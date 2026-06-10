@@ -1,5 +1,6 @@
 # CSARCH2 Virtual Exhibit Guide
-Node.js 26 · Astro 6 · MDX · React
+[![Node.js](https://img.shields.io/badge/Node.js%2026-6DA55F?logo=node.js&logoColor=white)](#) [![Astro](https://img.shields.io/badge/Astro%206-BC52EE?logo=astro&logoColor=fff)](#) [![MDX](https://img.shields.io/badge/MDX-1B1F24?logo=mdx&logoColor=fff)](#) [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
+
 
 
 ## Table of Contents
