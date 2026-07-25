@@ -1,0 +1,33 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "The Internet Era - Journey of a Message"
+author: "Cubarrubias, Dion Mel; Encarnacion, Alessandro Gabriel; Evangelista, Aiella; Junsay, Andre Renee; Rodriguez, Juan Titus"
+readingTime: "15 minute read"
+---
+
+import FiberOpticsInteractive from "../../components/s01g1/FiberOpticsInteractive.jsx"
+import ExhibitNav from "../../components/s01g1/ExhibitNav.astro"
+
+---
+
+## The Fiber Optics Era
+
+### High-Bandwidth Guided Media
+
+**Core Medium:** Strands of ultra-pure silica glass (thinner than a human hair) bundled inside armored submarine cables lying on the ocean floor.
+
+**Network Architecture - Optical Wavelength Routing:** Instead of electronic routers processing data packet-by-packet at every physical junction (which causes processing latency), this architecture utilizes Wavelength Division Multiplexing (WDM). Network nodes use optical prisms and selective mirrors to route data streams based entirely on their light color (wavelength), allowing millions of distinct data paths to share a single physical glass line simultaneously without crossing streams.
+
+**System Limitations:** High deep-sea installation costs, physical vulnerability to commercial ship anchors, and the requirement for optoelectronic repeaters every 40–60 km to amplify fading light signals.
+
+### Interactive Activity
+<FiberOpticsInteractive client:load />
+
+<ExhibitNav 
+  currentChapter={4} 
+  totalChapters={5} 
+  prevUrl="/virtual-exhibit-template/s01g1/03-internet" 
+  prevTitle="The Internet Era" 
+  nextUrl="/virtual-exhibit-template/s01g1/05-wifi" 
+  nextTitle="The Wifi Era" 
+/>

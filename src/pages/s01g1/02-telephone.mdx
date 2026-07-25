@@ -1,0 +1,42 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "The Telephone Era - Journey of a Message"
+author: "Cubarrubias, Dion Mel; Encarnacion, Alessandro Gabriel; Evangelista, Aiella; Junsay, Andre Renee; Rodriguez, Juan Titus"
+readingTime: "15 minute read"
+---
+
+
+import TelephoneEraInteractive from "../../components/s01g1/TelephoneEraInteractive.jsx"
+import ExhibitNav from "../../components/s01g1/ExhibitNav.astro"
+
+---
+
+## The Telephone Era
+
+### Analog Circuit-Switched
+
+The invention of the telegraph in the 1830s marked the first time information could travel faster than the physical object carrying it. Instead of moving paper, the telegraph converted text into electrical pulses (dots and dashes in Morse Code) that traveled along copper wires at the speed of electricity.
+
+**Core Medium:** Conductive copper wires, iron telegraph lines, and manual physical switchboards.
+
+The telephone, developed in the 1870s, took this further. Rather than encoding text into pulses, the telephone converted the continuous sound of a human voice into a continuous electrical signal. Speaking into a carbon microphone compressed carbon granules packed inside it, which changed the microphone's electrical resistance. That change in resistance produced a matching change in electrical current, which traveled down the wire. At the receiving end, an electromagnet converted those current variations back into physical vibrations, recreating the original sound.
+
+This shift from discrete pulses (telegraph) to continuous analog waveforms (telephone) was significant. For the first time, two people could have a real-time conversation across hundreds of miles.
+
+**Network Architecture - Circuit Switching:** Early telephone networks did not route calls automatically. Every call required a human operator sitting at a switchboard. When you picked up the phone, you would tell the operator the number or name of the person you were trying to reach. The operator would then physically plug a patch cable between your line's jack and the recipient's jack, completing an unbroken copper path between the two phones. This is called circuit switching: a dedicated physical connection is held open for the entire duration of the call, and released only when both parties hang up.
+
+Scaling this system was expensive. Each simultaneous call required its own dedicated wire path. As telephone use grew, the number of wires running between cities became enormous. Long-distance lines suffered from attenuation (signal weakening over distance) and crosstalk, where signals leaked between adjacent wires and callers could hear fragments of other conversations.
+
+**System Limitations:** The network could only support as many simultaneous calls as there were physical wire paths. If you called and the other person did not pick up, the message was lost. There was no voicemail, no answering machine, and no callback record until the 1960s and 70s. Both parties had to be present at exactly the same time, making communication synchronous in a way that letters, at least, were not.
+
+### Interactive Activity
+<TelephoneEraInteractive client:load />
+
+<ExhibitNav 
+  currentChapter={2} 
+  totalChapters={5} 
+  prevUrl="/virtual-exhibit-template/s01g1/01-mail" 
+  prevTitle="The Mail Era" 
+  nextUrl="/virtual-exhibit-template/s01g1/03-internet" 
+  nextTitle="The Internet Era" 
+/>

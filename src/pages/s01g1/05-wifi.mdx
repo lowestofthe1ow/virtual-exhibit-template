@@ -1,0 +1,36 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "The Internet Era - Journey of a Message"
+author: "Cubarrubias, Dion Mel; Encarnacion, Alessandro Gabriel; Evangelista, Aiella; Junsay, Andre Renee; Rodriguez, Juan Titus"
+readingTime: "15 minute read"
+---
+
+
+import WifiEraInteractive from "../../components/s01g1/WifiEraInteractive.jsx"
+import ExhibitNav from "../../components/s01g1/ExhibitNav.astro"
+
+---
+
+## The Wi-Fi Era
+
+### Wireless Communication
+
+The development of Wi-Fi and mobile networks made it possible to send and receive information without physical cables. Instead of traveling through dedicated wires, data is transmitted using radio waves, allowing smartphones, laptops, and other wireless devices to stay connected while on the move.
+
+**Core Medium:** Radio waves, Wi-Fi routers, wireless access points, and cellular towers.
+
+Wi-Fi routers convert digital data into radio signals that nearby devices can receive and transmit back. These devices exchange data wirelessly while the router forwards the information through an internet connection, typically backed by high-speed fiber optic networks. Mobile Data technologies such as 4G and 5G extend this connectivity beyond homes and offices, where routers are stationed, allowing users to communicate almost anywhere with network coverage.
+
+Wireless networking has enabled real-time communication such as messaging, video calls, online gaming, cloud services, and media streaming. It also supports billions of Internet of Things (IoT) devices, including smart home appliances, wearable technology, and connected sensors.
+
+**System Limitations:** Wireless performance depends on signal strength, interference, and network congestion. Obstacles like walls or long distances can weaken signals, and reliable communication still requires access to a Wi-Fi network or cellular service.
+
+### Interactive Activity
+<WifiEraInteractive client:load />
+
+<ExhibitNav 
+  currentChapter={5} 
+  totalChapters={5} 
+  prevUrl="/virtual-exhibit-template/s01g1/04-fiber" 
+  prevTitle="The Fiber Optics Era" 
+/>

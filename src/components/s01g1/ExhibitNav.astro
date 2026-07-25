@@ -1,0 +1,117 @@
+---
+interface Props {
+  prevUrl?: string;
+  prevTitle?: string;
+  nextUrl?: string;
+  nextTitle?: string;
+  currentChapter: number;
+  totalChapters: number;
+}
+import WarpTransition from "./Transition.jsx";
+
+const { prevUrl, prevTitle, nextUrl, nextTitle, currentChapter, totalChapters } = Astro.props;
+---
+
+<nav class="exhibit-nav">
+  <div class="nav-button prev-container">
+    {prevUrl && (
+      <WarpTransition client:load href={prevUrl} destination={prevTitle}>
+      <div class="nav-link prev">
+        <span class="label">← Previous</span>
+        <span class="title">{prevTitle}</span>
+      </a>
+      </div>
+      </WarpTransition>
+    )}
+  </div>
+
+  <div class="chapter-badge">
+    {currentChapter > 0 ? `Era ${currentChapter} of ${totalChapters}` : "Overview"}
+  </div>
+
+  <div class="nav-button next-container">
+    {nextUrl && (
+      <WarpTransition client:load href={nextUrl} destination={nextTitle}>
+      <div class="nav-link next">
+        <span class="label">Next →</span>
+        <span class="title">{nextTitle}</span>
+      </a>
+      </div>
+      </WarpTransition>
+    )}
+  </div>
+</nav>
+
+<style>
+  .exhibit-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #000000;
+  }
+
+  .nav-button {
+    flex: 1;
+    display: flex;
+  }
+
+  .next-container {
+    justify-content: flex-end;
+  }
+
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-decoration: none;
+    color: #000000 !important;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    max-width: 260px;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  .nav-link:hover {
+    background: #f1f5f9;
+  }
+
+  .nav-link.next {
+    text-align: right;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #475569 !important;
+    text-shadow: none !important;
+  }
+
+  .title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    font-family: inherit;
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+
+  .chapter-badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: #f1f5f9;
+    color: #000000 !important;
+    white-space: nowrap;
+    text-shadow: none !important;
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "The Mail Era - Journey of a Message"
+author: "Cubarrubias, Dion Mel; Encarnacion, Alessandro Gabriel; Evangelista, Aiella; Junsay, Andre Renee; Rodriguez, Juan Titus"
+readingTime: "15 minute read"
+---
+
+import MailDeliveryPicker from "../../components/s01g1/MailDeliveryPicker.jsx"
+import ExhibitNav from "../../components/s01g1/ExhibitNav.astro"
+
+
+## The Mail Era
+
+### Physical
+
+Before electricity, all information was physical. A message existed only as ink on paper, and moving it from sender to receiver meant physically carrying that paper across the distance between them.
+
+**Core Medium:** Physical paper, carbon ink, and kinetic energy (human runners, horses, or birds).
+
+The earliest long-distance communication relied on dedicated human messengers. By the time of the Roman Empire, a system called the *cursus publicus* established relay stations every 10 to 15 miles along major roads. Riders would swap for fresh horses at each station, allowing messages to travel far faster than any single horse and rider could manage alone. This relay model is one of the earliest examples of what we might now call a network.
+
+For routes where speed mattered more than volume, homing pigeons were used. Pigeons navigate using a biological trait called magnetoreception. Specialized proteins in their eyes and microscopic iron-oxide particles in their beaks allow them to sense the Earth's geomagnetic field, giving them an internal compass permanently calibrated to their home roost. To use a pigeon, a sender first had to physically carry the bird away from its home. When a message needed to go back, a tiny rolled letter was attached to the bird's leg and it was released. It would fly back home (one way only) at speeds of up to 60 mph.
+
+Ships extended the reach of physical mail across oceans. A letter from London to New York by sailing ship took four to six weeks. Cargo ships carried mail bags alongside goods, and schedules were predictable enough that organized postal services built timetables around them.
+
+**System Limitations:** Every message required the physical medium to complete the entire journey. If the pigeon was intercepted by a hawk, the letter was gone. If the ship sank, it was gone. There was no confirmation of receipt, no way to send a copy, and no way to recover a lost message. Delivery times were measured in days, weeks, or months depending on distance. Communication was strictly one-way at a time; a letter sent did not guarantee a reply arrived.
+
+### Interactive Activity
+<MailDeliveryPicker client:load />
+
+<ExhibitNav 
+  currentChapter={1} 
+  totalChapters={5} 
+  prevUrl="/virtual-exhibit-template/journey-of-a-message" 
+  prevTitle="exhibit Overview" 
+  nextUrl="/virtual-exhibit-template/s01g1/02-telephone" 
+  nextTitle="The Telephone Era" 
+/>

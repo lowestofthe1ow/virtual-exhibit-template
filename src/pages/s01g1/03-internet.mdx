@@ -1,0 +1,35 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "The Internet Era - Journey of a Message"
+author: "Cubarrubias, Dion Mel; Encarnacion, Alessandro Gabriel; Evangelista, Aiella; Junsay, Andre Renee; Rodriguez, Juan Titus"
+readingTime: "15 minute read"
+---
+
+import InternetEraInteractive from "../../components/s01g1/InternetEraInteractive.jsx"
+import WebmailInteractive from "../../components/s01g1/WebmailInteractive.jsx"
+import ExhibitNav from "../../components/s01g1/ExhibitNav.astro"
+
+---
+
+## The Internet Era
+
+### Digital Packet-Switched & Dial-Up
+
+**Core Medium:** Standard twisted-pair copper telephone lines repurposed to carry digital computer data.
+
+**Network Architecture - Packet Switching:** This era marked the historic migration away from rigid Circuit Switching to Packet Switching. Instead of locking down an entire physical line for a single connection, files were broken down into tiny, independent digital data packets. Each packet contained routing headers, traveled dynamically across disparate network pathways, and was reassembled in its correct order upon reaching the destination CPU.
+
+**System Limitations:** Narrow bandwidth and zero shared infrastructure availability (if someone picked up the physical house phone handset, the data stream was cut off immediately).
+
+### Interactive Activity
+<InternetEraInteractive client:load />
+<WebmailInteractive client:load />
+
+<ExhibitNav 
+  currentChapter={3} 
+  totalChapters={5} 
+  prevUrl="/virtual-exhibit-template/s01g1/02-telephone" 
+  prevTitle="The Telephone Era" 
+  nextUrl="/virtual-exhibit-template/s01g1/04-fiber" 
+  nextTitle="The Fiber Era" 
+/>
