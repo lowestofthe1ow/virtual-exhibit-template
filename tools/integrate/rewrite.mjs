@@ -10,6 +10,22 @@ const SPECIFIER = /(["'`])(\.\.?\/[^"'`]+)\1/g;
 // 'references-appendix' and 'simulator' into 'simulator2'.
 const TRAILING_BOUNDARY = '(?=[`\'"/#?]|$)';
 
+// The umbrella site's own base (astro.config.mjs's `base:`). Fixed for this
+// project, so a constant is simpler than threading a config read through
+// every call site; rewriteFile still takes it as an overridable option below
+// rather than baking the literal into the regex, so a caller can pass a
+// different value instead of forking this file if that ever stops being true.
+const UMBRELLA_BASE = 'virtual-exhibit-template';
+
+// A source repo's own astro.config `base:` shows up in the wild as
+// '/CSARCH2-Group-6/', 'virtual-exhibit-template', '/', or '' — leading and
+// trailing slashes are noise, and a bare '/' or empty string both mean "this
+// repo never set its own base" rather than naming a real path segment.
+export function normalizeBase(base) {
+  if (!base) return '';
+  return base.replace(/^\/+/, '').replace(/\/+$/, '');
+}
+
 export function remapSpecifier(spec, { fromDir, toDir, pathMap }) {
   if (!spec.startsWith('.')) return spec;
 
@@ -39,7 +55,10 @@ export function remapSpecifier(spec, { fromDir, toDir, pathMap }) {
 
 export function rewriteFile(
   content,
-  { fromDir, toDir, pathMap, slug, routes = [], publicAssets = [] },
+  {
+    fromDir, toDir, pathMap, slug, routes = [], publicAssets = [],
+    sourceBase = '', umbrellaBase = UMBRELLA_BASE,
+  },
 ) {
   let out = content.replace(SPECIFIER, (match, quote, spec) => {
     const remapped = remapSpecifier(spec, { fromDir, toDir, pathMap });
@@ -73,6 +92,32 @@ export function rewriteFile(
     out = out.replace(
       new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
       `$1/${slug}/$2`,
+    );
+  }
+
+  // Some repos hardcoded their OWN astro.config base into src/ instead of
+  // using ${base} or a relative path — a route like
+  // "/CSARCH2-G8-GPU-WARS-FORKED-/01-main" or a public asset like
+  // "/CSARCH2-G9-Exhibit/astronauts.png". Both routes and public assets end
+  // up living under the umbrella's base plus this exhibit's slug once
+  // merged, so both are fixed by the same substitution: swap the leading
+  // "/<sourceBase>/" for "/<umbrellaBase>/<slug>/" and leave the rest of the
+  // path (and the rest of the string) untouched.
+  //
+  // Runs last, after the ${base}-prefixed template-literal passes above,
+  // because it targets a structurally different, disjoint shape: those
+  // passes only ever touch a literal "${base...}" prefix, while this one
+  // only touches a literal quote immediately followed by "/<sourceBase>/".
+  // Neither pass's output can ever contain the other's trigger text, so
+  // ordering can't cause a reference to be rewritten twice — this is simply
+  // the last independent pass, standing in for the fact that, unlike routes/
+  // publicAssets, it does not need a per-name loop.
+  const normalizedSourceBase = normalizeBase(sourceBase);
+  if (normalizedSourceBase) {
+    const escapedBase = normalizedSourceBase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(
+      new RegExp('(["\'`])/' + escapedBase + '/', 'g'),
+      `$1/${umbrellaBase}/${slug}/`,
     );
   }
 

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { remapSpecifier, rewriteFile } from '../integrate/rewrite.mjs';
+import { remapSpecifier, rewriteFile, normalizeBase } from '../integrate/rewrite.mjs';
 
 const pathMap = new Map([
   ['components/Foo.jsx', 'components/s01g7/Foo.jsx'],
@@ -142,4 +142,60 @@ test('a slash-separated public asset reference is rewritten and keeps its leadin
     fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', routes: [], publicAssets: ['moon.svg'],
   });
   assert.match(out, /\$\{base\}\/s03g9\/moon\.svg/);
+});
+
+// --- source-repo's-own-base rewriting (correction 1) ---
+
+test('a hardcoded reference to the source repo\'s own base gains the umbrella base and slug', () => {
+  const out = rewriteFile('<img src="/CSARCH2-G9-Exhibit/astronauts.png">', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', sourceBase: 'CSARCH2-G9-Exhibit',
+  });
+  assert.equal(out, '<img src="/virtual-exhibit-template/s03g9/astronauts.png">');
+});
+
+test('the same rewrite applies inside a CSS url() reference', () => {
+  const out = rewriteFile("@font-face { src: url('/CSARCH2-G9-Exhibit/astronauts.png'); }", {
+    fromDir: 'styles', toDir: 'styles', pathMap, slug: 's03g9', sourceBase: 'CSARCH2-G9-Exhibit',
+  });
+  assert.match(out, /url\('\/virtual-exhibit-template\/s03g9\/astronauts\.png'\)/);
+});
+
+test('a reference to a different repo\'s base is left untouched', () => {
+  const src = '<img src="/CSARCH2-G8-GPU-WARS-FORKED-/01-main.png">';
+  const out = rewriteFile(src, {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', sourceBase: 'CSARCH2-G9-Exhibit',
+  });
+  assert.equal(out, src);
+});
+
+test('an empty sourceBase causes no rewriting', () => {
+  const src = '<img src="/CSARCH2-G9-Exhibit/astronauts.png">';
+  const out = rewriteFile(src, {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', sourceBase: '',
+  });
+  assert.equal(out, src);
+});
+
+test('a bare-slash sourceBase causes no rewriting', () => {
+  const src = '<img src="/CSARCH2-G9-Exhibit/astronauts.png">';
+  const out = rewriteFile(src, {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', sourceBase: '/',
+  });
+  assert.equal(out, src);
+});
+
+test('a sourceBase that is only a hyphen-prefix of the actual base is not spliced', () => {
+  const src = '<img src="/CSARCH2-G9-Exhibit/x.png">';
+  const out = rewriteFile(src, {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', sourceBase: 'CSARCH2-G9',
+  });
+  assert.equal(out, src);
+});
+
+test('normalizeBase strips leading and trailing slashes and treats "/" and "" as no base', () => {
+  assert.equal(normalizeBase('/CSARCH2-Group-6/'), 'CSARCH2-Group-6');
+  assert.equal(normalizeBase('virtual-exhibit-template'), 'virtual-exhibit-template');
+  assert.equal(normalizeBase('/'), '');
+  assert.equal(normalizeBase(''), '');
+  assert.equal(normalizeBase(undefined), '');
 });

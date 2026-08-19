@@ -3,7 +3,7 @@ import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync,
 import { join, extname, relative, posix } from 'node:path';
 import { findOrphans, TEMPLATE_LEFTOVERS, GLOB_REPOS } from '../assets/prune.mjs';
 import { optimizeTree } from '../assets/optimize.mjs';
-import { rewriteFile } from './rewrite.mjs';
+import { rewriteFile, normalizeBase } from './rewrite.mjs';
 
 const args = process.argv.slice(2);
 const arg = (name) => {
@@ -16,6 +16,25 @@ const entry = arg('entry');
 const subdir = arg('subdir');
 const apply = args.includes('--apply');
 const forceGlobRepo = args.includes('--force-glob-repo');
+
+// The source repo's OWN astro.config declares its OWN GitHub Pages base
+// (e.g. base: '/CSARCH2-G9-Exhibit'). Some repos hardcode that base into
+// src/ instead of using ${base} or a relative path; after merging, those
+// references point at a path that no longer exists (see rewrite.mjs). Read
+// whichever config file the repo actually has — Astro accepts any of the
+// three extensions — and normalize away the slash noise ('/', '', 'x/',
+// '/x') so that "no base set" and "default base" both collapse to ''.
+const readSourceBase = (repoDir) => {
+  for (const name of ['astro.config.mjs', 'astro.config.js', 'astro.config.ts']) {
+    const configPath = join(repoDir, name);
+    if (!existsSync(configPath)) continue;
+    const match = readFileSync(configPath, 'utf8').match(/\bbase\s*:\s*(['"])((?:(?!\1).)*)\1/);
+    if (match) return match[2];
+  }
+  return '';
+};
+const sourceBase = normalizeBase(readSourceBase(srcRepo));
+console.log(`source base: ${sourceBase || '(none — no rewriting needed)'}`);
 
 // findOrphans's basename/stem scan can't see references an import.meta.glob
 // call builds at runtime, so its report for these seven repos warrants a
@@ -183,7 +202,7 @@ const copyRewritten = (fromPath, toPath, fromDir, toDir) => {
   const content = readFileSync(fromPath, 'utf8');
   writeFileSync(
     toPath,
-    rewriteFile(content, { fromDir, toDir, pathMap, slug, routes, publicAssets }),
+    rewriteFile(content, { fromDir, toDir, pathMap, slug, routes, publicAssets, sourceBase }),
   );
 };
 

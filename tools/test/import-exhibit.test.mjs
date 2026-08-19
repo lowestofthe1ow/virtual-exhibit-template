@@ -135,6 +135,43 @@ test('a stylesheet reference into that directory is rewritten to the namespaced 
   assert.match(css, /url\('\.\.\/\.\.\/fonts\/s99g9\/Test\.ttf'\)/);
 });
 
+test('a source repo\'s own astro.config base is read, normalized, and used to rewrite hardcoded references', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepo();
+  writeFileSync(
+    join(repo, 'astro.config.mjs'),
+    "import { defineConfig } from 'astro/config';\n" +
+    "export default defineConfig({ base: '/CSARCH2-G9-Exhibit/' });\n",
+  );
+  writeFileSync(
+    join(repo, 'src', 'pages', 'entry.mdx'),
+    '# Entry\n\n<img src="/CSARCH2-G9-Exhibit/astronauts.png" />\n',
+  );
+  const result = runCli(
+    ['--slug', 's03g9', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /source base: CSARCH2-G9-Exhibit/);
+  const page = readFileSync(join(cwd, 'src', 'pages', 's03g9.mdx'), 'utf8');
+  assert.match(page, /src="\/virtual-exhibit-template\/s03g9\/astronauts\.png"/);
+});
+
+test('a source repo with no base (or the default "/") in its astro.config gets no rewriting and no crash', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepo();
+  writeFileSync(
+    join(repo, 'astro.config.mjs'),
+    "import { defineConfig } from 'astro/config';\nexport default defineConfig({});\n",
+  );
+  const result = runCli(
+    ['--slug', 's01g1', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /source base: \(none/);
+});
+
 test('a loose file at the root of src/ is left in the stage and flagged, not silently dropped', () => {
   const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
   const repo = fixtureRepo();
