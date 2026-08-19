@@ -1,13 +1,22 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, existsSync, chmodSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findOrphans, TEMPLATE_LEFTOVERS, GLOB_REPOS } from '../assets/prune.mjs';
 
 const PRUNE_CLI = fileURLToPath(new URL('../assets/prune.mjs', import.meta.url));
+
+// spawnSync (rather than execFileSync) is used for every CLI invocation below because
+// the CLI now sets non-zero exit codes for a refused delete (2) and a partial delete
+// failure (1) — execFileSync throws on non-zero exit, which would make those outcomes
+// impossible to assert on directly. spawnSync never throws and exposes `.status` and
+// `.stdout` on the same result object.
+function runCli(args) {
+  return spawnSync(process.execPath, [PRUNE_CLI, ...args], { encoding: 'utf8' });
+}
 
 function fixture() {
   const dir = mkdtempSync(join(tmpdir(), 'prune-'));
@@ -77,7 +86,7 @@ function globFixture(...segments) {
 
 test('a dry run leaves every file on disk', () => {
   const dir = fixture();
-  execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir], { encoding: 'utf8' });
+  runCli(['--dir', dir]);
   assert.ok(existsSync(join(dir, 'src', 'assets', 'used.png')));
   assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')));
   assert.ok(existsSync(join(dir, 'src', 'assets', 'proposal.pdf')));
@@ -85,7 +94,7 @@ test('a dry run leaves every file on disk', () => {
 
 test('--apply deletes exactly the reported set and nothing else', () => {
   const dir = fixture();
-  execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  runCli(['--dir', dir, '--apply']);
   assert.ok(existsSync(join(dir, 'src', 'assets', 'used.png')), 'referenced file must survive');
   assert.ok(existsSync(join(dir, 'src', 'pages', 'exhibit.mdx')), 'code file must survive');
   assert.ok(!existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'unreferenced image must be deleted');
@@ -94,43 +103,43 @@ test('--apply deletes exactly the reported set and nothing else', () => {
 
 test('a path naming a glob-repo slug as a whole segment refuses to delete under --apply', () => {
   const dir = globFixture('s03g8');
-  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  const result = runCli(['--dir', dir, '--apply']);
   assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'glob-repo files must survive without --force-glob-repo');
-  assert.match(output, /refusing to delete/);
-  assert.match(output, /s03g8/);
-  assert.match(output, /--force-glob-repo/);
+  assert.match(result.stdout, /refusing to delete/);
+  assert.match(result.stdout, /s03g8/);
+  assert.match(result.stdout, /--force-glob-repo/);
 });
 
 test('the production staging shape "<slug>-stage" refuses to delete under --apply', () => {
   // This is the exact shape Task 9's orchestrator uses: join('.integration-src', `${slug}-stage`).
   // A whole-path-segment check never fires here since the segment is "s03g8-stage", not "s03g8".
   const dir = globFixture('s03g8-stage');
-  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  const result = runCli(['--dir', dir, '--apply']);
   assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'glob-repo files must survive without --force-glob-repo');
-  assert.match(output, /refusing to delete/);
-  assert.match(output, /s03g8/);
-  assert.match(output, /--force-glob-repo/);
+  assert.match(result.stdout, /refusing to delete/);
+  assert.match(result.stdout, /s03g8/);
+  assert.match(result.stdout, /--force-glob-repo/);
 });
 
 test('the production staging shape ".integration-src/<slug>-stage" refuses to delete under --apply', () => {
   const dir = globFixture('.integration-src', 's03g8-stage');
-  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  const result = runCli(['--dir', dir, '--apply']);
   assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'glob-repo files must survive without --force-glob-repo');
-  assert.match(output, /refusing to delete/);
-  assert.match(output, /s03g8/);
+  assert.match(result.stdout, /refusing to delete/);
+  assert.match(result.stdout, /s03g8/);
 });
 
 test('--force-glob-repo overrides the refusal for the "<slug>-stage" shape and deletes', () => {
   const dir = globFixture('s03g8-stage');
-  execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply', '--force-glob-repo'], { encoding: 'utf8' });
+  runCli(['--dir', dir, '--apply', '--force-glob-repo']);
   assert.ok(!existsSync(join(dir, 'src', 'assets', 'orphan.png')), '--force-glob-repo must allow deletion');
 });
 
 test('a path naming no glob-repo slug still deletes normally under --apply', () => {
   const dir = globFixture('ordinary-exhibit-stage');
-  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  const result = runCli(['--dir', dir, '--apply']);
   assert.ok(!existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'unrelated exhibits must still be pruned');
-  assert.doesNotMatch(output, /refusing to delete/);
+  assert.doesNotMatch(result.stdout, /refusing to delete/);
 });
 
 test('the guard fires for all seven glob-repo slugs at the production "<slug>-stage" shape', () => {
@@ -141,9 +150,9 @@ test('the guard fires for all seven glob-repo slugs at the production "<slug>-st
   );
   for (const slug of GLOB_REPOS) {
     const dir = globFixture(`${slug}-stage`);
-    const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+    const result = runCli(['--dir', dir, '--apply']);
     assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), `${slug} files must survive without --force-glob-repo`);
-    assert.match(output, /refusing to delete/, `${slug} must trigger the refusal`);
+    assert.match(result.stdout, /refusing to delete/, `${slug} must trigger the refusal`);
   }
 });
 
@@ -158,10 +167,56 @@ test('a delete failure on one file does not prevent the others from being attemp
   chmodSync(join(dir, 'src', 'locked'), 0o555);
 
   try {
-    const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+    const result = runCli(['--dir', dir, '--apply']);
     assert.ok(!existsSync(join(dir, 'src', 'assets', 'ok.png')), 'the deletable orphan must still be removed');
     assert.ok(existsSync(join(dir, 'src', 'locked', 'stuck.png')), 'the undeletable orphan must remain');
-    assert.match(output, /1 deleted, 1 failed/);
+    assert.match(result.stdout, /1 deleted, 1 failed/);
+  } finally {
+    chmodSync(join(dir, 'src', 'locked'), 0o755);
+  }
+});
+
+// --- CLI exit codes. A caller (Task 9's orchestrator) shelling out to this script
+// must be able to distinguish "refused" (2), "partial failure" (1), and "succeeded
+// or nothing to do" (0) by exit status alone, without parsing stdout.
+
+test('a refused --apply on a glob-repo path exits 2 and leaves files intact', () => {
+  const dir = globFixture('s03g8-stage');
+  const result = runCli(['--dir', dir, '--apply']);
+  assert.equal(result.status, 2);
+  assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'refused delete must leave files in place');
+});
+
+test('a successful --apply on a non-glob path exits 0', () => {
+  const dir = fixture();
+  const result = runCli(['--dir', dir, '--apply']);
+  assert.equal(result.status, 0);
+});
+
+test('a dry run exits 0', () => {
+  const dir = fixture();
+  const result = runCli(['--dir', dir]);
+  assert.equal(result.status, 0);
+});
+
+test('--force-glob-repo on a glob-repo path exits 0 and deletes', () => {
+  const dir = globFixture('s03g8-stage');
+  const result = runCli(['--dir', dir, '--apply', '--force-glob-repo']);
+  assert.equal(result.status, 0);
+  assert.ok(!existsSync(join(dir, 'src', 'assets', 'orphan.png')), '--force-glob-repo must allow deletion');
+});
+
+test('a run where one delete fails exits 1', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'prune-fail-exit-'));
+  mkdirSync(join(dir, 'src', 'assets'), { recursive: true });
+  mkdirSync(join(dir, 'src', 'locked'), { recursive: true });
+  writeFileSync(join(dir, 'src', 'assets', 'ok.png'), 'x'.repeat(100));
+  writeFileSync(join(dir, 'src', 'locked', 'stuck.png'), 'x'.repeat(100));
+  chmodSync(join(dir, 'src', 'locked'), 0o555);
+
+  try {
+    const result = runCli(['--dir', dir, '--apply']);
+    assert.equal(result.status, 1);
   } finally {
     chmodSync(join(dir, 'src', 'locked'), 0o755);
   }

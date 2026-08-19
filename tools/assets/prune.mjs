@@ -92,10 +92,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (apply) {
     if (globSlug && !forceGlobRepo) {
       console.log(
-        `\nrefusing to delete: '${dir}' is inside '${globSlug}', which uses import.meta.glob, ` +
+        `\nrefusing to delete: '${resolvedDir}' is inside '${globSlug}', which uses import.meta.glob, ` +
         'so references built at runtime are invisible to this report and it cannot be trusted. ' +
         'Review the list above by hand, then re-run with --force-glob-repo to delete anyway.',
       );
+      // Non-zero and distinct from both success (0) and an unexpected crash (1), so a
+      // caller (Task 9's orchestrator) that branches on exit status can't mistake a
+      // refused delete for a completed one.
+      process.exitCode = 2;
     } else {
       let deleted = 0;
       let failed = 0;
@@ -112,6 +116,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         }
       }
       console.log(`\n${deleted} deleted, ${failed} failed, ${(reclaimed / 1048576).toFixed(1)} MB reclaimed`);
+      // A partial failure (some files couldn't be removed) is distinct from a policy
+      // refusal above — surface it as exit code 1 so a caller still sees non-zero.
+      if (failed > 0) process.exitCode = 1;
     }
   } else {
     console.log('dry run — pass --apply to delete');
