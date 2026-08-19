@@ -60,6 +60,31 @@ const hasPublic = existsSync(join(srcRepo, 'public'));
 rmSync(stagePublic, { recursive: true, force: true });
 if (hasPublic) cpSync(join(srcRepo, 'public'), stagePublic, { recursive: true });
 
+// Every student repo inherited this template's src/styles/global.css. It is
+// not a media file, so findOrphans/prune.mjs never considers it, yet when an
+// exhibit never touched it, copying it into styles/<slug>/ just duplicates
+// class names for no reason. Drop it ONLY when it is byte-identical (line
+// endings normalized first — several repos ship a CRLF copy of an otherwise
+// untouched file) to the umbrella's own copy; an exhibit that genuinely
+// customized global.css keeps its staged copy, since that content is
+// handled per-exhibit by the runbook's style-scoping step (moved to
+// src/styles/<slug>/base.css and wrapped so it cannot escape the exhibit).
+const stagedGlobalCss = join(stage, 'styles', 'global.css');
+const umbrellaGlobalCss = join(SRC, 'styles', 'global.css');
+if (existsSync(stagedGlobalCss)) {
+  const normalizeEol = (s) => s.replace(/\r\n/g, '\n');
+  const staged = normalizeEol(readFileSync(stagedGlobalCss, 'utf8'));
+  const umbrella = existsSync(umbrellaGlobalCss)
+    ? normalizeEol(readFileSync(umbrellaGlobalCss, 'utf8'))
+    : null;
+  if (staged === umbrella) {
+    rmSync(stagedGlobalCss, { force: true });
+    console.log('styles/global.css: identical to the umbrella copy, dropped');
+  } else {
+    console.log('styles/global.css: differs from the umbrella copy, kept for manual style-scoping');
+  }
+}
+
 // 2. Drop template leftovers.
 for (const dir of ['pages', 'components', 'assets', 'layouts', 'styles']) {
   const d = join(stage, dir);

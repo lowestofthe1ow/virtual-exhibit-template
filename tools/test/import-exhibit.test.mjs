@@ -191,3 +191,71 @@ test('a loose file at the root of src/ is left in the stage and flagged, not sil
     'the loose file must not be copied verbatim into the shared src/ root',
   );
 });
+
+// A staged styles/global.css is byte-identical to this repo's own
+// src/styles/global.css unless the exhibit genuinely modified it. Since it is
+// not a media file, prune.mjs never flags it as an orphan, so the orchestrator
+// must decide for itself whether to drop it. `cwd/src/styles/global.css`
+// stands in for "the umbrella's own copy" the same way the real CLI compares
+// against the umbrella repo it runs from.
+function withUmbrellaGlobalCss(cwd, content) {
+  mkdirSync(join(cwd, 'src', 'styles'), { recursive: true });
+  writeFileSync(join(cwd, 'src', 'styles', 'global.css'), content);
+}
+
+function fixtureRepoWithGlobalCss(content) {
+  const dir = fixtureRepo();
+  mkdirSync(join(dir, 'src', 'styles'), { recursive: true });
+  writeFileSync(join(dir, 'src', 'styles', 'global.css'), content);
+  return dir;
+}
+
+const REFERENCE_GLOBAL_CSS = '/* global.css */\nbody { margin: 0; }\n';
+
+test('a staged global.css byte-identical to the umbrella copy is dropped', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  withUmbrellaGlobalCss(cwd, REFERENCE_GLOBAL_CSS);
+  const repo = fixtureRepoWithGlobalCss(REFERENCE_GLOBAL_CSS);
+  const result = runCli(
+    ['--slug', 's01g1', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /styles\/global\.css: identical to the umbrella copy, dropped/);
+  assert.ok(
+    !existsSync(join(cwd, 'src', 'styles', 's01g1', 'global.css')),
+    'a byte-identical global.css must not be copied into the exhibit namespace',
+  );
+});
+
+test('a staged global.css that differs from the umbrella copy is kept', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  withUmbrellaGlobalCss(cwd, REFERENCE_GLOBAL_CSS);
+  const repo = fixtureRepoWithGlobalCss('/* global.css */\nbody { margin: 0; padding: 4px; }\n');
+  const result = runCli(
+    ['--slug', 's01g1', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /styles\/global\.css: differs from the umbrella copy, kept/);
+  assert.ok(
+    existsSync(join(cwd, 'src', 'styles', 's01g1', 'global.css')),
+    'a genuinely customized global.css must survive for the runbook\'s style-scoping step',
+  );
+});
+
+test('a staged global.css that differs from the umbrella copy only by CRLF line endings is treated as identical and dropped', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  withUmbrellaGlobalCss(cwd, REFERENCE_GLOBAL_CSS);
+  const repo = fixtureRepoWithGlobalCss(REFERENCE_GLOBAL_CSS.replace(/\n/g, '\r\n'));
+  const result = runCli(
+    ['--slug', 's01g1', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /styles\/global\.css: identical to the umbrella copy, dropped/);
+  assert.ok(
+    !existsSync(join(cwd, 'src', 'styles', 's01g1', 'global.css')),
+    'a CRLF-only difference must still be treated as identical',
+  );
+});
