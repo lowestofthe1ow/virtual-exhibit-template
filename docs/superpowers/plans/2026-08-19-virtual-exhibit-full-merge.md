@@ -93,11 +93,13 @@ test('the S40 G4 entry uses the s40g4 slug', () => {
   assert.ok(!slugs.includes('s02g4_2'), 's02g4_2 must be gone');
 });
 
-test('every exhibit carries a status and only s01g1/s01g4 start live', () => {
+test('every exhibit carries a status and the two done ones are live', () => {
   const exhibits = loadExhibits();
   assert.ok(exhibits.every((e) => typeof e.status === 'string'));
   const live = exhibits.filter((e) => e.status === 'live').map((e) => e.slug);
-  assert.deepEqual(live.sort(), ['s01g1', 's01g4']);
+  // Inclusion, not equality: this set grows by one on every exhibit task.
+  assert.ok(live.includes('s01g1'));
+  assert.ok(live.includes('s01g4'));
 });
 
 test('validateExhibits rejects a slug that disagrees with section and group', () => {
@@ -325,6 +327,7 @@ This test builds the site and asserts against the emitted HTML. Create `tools/te
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
+import { loadExhibits } from '../lib/exhibits.mjs';
 
 const DIST = 'dist/index.html';
 
@@ -334,9 +337,12 @@ test('homepage was built', () => {
 
 test('homepage shows a card for every live exhibit and none for pending ones', () => {
   const html = readFileSync(DIST, 'utf8');
-  assert.match(html, /id="s01g1"/);
-  assert.match(html, /id="s01g4"/);
-  assert.doesNotMatch(html, /id="s02g9"/, 'pending exhibits must not render a card');
+  // Derived from the data, so this test stays correct as exhibits go live.
+  for (const e of loadExhibits()) {
+    const card = new RegExp(`id="${e.slug}"`);
+    if (e.status === 'live') assert.match(html, card, `${e.slug} is live but has no card`);
+    else assert.doesNotMatch(html, card, `${e.slug} is ${e.status} but rendered a card`);
+  }
 });
 
 test('homepage renders section headings for grouped exhibits', () => {
@@ -423,7 +429,7 @@ git commit -m "feat: homepage renders ranked top row and per-section groups"
 
 - [ ] **Step 1: Write the union into `package.json`**
 
-Replace `dependencies` and `devDependencies` with:
+Replace **only** the `dependencies` and `devDependencies` blocks. Leave `scripts` untouched — Task 1 added `"test": "node --test tools/test/"` there and the rest of the plan depends on it.
 
 ```json
   "dependencies": {
@@ -649,6 +655,20 @@ test('orphans carry their byte size for reporting', () => {
   assert.equal(orphan.bytes, 200);
 });
 
+test('public assets are matched against a separate code directory', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'prune-public-'));
+  mkdirSync(join(dir, 'src', 'pages'), { recursive: true });
+  mkdirSync(join(dir, 'public'), { recursive: true });
+  writeFileSync(join(dir, 'public', 'used.svg'), 'x'.repeat(50));
+  writeFileSync(join(dir, 'public', 'unused.svg'), 'x'.repeat(50));
+  writeFileSync(join(dir, 'src', 'pages', 'p.mdx'), '<img src="/used.svg">');
+
+  const orphans = findOrphans(join(dir, 'public'), { haystackDir: join(dir, 'src') })
+    .map((o) => o.path);
+  assert.ok(orphans.some((p) => p.endsWith('unused.svg')));
+  assert.ok(!orphans.some((p) => p.endsWith('used.svg')), 'referenced public asset must survive');
+});
+
 test('the template leftover list covers the stock distro images', () => {
   assert.ok(TEMPLATE_LEFTOVERS.includes('Tux.png'));
   assert.ok(TEMPLATE_LEFTOVERS.includes('DistroQuiz.jsx'));
@@ -699,10 +719,13 @@ function walk(dir, out = []) {
   return out;
 }
 
-export function findOrphans(dir) {
+// `haystackDir` is where references are searched for; it defaults to `dir`.
+// They differ for public/, whose assets are referenced from src/ and which
+// contains no code of its own — scanning it alone would flag every file.
+export function findOrphans(dir, { haystackDir = dir } = {}) {
   const files = walk(dir);
 
-  const haystack = files
+  const haystack = walk(haystackDir)
     .filter((f) => CODE.has(extname(f).toLowerCase()))
     .map((f) => readFileSync(f, 'utf8'))
     .join('\n');
@@ -819,6 +842,15 @@ test('GLB and EXR keep their extensions', () => {
 test('already-optimal formats are skipped', () => {
   assert.deepEqual(planConversions(fixture(['icon.svg', 'photo.webp'])), []);
 });
+
+test('an oversized SVG is queued for embedded-raster re-encoding', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'optimize-svg-'));
+  mkdirSync(join(dir, 'assets'), { recursive: true });
+  writeFileSync(join(dir, 'assets', 'moon.svg'), 'x'.repeat(2 * 1024 * 1024));
+  const [conversion] = planConversions(dir);
+  assert.equal(conversion.kind, 'svg');
+  assert.equal(conversion.from, conversion.to);
+});
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -831,7 +863,8 @@ Expected: FAIL — `Cannot find module '../assets/optimize.mjs'`.
 Create `tools/assets/optimize.mjs`:
 
 ```javascript
-import { readdirSync, statSync, renameSync, unlinkSync } from 'node:fs';
+import { readdirSync, statSync, renameSync, unlinkSync,
+         readFileSync, writeFileSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -841,6 +874,8 @@ const MAX_IMAGE_DIM = 2560;
 const WEBP_QUALITY = 82;
 const VIDEO_CRF = 24;
 const MAX_VIDEO_WIDTH = 1920;
+const SVG_RASTER_THRESHOLD = 1024 * 1024;
+const EMBEDDED_RASTER_MIN = 64 * 1024;
 
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -868,6 +903,9 @@ export function planConversions(dir) {
       plan.push({ from: file, to: file, kind: 'model' });
     } else if (ext === '.exr' || ext === '.hdr') {
       plan.push({ from: file, to: file, kind: 'hdr' });
+    } else if (ext === '.svg' && statSync(file).size > SVG_RASTER_THRESHOLD) {
+      // Small SVGs are real vectors. Huge ones are bitmaps in an SVG wrapper.
+      plan.push({ from: file, to: file, kind: 'svg' });
     }
   }
   return plan;
@@ -890,8 +928,34 @@ function convert({ from, to, kind }) {
       '--texture-size', '1024', '--compress', 'draco']);
   } else if (kind === 'hdr') {
     execFileSync('magick', [from, '-resize', '2048x1024>', tmp]);
+  } else if (kind === 'svg') {
+    optimizeSvg(from, tmp);
   }
   return tmp;
+}
+
+// An SVG that is megabytes large is almost always a bitmap wrapped in vector
+// markup. Re-encode the embedded rasters and leave the vector parts alone, so
+// the file keeps its .svg extension and no reference has to change.
+function optimizeSvg(from, tmp) {
+  const svg = readFileSync(from, 'utf8');
+  const out = svg.replace(
+    /data:image\/(png|jpe?g);base64,([A-Za-z0-9+/=\s]+)/g,
+    (match, format, base64) => {
+      const buffer = Buffer.from(base64.replace(/\s/g, ''), 'base64');
+      if (buffer.length < EMBEDDED_RASTER_MIN) return match;
+      const inFile = `${tmp}.in.${format}`;
+      const outFile = `${tmp}.out.webp`;
+      writeFileSync(inFile, buffer);
+      execFileSync('magick', [inFile, '-resize', `${MAX_IMAGE_DIM}x${MAX_IMAGE_DIM}>`,
+        '-quality', String(WEBP_QUALITY), outFile]);
+      const encoded = readFileSync(outFile).toString('base64');
+      unlinkSync(inFile);
+      unlinkSync(outFile);
+      return `data:image/webp;base64,${encoded}`;
+    },
+  );
+  writeFileSync(tmp, out);
 }
 
 export async function optimizeTree(dir, { apply = false } = {}) {
@@ -1041,6 +1105,15 @@ test('base-relative internal links gain the slug', () => {
   assert.match(out, /\$\{base\}s04g4\/shared-bus-problem\//);
 });
 
+test('references to a public asset gain the slug in both link shapes', () => {
+  const out = rewriteFile('<img src="/moon.svg"> and href={`${base}moon.svg`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9',
+    routes: [], publicAssets: ['moon.svg'],
+  });
+  assert.match(out, /src="\/s03g9\/moon\.svg"/);
+  assert.match(out, /\$\{base\}s03g9\/moon\.svg/);
+});
+
 test('a base-relative link to a route the exhibit does not own is untouched', () => {
   const src = 'href={`${base}`}';
   const out = rewriteFile(src, {
@@ -1093,7 +1166,10 @@ export function remapSpecifier(spec, { fromDir, toDir, pathMap }) {
   return out;
 }
 
-export function rewriteFile(content, { fromDir, toDir, pathMap, slug, routes = [] }) {
+export function rewriteFile(
+  content,
+  { fromDir, toDir, pathMap, slug, routes = [], publicAssets = [] },
+) {
   let out = content.replace(SPECIFIER, (match, quote, spec) => {
     const remapped = remapSpecifier(spec, { fromDir, toDir, pathMap });
     return `${quote}${remapped}${quote}`;
@@ -1106,6 +1182,20 @@ export function rewriteFile(content, { fromDir, toDir, pathMap, slug, routes = [
       'g',
     );
     out = out.replace(pattern, `$1${slug}/$2`);
+  }
+
+  // Files served from public/ move to public/<slug>/, so both the base-relative
+  // and the root-absolute reference shapes need the slug inserted.
+  for (const asset of publicAssets) {
+    const escaped = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(
+      new RegExp('(\\$\\{base[A-Za-z]*\\})(' + escaped + ')', 'g'),
+      `$1${slug}/$2`,
+    );
+    out = out.replace(
+      new RegExp('(["\'`])/(' + escaped + ')', 'g'),
+      `$1/${slug}/$2`,
+    );
   }
 
   return out;
@@ -1241,6 +1331,13 @@ const stage = join('.integration-src', `${slug}-stage`);
 rmSync(stage, { recursive: true, force: true });
 cpSync(join(srcRepo, 'src'), stage, { recursive: true });
 
+// public/ is served verbatim and must move to public/<slug>/ or its assets
+// are silently lost. 16 exhibits ship 113 MB there.
+const stagePublic = join('.integration-src', `${slug}-stage-public`);
+const hasPublic = existsSync(join(srcRepo, 'public'));
+rmSync(stagePublic, { recursive: true, force: true });
+if (hasPublic) cpSync(join(srcRepo, 'public'), stagePublic, { recursive: true });
+
 // 2. Drop template leftovers.
 for (const dir of ['pages', 'components', 'assets', 'layouts', 'styles']) {
   const d = join(stage, dir);
@@ -1258,10 +1355,20 @@ console.log(`orphans: ${orphans.length} files, ` +
 for (const o of orphans) console.log(`  ${o.reason.padEnd(12)} ${o.path}`);
 if (apply) for (const o of orphans) rmSync(o.path, { force: true });
 
-// 4. Optimize what remains.
+// 4. Optimize what remains, in src/assets and in public/.
+if (hasPublic) {
+  const publicOrphans = findOrphans(stagePublic, { haystackDir: stage });
+  console.log(`public orphans: ${publicOrphans.length} files`);
+  for (const o of publicOrphans) console.log(`  ${o.reason.padEnd(12)} ${o.path}`);
+  if (apply) for (const o of publicOrphans) rmSync(o.path, { force: true });
+}
 const results = apply ? await optimizeTree(join(stage, 'assets'), { apply: true }) : [];
-const before = results.reduce((n, r) => n + r.beforeBytes, 0);
-const after = results.reduce((n, r) => n + (r.afterBytes ?? r.beforeBytes), 0);
+const publicResults = apply && hasPublic
+  ? await optimizeTree(stagePublic, { apply: true })
+  : [];
+const all = [...results, ...publicResults];
+const before = all.reduce((n, r) => n + r.beforeBytes, 0);
+const after = all.reduce((n, r) => n + (r.afterBytes ?? r.beforeBytes), 0);
 console.log(`assets: ${(before / 1048576).toFixed(1)} MB -> ${(after / 1048576).toFixed(1)} MB`);
 
 // 5. Build the old -> new path map.
@@ -1296,8 +1403,15 @@ const routes = readdirSync(join(stage, 'pages'))
   .filter((r) => r !== 'index');
 console.log(`routes to re-point: ${routes.join(', ') || '(none)'}`);
 
+// Public asset names, for rewriting /foo.png and ${base}foo.png references.
+const publicAssets = hasPublic
+  ? walk(stagePublic).map((f) => relative(stagePublic, f).split(/[\\/]/).join('/'))
+  : [];
+console.log(`public assets to re-point: ${publicAssets.length}`);
+
 console.log(`\nentry page: ${entry} -> src/pages/${slug}.mdx`);
 if (subdir) console.log(`sub-pages : ${subdir}/ -> src/pages/${slug}/`);
+if (hasPublic) console.log(`public    : -> public/${slug}/`);
 console.log(`components: -> src/components/${slug}/`);
 console.log(`assets    : -> src/assets/${slug}/`);
 console.log(`styles    : -> src/styles/${slug}/`);
@@ -1309,7 +1423,10 @@ const copyRewritten = (fromPath, toPath, fromDir, toDir) => {
   const isText = /\.(mdx|md|astro|js|jsx|ts|tsx|css|scss|json)$/.test(fromPath);
   if (!isText) { cpSync(fromPath, toPath); return; }
   const content = readFileSync(fromPath, 'utf8');
-  writeFileSync(toPath, rewriteFile(content, { fromDir, toDir, pathMap, slug, routes }));
+  writeFileSync(
+    toPath,
+    rewriteFile(content, { fromDir, toDir, pathMap, slug, routes, publicAssets }),
+  );
 };
 
 for (const kind of ['components', 'assets', 'styles']) {
@@ -1327,6 +1444,13 @@ if (subdir) {
     const rel = relative(join(stage, 'pages', subdir), file).split(/[\\/]/).join('/');
     copyRewritten(file, join(SRC, 'pages', slug, rel), `pages/${subdir}`, `pages/${slug}`);
   }
+}
+
+// 8. Move public/ into its namespace.
+if (hasPublic) {
+  mkdirSync(join('public', slug), { recursive: true });
+  cpSync(stagePublic, join('public', slug), { recursive: true });
+  console.log(`public/: ${publicAssets.length} files -> public/${slug}/`);
 }
 
 console.log('\ndone. Now: set the layout import, set status live, build, verify, commit.');
@@ -1400,9 +1524,12 @@ changed, and that the homepage still renders.
 ## 8. Commit
 
 ```bash
-git add src/ docs/asset-optimization-report.md
+git add src/ public/
 git commit -m "feat: <slug> integration"
 ```
+
+Record the run's before/after asset totals in the ledger as you go; they are
+collected into `docs/asset-optimization-report.md` in the final task.
 
 ## If it resists
 
@@ -1499,7 +1626,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g7` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g7 integration"
 ```
 
@@ -1565,7 +1692,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g8` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g8 integration"
 ```
 
@@ -1629,7 +1756,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g2` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g2 integration"
 ```
 
@@ -1710,7 +1837,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g4` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g4 integration"
 ```
 
@@ -1773,7 +1900,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g6` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g6 integration"
 ```
 
@@ -1838,7 +1965,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g8` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g8 integration"
 ```
 
@@ -1902,7 +2029,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g2` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g2 integration"
 ```
 
@@ -1965,7 +2092,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g3` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g3 integration"
 ```
 
@@ -2028,7 +2155,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g6` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g6 integration"
 ```
 
@@ -2094,7 +2221,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g7` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g7 integration"
 ```
 
@@ -2158,7 +2285,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g9` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g9 integration"
 ```
 
@@ -2221,7 +2348,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g1` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g1 integration"
 ```
 
@@ -2285,7 +2412,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g6` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g6 integration"
 ```
 
@@ -2350,7 +2477,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g7` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g7 integration"
 ```
 
@@ -2413,7 +2540,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g8` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g8 integration"
 ```
 
@@ -2476,7 +2603,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g1` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g1 integration"
 ```
 
@@ -2539,7 +2666,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g3` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g3 integration"
 ```
 
@@ -2602,7 +2729,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g6` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g6 integration"
 ```
 
@@ -2666,7 +2793,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g8` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g8 integration"
 ```
 
@@ -2736,7 +2863,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g2` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g2 integration"
 ```
 
@@ -2799,7 +2926,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g3` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g3 integration"
 ```
 
@@ -2866,7 +2993,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g5` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g5 integration"
 ```
 
@@ -2930,7 +3057,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g6` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g6 integration"
 ```
 
@@ -2994,7 +3121,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s01g9` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s01g9 integration"
 ```
 
@@ -3059,7 +3186,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g3` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g3 integration"
 ```
 
@@ -3124,7 +3251,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g1` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g1 integration"
 ```
 
@@ -3189,7 +3316,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g2` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g2 integration"
 ```
 
@@ -3253,7 +3380,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g3` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g3 integration"
 ```
 
@@ -3320,7 +3447,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g5` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g5 integration"
 ```
 
@@ -3387,7 +3514,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g7` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g7 integration"
 ```
 
@@ -3451,7 +3578,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g8` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g8 integration"
 ```
 
@@ -3516,7 +3643,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g3` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g3 integration"
 ```
 
@@ -3580,7 +3707,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g4` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g4 integration"
 ```
 
@@ -3644,7 +3771,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g9` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g9 integration"
 ```
 
@@ -3709,7 +3836,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g5` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g5 integration"
 ```
 
@@ -3777,7 +3904,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g1` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g1 integration"
 ```
 
@@ -3845,7 +3972,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g4` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g4 integration"
 ```
 
@@ -3928,7 +4055,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g5` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g5 integration"
 ```
 
@@ -3995,7 +4122,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g6` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g6 integration"
 ```
 
@@ -4061,7 +4188,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g8` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g8 integration"
 ```
 
@@ -4129,7 +4256,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s02g9` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s02g9 integration"
 ```
 
@@ -4195,7 +4322,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s03g9` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s03g9 integration"
 ```
 
@@ -4262,7 +4389,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g1` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g1 integration"
 ```
 
@@ -4329,7 +4456,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g4` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g4 integration"
 ```
 
@@ -4398,7 +4525,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s04g5` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s04g5 integration"
 ```
 
@@ -4464,7 +4591,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g2` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g2 integration"
 ```
 
@@ -4530,7 +4657,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s05g5` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s05g5 integration"
 ```
 
@@ -4596,7 +4723,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g2` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g2 integration"
 ```
 
@@ -4660,7 +4787,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g4` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g4 integration"
 ```
 
@@ -4728,7 +4855,7 @@ Open `http://localhost:4321/virtual-exhibit-template/s40g7` and compare against 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/
+git add src/ public/
 git commit -m "feat: s40g7 integration"
 ```
 
