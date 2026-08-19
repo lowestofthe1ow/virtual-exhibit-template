@@ -21,7 +21,7 @@ Every task's requirements implicitly include this section.
 - Every exhibit owns exactly these paths and touches nothing else: `src/pages/<slug>.mdx`, `src/pages/<slug>/`, `src/components/<slug>/`, `src/assets/<slug>/`, `src/styles/<slug>/`, and `public/<slug>/` only where the bundler must be bypassed.
 - **Commit per exhibit, straight to `main`**, message form `feat: <slug> integration`.
 - `npm run build` must be green at the end of every task. A task is not done with a red build.
-- `npm test` must be green at the end of every task.
+- `npm test` must be green at the end of every task. The script is `node --test tools/test/*.mjs` — Node 26 rejects a bare directory argument to `--test` with MODULE_NOT_FOUND, so the glob form is required, not cosmetic.
 - Exhibit source repos are cloned to `.integration-src/<slug>/` which is git-ignored. Never commit them.
 - Template leftovers are dropped on merge, never namespaced: `linux.mdx`, the stock `index.mdx`, `DistroQuiz.jsx`, `ImageGallery.jsx`, the umbrella's own `TextWithImage.astro`, and the Linux distro PNGs (`Tux.png`, `Ubuntu.png`, `Debian.png`, `Fedora.png`, `Mint.png`, `Manjaro.png`, `Zorin.png`, `PopOS.png`, `MX-Linux.png`, `CachyOS.png`, `Endeavour.png`).
 - Proposal documents (`*.pdf`, `*.docx`) are never merged.
@@ -162,7 +162,7 @@ In `src/data/exhibits.json`:
 In `package.json`, add to `scripts`:
 
 ```json
-"test": "node --test tools/test/"
+"test": "node --test tools/test/*.mjs"
 ```
 
 Append to `.gitignore`:
@@ -429,7 +429,7 @@ git commit -m "feat: homepage renders ranked top row and per-section groups"
 
 - [ ] **Step 1: Write the union into `package.json`**
 
-Replace **only** the `dependencies` and `devDependencies` blocks. Leave `scripts` untouched — Task 1 added `"test": "node --test tools/test/"` there and the rest of the plan depends on it.
+Replace **only** the `dependencies` and `devDependencies` blocks. Leave `scripts` untouched — Task 1 added `"test": "node --test tools/test/*.mjs"` there and the rest of the plan depends on it.
 
 ```json
   "dependencies": {
