@@ -6,10 +6,16 @@ import '../styles/global.css';
 import '../styles/homepage.css';
 
 import ExhibitCard from '../components/ExhibitCard.astro';
+import { buildGallery } from '../../tools/lib/gallery.mjs';
 import exhibits from '../data/exhibits.json';
+import rankings from '../data/rankings.json';
 
-// Try showing first 5 for now
-const top_exhibits = exhibits.slice(0, 5);
+const SECTION_NAMES = {
+  S01: 'Section S01', S02: 'Section S02', S03: 'Section S03',
+  S04: 'Section S04', S05: 'Section S05', S40: 'Section S40',
+};
+
+const { top, sections } = buildGallery(exhibits, rankings);
 ---
 
 <!DOCTYPE html>
@@ -30,8 +36,19 @@ const top_exhibits = exhibits.slice(0, 5);
                 <h2 class="section__title">Top exhibits</h2>
             </div>
             <section class="section">
-                {top_exhibits.map((exhibit) => ( <ExhibitCard exhibit={exhibit} />))}
+                {top.map((exhibit) => <ExhibitCard exhibit={exhibit} />)}
             </section>
+
+            {sections.map((group) => (
+                <>
+                    <div class="section__head">
+                        <h2 class="section__title">{SECTION_NAMES[group.section] ?? group.section}</h2>
+                    </div>
+                    <section class="section">
+                        {group.exhibits.map((exhibit) => <ExhibitCard exhibit={exhibit} />)}
+                    </section>
+                </>
+            ))}
         </main>
 
         <footer>CSARCH2 Virtual Exhibit &mdash; "Computer Architecture is Forever"</footer>
