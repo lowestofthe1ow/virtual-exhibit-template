@@ -190,3 +190,24 @@ test('sanitizeReason collapses whitespace, trims, escapes pipes, and enforces th
   assert.equal(sanitizeReason('left | right'), 'left &#124; right');
   assert.equal(sanitizeReason('y'.repeat(1000)).length, FAILURE_REASON_MAX);
 });
+
+// --- Fix round 3: a missing src/assets/ directory (10 of 53 exhibit repos
+// have none) must be treated as an empty tree, not throw ENOENT ---
+
+import { optimizeTree } from '../assets/optimize.mjs';
+
+test('planConversions on a non-existent path returns [] and does not throw', () => {
+  const dir = join(mkdtempSync(join(tmpdir(), 'optimize-missing-')), 'does-not-exist');
+  assert.deepEqual(planConversions(dir), []);
+});
+
+test('optimizeTree on a non-existent path resolves to [] and does not throw', async () => {
+  const dir = join(mkdtempSync(join(tmpdir(), 'optimize-missing-')), 'does-not-exist');
+  const results = await optimizeTree(dir);
+  assert.deepEqual(results, []);
+});
+
+test('planConversions on an existing-but-empty directory still returns []', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'optimize-empty-'));
+  assert.deepEqual(planConversions(dir), []);
+});

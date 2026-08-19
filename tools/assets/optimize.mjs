@@ -17,6 +17,11 @@ const EMBEDDED_RASTER_MIN = 64 * 1024;
 export const FAILURE_REASON_MAX = 200;
 
 function walk(dir, out = []) {
+  // Many exhibit repos ship with no src/assets/ directory at all. Treat a
+  // missing directory as an empty tree rather than letting readdirSync
+  // throw ENOENT — an existing-but-empty directory already returns []
+  // from readdirSync on its own, so this only changes the missing case.
+  if (!existsSync(dir)) return out;
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (SKIP_DIRS.has(entry.name)) continue;
     const path = join(dir, entry.name);
