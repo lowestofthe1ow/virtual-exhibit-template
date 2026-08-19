@@ -1,7 +1,7 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync,
          rmSync, statSync, writeFileSync } from 'node:fs';
 import { join, extname, relative, posix } from 'node:path';
-import { findOrphans, TEMPLATE_LEFTOVERS } from '../assets/prune.mjs';
+import { findOrphans, TEMPLATE_LEFTOVERS, GLOB_REPOS } from '../assets/prune.mjs';
 import { optimizeTree } from '../assets/optimize.mjs';
 import { rewriteFile } from './rewrite.mjs';
 
@@ -15,6 +15,17 @@ const srcRepo = arg('src');
 const entry = arg('entry');
 const subdir = arg('subdir');
 const apply = args.includes('--apply');
+const forceGlobRepo = args.includes('--force-glob-repo');
+
+// findOrphans's basename/stem scan can't see references an import.meta.glob
+// call builds at runtime, so its report for these seven repos warrants a
+// human look before anything is deleted — the same reasoning that makes
+// prune.mjs's own CLI refuse under this condition. That refusal lives only
+// in prune.mjs's CLI block, not in the exported findOrphans function this
+// orchestrator calls as a library, so the guard has to be repeated here.
+// Matched on the --slug argument (not the resolved path) because the slug
+// is already passed explicitly on this CLI.
+const refuseGlobRepo = apply && GLOB_REPOS.includes(slug) && !forceGlobRepo;
 
 const SRC = 'src';
 const stage = join('.integration-src', `${slug}-stage`);
@@ -45,15 +56,31 @@ const orphans = findOrphans(stage);
 console.log(`orphans: ${orphans.length} files, ` +
   `${(orphans.reduce((n, o) => n + o.bytes, 0) / 1048576).toFixed(1)} MB`);
 for (const o of orphans) console.log(`  ${o.reason.padEnd(12)} ${o.path}`);
-if (apply) for (const o of orphans) rmSync(o.path, { force: true });
+if (apply && !refuseGlobRepo) for (const o of orphans) rmSync(o.path, { force: true });
 
 // 4. Optimize what remains, in src/assets and in public/.
+let publicOrphans = [];
 if (hasPublic) {
-  const publicOrphans = findOrphans(stagePublic, { haystackDir: stage });
+  publicOrphans = findOrphans(stagePublic, { haystackDir: stage });
   console.log(`public orphans: ${publicOrphans.length} files`);
   for (const o of publicOrphans) console.log(`  ${o.reason.padEnd(12)} ${o.path}`);
-  if (apply) for (const o of publicOrphans) rmSync(o.path, { force: true });
+  if (apply && !refuseGlobRepo) for (const o of publicOrphans) rmSync(o.path, { force: true });
 }
+
+// Refuse before any deletion, optimization, or copy has run (all of the
+// above was read-only reporting plus staging into the disposable
+// .integration-src/ copy) so a re-run after manual review starts clean
+// instead of resuming a half-applied import.
+if (refuseGlobRepo) {
+  console.log(
+    `\nrefusing to delete or copy: '${slug}' uses import.meta.glob, so references built at ` +
+    'runtime are invisible to the orphan report above and it cannot be trusted automatically. ' +
+    'Review the list by hand, then re-run with --force-glob-repo to proceed.',
+  );
+  process.exitCode = 2;
+  process.exit(2);
+}
+
 const results = apply ? await optimizeTree(join(stage, 'assets'), { apply: true }) : [];
 const publicResults = apply && hasPublic
   ? await optimizeTree(stagePublic, { apply: true })
