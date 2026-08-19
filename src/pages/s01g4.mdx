@@ -1,0 +1,168 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Instruction-Level Parallelism & Pipelining"
+author: "HIZON, Allen; INFANTE, Charles; MARQUEZ, Jose Miguel; SY, Justin; TENORIO, Jeroen"
+readingTime: "8 minute read"
+---
+
+import TextWithImage from "../components/s01g4/TextWithImage.astro"
+import SequentialSim from "../components/s01g4/SequentialSim.tsx"
+import PipelinedSim from "../components/s01g4/PipelinedSim.tsx"
+import HazardFlushSim from "../components/s01g4/HazardFlushSim.tsx"
+import HazardForwardingSim from "../components/s01g4/HazardForwardingSim.tsx"
+import HazardNoForwardingSim from "../components/s01g4/HazardNoForwardingSim.tsx"
+import HazardLoadUseSim from "../components/s01g4/HazardLoadUseSim.tsx"
+import Fetch from "../components/s01g4/Fetch.tsx"
+import Decode from "../components/s01g4/Decode.tsx"
+import Execute from "../components/s01g4/Execute.tsx"
+import Memory from "../components/s01g4/Memory.tsx"
+import Writeback from "../components/s01g4/Writeback.tsx"
+
+import "../styles/s01g4/neobrutalist-theme.css" 
+import "../styles/s01g4/pipeline-theme.css"
+
+<div id="neobrutalist-page" style={{display: 'none'}}></div>
+
+import cpuThumb from "../assets/s01g4/cpu-placeholder.png"
+import assemblyLine from "../assets/s01g4/assembly-placeholder.png"
+
+# Introduction to Instruction Level Parallelism
+Instruction-Level Parallelism (ILP) is one of the core concepts behind modern fast processors. It is the architectural technique that allows a CPU to execute multiple instructions simultaneously, ensuring that hardware resources are pushed to their maximum potential rather than sitting idle. Every processor you interact with today, from the chip in a smartphone to a data-center server, is designed around this idea in some form.
+
+This exhibit explores **pipelining**, the primary hardware technique CPUs use to achieve ILP. We'll walk through why it was needed, how it works, what can go wrong when instructions overlap, and how modern hardware resolves those conflicts automatically.
+
+## Necessary Context
+
+Before going into the rest of the exhibit, we first need to introduce the 5 clock cycles done by the machine to perform a single instruction. These are Fetch, Decode, Execute, Memory, and Write-back.
+
+For the explanation of the 5 clock cycles lets assume that we are performing the instruction below. Where RAX is a register in the CPU (temporary storage) and var1 is located in the memory with a of value 4.
+
+```
+
+    MOV RAX, [var1]
+
+
+```
+
+1. **Fetch (F):** The CPU fetches the instruction's encoded bits from memory and brings it back to the CPU.
+
+<Fetch client:visible />
+
+2. **Decode (D):** The CPU looks at the instruction it got (often shown in hexadecimal for readability) and looks at it part by part to understand the operation it needs to perform and what values are involved in the operation.
+
+<Decode client:visible />
+
+3. **Execute (E):** Now that the CPU understands the instruction, the CPU then executes it.
+
+<Execute client:visible />
+
+4. **Memory (M):** If the instruction involves getting a value from or storing a value into memory, the CPU needs to perform this extra cycle.
+
+<Memory client:visible />
+
+5. **Write-back (WB):** The CPU writes the final result, from either Execute or Memory cycle, back into the register file in the CPU.
+
+<Writeback client:visible />
+
+## Sequential Execution: The Flawed Predecessor
+
+Before pipelining, processors executed instructions in a strictly sequential manner. Each instruction had to go through all five stages of execution—Fetch, Decode, Execute, Memory Access, and Write-back—before the next instruction could even begin. This meant that at any given moment, only one hardware unit was active while the rest sat idle, creating a severe **performance bottleneck**.
+
+With non-pipelined execution, if an instruction takes 5 clock cycles to complete, a sequence of **N** instructions will take **5N** cycles. Increasing the instruction load directly **multiplies the execution time**, leaving the hardware units utilized only 20% of the time on average.
+
+Use the simulator below to visualize sequential execution. Adjust the instruction count slider to see how execution time scales.
+
+<SequentialSim client:visible />
+
+## What is Pipelining?
+
+Pipelining is a technique that enables the CPU to overlap the execution of multiple instructions, much like an assembly line in a factory. Instead of waiting for one instruction to finish completely, the processor begins fetching the next instruction as soon as the current one moves to the next stage.
+
+In an ideal pipeline, a new instruction is completed every clock cycle once the pipeline is full. A sequence of **N** instructions takes only **4 + N** cycles to execute, achieving a near-5x speedup over sequential execution for large instruction counts.
+
+Compare the pipelined execution below to the sequential model above. Notice how instructions stagger diagonally and how hardware stage utilization reaches up to 100% when the pipeline is fully filled.
+
+<PipelinedSim client:visible />
+
+## Hazards of Pipelining
+
+Although pipelining increases performance, it introduces **hazards**—situations where the next instruction cannot execute in the designated clock cycle. Hazards force the CPU to stall or discard instructions, reducing overall throughput.
+
+## Data Hazards & Forwarding
+
+A **data hazard** occurs when instructions are so close together that one instruction needs a piece of data before a previous instruction has finished computing it. 
+
+Given this NASM instruction sequence:
+
+```
+
+    MOV AX, 10
+    MOV BX, 20
+    ADD AX, BX
+    SUB CX, 5
+
+
+```
+
+In a basic pipeline, the processor handles this safely but slowly. The `ADD` instruction depends on the results of the two `MOV` instructions, so it must pause—or **stall**—in the Decode stage. It simply waits there until the older instructions complete their final **Write-Back (WB)** stage to update the register file. Only then can the `ADD` instruction grab the data and proceed, creating dead cycles (bubbles) in the pipeline.
+
+<HazardNoForwardingSim client:visible/>
+
+Modern CPUs solve this using **forwarding**. Instead of waiting for the data to be written all the way back to the registers, the CPU routes the computed data values from one instruction to the next *internally*. The moment the data is ready, it is forwarded directly to the ALU's input for the `ADD` instruction. This ensures the data is available exactly when `ADD` reaches its Execute step, eliminating the need to stall.
+
+<HazardForwardingSim client:visible/>
+
+Forwarding is brilliant, but it cannot bend time. Forwarding is not possible if the data value comes from a memory label:
+
+```
+
+    MOV AX, [ALPHA]
+    ADD BX, AX
+
+
+```
+
+Because fetching `[ALPHA]` happens in Step 4 (Memory), the data physically cannot be obtained before the Execute step (Step 3) of the dependent `ADD` instruction. In this specific scenario, the hardware is forced to inject a mandatory 1-cycle stall even with forwarding enabled.
+
+<HazardLoadUseSim client:visible/>
+
+## Control Hazards & Branch Prediction
+
+A **control hazard** (or branch hazard) occurs when the CPU encounters a branching instruction and doesn't know which instructions to fetch next. 
+
+Given this NASM instruction sequence:
+
+```
+
+    JCXZ L1
+    INC AX
+    DEC BX
+
+ L1: MOV CX, 5
+
+
+```
+
+When the processor fetches `JCXZ L1`, it does not know if `CX` is zero yet. The CPU refuses to sit idle, so it speculatively fetches `INC AX` and `DEC BX`, **guessing the jump won't happen**.
+
+However, the instruction must reach the **Execute (E)** step for the ALU to test the actual contents of `CX` directly against 0.
+
+If `CX` turns out to be 0, the CPU realizes it guessed wrong! It must initiate a **Pipeline Flush**. It instantly converts the speculatively fetched `INC AX` and `DEC BX` into `NOP`s (bubbles) inside the pipeline, preventing them from modifying any registers, and redirects the fetch stage to `L1: MOV CX, 5`.
+
+*Trace the exact sequence above using the simulator below. Notice how the misprediction is detected in the Execute stage, triggering a flush of the wrong path.*
+
+<HazardFlushSim client:visible/>
+
+## Summary
+
+Instruction-Level Parallelism via pipelining is the foundation of high-performance processor design. While overlapping instruction execution dramatically increases throughput, hardware designers must implement complex mechanisms like forwarding paths, interlocks, and branch predictors to manage hazards and keep the execution units running at maximum efficiency.
+
+## References
+* Hennessy, J. L., & Patterson, D. A. (2017). Computer Architecture: A Quantitative Approach. Morgan Kaufmann.
+* Stallings, W. (2016). *Computer Organization and Architecture*. Pearson.
+* Cloutier, F. (n.d.). *Jcc — Jump if condition is met*. x86 and amd64 instruction reference. Retrieved from https://www.felixcloutier.com/x86/jcc
+* Intel Corporation. (1986). *80386 programmer's reference manual*. Retrieved from https://pdos.csail.mit.edu/6.828/2017/readings/i386/Jcc.htm
+* Alheraki, A. (2026, January 11). *x86-64 Machine Code Encoding: Real encoding examples with byte breakdowns*. SimplifyC++. Retrieved from https://www.simplifycpp.org/?id=a0741
+* Intel Corporation. (2024). *Intel® 64 and IA-32 Architectures Software Developer's Manual, Volume 2 (2A, 2B, 2C, & 2D): Instruction Set Reference, A-Z*. Retrieved from https://cdrdv2.intel.com/v1/dl/getContent/671110
+* Stack Overflow. (n.d.). *What is REX prefix in instruction encoding?* Retrieved from https://stackoverflow.com/questions/68604377/what-is-rex-prefix-in-instruction-encoding
+* Binkley, D. (n.d.). *Encoding real x86 instructions*. CS 371, Loyola University Maryland. Retrieved from https://www.cs.loyola.edu/~binkley/371/Encoding_Real_x86_Instructions.html

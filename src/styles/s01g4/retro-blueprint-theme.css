@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Source+Sans+3:wght@400;600&display=swap');
+
+:root {
+    --accent: #FFFFFF; /* Pure white for accents and links */
+    --bg1: #0F2744;    /* Deep blueprint blue */
+    --bg2: #0F2744;    /* Keep panels the same deep blue */
+    --text: #FFFFFF;   /* White text */
+    --muted: #A0BBD4;  /* Soft light blue for secondary text */
+    --border: #FFFFFF; /* Thin white borders */
+    
+    --radius: 0px; 
+}
+
+html {
+    background-color: var(--bg1);
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+body {
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+.title, 
+.subtitle,
+.article h1,
+.article h2,
+.article h3,
+.article h4,
+.toc h2,
+.content__titlemeta h1 {
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: none; 
+    font-weight: 600;
+}
+
+.header__titleblock,
+.article,
+.content__titlemeta,
+.exhibitlink,
+.toc {
+    box-shadow: none; 
+    border: 1px solid var(--border); 
+    background: var(--bg2);
+}
+
+.button {
+    box-shadow: none;
+    border-radius: 0px;
+    border: 1px solid var(--border);
+}
