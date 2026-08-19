@@ -1,0 +1,145 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Multicore Processors: Keeping It Cool"
+description: "A short description of your topic."
+author: "Ang, Byron Scott; Claro, Stephen Jakobb; Placer, Paul John; Sotingco, Kimberly Wynelle; Tee, John Lorens"
+readingTime: "6-7 minutes"
+---
+
+import img1 from "../assets/s03g6/S03_Group6_Processors/1.webp";
+import img2 from "../assets/s03g6/S03_Group6_Processors/2.webp";
+import img3 from "../assets/s03g6/S03_Group6_Processors/3.webp";
+import img4 from "../assets/s03g6/S03_Group6_Processors/4.webp";
+import img5 from "../assets/s03g6/S03_Group6_Processors/5.webp";
+import img6 from "../assets/s03g6/S03_Group6_Processors/6.webp";
+import img7 from "../assets/s03g6/S03_Group6_Processors/7.jpg";
+import img8 from "../assets/s03g6/S03_Group6_Processors/8.webp";
+import img9 from "../assets/s03g6/S03_Group6_Processors/9.jpg";
+
+export const exhibitPhotos = [
+    {
+        id: '1',
+        src: img1.src,
+        title: '1971 — Intel 4004',
+        caption: 'The world’s first commercially available single-chip microprocessor.'
+    },
+    {
+        id: '2',
+        src: img2.src,
+        title: '2001 — IBM POWER4',
+        caption: 'The world’s first commercial dual-core processor.'
+    },
+    {
+        id: '3',
+        src: img3.src,
+        title: '2005 — Intel Pentium D / AMD Athlon 64 X2',
+        caption: 'Brought dual-core x86 computing into consumer desktop systems.'
+    },
+    {
+        id: '4',
+        src: img4.src,
+        title: '2006 — Intel Core 2 Quad',
+        caption: 'Pioneered mainstream quad-core performance for desktops.'
+    },
+    {
+        id: '5',
+        src: img5.src,
+        title: '2010 — AMD Phenom II X6 / Intel Core i7-980X',
+        caption: 'Introduced 6-core processing to desktop enthusiast platforms.'
+    },
+    {
+        id: '6',
+        src: img6.src,
+        title: '2017 — AMD Ryzen 7 1700X',
+        caption: 'Brought affordable 8-core, 16-thread performance to mainstream PCs.'
+    },
+    {
+        id: '7',
+        src: img7.src,
+        title: '2019 — AMD Ryzen 9 3950X',
+        caption: 'Pushed core counts to 16 cores on a consumer desktop socket.'
+    },
+    {
+        id: '8',
+        src: img8.src,
+        title: '2019 — AMD Ryzen Threadripper 3970X',
+        caption: 'Delivered 32 cores for high-end workstation computing.'
+    },
+    {
+        id: '9',
+        src: img9.src,
+        title: '2021 — Intel Alder Lake (12th Gen)',
+        caption: 'Introduced x86 performance hybrid architecture with P-cores and E-cores.'
+    }
+];
+
+{/* component imports */}
+import InteractiveCpu from '../components/s03g6/S03_Group6/InteractiveCpu.jsx';
+import Background from '../components/s03g6/S03_Group6/Background.astro';
+import ComparisonTable from '../components/s03g6/S03_Group6/ComparisonTable.jsx';
+import TrendGraph from '../components/s03g6/S03_Group6/TrendGraph.jsx';
+import ChefAnalogy from '../components/s03g6/S03_Group6/ChefAnalogy.jsx';
+import PowerFormula from '../components/s03g6/S03_Group6/PowerFormula.jsx';
+import PhotoGallery from '../components/s03g6/S03_Group6/PhotoGallery.jsx';
+
+<div className="multicore-exhibit">
+    <Background />
+
+    ## Problem Solving Story
+    In the past, computer processors only had a single core, which was defined by a single metric: clock speed. Microprocessors possessed only one computational engine which executed instructions sequentially. Computers did exactly what they were told, when they were told. Under a principle known as Dennard scaling, engineers could shrink transistors on a silicon die, allowing them to increase the clock frequency without a corresponding increase in power density.
+
+    <TrendGraph client:load />
+
+    However, as the demand for complex 3D rendering and real-time computations grew, single-core processors hit a severe bottleneck. To keep up, manufacturers pushed clock speeds higher, which required exponential increases in voltage. This created a thermal density so high that standard air-cooling solutions could no longer prevent the silicon from melting. This physical barrier became known as the **Power Wall problem**.
+
+    Around 2005, realizing that a single core could no longer be pushed to higher frequencies without severe overheating, CPU companies like Intel and AMD shifted their approach: putting multiple cores on a single chip.
+
+    <ChefAnalogy client:load />
+
+    Think of a CPU like a restaurant kitchen. A single-core processor is like having one incredibly fast, highly skilled chef. To complete more orders, you have to force that chef to work faster and faster. Eventually, the chef gets exhausted, the kitchen overheats, and they can still only cook one dish at a time.
+
+    With a multicore processor, instead of forcing one chef to work at an increasing speed, you hire more chefs. In a symmetric multiprocessing environment, the operating system treats each physical core as a distinct logical entity, much like a head chef assigning incoming order tickets across separate workstation line cooks.
+
+    To execute an application, software instructions are divided into independent paths called threads. The OS schedules these distinct threads across available cores simultaneously, allowing them to work in parallel at a comfortable, moderate pace. To prevent order mix-ups or resource conflicts, the cores continuously coordinate using shared memory frameworks and internal communication lines, ensuring data stays synchronized without creating computational bottlenecks.
+
+    <ComparisonTable client:load/>
+
+    By distributing the workload across multiple parallel workers, the total output of the system increases dramatically without any single core overheating. But how did this approach solve the Power Wall mathematically? It comes down to the physics of dynamic power consumption in CMOS circuits, expressed by the following formula:
+    <PowerFormula client:load />
+
+    Because power consumption scales quadratically with voltage, running a single core at extreme frequencies requires a high operating voltage that causes power and heat to spike exponentially. By splitting a workload across multiple cores, each individual core can run at a significantly lower frequency and a reduced operating voltage. Because of the quadratic relationship, a slight reduction in voltage yields a massive drop in heat and power usage. This allowed computing throughput to increase through parallel execution without exceeding the thermal limits of the silicon.
+
+    ## The Multicore CPU
+    The transition to multicore processing began in heavy-duty enterprise environments when IBM introduced the first commercial dual-core processor, the POWER4, in 2001. Mainstream desktop computing quickly followed in 2005 with the launch of the Intel Pentium D and AMD Athlon 64 X2, forcing a monumental paradigm shift in software engineering from single-threaded clock speed reliance to multithreaded parallel programming.
+
+    Over the next two decades, consumer core counts expanded rapidly, from early quad-core and 6-core enthusiast chips in the late 2000s to AMD’s aggressive push bringing 8-core and 16-core chips to standard desktop sockets, and up to 32 cores for workstations. Today, processor design has evolved into complex hybrid architectures, pioneered in x86 by Intel's Alder Lake in 2021, which pairs dedicated Performance cores with high-efficiency cores to maximize multitasking across modern devices.
+    <PhotoGallery photos={exhibitPhotos} client:visible />
+
+    ## Interactive Multicore CPU Model
+    <InteractiveCpu client:load/>
+
+    ## References
+	1. **Cass, S.** (2024, Mar 15). Chip Hall of Fame: Intel 4004. *IEEE Spectrum*. [Link](https://spectrum.ieee.org/chip-hall-of-fame-intel-4004-microprocessor)
+	2. **Des, & Des.** (2023, Jul 28). Thermal Throttling vs Power Limit Throttling. *76 Services*. [Link](https://76services.co.uk/thermal-throttling/thermal-throttling-vs-power-limit-throttling/)
+	3. **Fish, R.** (2012, Jan 6). Future of computers – Part 2: The Power Wall. *EDN*. [Link](https://www.edn.com/future-of-computers-part-2-the-power-wall/)
+	4. **Guru3D.** (2014). Intel Core i7-980X. [Link](https://www.guru3d.com/review/intel-core-i7-980x-review/)
+	5. **Harris, D. M., & Harris, S. L.** (2012). From zero to one. *Elsevier eBooks* (pp. 2–52). [Link](https://doi.org/10.1016/b978-0-12-394424-5.00001-x)
+	6. **Koren, I., & Krishna, C.** (2011). Temperature-aware computing. *Sustainable Computing*, 1(1), 46–56. [Link](https://doi.org/10.1016/j.suscom.2010.10.004)
+	7. **Microchip USA.** (n.d.). CPU power dissipation. [Link](https://www.microchipusa.com/electrical-components/cpu-power-dissipation)
+	8. **OkQubit.** (n.d.). IBM POWER4 MCM package. [Link](https://www.okqubit.net/power4/)
+	9. **Rajagopal, S. M., et al.** (2023). FedSDM for ECG data. *Internet of Things*, 22, 100784. [Link](https://doi.org/10.1016/j.iot.2023.100784)
+	10. **Rupp, K.** (2018, Feb 15). 42 Years of Microprocessor Trend Data. [Link](https://www.karlrupp.net/2018/02/42-years-of-microprocessor-trend-data/)
+	11. **ServeTheHome.** (2019, Nov 25). AMD Ryzen Threadripper 3970X. [Link](https://www.servethehome.com/amd-ryzen-threadripper-3970x-review-32-cores-of-madness/)
+	12. **Sheikh, H. F., et al.** (2011). Thermal-aware scheduling techniques. *Sustainable Computing*, 2(3), 151–169. [Link](https://doi.org/10.1016/j.suscom.2011.06.005)
+	13. **Sutter, H.** (2009). The Free Lunch Is Over. *Dr. Dobb's Journal*. [Link](https://www.cs.utexas.edu/~lin/cs380p/Free_Lunch.pdf)
+	14. **Team, R.** (2025, Dec 27). Single-Core vs Multi-Core CPUs. *RevisionDojo*. [Link](https://www.revisiondojo.com/blog/single-core-vs-multi-core-processors-explained)
+	15. **TechPowerUp.** (n.d.). AMD Athlon 64 X2 4200+. [Link](https://www.techpowerup.com/cpu-specs/athlon-64-x2-4200.c475)
+	16. **TechPowerUp.** (n.d.). AMD Phenom II X6 1090T BE. [Link](https://www.techpowerup.com/cpu-specs/phenom-ii-x6-1090t-be.c670)
+	17. **TechPowerUp.** (n.d.). AMD Ryzen 7 1700X. [Link](https://www.techpowerup.com/cpu-specs/ryzen-7-1700x.c1892)
+	18. **TechPowerUp.** (n.d.). Intel Core 2 Quad Q6600. [Link](https://www.techpowerup.com/cpu-specs/core-2-quad-q6600-95w.c403)
+	19. **TechPowerUp.** (n.d.). Intel Pentium D 920. [Link](https://www.techpowerup.com/cpu-specs/pentium-d-920.c327)
+	20. **TweakTown.** (2020, Nov 3). AMD Ryzen 9 3950X. [Link](https://www.tweaktown.com/reviews/9255/amd-ryzen-9-3950x-zen-2-processor-review/index.html)
+	21. **Venu, B.** (2011). Multi-core processors – An overview. *arXiv*. [Link](https://arxiv.org/abs/1110.3535)
+	22. **Wikipedia.** (2026, Jun 18). Alder Lake. [Link](https://en.wikipedia.org/wiki/Alder_Lake)
+	23. **Wikipedia.** (2026, Feb 2). Athlon 64 X2. [Link](https://en.wikipedia.org/wiki/Athlon_64_X2)
+</div>
