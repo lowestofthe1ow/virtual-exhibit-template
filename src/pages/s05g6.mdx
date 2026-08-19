@@ -1,0 +1,288 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Arm Architecture"
+author: "Borromeo, Anton; Dela Cruz, Mirai; Reyes, Nicos;
+        Roldan, Beatrice; Ruiz, Joseph"
+readingTime: "25 minutes"
+---
+
+ {/* We import various Astro and React components */}
+
+import TextWithImage from "../components/s05g6/TextWithImage.astro"
+import ImageGallery from '../components/ImageGallery.jsx';
+import DistroQuiz from "../components/DistroQuiz.jsx"
+import InteractiveImageMap from "../components/s05g6/InteractiveImageMap.jsx";
+import BenchmarkGallery from "../components/s05g6/BenchmarkGallery.jsx";
+
+{/* Images have to be imported manually */}
+
+import bbcmicro from "../assets/s05g6/bbcmicro.webp"
+import arm1 from "../assets/s05g6/arm1.webp"
+import arm1guts from "../assets/s05g6/arm1guts.webp"
+import arm2 from "../assets/s05g6/arm2.webp"
+import arm3 from "../assets/s05g6/arm3.webp"
+import cortexm from "../assets/s05g6/cortexm.webp"
+import cortexr from "../assets/s05g6/cortexr.webp"
+import cortexa from "../assets/s05g6/cortexa.webp"
+import cortexx from "../assets/s05g6/cortexx.webp"
+import armneo from "../assets/s05g6/armneo.jpg"
+
+{/* Used for the ImageGallery component */}
+
+export const photos = [
+  {
+    id: 1,
+    title: "Cortex-M",
+    tagline: "Designed for microcontrollers and embedded systems that require low power consumption, fast response times, and cost efficiency. Unlike processors used in smartphones or computers, Cortex-M cores are optimized to perform dedicated tasks while consuming minimal energy. Despite their small size and low power requirements, Cortex-M processors provide reliable performance for sensor processing, motor control, and real-time monitoring, making them one of the most widely used ARM processor families in embedded computing.",
+    author: "Common devices: Smartwatches, fitness trackers, smart home devices, medical sensors, microcontroller development boards",
+    year: "Architecture: Thumb Instructions; This architecture compresses 32-bit operations into 16-bit widths, allowing more code to fit into restricted memory spaces without sacrificing performance.",
+    img: cortexm.src,
+  },
+  {
+    id: 2,
+    title: "Cortex-R",
+    tagline: " Built for real-time applications where tasks must be completed within strict timing constraints. Rather than focusing solely on speed, Cortex-R processors emphasize deterministic performance, reliability, and fault tolerance. These processors are commonly used in systems where delays or failures could have serious consequences, such as automotive safety systems, industrial controllers, hard drive controllers, and aerospace applications. Features such as error correction, tightly coupled memory, and fast interrupt handling allow Cortex-R processors to maintain predictable operation even under demanding conditions.",
+    author: "Common applications: anti-lock braking systems (ABS), airbag controllers, hard disk and SSD controllers, industrial robots, aviation and aerospace systems",
+    img: cortexr.src,
+  },
+  {
+    id: 3,
+    title: "Cortex-A",
+    tagline: "Designed to run full operating systems such as Android and Linux while delivering an excellent balance between performance and energy efficiency. Cortex-A processors support advanced features including virtualization, multicore processing, multimedia acceleration, and high-speed memory access. Over several generations, they have become the foundation of modern mobile computing, enabling users to browse the web, play games, stream videos, and run demanding applications without sacrificing battery life. ",
+    author: "Common devices: smartphones, tablets, chromebooks, smart TVs, Raspberry Pi, single-board computers",
+    img: cortexa.src,
+  },
+  {
+    id: 4,
+    title: "Cortex-X",
+    tagline: "Represents ARM's highest-performance CPU cores for consumer devices. Cortex-X cores prioritize maximum computational performance; typically paired with Cortex-A cores using ARM's big.LITTLE architecture, allowing devices to switch between efficiency and high-performance modes depending on workload. ",
+    author: "Common devices: Flagship Android smartphones, high-end tablets, premium mobile gaming devices",
+    year: "Architecture: Heterogeneous Scaling;  pairs high-performance 'big' cores (like the Cortex-X/A series) with energy-sipping 'LITTLE' efficiency cores. The operating system intelligently toggles between these clusters: the high-power cores stay powered down during background tasks, and the device only engages the 'big' cores during intensive gaming or AI processing. This heterogeneous design allows smartphones to offer flagship performance while keeping power draw low during idle operation.",
+    img: cortexx.src,
+  },
+];
+
+{/* Actual content */}
+
+# ARM Architecture
+
+ARM (Advanced RISC Machine) CPU architecture is a family of Reduced Instruction Set Computing (RISC) architectures utilised to specify a set of rules that dictate how the hardware works when a particular instruction is executed. (Arm Ltd., n.d.)  Created by ARM Holdings, then founded as Advanced RISC Machines Ltd. in November 1990 as a joint venture between  Acorn Computers, Apple Computer (now Apple Inc.), and VLSI Technology (now NXP Semiconductors N.V); ARM underpins almost every electronic system with its efficient architecture, having shipped more than 350 billion chips across the technological market: from IoT and smartphones to data centers and supercomputers. 
+
+With profiles optimized for applications, real-time, and microcontrollers, Arm delivers scalability, energy efficiency, security, and broad ecosystem support unmatched by other processor architectures.
+
+## A Brief History of ARM
+
+<TextWithImage
+  body="The BBC Microcomputer is a range of computers designed and built by Acorn Computers during the 1980s and 1990s. It was originally designed to support the BBC’s Computer Literacy Project for usage in British primary and secondary schools, before trickling down into public usage as a popular choice for a home computer. It is the first computer many Britons growing up in the 1980s saw, and it has been the starting point of many thousands of careers in software, computing, electronics, and other technical fields."
+  imageSrc={bbcmicro.src}
+  imageAlt="Image of an Acorn BBC Micro Model B+"
+  imageCaption="Acorn BBC Micro Model B+"
+/>
+
+The success of the BBC Micro demonstrated the growing demand for faster and more efficient computers. However, the 8-bit processors available at the time were beginning to limit performance. To overcome these limitations, Acorn Computers started developing its own RISC processor, leading to the creation of the ARM1 in 1985.
+
+## ARM Classic
+
+<TextWithImage
+  body="This marked the beginning of the ARM architecture, introducing a processor that emphasized simplicity, efficiency, and low power consumption — principles that continue to define ARM processors today. The challenge Acorn faced was that commercial off-the-shelf processors were designed for general-purpose computing, which often meant carrying unnecessary 'bloat' in their instruction sets and features that slowed execution and increased power consumption."
+  imageSrc={arm1.src}
+  imageAlt="Image of one of the first ARM processors"
+  imageCaption="One of the first ARM processors"
+  reverse = {true}
+/>
+
+<InteractiveImageMap
+  client:load
+  src={arm1guts.src}
+  maxWidth={400}
+  caption="An interactive closer look at an ARM1 die"
+  hotspots={[
+    {
+      id: "addr",
+      title: "Addr",
+      description: "Latches and stabilizes memory markers to tell external hardware exactly where to look for data.",
+      point: { x: 15, y: 65 },
+      box: { x: -30, y: 35, width: 170, anchor: "bottom" },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "reg",
+      title: "Register File",
+      description: "Serves as the primary internal storage grid holding user registers, status states, and the Program Counter",
+      point: { x: 35, y: 70 },
+      box: { x: 4, y: 20, width: 170, anchor: "bottom" },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "alu",
+      title: "ALU",
+      description: "Arithmetic logic unit — Executes all standard arithmetic math processing and bitwise logical comparisons on variables.",
+      point: { x: 53, y: 65},
+      box: { x: 55, y: 40, width: 170 },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "barrshift",
+      title: "Barrel Shifter",
+      description: "Accelerates performance by shifting, rotating, or scaling binary data within a single cycle before it reaches the ALU.",
+      point: { x: 67, y: 70},
+      box: { x: 60, y: 80, width: 170 },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "data",
+      title: "Data",
+      description: "Serves as the bidirectional buffer gateway routing active information bits into and out of the processor core.",
+      point: { x: 85, y: 65},
+      box: { x: 90, y: 40, width: 170 },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "regdecode",
+      title: "Register Decode",
+      description: "Identifies and opens specific lines to read from or write to designated target slots in the Register File.",
+      point: { x: 30, y: 30},
+      box: { x: -30, y: 5, width: 170 },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "instdecode",
+      title: "Instruction Decode",
+      description: "Translates raw machine instructions fetched from memory into explicit execution routing signals.",
+      point: { x: 70, y: 30},
+      box: { x: 90, y: 5, width: 170 },
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+    {
+      id: "control",
+      title: "Control",
+      description: "Generates the chip's internal timing, clock synchronization, and micro-architectural sequences required to run operations.",
+      point: { x: 50, y: 15},
+      box: { x: 60, y: 5, width: 170, anchor: "top"},
+      color: "rgba(255, 233, 173, 0.97)",
+    },
+  ]}
+/>
+
+The ARM1 chip is built from functional blocks, each with a different purpose. Registers store data, the ALU (arithmetic-logic unit) performs simple arithmetic, instruction decoders determine how to handle each instruction, and so forth. Compared to most processors, the layout of the chip is simple, with each functional block clearly visible. (In comparison, the layout of chips such as the 6502 or Z-80 is highly hand-optimized to avoid any wasted space. In these chips, the functional blocks are squished together, making it harder to pick out the pieces.)
+
+<TextWithImage
+  body="Released in 1986, the ARM2 transitioned the architecture from the experimental ARM1 prototype into a commercial production success for the Acorn Archimedes. While maintaining the core RISC philosophy of simplicity, its major structural evolution was the addition of a dedicated hardware multiplier. Where the ARM1 relied on slow, multi-step software loops managed by control logic, the ARM2 allocated physical silicon space to accelerate multiplication and multiply-accumulate (MAC) operations directly. This generation retained the layout principles of the ARM1 but packed them densely to expand the transistor count from 25,000 to roughly 30,000."
+  imageSrc={arm2.src}
+  imageAlt="Image of an ARM2"
+  imageCaption="ARM2"
+/>
+
+The ARM2 was first shipped running at a clock rate of 8 MHz, but even at this relatively sedate speed still delivered about 4 MIPS when attached to (slow) 120 ns commercial dynamic RAM. Since then, ARM2 has been commercially offered in 10 MHz and 12 MHz speeds, still yielding a performance of about half the clock rate in MIPS. This efficiency allowed the platform to deliver exceptional throughput for its era while maintaining the ultra-low power consumption and minimal thermal footprint that ultimately defined the architecture's lasting legacy.
+
+<TextWithImage
+  body="The third ARM revision, the ARM3, was a significant upgrade in both design and fabrication technology. It was also the first time that the Variants of the ARM CPU 167 macrocell approach had been used in the design of an ARM processor. The ARM3 exploits the small size of the ARM2 CPU core and adds to it a 4 kbyte on-chip cache which provides cached data in a single clock cycle. At the same time, the fabrication process was shrunk another couple of steps to allow a significant increase in clock rate."
+imageSrc={arm3.src}
+  imageAlt="Image of an ARM3"
+  imageCaption="ARM3"
+  reverse={true}
+/>
+
+The ARM3 comprises some 300 000 transistors, more than ten times as many as ARM2 and yet still small by contemporary microprocessor standards (the Intel 80486DX has roughly 1200 000). ARM3 is capable of operating at 25 MHz when fabricated in a 1.2 μm process and at 33 MHz when fabricated in a 0.8 μm process. At these speeds, it typically yields some 13-15 MIPS, yet still requires only relatively slow commercial DRAM.
+
+The transition from ARM2 to ARM3 marked a doubling down on the Reduced Instruction Set Computing (RISC) philosophy. Unlike traditional processors that rely on complex, variable-length instructions requiring heavy hardware decoding, ARM utilizes fixed-length, simple instructions. This design allows the processor to execute operations in a single clock cycle with minimal transistor overhead. Because each instruction is uniform, the chip requires less power and generates significantly less heat than contemporary CISC-based architectures, establishing the efficiency footprint that remains ARM's core advantage.
+
+## ARM Cortex Cores
+
+The ARM Cortex family spans a full range of performance and power tradeoffs, with each sub-family built for a different job. Cortex-M handles low-power microcontrollers and embedded systems like wearables and IoT sensors, using the compact Thumb instruction set to fit 32-bit performance into tight memory and power budgets. Cortex-R prioritizes deterministic, fault-tolerant real-time response over raw speed, making it suited to safety-critical systems such as automotive ABS, industrial controllers, and aerospace. Cortex-A and Cortex-X both target full-OS devices like phones and laptops, balancing performance and battery life differently, and are often combined through big.LITTLE architecture so a single device can idle efficiently and still burst to high performance when needed.
+<br />
+
+<ImageGallery photos={photos} client:load />
+
+<br />Together, these four families form a continuous ladder, from ultra-low-power microcontrollers, to guaranteed-response embedded control, to everyday mobile computing, to peak-performance flagship processing, all built on a shared instruction-set architecture. This range is what has made ARM cores foundational across such a wide span of modern computing, powering devices from simple fitness trackers to high-end smartphones.
+
+##  ARM Neoverse
+
+<TextWithImage
+  body="As the most recent major expansion to the ARM family, the ARM Neoverse platform extends this architectural blueprint far beyond mobile devices, anchoring ARM's footprint in cloud computing, networking, and enterprise infrastructure."
+  imageSrc={armneo.src}
+  imageAlt="Image of an ARM Neoverse processor"
+  imageCaption="An ARM Neoverse processor"
+/>
+
+Instead of powering personal electronics, Neoverse processors are meticulously optimized for servers, data centers, edge computing, and high-performance networking equipment. By focusing on high throughput, energy efficiency, and massive scalability, they allow cloud providers to seamlessly handle millions of simultaneous requests while drastically reducing total power consumption. Ultimately, as the global demand for cloud services and artificial intelligence continues to grow, Neoverse has solidified its role as a key component in modern server infrastructure and supercomputing environments.
+
+## Performance Benchmarks
+Compare the performance evolution of ARM Classic and ARM Cortex processors through their respective benchmarks.
+<br />
+<br />
+Note that MIPS and DMIPS/MHz are not directly comparable, as they use different measurement standards: 
+<br/ >
+MIPS measures total instruction throughput, while DMIPS/MHz measures benchmark efficiency per clock cycle.
+
+ARM Classic Performance (MIPS)
+<br />
+<BenchmarkGallery
+  client:load
+  benchmarks={[
+    {
+      name: "ARM1",
+      benchmark: 3,
+      metric: "MIPS",
+      value: "3 MIPS"
+    },
+    {
+      name: "ARM2",
+      benchmark: 4,
+      metric: "MIPS",
+      value: "4 MIPS"
+    },
+    {
+      name: "ARM3",
+      benchmark: 15,
+      metric: "MIPS",
+      value: "15 MIPS"
+    }
+  ]}
+/>
+<br />
+Cortex Performance (DMIPS/MHz)
+<br />
+<BenchmarkGallery
+  client:load
+  benchmarks={[
+    {
+      name: "Cortex-M7",
+      benchmark: 2.14,
+      metric: "DMIPS/MHz",
+      value: "2.14 DMIPS/MHz"
+    },
+    {
+      name: "Cortex-R (ARMv8-R)",
+      benchmark: 3.4,
+      metric: "DMIPS/MHz",
+      value: "3.4 DMIPS/MHz"
+    }
+  ]}
+/>
+<br />
+## References
+
+- Acorn Computers. (n.d.). ARM hardware reference manual. https://acorn.huininga.nl/pub/docs/manuals/Acorn/ARM%20Evaluation%20System/ARM%20Evaluation%20System%20-%20ARM%20Hardware%20Reference%20Manual.pdf
+- Arc. (n.d.). ARM3. https://arcwiki.org.uk/index.php/ARM3
+- Arm. (n.d.). Arm architecture. https://www.arm.com/architecture
+- Arm. (n.d.). Arm official history. https://newsroom.arm.com/blog/arm-official-history
+- Arm. (n.d.). A brief history of Arm, part 1. https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/a-brief-history-of-arm-part-1
+- BBC. (n.d.). BBC history. https://clp.bbcrewind.co.uk/history
+- BBC Micro. (n.d.). The BBC Microcomputer. https://bbcmicro.computer/
+- Computer History Museum. (n.d.). Acorn computers interview. https://archive.computerhistory.org/resources/access/text/2012/06/102746190-05-01-acc.pdf
+- CPU Shack. (2010, March 31). The origin of ARM: New finds for the museum. https://www.cpushack.com/2010/03/31/the-origin-of-arm-new-finds-for-the-museum/
+
+- Jia, J. (n.d.). CPU comparison: Branch prediction. https://jia.je/cpu/comparison.html#branch-prediction
+- Ken Shirriff. (2015, December). Reverse engineering the ARM1. https://www.righto.com/2015/12/reverse-engineering-arm1-ancestor-of.html
+- Sunstream Global. (n.d.). Exploring the applications of 32-bit ARM Cortex-M based microcontrollers. https://www.sunstreamglobal.com/exploring-the-applications-of-32-bit-arm-cortex-m-based-microcontrollers/
+- Van Someren, A., & Atack, C. (n.d.). The ARM RISC chip: A programmer's guide. https://web.archive.org/web/20250805233033/http://arcarc.nl/archive/Books/The%20ARM%20RISC%20Chip%20-%20A%20Programmer's%20Guide%20-%20Alex%20Van%20Someren%20&%20Carol%20Atack/The%20ARM%20RISC%20Chip%20-%20A%20Programmer's%20Guide%20-%20Alex%20Van%20Someren%20&%20Carol%20Atack.pdf
+
+- Weir, J. (2022, September 22). A history of ARM, part 1: Building the first chip. Ars Technica. https://arstechnica.com/gadgets/2022/09/a-history-of-arm-part-1-building-the-first-chip/
+- Weir, J. (2022, November 23). A history of ARM, part 2: Everything starts to come together. Ars Technica. https://arstechnica.com/gadgets/2022/11/a-history-of-arm-part-2-everything-starts-to-come-together/
+- Weir, J. (2023, January 18). A history of ARM, part 3: Coming full circle. Ars Technica. https://arstechnica.com/gadgets/2023/01/a-history-of-arm-part-3-coming-full-circle/
+
+- Wikipedia. (n.d.). Acorn Computers. https://en.wikipedia.org/wiki/Acorn_Computers
+- Wikipedia. (n.d.). ARM architecture. https://en.wikipedia.org/wiki/ARM_architecture
+- Wikipedia. (n.d.). List of ARM processors. https://en.wikipedia.org/wiki/List_of_ARM_processors
+- Wikipedia. (n.d.). MOS Technology 6502. https://en.wikipedia.org/wiki/MOS_Technology_6502
