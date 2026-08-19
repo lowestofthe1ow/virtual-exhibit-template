@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { buildGallery } from '../lib/gallery.mjs';
+import { loadExhibits } from '../lib/exhibits.mjs';
 
 const make = (slug, section, group, status = 'live') => ({
   slug, section, group, status, title: slug, authors: [], keywords: [],
@@ -36,4 +38,12 @@ test('sections come out in S01..S05 then S40 order', () => {
   const exhibits = [make('s40g1', 'S40', 1), make('s01g1', 'S01', 1), make('s05g1', 'S05', 1)];
   const { sections } = buildGallery(exhibits, [], { topCount: 0 });
   assert.deepEqual(sections.map((s) => s.section), ['S01', 'S05', 'S40']);
+});
+
+test('every slug in rankings.json exists in exhibits.json', () => {
+  const rankings = JSON.parse(readFileSync('src/data/rankings.json', 'utf8'));
+  const slugs = new Set(loadExhibits().map((e) => e.slug));
+  for (const slug of rankings) {
+    assert.ok(slugs.has(slug), `rankings.json contains unknown slug: ${slug}`);
+  }
 });
