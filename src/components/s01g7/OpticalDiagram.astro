@@ -1,0 +1,235 @@
+---
+// comment 3: labeled "3D-ish" anatomy of a CD for the top of the optical page.
+// it's a flat SVG that tilts toward the cursor; hovering a label lights up the
+// matching part. reusable idea — swap the svg + labels for the other pages later.
+---
+
+<figure class="pd" data-pd aria-label="Labeled anatomy of a compact disc">
+  <figcaption class="pd-cap">
+    COMPACT DISC &mdash; ANATOMY
+    <span>hover a label to highlight the part</span>
+  </figcaption>
+
+  <div class="pd-stage" data-pd-stage>
+    <svg viewBox="0 0 560 380" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <radialGradient id="pdDisc" cx="47%" cy="42%" r="72%">
+          <stop offset="0%" stop-color="#2b2b40" />
+          <stop offset="30%" stop-color="#1b2b3a" />
+          <stop offset="48%" stop-color="#241b3a" />
+          <stop offset="66%" stop-color="#1b3a30" />
+          <stop offset="82%" stop-color="#331b2c" />
+          <stop offset="100%" stop-color="#161620" />
+        </radialGradient>
+        <linearGradient id="pdSheen" x1="0" y1="0" x2="1" y2="0.7">
+          <stop offset="0%" stop-color="rgba(0,255,255,0.22)" />
+          <stop offset="35%" stop-color="rgba(255,0,255,0.10)" />
+          <stop offset="65%" stop-color="rgba(57,255,20,0.10)" />
+          <stop offset="100%" stop-color="rgba(0,255,255,0.20)" />
+        </linearGradient>
+        <linearGradient id="pdBeam" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="rgba(255,60,60,0.04)" />
+          <stop offset="100%" stop-color="rgba(255,60,60,0.7)" />
+        </linearGradient>
+      </defs>
+
+      <!-- ===== the disc (center 230,190 · rx150 · ry100) ===== -->
+      <g class="pd-part" data-part="disc">
+        <ellipse cx="230" cy="190" rx="150" ry="100" fill="url(#pdDisc)" stroke="#3a3a4a" stroke-width="1.5" />
+        <ellipse cx="230" cy="190" rx="150" ry="100" fill="url(#pdSheen)" opacity="0.9" class="pd-sheen" />
+        <ellipse cx="230" cy="190" rx="130" ry="87" fill="none" stroke="rgba(255,255,255,0.06)" />
+        <ellipse cx="230" cy="190" rx="88"  ry="59" fill="none" stroke="rgba(255,255,255,0.06)" />
+        <ellipse cx="230" cy="190" rx="62"  ry="41" fill="none" stroke="rgba(255,255,255,0.06)" />
+      </g>
+
+      <!-- highlighted data spiral -->
+      <ellipse class="pd-part" data-part="track" cx="230" cy="190" rx="108" ry="72"
+        fill="none" stroke="rgba(0,255,255,0.55)" stroke-width="1.5" stroke-dasharray="1 5" />
+
+      <!-- pit / land cluster sitting on the data track (upper-right) -->
+      <g class="pd-part" data-part="pit" transform="translate(305,150) rotate(118)">
+        <rect x="-3" y="-19" width="6" height="11" rx="1.5" fill="#0b0b12" stroke="rgba(0,255,255,0.5)" stroke-width="0.6" />
+        <rect x="-3" y="-3"  width="6" height="7"  rx="1.5" fill="#0b0b12" stroke="rgba(0,255,255,0.5)" stroke-width="0.6" />
+        <rect x="-3" y="11"  width="6" height="12" rx="1.5" fill="#0b0b12" stroke="rgba(0,255,255,0.5)" stroke-width="0.6" />
+      </g>
+
+      <!-- spindle hub + hole -->
+      <ellipse class="pd-part" data-part="hub" cx="230" cy="190" rx="34" ry="23"
+        fill="#22222f" stroke="#4a4a5a" stroke-width="1.2" />
+      <ellipse class="pd-part" data-part="hole" cx="230" cy="190" rx="17" ry="11"
+        fill="#0a0a12" stroke="#555" stroke-width="1" />
+
+      <!-- laser assembly below the disc -->
+      <g class="pd-part" data-part="laser">
+        <polygon points="230,290 219,346 241,346" fill="url(#pdBeam)" />
+        <rect x="211" y="346" width="38" height="20" rx="4" fill="#1a0a0a" stroke="rgba(255,60,60,0.6)" stroke-width="1.2" />
+        <circle cx="230" cy="356" r="4" fill="#ff3c3c" class="pd-diode" />
+      </g>
+
+      <!-- ===== callouts ===== -->
+      <g class="pd-callout" data-target="disc" tabindex="0">
+        <line x1="300" y1="52" x2="266" y2="124" />
+        <circle class="anchor" cx="266" cy="124" r="3" />
+        <text x="306" y="48">Reflective + data surface</text>
+        <text x="306" y="62" class="sub">rainbow = light diffraction</text>
+      </g>
+
+      <g class="pd-callout" data-target="track" tabindex="0">
+        <line x1="150" y1="122" x2="142" y2="150" />
+        <circle class="anchor" cx="142" cy="150" r="3" />
+        <text x="14" y="118">Data spiral (track)</text>
+        <text x="14" y="132" class="sub">one 5&nbsp;km groove, inside &rarr; out</text>
+      </g>
+
+      <g class="pd-callout" data-target="hole" tabindex="0">
+        <line x1="128" y1="256" x2="212" y2="198" />
+        <circle class="anchor" cx="212" cy="198" r="3" />
+        <text x="18" y="256">Spindle hole</text>
+        <text x="18" y="270" class="sub">clamps to the motor</text>
+      </g>
+
+      <g class="pd-callout" data-target="pit" tabindex="0">
+        <line x1="396" y1="150" x2="310" y2="152" />
+        <circle class="anchor" cx="310" cy="152" r="3" />
+        <text x="402" y="146">Pits &amp; lands</text>
+        <text x="402" y="160" class="sub">bumps the laser reads</text>
+      </g>
+
+      <g class="pd-callout" data-target="laser" tabindex="0">
+        <line x1="330" y1="336" x2="240" y2="312" />
+        <circle class="anchor" cx="240" cy="312" r="3" />
+        <text x="336" y="332">Laser diode &mdash; 780&nbsp;nm</text>
+        <text x="336" y="346" class="sub">reads from below, no contact</text>
+      </g>
+    </svg>
+  </div>
+</figure>
+
+<style>
+  .pd {
+    perspective: 750px;
+    max-width: 660px;      /* keep the svg (and its text) from ballooning on wide screens */
+    margin: 0 auto 2.75rem;
+    padding: 1.25rem 1rem 0.5rem;
+    background: rgba(10, 0, 20, 0.55);
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    border-radius: 10px;
+  }
+
+  .pd-cap {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--accent-cyan);
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+  .pd-cap span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: rgba(170, 170, 204, 0.55);
+    margin-top: 0.3rem;
+  }
+
+  .pd-stage {
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--pop, 1));
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+  }
+  .pd-stage svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+  .pd-sheen { mix-blend-mode: screen; }
+
+  /* callouts */
+  .pd-callout { cursor: default; outline: none; }
+  .pd-callout line { stroke: rgba(255, 255, 255, 0.25); stroke-width: 1; transition: stroke 0.2s; }
+  .pd-callout .anchor { fill: var(--accent-cyan); opacity: 0.6; transition: opacity 0.2s; }
+  .pd-callout text {
+    font-family: var(--font-body);
+    font-size: 11px;
+    fill: var(--text-muted);
+    letter-spacing: 0.5px;
+    transition: fill 0.2s;
+  }
+  .pd-callout text.sub { font-size: 9px; fill: rgba(170, 170, 204, 0.5); }
+
+  .pd-callout:hover text,
+  .pd-callout:focus text,
+  .pd-callout.on text { fill: var(--accent-cyan); }
+  .pd-callout:hover text.sub,
+  .pd-callout.on text.sub { fill: rgba(0, 255, 255, 0.7); }
+  .pd-callout:hover line,
+  .pd-callout:focus line,
+  .pd-callout.on line { stroke: var(--accent-cyan); }
+  .pd-callout:hover .anchor,
+  .pd-callout.on .anchor { opacity: 1; }
+
+  /* the part that lights up when its label is hovered */
+  .pd-part { transition: filter 0.2s; }
+  .pd-part.lit { filter: drop-shadow(0 0 7px rgba(0, 255, 255, 0.85)); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* gentle idle bob/tilt so the disc drifts in 3D even when you're not hovering
+       (rides on the <svg>, while the pointer-tilt rides on .pd-stage — they stack) */
+    .pd-stage svg { animation: pdBob 7s ease-in-out infinite; transform-origin: 50% 50%; }
+    @keyframes pdBob {
+      0%, 100% { transform: translateY(0) rotateZ(-0.5deg); }
+      50%      { transform: translateY(-7px) rotateZ(0.5deg); }
+    }
+    /* slow shimmer so the disc looks alive even when idle */
+    .pd-sheen { animation: pdShimmer 9s ease-in-out infinite alternate; }
+    @keyframes pdShimmer { to { opacity: 0.55; } }
+    .pd-diode { animation: pdBlink 2.4s ease-in-out infinite; }
+    @keyframes pdBlink { 50% { opacity: 0.3; } }
+  }
+
+  /* mobile: clip inside the frame so nothing overflows, drop the sub-labels
+     (too small to read on a phone) and bump the main labels up a bit */
+  @media (max-width: 600px) {
+    .pd { padding: 1rem 0.5rem 0.4rem; }
+    .pd-stage svg { overflow: hidden; }
+    .pd-callout text { font-size: 13px; }
+    .pd-callout text.sub { display: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-pd]').forEach((pd) => {
+    const stage = pd.querySelector('[data-pd-stage]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fine = window.matchMedia('(pointer: fine)').matches;
+
+    // tilt the disc toward the pointer (skip on touch / reduced-motion).
+    // big multipliers + a slight pop make the movement feel dramatic.
+    if (stage && !reduce && fine) {
+      pd.addEventListener('pointerenter', () => stage.style.setProperty('--pop', '1.05'));
+      pd.addEventListener('pointermove', (e) => {
+        const r = pd.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        stage.style.setProperty('--ry', (px * 28).toFixed(2) + 'deg');
+        stage.style.setProperty('--rx', (-py * 20).toFixed(2) + 'deg');
+      });
+      pd.addEventListener('pointerleave', () => {
+        stage.style.setProperty('--ry', '0deg');
+        stage.style.setProperty('--rx', '0deg');
+        stage.style.setProperty('--pop', '1');
+      });
+    }
+
+    // hovering/focusing a label lights the matching part
+    pd.querySelectorAll('.pd-callout').forEach((cout) => {
+      const target = cout.getAttribute('data-target');
+      const parts = pd.querySelectorAll('[data-part="' + target + '"]');
+      const on = () => { cout.classList.add('on'); parts.forEach((p) => p.classList.add('lit')); };
+      const off = () => { cout.classList.remove('on'); parts.forEach((p) => p.classList.remove('lit')); };
+      cout.addEventListener('mouseenter', on);
+      cout.addEventListener('mouseleave', off);
+      cout.addEventListener('focus', on);
+      cout.addEventListener('blur', off);
+    });
+  });
+</script>

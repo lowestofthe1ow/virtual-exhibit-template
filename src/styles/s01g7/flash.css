@@ -1,0 +1,523 @@
+/* ============================================================
+   flash.css — page-specific styles for exhibit-flash.html.
+   Follows the same convention as horizon.css: shared look (fonts,
+   colors, .sim-wrap, .compare-table, .figure-placeholder, .btn*)
+   comes from css/style.css; this file only adds the components
+   unique to the Flash exhibit.
+   ============================================================ */
+
+/* ---------- NAND hierarchy (Package → Die → Block → Page → Cell) ---------- */
+.nand-hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1.5rem 0;
+}
+
+.nand-tier {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  border-left: 3px solid transparent;
+  transition: background 0.2s;
+}
+
+.nand-tier:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nand-tier-name {
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  min-width: 130px;
+  flex-shrink: 0;
+}
+
+.nand-tier-bar-wrap {
+  flex: 1;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.nand-tier-bar {
+  height: 100%;
+  border-radius: 3px;
+  opacity: 0.85;
+  transition: width 1s ease;
+}
+
+.nand-tier-meta {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  min-width: 130px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.nand-tier.tier-package { border-color: var(--accent-purple); }
+.nand-tier.tier-package .nand-tier-name { color: var(--accent-purple); }
+.nand-tier.tier-package .nand-tier-bar { background: var(--accent-purple); width: 100%; }
+
+.nand-tier.tier-die { border-color: var(--accent-magenta); }
+.nand-tier.tier-die .nand-tier-name { color: var(--accent-magenta); }
+.nand-tier.tier-die .nand-tier-bar { background: var(--accent-magenta); width: 58%; }
+
+.nand-tier.tier-block { border-color: var(--accent-cyan); }
+.nand-tier.tier-block .nand-tier-name { color: var(--accent-cyan); }
+.nand-tier.tier-block .nand-tier-bar { background: var(--accent-cyan); width: 22%; }
+
+.nand-tier.tier-page { border-color: var(--accent-green); }
+.nand-tier.tier-page .nand-tier-name { color: var(--accent-green); }
+.nand-tier.tier-page .nand-tier-bar { background: var(--accent-green); width: 9%; }
+
+.nand-tier.tier-cell { border-color: rgba(255, 255, 255, 0.5); }
+.nand-tier.tier-cell .nand-tier-name { color: rgba(255, 255, 255, 0.7); }
+.nand-tier.tier-cell .nand-tier-bar { background: rgba(255, 255, 255, 0.35); width: 2%; }
+
+.nand-caveat {
+  font-size: 0.68rem;
+  color: rgba(170, 170, 204, 0.5);
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+/* ---------- Wear leveling: P/E cycle endurance by cell type ---------- */
+.wear-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+
+.wear-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.wear-label {
+  min-width: 48px;
+  font-family: var(--font-head);
+  letter-spacing: 1px;
+}
+
+.wear-track {
+  flex: 1;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.wear-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.wear-val {
+  min-width: 130px;
+  text-align: right;
+  letter-spacing: 0.5px;
+  font-size: 0.74rem;
+}
+
+.wear-row.wear-slc .wear-label { color: var(--accent-cyan); }
+.wear-row.wear-slc .wear-fill { background: var(--accent-cyan); width: 100%; }
+
+.wear-row.wear-mlc .wear-label { color: var(--accent-green); }
+.wear-row.wear-mlc .wear-fill { background: var(--accent-green); width: 74%; }
+
+.wear-row.wear-tlc .wear-label { color: #fe0; }
+.wear-row.wear-tlc .wear-fill { background: #fe0; width: 66%; }
+
+.wear-row.wear-qlc .wear-label { color: var(--accent-magenta); }
+.wear-row.wear-qlc .wear-fill { background: var(--accent-magenta); width: 46%; }
+
+/* ---------- IOPS ladder: HDD vs SATA SSD vs NVMe SSD ---------- */
+/* Colors intentionally match the device accents used in the
+   SSD Speed Challenge simulator further down the page, so the
+   static chart and the interactive widget read as one system. */
+.iops-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+
+.iops-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.iops-label {
+  min-width: 90px;
+  font-family: var(--font-head);
+  letter-spacing: 1px;
+}
+
+.iops-track {
+  flex: 1;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.iops-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.iops-val {
+  min-width: 110px;
+  text-align: right;
+  letter-spacing: 0.5px;
+  font-size: 0.74rem;
+}
+
+.iops-row.iops-hdd .iops-label { color: #FF0080; }
+.iops-row.iops-hdd .iops-fill { background: #FF0080; width: 15%; }
+
+.iops-row.iops-sata .iops-label { color: var(--accent-cyan); }
+.iops-row.iops-sata .iops-fill { background: var(--accent-cyan); width: 55%; }
+
+.iops-row.iops-nvme .iops-label { color: var(--accent-green); }
+.iops-row.iops-nvme .iops-fill { background: var(--accent-green); width: 100%; }
+
+@media (max-width: 700px) {
+  .nand-tier-meta {
+    display: none;
+  }
+  .nand-tier-name {
+    min-width: 100px;
+    font-size: 0.64rem;
+  }
+  .wear-val,
+  .iops-val {
+    display: none;
+  }
+}
+
+/* ---------- SSD Speed Challenge simulator ---------- */
+/* (moved here from an inline <style> block, matching the horizon.css
+   convention of keeping all page-specific CSS in one file) */
+
+.ssdsim-body {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+@media (max-width: 640px) {
+  .ssdsim-body { grid-template-columns: 1fr; }
+}
+
+.ssdsim-devices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+@media (max-width: 640px) {
+  .ssdsim-devices { flex-direction: row; }
+}
+.ssdsim-device-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid rgba(170,170,204,0.25);
+  background: transparent;
+  color: #888;
+  padding: 0.65rem 0.4rem;
+  cursor: pointer;
+  font-family: "Space Mono", monospace;
+  transition: all 0.15s;
+}
+.ssdsim-device-btn.active {
+  background: rgba(255,255,255,0.06);
+}
+.ssdsim-device-btn:disabled { cursor: not-allowed; }
+.ssdsim-device-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.ssdsim-device-btn .dname { font-size: 0.72rem; font-weight: 700; }
+.ssdsim-device-btn .dsub {
+  font-size: 0.6rem;
+  color: rgba(170,170,204,0.5);
+  display: none;
+}
+@media (min-width: 641px) {
+  .ssdsim-device-btn .dsub { display: block; }
+}
+
+.ssdsim-path {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(170,170,204,0.15);
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.ssdsim-path-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.ssdsim-path-box {
+  border: 1px solid rgba(170,170,204,0.4);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ssdsim-path-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(170,170,204,0.5);
+}
+.ssdsim-path-line {
+  flex: 1;
+  height: 1px;
+  margin: 0 0.8rem;
+  position: relative;
+}
+.ssdsim-path-dot {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: left 0.3s ease;
+}
+.ssdsim-path-dot.on {
+  opacity: 1;
+  animation: ssdsim-pulse 0.9s ease-in-out infinite alternate;
+}
+@keyframes ssdsim-pulse {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+.ssdsim-queue-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.ssdsim-queue-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(170,170,204,0.5);
+}
+.ssdsim-queue-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+.ssdsim-queue-cell {
+  aspect-ratio: 1;
+  border: 1px solid rgba(170,170,204,0.15);
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  transition: all 0.15s;
+}
+
+.ssdsim-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.ssdsim-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ssdsim-stat-track {
+  width: 100%;
+  height: 70px;
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.ssdsim-stat-fill {
+  width: 100%;
+  transition: height 0.5s ease-out;
+}
+.ssdsim-stat-name {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(170,170,204,0.5);
+}
+.ssdsim-stat-value {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.ssdsim-blurb {
+  font-size: 0.78rem;
+  color: rgba(170,170,204,0.7);
+  line-height: 1.6;
+  border-top: 1px solid rgba(170,170,204,0.15);
+  padding-top: 0.9rem;
+  margin: 0 0 0.9rem 0;
+}
+
+.ssdsim-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-top: 1px solid rgba(170,170,204,0.15);
+  padding-top: 0.9rem;
+}
+.ssdsim-legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  color: rgba(170,170,204,0.6);
+  line-height: 1.5;
+}
+.ssdsim-legend-swatch {
+  margin-top: 3px;
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+}
+.ssdsim-legend-name {
+  font-weight: 700;
+}
+
+.ssdsim-caveat {
+  font-size: 0.62rem;
+  color: rgba(170,170,204,0.35);
+  line-height: 1.5;
+  margin: 0.9rem 0 0 0;
+}
+
+/* Fallback button styling, scoped by ID so it can never clash with
+   whatever css/style.css defines for .btn-primary/.btn-sm elsewhere
+   on the site — the Fire/Reset buttons should always be usable and
+   visible even if those utility classes aren't defined globally. */
+#fireBtn, #simReset {
+  font-family: "Space Mono", monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: transparent;
+  border: 1px solid rgba(170,170,204,0.4);
+  color: #ccc;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+#fireBtn:disabled { cursor: not-allowed; opacity: 0.5; }
+#fireBtn:focus-visible, #simReset:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ---------- Live run stats readout (batch progress + final result) ---------- */
+.ssdsim-runstats {
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  min-height: 1.2rem;
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid var(--accent-cyan);
+}
+
+/* ---------- Cell-state legend (Waiting / Reading / Done) ---------- */
+.ssdsim-cell-legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.62rem;
+  color: rgba(170, 170, 204, 0.6);
+  margin-bottom: 0.6rem;
+}
+.cell-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.cell-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.cell-swatch.cell-waiting {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(170, 170, 204, 0.25);
+}
+.cell-swatch.cell-reading {
+  background: rgba(255, 255, 255, 0.9);
+}
+.cell-swatch.cell-done {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ---------- Stats caption ---------- */
+.ssdsim-stats-caption {
+  font-size: 0.62rem;
+  color: rgba(170, 170, 204, 0.5);
+  letter-spacing: 0.5px;
+  margin: 0.9rem 0 0.5rem 0;
+}
+
+/* ---------- Figure centering & sizing for this page's figures ---------- */
+/* style.css defines .figure-placeholder generically, but doesn't
+   guarantee centering on its own (depends on the img's default
+   display). These rules make sure every figure on this page —
+   early-ssd, floating-gate-cell, sata-vs-m2 — is centered
+   regardless of what the base stylesheet does. */
+.figure-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.figure-img-flash {
+  max-width: 600px;
+  width: 100%;
+}
+
+.figure-placeholder figcaption {
+  margin: 0.6rem 0 0;
+  max-width: 600px;
+  text-align: center;
+}

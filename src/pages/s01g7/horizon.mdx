@@ -1,0 +1,477 @@
+---
+layout: '../../components/s01g7/S01_Group7_ExhibitPageLayout.astro'
+title: "The Horizon — Full Capacity"
+pageTitle: "THE HORIZON:"
+subtitle: "Cloud, DNA, and Emerging Storage"
+author: "Ke, Xan Luo C."
+readingTime: "~15 minute read"
+toc:
+  - href: "#intro"
+    label: "Introduction"
+  - href: "#cloud-architecture"
+    label: "Cloud Storage Architecture"
+  - href: "#cloud-scalability"
+    label: "Cloud Scalability"
+  - href: "#data-access"
+    label: "Data Access & Retrieval"
+  - href: "#data-centers"
+    label: "Data Centers"
+  - href: "#distributed-storage"
+    label: "Distributed Storage"
+  - href: "#emerging-tech"
+    label: "Emerging Technologies"
+  - href: "#dna-storage"
+    label: "DNA Storage"
+  - href: "#holographic-storage"
+    label: "Holographic Storage"
+  - href: "#neuromorphic-storage"
+    label: "Neuromorphic Storage"
+  - href: "#simulator"
+    label: "Interactive Simulator"
+  - href: "#references"
+    label: "References"
+---
+
+import '../../styles/s01g7/horizon.css';
+import '../../styles/s01g7/horizon-simulator.css';
+import CloudDataFlow from '../../components/s01g7/CloudDataFlow.jsx';
+import DnaProcessFlow from '../../components/s01g7/DnaProcessFlow.jsx';
+import DataDestinationSimulator from '../../components/s01g7/DataDestinationSimulator.jsx';
+import cloudArchitecture from '../../assets/s01g7/cloud-architecture.webp';
+import dataCenter from '../../assets/s01g7/data-center.webp';
+import dnaStorage from '../../assets/s01g7/dna-storage.webp';
+import holographicStorage from '../../assets/s01g7/holographic-storage.webp';
+
+<section id="intro">
+  <h2>Introduction</h2>
+  <p style="text-align: justify;">
+    As technology continues to evolve, the way we store data is changing faster than
+    ever. From cloud storage that lets us access files anytime and anywhere, to
+    experimental technologies like DNA storage that could preserve vast amounts of
+    information in an incredibly small space, the future of data storage is becoming
+    more powerful, scalable, and innovative.
+  </p>
+  <p style="text-align: justify;">
+    This section explores how modern cloud systems store and manage data, the role
+    of data centers and distributed storage in keeping information secure and
+    available, and the emerging technologies that may shape the next generation of
+    digital storage. Together, these advancements provide a glimpse into the future
+    of how the world's growing data will be stored, protected, and accessed.
+  </p>
+</section>
+
+<section id="cloud-architecture">
+  <h2>Cloud Storage Architecture</h2>
+
+  <figure class="figure-placeholder">
+    <img src={cloudArchitecture.src} alt="Diagram of cloud storage architecture components" class="figure-img figure-img-cloud" />
+    <figcaption>Fig. Cloud Storage Architecture</figcaption>
+  </figure>
+
+  <p style="text-align: justify;">
+    Cloud storage architecture is the framework that enables users to store, manage,
+    and access data through the internet instead of relying solely on local storage
+    devices. It consists of four main components: the front-end, back-end, network,
+    and cloud-based delivery platform. The front-end is the user side, where people
+    interact with cloud services using applications or web browsers on devices such
+    as laptops, smartphones, and tablets. The network, usually the internet,
+    securely connects users to the cloud service provider. The back-end contains the
+    remote servers, databases, storage systems, and management software that process
+    requests and store data in data centers. Together, these components allow users
+    to upload, retrieve, and synchronize files efficiently from virtually anywhere
+    with an internet connection. Cloud storage architecture provides flexibility,
+    scalability, reliability, and secure access to digital information, making it an
+    essential part of modern computing.
+  </p>
+
+  <div class="arch-strip">
+    <div class="arch-part">
+      <span class="arch-icon">💻</span>
+      <div class="arch-label">FRONT-END</div>
+      <div class="arch-desc">The user side — apps and browsers on laptops, phones, and tablets.</div>
+    </div>
+    <div class="arch-part">
+      <span class="arch-icon">🌐</span>
+      <div class="arch-label">NETWORK</div>
+      <div class="arch-desc">Usually the internet, securely connecting the user to the provider.</div>
+    </div>
+    <div class="arch-part">
+      <span class="arch-icon">🗄️</span>
+      <div class="arch-label">BACK-END</div>
+      <div class="arch-desc">Remote servers, databases, and storage systems inside data centers.</div>
+    </div>
+    <div class="arch-part">
+      <span class="arch-icon">☁️</span>
+      <div class="arch-label">DELIVERY PLATFORM</div>
+      <div class="arch-desc">The cloud service layer that syncs and serves files back to the user.</div>
+    </div>
+  </div>
+</section>
+
+<section id="cloud-scalability">
+  <h2>Cloud Storage and Scalability</h2>
+
+  <div class="scale-diagram">
+    <div class="scale-col" style="--i:0;">
+      <span class="scale-cloud" style="--i:0;">☁️</span>
+      <div class="scale-bar" style="--i:0;"></div>
+      <div class="scale-label">100 GB</div>
+    </div>
+    <div class="scale-col" style="--i:1;">
+      <span class="scale-cloud" style="--i:1;">☁️</span>
+      <div class="scale-bar" style="--i:1;"></div>
+      <div class="scale-label">1 TB</div>
+    </div>
+    <div class="scale-col" style="--i:2;">
+      <span class="scale-cloud" style="--i:2;">☁️</span>
+      <div class="scale-bar" style="--i:2;"></div>
+      <div class="scale-label">10 TB</div>
+    </div>
+    <div class="scale-col" style="--i:3;">
+      <span class="scale-cloud" style="--i:3;">☁️</span>
+      <div class="scale-bar" style="--i:3;"></div>
+      <div class="scale-label">100 TB</div>
+    </div>
+  </div>
+
+  <p style="text-align: justify;">
+    Cloud storage enables individuals and organizations to store, access, and manage
+    data through remote servers hosted by cloud service providers instead of relying
+    on local storage devices. One of its greatest advantages is scalability, which
+    allows storage capacity to expand or shrink based on changing data needs. As
+    users create more data, cloud providers can allocate additional storage
+    resources without requiring new physical hardware or disrupting existing
+    services. This flexibility allows businesses to handle growing workloads
+    efficiently while paying only for the resources they use. By combining
+    scalability with secure remote access and reliable storage, cloud computing
+    provides a cost-effective solution that supports the increasing demand for
+    digital data in today's connected world.
+  </p>
+</section>
+
+<section id="data-access">
+  <h2>Data Access and Retrieval</h2>
+
+  <CloudDataFlow client:load />
+
+  <p style="text-align: justify;">
+    Cloud storage systems are designed to locate and retrieve data quickly and
+    efficiently, even when billions of files are stored across multiple servers.
+    When a user requests a file, the system uses indexing to identify its location,
+    while metadata provides descriptive information such as the file name, type,
+    owner, and creation date. Frequently accessed files may be stored in a cache,
+    allowing them to be retrieved much faster without searching the entire storage
+    system. Networking enables secure communication between users and cloud
+    servers, while load balancing distributes requests across multiple servers to
+    prevent congestion and maintain fast performance. Together, these technologies
+    ensure that users can access their files reliably, often within milliseconds.
+  </p>
+
+  <div class="keytech-row">
+    <div class="keytech-card">
+      <span class="kt-icon">🗂️</span>
+      <div class="kt-name">INDEXING</div>
+      <div class="kt-desc">Creates an organized directory that helps the cloud quickly locate the exact file requested.</div>
+    </div>
+    <div class="keytech-card">
+      <span class="kt-icon">🏷️</span>
+      <div class="kt-name">METADATA</div>
+      <div class="kt-desc">Stores information about a file, such as its name, size, owner, and creation date, making searching and organization easier.</div>
+    </div>
+    <div class="keytech-card">
+      <span class="kt-icon">⚡</span>
+      <div class="kt-name">CACHING</div>
+      <div class="kt-desc">Temporarily stores frequently accessed files in faster storage so they can be retrieved more quickly.</div>
+    </div>
+    <div class="keytech-card">
+      <span class="kt-icon">🌐</span>
+      <div class="kt-name">NETWORKING</div>
+      <div class="kt-desc">Transfers data securely between the user's device and cloud servers through the internet.</div>
+    </div>
+    <div class="keytech-card">
+      <span class="kt-icon">⚖️</span>
+      <div class="kt-name">LOAD BALANCING</div>
+      <div class="kt-desc">Distributes user requests across multiple servers to prevent overload and improve performance.</div>
+    </div>
+  </div>
+
+  <div class="fact-box">
+    <span class="fact-icon">💡</span>
+    <div class="fact-body">
+      <h4>Did You Know?</h4>
+      <p>
+        Many cloud storage services can locate and deliver requested files in just
+        milliseconds, even when managing billions of files across multiple data centers.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="data-centers">
+  <h2>Data Centers</h2>
+
+  <figure class="figure-placeholder">
+    <img src={dataCenter.src} alt="Photo of a modern data center with server racks" class="figure-img figure-img-datacenter" />
+    <figcaption>Fig. Modern Data Center <a href="https://www.hiclipart.com/free-transparent-background-png-clipart-donyq" target="_blank" rel="noopener">(HiClipart)</a></figcaption>
+  </figure>
+
+  <p style="text-align: justify;">
+    A data center is a physical facility that houses the servers, storage devices,
+    networking equipment, and other IT infrastructure needed to store, process, and
+    manage digital information. Instead of keeping data on a user's personal
+    computer, cloud service providers store data in large data centers that operate
+    continuously to ensure information is always available. Modern data centers
+    contain thousands of interconnected servers organized in racks and are equipped
+    with advanced cooling systems, backup power supplies, and security measures to
+    maintain reliable operation. By distributing data across multiple servers and
+    locations, data centers provide high availability, fast access, and protection
+    against hardware failures or unexpected disasters, making them the foundation of
+    today's cloud computing services.
+  </p>
+</section>
+
+<section id="distributed-storage">
+  <h2>Distributed Storage System</h2>
+
+  <div class="tree-diagram">
+    <div class="tree-root">
+      <div class="tree-node">Original Data</div>
+    </div>
+    <div class="tree-branches">
+      <div class="tree-branch branch-replication">
+        <div class="tree-branch-title">REPLICATION</div>
+        <div class="tree-branch-sub">(copies)</div>
+        <div class="tree-leaves">
+          <div class="tree-leaf">Server A — Copy</div>
+          <div class="tree-leaf">Server B — Copy</div>
+        </div>
+      </div>
+      <div class="tree-branch branch-sharding">
+        <div class="tree-branch-title">SHARDING</div>
+        <div class="tree-branch-sub">(split into parts)</div>
+        <div class="tree-leaves">
+          <div class="tree-leaf">Server A — Part 1</div>
+          <div class="tree-leaf">Server B — Part 2</div>
+          <div class="tree-leaf">Server C — Part 3</div>
+        </div>
+      </div>
+    </div>
+    <div class="tree-footer">🛡️ Backup + Redundancy — extra copies stored elsewhere</div>
+  </div>
+
+  <p style="text-align: justify;">
+    A distributed storage system is a method of storing data across multiple
+    interconnected servers or storage nodes instead of keeping all information in a
+    single location. By distributing data across different machines, the system
+    becomes more scalable, reliable, and fault tolerant, ensuring that information
+    remains available even if one server fails. To improve data reliability,
+    distributed storage systems use techniques such as <strong>replication</strong>,
+    which creates multiple copies of data on different servers;
+    <strong>sharding</strong>, which divides large datasets into smaller pieces
+    stored across several nodes; <strong>backup</strong>, which provides additional
+    copies for recovery after failures or disasters; and <strong>redundancy</strong>,
+    which adds extra storage resources to prevent data loss. These techniques work
+    together to improve performance, maintain continuous access to data, and support
+    the large-scale storage needs of modern cloud computing services.
+  </p>
+</section>
+
+<section id="emerging-tech">
+  <h2>Emerging Storage Technologies</h2>
+  <br />
+
+  <div class="orbit-banner">
+    <div class="orbit-core">BEYOND<br />CONVENTIONAL<br />STORAGE</div>
+    <div class="orbit-track">
+      <div class="orbit-spin" style="--offset:0s;">
+        <div class="orbit-icon oi-1" style="--offset:0s;">🧬</div>
+      </div>
+      <div class="orbit-spin" style="--offset:-6.7s;">
+        <div class="orbit-icon oi-2" style="--offset:-6.7s;">💠</div>
+      </div>
+      <div class="orbit-spin" style="--offset:-13.3s;">
+        <div class="orbit-icon oi-3" style="--offset:-13.3s;">🧠</div>
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <p style="text-align: justify;">
+    As the demand for digital storage continues to grow, researchers are developing
+    next-generation storage technologies that can store more data while improving
+    capacity, durability, and efficiency. These innovations go beyond conventional
+    storage devices by exploring entirely new ways of preserving digital
+    information. Although many of these technologies are still in the research and
+    development stage, they offer a glimpse of what the future of data storage may
+    look like. Examples include DNA storage, holographic storage, and neuromorphic
+    storage, each designed to address the challenges of storing the world's rapidly
+    expanding digital data.
+  </p>
+</section>
+
+<section id="dna-storage">
+  <h2>DNA Storage</h2>
+
+  <figure class="figure-placeholder">
+    <img src={dnaStorage.src} alt="Illustration of DNA strands used for digital data storage" class="figure-img figure-img-dna" />
+    <figcaption>Fig. Illustration of Synthetic DNA Strand with Data Encoded <a href="https://www.geneticsdigest.com/the-role-of-dna-data-storage-in-health-and-technology/" target="_blank" rel="noopener">(Genetics Digest)</a></figcaption>
+  </figure>
+
+  <p style="text-align: justify;">
+    DNA storage is an emerging technology that uses synthetic DNA molecules to store
+    digital information instead of traditional storage devices such as hard drives
+    or solid-state drives. Instead of recording data as binary digits (0s and 1s),
+    DNA storage converts digital information into sequences of the four DNA bases:
+    <strong>A</strong> (Adenine), <strong>T</strong> (Thymine), <strong>C</strong>
+    (Cytosine), and <strong>G</strong> (Guanine). These DNA strands are then
+    synthesized, preserved in secure containers, and can later be sequenced to
+    retrieve the original digital data. Because DNA has an extremely high storage
+    density, a tiny sample can theoretically hold enormous amounts of information
+    while requiring very little physical space. Researchers have already
+    demonstrated this potential by storing books, movies, and other digital files in
+    DNA. Although DNA storage promises exceptional capacity, long-term durability,
+    and energy-efficient archiving, it is still in the experimental stage due to the
+    high cost and slow process of writing and retrieving data.
+  </p>
+
+  <DnaProcessFlow client:load />
+
+  <div class="fact-box">
+    <span class="fact-icon">🧬</span>
+    <div class="fact-body">
+      <h4>Did You Know?</h4>
+      <p>
+        Scientists have successfully stored works such as Shakespeare's sonnets,
+        Wikipedia articles, and even movies inside tiny DNA samples. In theory, a
+        capsule the size of a medicine bottle could store up to 50 petabytes of
+        data. That is far more than today's storage devices.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="holographic-storage">
+  <h2>Holographic Storage</h2>
+
+  <figure class="figure-placeholder">
+    <img src={holographicStorage.src} alt="Diagram of holographic data storage using lasers" class="figure-img figure-img-holo" />
+    <figcaption>Fig. — Lasers record and read data across the full depth of a holographic medium <a href="https://www.thehindu.com/sci-tech/technology/microsofts-exploring-holographic-storage-devices-for-its-cloud-what-does-it-mean/article61735059.ece" target="_blank" rel="noopener">(The Hindu)</a></figcaption>
+  </figure>
+
+  <p style="text-align: justify;">
+    Holographic storage is an emerging data storage technology that uses lasers to
+    record and retrieve digital information in three dimensions. Unlike traditional
+    optical storage devices such as CDs and DVDs that store data only on their
+    surface, holographic storage records data throughout the entire volume of a
+    light-sensitive material, allowing much more information to be stored in the
+    same physical space. This technology offers the potential for high storage
+    capacity, fast data transfer, and quick access to large amounts of information,
+    making it a promising solution for cloud storage, data centers, and big data
+    applications. Although researchers and companies such as Microsoft continue to
+    develop holographic storage systems, the technology is still in the research
+    stage and has not yet been widely commercialized due to technical and
+    manufacturing challenges.
+  </p>
+</section>
+
+<section id="neuromorphic-storage">
+  <h2>Neuromorphic Storage</h2>
+
+  <div class="neuro-stage">
+    <div class="neuro-row">
+      <div class="neuro-node node-brain">
+        <div class="neuro-icon">🧠</div>
+        <div class="neuro-name">BRAIN-INSPIRED<br />ARCHITECTURE</div>
+      </div>
+      <div class="neuro-link"></div>
+      <div class="neuro-node node-merge">
+        <div class="neuro-icon">🔗</div>
+        <div class="neuro-name">STORAGE +<br />PROCESSING</div>
+      </div>
+      <div class="neuro-link link-2"></div>
+      <div class="neuro-node node-ai">
+        <div class="neuro-icon">🤖</div>
+        <div class="neuro-name">AI &amp;<br />MACHINE LEARNING</div>
+      </div>
+      <div class="neuro-link link-3"></div>
+      <div class="neuro-node node-cloud">
+        <div class="neuro-icon">☁️</div>
+        <div class="neuro-name">CLOUD<br />COMPUTING</div>
+      </div>
+    </div>
+    <p class="neuro-caption">
+      Using advanced nanophotonic materials and brain-inspired architectures,
+      neuromorphic chips mimic neural connections that <strong>learn, adapt, and
+      perform many operations simultaneously</strong> — merging memory and
+      processing into one component.
+    </p>
+  </div>
+
+  <p style="text-align: justify;">
+    Neuromorphic storage is an emerging technology inspired by the way the human
+    brain stores and processes information. Unlike traditional storage systems that
+    separate memory from processing, neuromorphic storage combines both functions
+    into a single system, allowing data to be stored, processed, and retrieved more
+    efficiently. Using advanced nanophotonic materials and brain-inspired
+    architectures, it can mimic neural connections that learn, adapt, and perform
+    many operations simultaneously. This approach has the potential to significantly
+    reduce energy consumption while providing faster data access and higher storage
+    performance. Although still in the research stage, neuromorphic storage is
+    considered a promising technology for supporting future applications such as
+    artificial intelligence, machine learning, and large-scale cloud computing.
+  </p>
+
+  <div class="fact-box">
+    <span class="fact-icon">🧠</span>
+    <div class="fact-body">
+      <h4>Did You Know?</h4>
+      <p>
+        The human brain has an estimated storage capacity of about 2.5 petabytes
+        while operating with extremely low energy consumption. Researchers are
+        developing neuromorphic storage systems that imitate the brain's efficient
+        way of storing and processing information to support future artificial
+        intelligence and cloud computing.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="simulator">
+  <h2>Interactive: Data Storage Destination Simulator</h2>
+
+  <DataDestinationSimulator client:load />
+</section>
+
+<section id="references">
+  <h2>References</h2>
+  <ul>
+    <li>
+      Bender, M. (2025). <em>DNA could revolutionize how we store our data.</em> National Geographic.
+      https://www.nationalgeographic.com/science/article/dna-data-storage-biotechnology
+    </li>
+    <li>
+      GeeksforGeeks. (2025). <em>Distributed Storage Systems.</em> GeeksforGeeks.
+      https://www.geeksforgeeks.org/computer-networks/distributed-storage-systems/
+    </li>
+    <li>
+      Gillis, A. (2021). <em>holographic storage (holostorage).</em> TechTarget.
+      https://www.techtarget.com/searchstorage/definition/holographic-storage
+    </li>
+    <li>
+      Lamon, S., Zhang, Q., Yu, H., &amp; Gu, M. (2024). <em>Neuromorphic Optical Data Storage Enabled by Nanophotonics: A Perspective.</em> ACS Publications.
+      https://pubs.acs.org/doi/10.1021/acsphotonics.3c01253
+    </li>
+    <li>
+      Reber, P. (2010). <em>What Is the Memory Capacity of the Human Brain?.</em> Scientific American.
+      https://www.scientificamerican.com/article/what-is-the-memory-capacity/
+    </li>
+    <li>
+      Susnjara, S., &amp; Smalley, I. (n.d.). <em>What is a data center?.</em> IBM.
+      https://www.ibm.com/think/topics/data-centers
+    </li>
+    <li>
+      Susnjara, S., &amp; Smalley, I. (n.d.). <em>What is cloud architecture?.</em> IBM.
+      https://www.ibm.com/think/topics/cloud-architecture
+    </li>
+  </ul>
+</section>

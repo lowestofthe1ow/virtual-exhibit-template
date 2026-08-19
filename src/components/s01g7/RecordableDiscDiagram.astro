@@ -1,0 +1,141 @@
+---
+// Visual for the "Recordable & Rewritable Discs" section: three small disc
+// cross-sections showing how each family represents a "1" on the track -
+// a stamped physical pit, a laser-darkened dye spot, or a phase-change alloy
+// spot switched between crystalline and amorphous.
+const DISCS = [
+  {
+    name: 'Pressed (factory)',
+    tag: 'Read-only',
+    color: '#00FFFF',
+    note: 'Pits are physically stamped into the polycarbonate at manufacture. Nothing to write, nothing to erase.',
+  },
+  {
+    name: 'CD-R / DVD±R',
+    tag: 'Write-once',
+    color: '#39FF14',
+    note: 'A write laser permanently darkens spots in an organic dye layer. The dye can\'t revert, so data is locked in for good.',
+  },
+  {
+    name: 'CD-RW / DVD±RW',
+    tag: 'Rewritable ~1,000x',
+    color: '#FF00FF',
+    note: 'A phase-change alloy is melted into a scattering amorphous state, or slow-cooled back into a reflective crystalline one.',
+  },
+];
+---
+
+<div class="rdd" data-rdd aria-label="Comparison of pressed, recordable, and rewritable optical discs">
+  <p class="rdd-cap">
+    THREE WAYS TO MAKE A "1"
+    <span>same laser, three different physical tricks</span>
+  </p>
+
+  <div class="rdd-grid">
+    {DISCS.map((d, i) => (
+      <div class="rdd-card">
+        <div class="rdd-disc" style={`--c:${d.color}`}>
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img">
+            <circle cx="50" cy="50" r="46" fill="#1a1a2e" stroke="#38384a" stroke-width="1.5" />
+            <circle cx="50" cy="50" r="46" fill="none" stroke={d.color} stroke-width="1" opacity="0.25" />
+            {i === 0 && (
+              <g>
+                {[0, 1, 2, 3, 4, 5].map((n) => (
+                  <rect x={20 + n * 10} y="46" width="5" height="8" rx="1" fill={d.color} opacity={n % 2 === 0 ? 0.95 : 0.25} />
+                ))}
+              </g>
+            )}
+            {i === 1 && (
+              <g>
+                {[0, 1, 2, 3, 4, 5].map((n) => (
+                  <circle cx={23 + n * 11} cy="50" r={n % 2 === 0 ? 4.5 : 2} fill={n % 2 === 0 ? d.color : 'rgba(255,255,255,0.15)'} />
+                ))}
+              </g>
+            )}
+            {i === 2 && (
+              <g>
+                {[0, 1, 2, 3, 4, 5].map((n) => (
+                  <rect x={21 + n * 10.5} y="45" width="7" height="10" rx="3"
+                    fill={n % 2 === 0 ? d.color : 'rgba(255,255,255,0.12)'}
+                    opacity={n % 2 === 0 ? 0.9 : 0.5} />
+                ))}
+              </g>
+            )}
+            <circle cx="50" cy="50" r="8" fill="#2a2a3a" stroke="#555" stroke-width="1" />
+          </svg>
+        </div>
+        <p class="rdd-name">{d.name}</p>
+        <p class="rdd-tag" style={`color:${d.color}`}>{d.tag}</p>
+        <p class="rdd-note">{d.note}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .rdd {
+    background: rgba(10, 0, 20, 0.55);
+    border: 1px solid rgba(255, 0, 255, 0.18);
+    border-radius: 10px;
+    padding: 1.25rem 1.25rem 1.4rem;
+    margin: 1.5rem 0;
+  }
+  .rdd-cap {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--accent-magenta);
+    text-align: center;
+    margin-bottom: 1.1rem;
+  }
+  .rdd-cap span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: rgba(170, 170, 204, 0.6);
+    margin-top: 0.3rem;
+  }
+
+  .rdd-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .rdd-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 0.9rem 0.75rem 1rem;
+    text-align: center;
+  }
+  .rdd-disc {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 0.6rem;
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--c) 40%, transparent));
+  }
+  .rdd-disc svg { width: 100%; height: 100%; display: block; }
+
+  .rdd-name {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    color: var(--text);
+  }
+  .rdd-tag {
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    margin: 0.3rem 0 0.6rem;
+    text-transform: uppercase;
+  }
+  .rdd-note {
+    font-size: 0.74rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 700px) {
+    .rdd-grid { grid-template-columns: 1fr; }
+  }
+</style>

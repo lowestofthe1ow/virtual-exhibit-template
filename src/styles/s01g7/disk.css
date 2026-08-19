@@ -1,0 +1,755 @@
+/* ── HDD Simulator ─────────────────────────────────────────── */
+.hdd-sim-wrap {
+  background: rgba(10,0,20,0.85);
+  border: 1px solid rgba(0,255,255,0.2);
+  border-radius: 10px;
+  padding: 1.75rem;
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hdd-sim-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ── Platter canvas ── */
+#hddCanvas {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  border-radius: 50%;
+  margin: 0 auto;
+  cursor: default;
+}
+
+/* ── Control panel ── */
+.hdd-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.hdd-controls label {
+  font-size: 0.78rem;
+  color: var(--accent-cyan);
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.hdd-controls input[type="text"],
+.hdd-controls select {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(0,255,255,0.3);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.hdd-controls input[type="text"]:focus,
+.hdd-controls select:focus {
+  border-color: var(--accent-cyan);
+}
+
+.hdd-controls select option { background: #0d001a; }
+
+.hdd-btn-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.hdd-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.hdd-stat {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 5px;
+  padding: 0.5rem 0.75rem;
+}
+
+.hdd-stat-label {
+  font-size: 0.68rem;
+  color: rgba(170,170,204,0.5);
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.hdd-stat-val {
+  font-family: var(--font-head);
+  font-size: 0.88rem;
+  color: var(--accent-green);
+  letter-spacing: 1px;
+}
+
+/* ── Log panel ── */
+.hdd-log {
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(57,255,20,0.15);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  color: var(--accent-green);
+  letter-spacing: 1px;
+  line-height: 1.9;
+  min-height: 90px;
+  font-family: var(--font-body);
+}
+
+.hdd-log .log-entry        { display: block; }
+.hdd-log .log-entry.muted  { color: rgba(57,255,20,0.4); }
+.hdd-log .log-entry.seek   { color: var(--accent-cyan); }
+.hdd-log .log-entry.read   { color: var(--accent-green); }
+.hdd-log .log-entry.write  { color: var(--accent-magenta); }
+.hdd-log .log-entry.error  { color: #ff4444; }
+
+/* ── Seek-time comparison bars ── */
+.seek-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.seek-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.seek-bar-label { min-width: 70px; letter-spacing: 1px; }
+
+.seek-bar-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.seek-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.seek-bar-fill.hdd-fill { background: var(--accent-cyan); }
+.seek-bar-fill.ssd-fill { background: var(--accent-green); }
+.seek-bar-fill.ram-fill { background: var(--accent-magenta); }
+
+.seek-bar-val { min-width: 52px; text-align: right; letter-spacing: 1px; }
+
+/* ── Memory hierarchy ladder ── */
+.mem-hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1.25rem 0;
+}
+
+.mem-tier {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-left: 3px solid transparent;
+  transition: background 0.2s;
+}
+
+.mem-tier:hover { background: rgba(255,255,255,0.03); }
+
+.mem-tier.tier-reg   { border-color: var(--accent-magenta); }
+.mem-tier.tier-cache { border-color: #ff8800; }
+.mem-tier.tier-ram   { border-color: #ffee00; }
+.mem-tier.tier-hdd   { border-color: var(--accent-cyan); }
+.mem-tier.tier-tape { border-color: #ffcc66; }
+
+.mem-tier-name {
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  min-width: 90px;
+}
+
+.mem-tier.tier-reg   .mem-tier-name { color: var(--accent-magenta); }
+.mem-tier.tier-cache .mem-tier-name { color: #ff8800; }
+.mem-tier.tier-ram   .mem-tier-name { color: #ffee00; }
+.mem-tier.tier-hdd   .mem-tier-name { color: var(--accent-cyan); }
+.mem-tier.tier-tape .mem-tier-name { color: #ffcc66; }
+
+.mem-tier-bar-wrap {
+  flex: 1;
+  height: 22px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mem-tier-bar {
+  height: 100%;
+  border-radius: 3px;
+  opacity: 0.85;
+  width: 0;
+  animation: memBarGrow 6s ease-in-out infinite;
+}
+
+@keyframes memBarGrow {
+  0%   { width: 0; }
+  20%  { width: var(--target); }
+  80%  { width: var(--target); }
+  100% { width: 0; }
+}
+
+.mem-tier.tier-reg   .mem-tier-bar { background: var(--accent-magenta); --target: 5%;   animation-delay: 0s; }
+.mem-tier.tier-cache .mem-tier-bar { background: #ff8800;               --target: 12%;  animation-delay: 0.3s; }
+.mem-tier.tier-ram   .mem-tier-bar { background: #ffee00;               --target: 28%;  animation-delay: 0.6s; }
+.mem-tier.tier-hdd   .mem-tier-bar { background: var(--accent-cyan);    --target: 72%;  animation-delay: 0.9s; box-shadow: 0 0 10px rgba(0,255,255,0.35); }
+.mem-tier.tier-tape .mem-tier-bar {
+  background: #ffcc66;
+  --target: 100%;
+  animation-delay: 1.2s;
+  box-shadow: 0 0 8px rgba(255,204,102,0.4);
+}
+
+.mem-tier-meta {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  min-width: 110px;
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* ── Areal density chart ── */
+.density-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1.25rem 0;
+}
+
+.density-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.density-year { min-width: 44px; color: var(--accent-cyan); letter-spacing: 1px; }
+
+.density-track {
+  flex: 1;
+  height: 14px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.density-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+  width: 0;
+  box-shadow: 0 0 10px rgba(0,255,255,0.25);
+  animation: densityGrow 9s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.2s);
+}
+
+@keyframes densityGrow {
+  0%   { width: 0;         opacity: 0.5; }
+  12%  { width: var(--w);  opacity: 1; }
+  85%  { width: var(--w);  opacity: 1; }
+  100% { width: 0;         opacity: 0.5; }
+}
+
+.density-val { min-width: 90px; text-align: right; letter-spacing: 1px; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .hdd-sim-top        { grid-template-columns: 1fr; }
+  #hddCanvas          { max-width: 280px; }
+  .hdd-stat-grid      { grid-template-columns: 1fr; }
+  .mem-tier-meta      { display: none; }
+}
+
+.figure-img-pmr {
+  max-width: 750px;
+}
+
+.figure-img-hdd {
+  max-width: 600px;
+}
+
+.figure-img-mem {
+  max-width: 500px;
+}
+ 
+/* fallback box, kept in case an image is missing/not yet added */
+.figure-placeholder-box {
+  width: 100%;
+  min-height: 220px;
+  background: rgba(26, 0, 51, 0.5);
+  border: 1px dashed rgba(0, 255, 255, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(170, 170, 204, 0.45);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+/* Figure captions are centered as a full-width block underneath the
+   image, regardless of whether a ".article-body" ancestor wraps the
+   exhibit content — the plain, unscoped selector is the one that
+   actually matches on this page, so it's listed first and is the
+   one doing the real work; the .article-body-scoped copy is kept so
+   nothing regresses if that wrapper is added later. */
+.figure-placeholder figcaption,
+.article-body .figure-placeholder figcaption {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0.6rem auto 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.figure-placeholder figcaption strong,
+.article-body .figure-placeholder figcaption strong {
+  font-weight: bold;
+  color: var(--text-muted);
+}
+
+.figure-placeholder figcaption a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+ 
+.figure-placeholder figcaption a:hover {
+  text-decoration: underline;
+}
+
+/* ── Shared "figure" caption for non-<figure> animated diagrams ──
+   !important is used here deliberately: these are plain <p> tags,
+   and something in the global stylesheet is evidently winning the
+   specificity/cascade battle against a plain class selector (Fig. 1's
+   <figcaption> centers fine, but these paragraph-based captions were
+   not), so this guarantees centering regardless of what else targets
+   <p> elsewhere on the page. */
+.figure-caption-text,
+.article-body p.figure-caption-text {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  margin: 0.6rem auto 1.75rem !important;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  color: var(--text-muted);
+}
+
+.figure-caption-text strong,
+.article-body p.figure-caption-text strong {
+  font-weight: bold;
+  color: var(--text-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HDD Assembly — animated schematic (replaces static photo)
+   ══════════════════════════════════════════════════════════════ */
+.hdd-assembly {
+  display: grid;
+  grid-template-columns: 220px max-content;
+  gap: 2rem;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.75rem auto 0.5rem;
+  padding: 1.75rem 1.5rem;
+  background: rgba(10,0,20,0.75);
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: 10px;
+}
+
+.hdd-assembly-visual {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.hdd-assembly-platter {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, rgba(255,255,255,0.07), rgba(20,0,40,0.92));
+  border: 2px solid rgba(0,255,255,0.35);
+  animation: platterSpin 5s linear infinite;
+}
+
+@keyframes platterSpin { to { transform: rotate(360deg); } }
+
+.hdd-assembly-track {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(0,255,255,0.25);
+}
+.hdd-assembly-track.t1 { inset: 16%; }
+.hdd-assembly-track.t2 { inset: 30%; }
+.hdd-assembly-track.t3 { inset: 44%; }
+
+.hdd-assembly-hub {
+  position: absolute;
+  inset: 45%;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #c9a3ff, #6b3fa0);
+  border: 1px solid #c9a3ff;
+  box-shadow: 0 0 10px rgba(201, 163, 255, 0.5);
+}
+
+.hdd-assembly-pivot {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: #1e1e2e;
+  border: 2px solid rgba(255,255,255,0.3);
+  z-index: 3;
+}
+
+.hdd-assembly-arm {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 76%;
+  height: 3px;
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+  transform-origin: right center;
+  animation: armSweep 3.6s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes armSweep {
+  0%, 100% { transform: translateY(-50%) rotate(-22deg); }
+  50%      { transform: translateY(-50%) rotate(20deg); }
+}
+
+.hdd-assembly-head {
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green), 0 0 18px rgba(57,255,20,0.5);
+  animation: headBlink 3.6s ease-in-out infinite;
+}
+
+@keyframes headBlink {
+  0%, 100% { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green), 0 0 18px rgba(57,255,20,0.5); }
+  50%      { background: var(--accent-magenta); box-shadow: 0 0 10px var(--accent-magenta), 0 0 18px rgba(255,0,255,0.5); }
+}
+
+.hdd-assembly-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;  /* reduced from 0.35rem */
+}
+
+.hal-item {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1.1;  /* reduced from 1.2 */
+  white-space: nowrap;
+}
+
+.hal-item strong {
+  color: var(--text);
+  font-weight: bold;
+}
+
+.hal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.hal-dot.dot-cyan    { background: var(--accent-cyan);    box-shadow: 0 0 8px var(--accent-cyan); }
+.hal-dot.dot-green   { background: var(--accent-green);   box-shadow: 0 0 8px var(--accent-green); }
+.hal-dot.dot-magenta { background: var(--accent-magenta); box-shadow: 0 0 8px var(--accent-magenta); }
+.hal-dot.dot-purple  { background: #c9a3ff;                box-shadow: 0 0 8px rgba(128,0,255,0.6); }
+
+@media (max-width: 700px) {
+  .hdd-assembly          { grid-template-columns: 1fr; width: 100%; }
+  .hdd-assembly-visual   { width: 170px; height: 170px; }
+  .hal-item              { white-space: normal; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Component spec grid — animated icon cards (replaces the table)
+   ══════════════════════════════════════════════════════════════ */
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.component-card {
+  background: rgba(26,0,51,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 1.1rem 1rem;
+  text-align: center;
+  position: relative;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  animation: cardPulseIn 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.3s);
+}
+
+.component-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-cyan);
+}
+
+@keyframes cardPulseIn {
+  0%, 100% { box-shadow: 0 0 0 rgba(0,255,255,0); }
+  50%      { box-shadow: 0 0 18px rgba(0,255,255,0.14); }
+}
+
+.component-card .cc-icon {
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 6px rgba(0,255,255,0.35));
+}
+
+.component-card .cc-name {
+  font-family: var(--font-head);
+  font-weight: normal;
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  color: var(--accent-cyan);
+  margin-bottom: 0.4rem;
+}
+
+.component-card .cc-func {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 0.65rem;
+}
+
+.component-card .cc-metric {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+  color: var(--accent-green);
+  border: 1px solid rgba(57,255,20,0.3);
+  background: rgba(57,255,20,0.07);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+@media (max-width: 900px) {
+  .component-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .component-grid { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Sequential vs. Random access — animated block scan
+   ══════════════════════════════════════════════════════════════ */
+.access-compare {
+  margin: 1.75rem 0;
+  padding: 1.5rem 1.5rem 1.75rem;
+  background: rgba(10,0,20,0.75);
+  border: 1px solid rgba(255,0,255,0.15);
+  border-radius: 8px;
+}
+
+.access-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.access-row:last-child { margin-bottom: 0; }
+
+.access-row-label {
+  min-width: 96px;
+  font-family: var(--font-head);
+  font-weight: normal;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+}
+.access-row.seq .access-row-label  { color: var(--accent-green); }
+.access-row.rand .access-row-label { color: var(--accent-magenta); }
+
+.access-blocks {
+  display: flex;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.access-block {
+  flex: 1;
+  height: 34px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+@keyframes accessFlash {
+  0%   { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); box-shadow: none; transform: scale(1); color: var(--text-muted); }
+  6%   { background: var(--flash-bg); border-color: var(--flash-border); box-shadow: 0 0 12px var(--flash-border); transform: scale(1.06); color: var(--text); }
+  16%  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); box-shadow: none; transform: scale(1); color: var(--text-muted); }
+  100% { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); box-shadow: none; transform: scale(1); color: var(--text-muted); }
+}
+
+.access-row.seq .access-block {
+  animation: accessFlash 4.8s linear infinite;
+  --flash-bg: rgba(57,255,20,0.22);
+  --flash-border: var(--accent-green);
+}
+.access-row.seq .access-block:nth-child(1) { animation-delay: 0s; }
+.access-row.seq .access-block:nth-child(2) { animation-delay: 0.6s; }
+.access-row.seq .access-block:nth-child(3) { animation-delay: 1.2s; }
+.access-row.seq .access-block:nth-child(4) { animation-delay: 1.8s; }
+.access-row.seq .access-block:nth-child(5) { animation-delay: 2.4s; }
+.access-row.seq .access-block:nth-child(6) { animation-delay: 3.0s; }
+.access-row.seq .access-block:nth-child(7) { animation-delay: 3.6s; }
+.access-row.seq .access-block:nth-child(8) { animation-delay: 4.2s; }
+
+.access-row.rand .access-block {
+  animation: accessFlash 4.8s linear infinite;
+  --flash-bg: rgba(255,0,255,0.22);
+  --flash-border: var(--accent-magenta);
+}
+.access-row.rand .access-block:nth-child(1) { animation-delay: 1.8s; }
+.access-row.rand .access-block:nth-child(2) { animation-delay: 3.6s; }
+.access-row.rand .access-block:nth-child(3) { animation-delay: 0.6s; }
+.access-row.rand .access-block:nth-child(4) { animation-delay: 4.2s; }
+.access-row.rand .access-block:nth-child(5) { animation-delay: 0s; }
+.access-row.rand .access-block:nth-child(6) { animation-delay: 2.4s; }
+.access-row.rand .access-block:nth-child(7) { animation-delay: 1.2s; }
+.access-row.rand .access-block:nth-child(8) { animation-delay: 3.0s; }
+
+@media (max-width: 600px) {
+  .access-row      { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .access-blocks   { width: 100%; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Memory hierarchy pyramid — tiers stack in one by one, on a loop
+   ══════════════════════════════════════════════════════════════ */
+.mem-pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin: 2rem auto 0.5rem;
+  max-width: 520px;
+}
+
+.mem-pyramid-tier {
+  width: var(--w, 60%);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0% 100%);
+  font-family: var(--font-head);
+  font-weight: normal;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  text-align: center;
+  animation: pyramidStack 8s ease-in-out infinite;
+}
+
+@keyframes pyramidStack {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.94); }
+  10%  { opacity: 1; transform: translateY(0) scale(1); }
+  85%  { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(16px) scale(0.94); }
+}
+
+.mem-pyramid-tier.tier-reg {
+  --w: 30%;
+  background: linear-gradient(180deg, rgba(255,0,255,0.75), rgba(255,0,255,0.35));
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255,0,255,0.55);
+  animation-delay: 2.4s;
+}
+.mem-pyramid-tier.tier-cache {
+  --w: 46%;
+  background: linear-gradient(180deg, rgba(255,136,0,0.75), rgba(255,136,0,0.35));
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255,136,0,0.5);
+  animation-delay: 1.8s;
+}
+.mem-pyramid-tier.tier-dram {
+  --w: 63%;
+  background: linear-gradient(180deg, rgba(255,238,0,0.7), rgba(255,238,0,0.3));
+  color: #1a1a1a;
+  box-shadow: 0 0 20px rgba(255,238,0,0.5);
+  animation-delay: 1.2s;
+}
+.mem-pyramid-tier.tier-hdd {
+  --w: 81%;
+  background: linear-gradient(180deg, rgba(0,255,255,0.8), rgba(0,255,255,0.35));
+  color: #04262b;
+  font-weight: bold;
+  border: 1px solid rgba(0,255,255,0.8);
+  box-shadow: 0 0 26px rgba(0,255,255,0.6);
+  animation-delay: 0.6s;
+}
+.mem-pyramid-tier.tier-tape {
+  --w: 100%;
+  background: linear-gradient(180deg, rgba(255,215,120,0.55), rgba(255,215,120,0.2));
+  color: #2a1f00;
+  font-weight: bold;
+  box-shadow: 0 0 14px rgba(255,215,120,0.35);
+  animation-delay: 0s;
+}
+
+@media (max-width: 600px) {
+  .mem-pyramid-tier { font-size: 0.62rem; height: 38px; }
+}

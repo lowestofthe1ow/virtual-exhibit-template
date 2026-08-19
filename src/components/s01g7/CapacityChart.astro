@@ -1,0 +1,240 @@
+---
+// comment 3: line chart of optical capacity over time for the standards section.
+// log y-scale because capacity grows ~exponentially (0.7 -> 4.7 -> 25 GB), so a
+// linear axis would squash the CD to the floor. one series, so no legend — the
+// title names it, values are labeled directly, and the table above is the a11y view.
+---
+
+<figure class="cap" data-cap aria-label="Optical storage capacity from 1982 to 2006, log scale">
+  <figcaption class="cap-cap">
+    CAPACITY OVER TIME
+    <span>single-layer, log scale &mdash; each format multiplies the last</span>
+  </figcaption>
+
+  <div class="cap-plot">
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" role="img"
+      preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="capArea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(57,255,20,0.35)" />
+          <stop offset="100%" stop-color="rgba(57,255,20,0)" />
+        </linearGradient>
+      </defs>
+
+      <!-- gridlines + y labels (recessive) -->
+      <line class="cap-grid" x1="64" y1="223" x2="610" y2="223" />
+      <line class="cap-grid" x1="64" y1="105" x2="610" y2="105" />
+      <line class="cap-axis" x1="64" y1="34" x2="64" y2="270" />
+      <line class="cap-axis" x1="64" y1="270" x2="610" y2="270" />
+      <text class="cap-ytick" x="58" y="227">1 GB</text>
+      <text class="cap-ytick" x="58" y="109">10 GB</text>
+
+      <!-- area under the line -->
+      <path class="cap-area" data-cap-area
+        d="M103,241 L356,144 L571,58 L571,270 L103,270 Z" />
+
+      <!-- the line itself (drawn in when scrolled into view) -->
+      <path class="cap-line" data-cap-line d="M103,241 L356,144 L571,58" />
+
+      <!-- growth multipliers between points -->
+      <text class="cap-mult" x="230" y="185">&times;6.7</text>
+      <text class="cap-mult" x="464" y="93">&times;5.3</text>
+
+      <!-- markers + direct value labels -->
+      <g class="cap-pt" data-cap-pt>
+        <circle class="cap-dot" cx="103" cy="241" r="6" />
+        <text class="cap-val" x="103" y="261">700 MB</text>
+        <circle class="cap-hit" data-cap-hit cx="103" cy="241" r="20"
+          data-fmt="CD" data-year="1982" data-val="700 MB" data-mult="baseline" />
+      </g>
+      <g class="cap-pt" data-cap-pt>
+        <circle class="cap-dot" cx="356" cy="144" r="6" />
+        <text class="cap-val" x="356" y="126">4.7 GB</text>
+        <circle class="cap-hit" data-cap-hit cx="356" cy="144" r="20"
+          data-fmt="DVD" data-year="1995" data-val="4.7 GB" data-mult="6.7&times; the CD" />
+      </g>
+      <g class="cap-pt" data-cap-pt>
+        <circle class="cap-dot" cx="571" cy="58" r="6" />
+        <text class="cap-val cap-val-end" x="571" y="40">25 GB</text>
+        <circle class="cap-hit" data-cap-hit cx="571" cy="58" r="20"
+          data-fmt="Blu-ray" data-year="2006" data-val="25 GB" data-mult="5.3&times; the DVD" />
+      </g>
+
+      <!-- x labels -->
+      <text class="cap-xtick" x="103" y="290">CD</text>
+      <text class="cap-xsub"  x="103" y="304">1982</text>
+      <text class="cap-xtick" x="356" y="290">DVD</text>
+      <text class="cap-xsub"  x="356" y="304">1995</text>
+      <text class="cap-xtick" x="571" y="290">Blu-ray</text>
+      <text class="cap-xsub"  x="571" y="304">2006</text>
+    </svg>
+
+    <div class="cap-tip" data-cap-tip hidden></div>
+  </div>
+</figure>
+
+<style>
+  .cap {
+    background: rgba(10, 0, 20, 0.55);
+    border: 1px solid rgba(57, 255, 20, 0.18);
+    border-radius: 10px;
+    padding: 1.25rem 1.25rem 1rem;
+    margin: 1.5rem 0;
+  }
+  .cap-cap {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--accent-green);
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+  .cap-cap span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: rgba(170, 170, 204, 0.6);
+    margin-top: 0.3rem;
+  }
+
+  .cap-plot { position: relative; max-width: 640px; margin: 0 auto; }
+  .cap-plot svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+  .cap-grid { stroke: rgba(255, 255, 255, 0.07); stroke-width: 1; stroke-dasharray: 3 4; }
+  .cap-axis { stroke: rgba(255, 255, 255, 0.15); stroke-width: 1; }
+  .cap-ytick { fill: rgba(170,170,204,0.6); font-family: var(--font-body); font-size: 10px; text-anchor: end; }
+  .cap-xtick { fill: var(--text); font-family: var(--font-head); font-size: 12px; text-anchor: middle; }
+  .cap-xsub  { fill: rgba(170,170,204,0.6); font-family: var(--font-body); font-size: 10px; text-anchor: middle; }
+
+  .cap-val {
+    fill: var(--text);
+    font-family: var(--font-head);
+    font-size: 13px;
+    text-anchor: middle;
+    letter-spacing: 0.5px;
+  }
+  .cap-val-end { text-anchor: end; }
+  .cap-mult { fill: var(--accent-magenta); font-family: var(--font-body); font-size: 11px; text-anchor: middle; opacity: 0.85; }
+
+  .cap-area { fill: url(#capArea); opacity: 0; transition: opacity 0.6s ease 0.5s; }
+  .cap-line {
+    fill: none;
+    stroke: var(--accent-green);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.5));
+  }
+  .cap-dot {
+    fill: var(--accent-cyan);
+    stroke: #0d001a;
+    stroke-width: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .cap-val { opacity: 0; transition: opacity 0.4s ease; }
+  .cap-hit { fill: transparent; cursor: pointer; }
+
+  /* drawn-in state (added by the observer in the script) */
+  .cap.drawn .cap-area { opacity: 1; }
+  .cap.drawn .cap-dot,
+  .cap.drawn .cap-val { opacity: 1; }
+  /* the three .cap-pt groups are the only <g> elements, so nth-of-type targets
+     CD / DVD / Blu-ray in order — fade them in after the line finishes drawing */
+  .cap.drawn .cap-pt:nth-of-type(1) .cap-dot,
+  .cap.drawn .cap-pt:nth-of-type(1) .cap-val { transition-delay: 0.7s; }
+  .cap.drawn .cap-pt:nth-of-type(2) .cap-dot,
+  .cap.drawn .cap-pt:nth-of-type(2) .cap-val { transition-delay: 0.95s; }
+  .cap.drawn .cap-pt:nth-of-type(3) .cap-dot,
+  .cap.drawn .cap-pt:nth-of-type(3) .cap-val { transition-delay: 1.2s; }
+
+  .cap-dot.hot { r: 9; filter: drop-shadow(0 0 8px rgba(0,255,255,0.9)); }
+
+  .cap-tip {
+    position: absolute;
+    transform: translate(-50%, -115%);
+    background: rgba(5, 0, 15, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.75rem;
+    color: var(--text);
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 5;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  }
+  .cap-tip b { color: var(--accent-green); font-family: var(--font-head); font-weight: normal; }
+  .cap-tip span { color: var(--text-muted); }
+
+  /* reduced motion: no draw animation, just show it */
+  @media (prefers-reduced-motion: reduce) {
+    .cap-line { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+    .cap-area, .cap-dot, .cap-val { opacity: 1 !important; transition: none !important; }
+  }
+
+  @media (max-width: 560px) {
+    .cap-val, .cap-xtick { font-size: 14px; }
+    .cap-mult { font-size: 12px; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-cap]').forEach((cap) => {
+    const line = cap.querySelector('[data-cap-line]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // prime the line for a draw-in
+    if (line && !reduce) {
+      const len = line.getTotalLength();
+      line.style.strokeDasharray = len;
+      line.style.strokeDashoffset = len;
+      line.style.transition = 'stroke-dashoffset 1.2s ease-out';
+    }
+
+    const start = () => {
+      cap.classList.add('drawn');
+      if (line && !reduce) line.style.strokeDashoffset = '0';
+    };
+
+    if (reduce) {
+      start();
+    } else {
+      const io = new IntersectionObserver(
+        (entries, obs) => entries.forEach((e) => {
+          if (e.isIntersecting) { start(); obs.disconnect(); }
+        }),
+        { threshold: 0.35 }
+      );
+      io.observe(cap);
+    }
+
+    // hover tooltips per point
+    const tip = cap.querySelector('[data-cap-tip]');
+    const plot = cap.querySelector('.cap-plot');
+    cap.querySelectorAll('[data-cap-hit]').forEach((hit) => {
+      const dot = hit.parentNode.querySelector('.cap-dot');
+      hit.addEventListener('mouseenter', () => {
+        dot.classList.add('hot');
+        const mult = hit.dataset.mult === 'baseline'
+          ? 'the starting point'
+          : hit.dataset.mult;
+        tip.innerHTML =
+          '<b>' + hit.dataset.fmt + '</b> &middot; ' + hit.dataset.year +
+          '<br><span>' + hit.dataset.val + ' &mdash; ' + mult + '</span>';
+        tip.hidden = false;
+      });
+      hit.addEventListener('mousemove', (e) => {
+        const r = plot.getBoundingClientRect();
+        tip.style.left = (e.clientX - r.left) + 'px';
+        tip.style.top = (e.clientY - r.top) + 'px';
+      });
+      hit.addEventListener('mouseleave', () => {
+        dot.classList.remove('hot');
+        tip.hidden = true;
+      });
+    });
+  });
+</script>

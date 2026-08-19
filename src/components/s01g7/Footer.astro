@@ -1,0 +1,110 @@
+---
+---
+
+<footer class="footer">
+  FULL CAPACITY &mdash; The Evolution of Computer Data Storage<br />
+  CSARCH2 Group 7 [S01] &mdash; De La Salle University &mdash; 3rd Term, A.Y. 2025&ndash;2026
+</footer>
+
+<script>
+  // comment 3: the animation/scroll stuff lives here so it loads on every page.
+  // turns itself off if the user prefers reduced motion.
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // top progress bar
+  const bar = document.createElement('div');
+  bar.className = 'scroll-progress';
+  document.body.appendChild(bar);
+  const onScroll = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // mark the things we want to fade in on scroll
+  const tag = (sel, cls) =>
+    document.querySelectorAll(sel).forEach((el) => el.classList.add(cls));
+
+  tag('.stats-bar', 'reveal-stagger');
+  tag('.carousel-section', 'reveal');
+  tag('.exhibits .section-label', 'reveal');
+  tag('.exhibit-card', 'reveal');
+  tag('.article-body section', 'reveal');
+  tag('.sim-wrap', 'reveal');
+  tag('.hdd-sim-wrap', 'reveal');
+  tag('.compare-table', 'reveal');
+  tag('.cd-diagram', 'reveal');
+
+  // stagger the exhibit cards a bit
+  document.querySelectorAll('.exhibit-card').forEach((el, i) => {
+    el.style.transitionDelay = 0.07 * i + 's';
+  });
+
+  // wrap each table so it can scroll sideways when the screen is narrow,
+  // and copy the column headers onto the cells for the phone "card" view
+  document.querySelectorAll('.compare-table').forEach((table) => {
+    if (!table.closest('.table-scroll')) {
+      const wrap = document.createElement('div');
+      wrap.className = 'table-scroll';
+      table.parentNode.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    }
+    const heads = [...table.querySelectorAll('thead th')].map((th) => th.textContent.trim());
+    if (!heads.length) return;
+    table.querySelectorAll('tbody tr').forEach((tr) => {
+      tr.querySelectorAll('td').forEach((td, i) => {
+        if (heads[i]) td.setAttribute('data-label', heads[i]);
+      });
+    });
+  });
+
+  const revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .timeline-scroll');
+
+  if (reduced) {
+    // just show everything, no animation
+    revealEls.forEach((el) => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in');
+          if (entry.target.classList.contains('stats-bar')) runCounters(entry.target);
+          obs.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.15 }
+    );
+    revealEls.forEach((el) => io.observe(el));
+  }
+
+  // count the stat numbers up from 0 when the bar scrolls into view
+  function runCounters(scope) {
+    scope.querySelectorAll('.stat-num').forEach((el) => {
+      const original = el.innerHTML;
+      const text = el.textContent.trim();
+      const m = text.match(/^(\d[\d,]*)(.*)$/s);
+      if (!m) return; // skip ones that don't start with a number, e.g. 10⁶×
+      const hasComma = m[1].includes(',');
+      const target = parseInt(m[1].replace(/,/g, ''), 10);
+      const suffix = m[2];
+      const fmt = (n) => (hasComma ? n.toLocaleString('en-US') : String(n));
+      const dur = 1200;
+      const start = performance.now();
+      const step = (now) => {
+        const p = Math.min((now - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.round(eased * target)) + suffix;
+        if (p < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.innerHTML = original; // put back the original markup
+          el.classList.add('counted');
+        }
+      };
+      requestAnimationFrame(step);
+    });
+  }
+</script>

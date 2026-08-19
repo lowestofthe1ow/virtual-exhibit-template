@@ -1,0 +1,288 @@
+---
+layout: '../../components/s01g7/S01_Group7_ExhibitPageLayout.astro'
+title: "The Flash — Full Capacity"
+pageTitle: "THE FLASH:"
+subtitle: "SSDs, NAND, and NVMe"
+author: "Galicia, Lance Krystofer"
+readingTime: "~15 minute read"
+toc:
+  - href: "#intro"
+    label: "Introduction"
+  - href: "#nand"
+    label: "NAND Flash Architecture"
+  - href: "#lifespan"
+    label: "Wear Leveling & Lifespan"
+  - href: "#interfaces"
+    label: "SATA vs. NVMe"
+  - href: "#performance"
+    label: "Speed, Latency & IOPS"
+  - href: "#simulator"
+    label: "Interactive Simulator"
+  - href: "#references"
+    label: "References"
+---
+
+import '../../styles/s01g7/flash.css';
+import '../../styles/s01g7/horizon-simulator.css';
+import SSDSpeedChallenge from '../../components/s01g7/SSDSpeedChallenge.jsx';
+import NandHierarchyFlow from '../../components/s01g7/NandHierarchyFlow.jsx';
+import CellVoltageDiagram from '../../components/s01g7/CellVoltageDiagram.jsx';
+import earlySsd from '../../assets/s01g7/early-ssd.webp';
+import floatingGateCell from '../../assets/s01g7/floating-gate-cell.webp';
+import sataVsM2 from '../../assets/s01g7/sata-vs-m2.jpg';
+import WearLevelingFlow from '../../components/s01g7/WearLevelingFlow.jsx';
+import BusSpeedRace from '../../components/s01g7/BusSpeedRace.jsx';
+import IopsGaugeCluster from '../../components/s01g7/IopsGaugeCluster.jsx';
+import InterfacePathDiagram from '../../components/s01g7/InterfacePathDiagram.jsx';
+import FloatingGateAnimation from '../../components/s01g7/FloatingGateAnimation.jsx';
+import WearLevelingAnimation from '../../components/s01g7/WearLevelingAnimation.jsx';
+import ScaleCaveatIcon from '../../components/s01g7/ScaleCaveatIcon.jsx';
+import PriceCrossoverRace from '../../components/s01g7/PriceCrossoverRace.jsx';
+
+<section id="intro">
+  <h2>Introduction</h2>
+  <p>
+    Every storage medium before this one had a motor. Punch cards were fed through
+    rollers, drums spun, platters rotated, discs whirled under a laser. Each new
+    generation got faster, but every one of them still depended on something
+    physical moving into position before a single bit could be read. In 1991,
+    SanDisk shipped the first commercial <strong>solid-state drive</strong> &mdash; a
+    20 MB unit with no motor at all. Data was trapped as electrical charge inside
+    silicon, and for the first time, "seeking" a piece of data meant nothing: every
+    cell was equally close, reachable in the same instant regardless of where it
+    physically sat on the chip.
+  </p>
+
+  <figure class="figure-placeholder">
+    <img src={earlySsd.src} alt="Photo of an early solid-state flash storage card" class="figure-img figure-img-flash" />
+    <figcaption>Fig. Early solid-state flash storage, decades before SSDs replaced hard drives <a href="https://en.wikipedia.org/wiki/Solid-state_drive" target="_blank" rel="noopener">(Wikipedia)</a></figcaption>
+  </figure>
+
+  <p>
+    It took almost two decades for flash to become cheap enough to replace the hard
+    drive in everyday computers, held back less by the technology itself than by
+    the cost of manufacturing enough silicon to compete with a spinning platter's
+    price per gigabyte. But once <strong>NAND flash</strong> caught up in price, it
+    changed the shape of the memory hierarchy &mdash; closing the long-standing gap
+    between fast, volatile RAM and slow, mechanical secondary storage, and setting
+    up almost every other technology covered in this exhibit.
+  </p>
+
+  <PriceCrossoverRace client:visible />
+
+  <p>
+    What made that leap possible sits inside a single transistor, repeated across
+    a chip billions of times over. The rest of this exhibit works outward from
+    that one component &mdash; how a single cell traps and releases charge, how
+    those cells are organized into a working chip, how that chip is protected from
+    wearing out, and how the interface connecting it to the rest of the computer
+    had to be reinvented just to keep up with what flash could actually do.
+  </p>
+</section>
+
+<section id="nand">
+  <h2>NAND Flash Memory Architecture</h2>
+  <p>
+    A NAND flash chip stores data in <strong>floating-gate transistors</strong> — a
+    normal transistor with a second, electrically isolated gate buried inside it.
+    Trapping electrons on that floating gate raises the cell's threshold voltage;
+    removing them lowers it. Because the gate is insulated, the charge stays put
+    with no power applied — this is what makes flash <strong>non-volatile</strong>.
+  </p>
+
+  <FloatingGateAnimation client:visible />
+
+  <p>
+    That single cell is the smallest unit of storage on the chip, but it never
+    stands alone. Millions of them are wired together into a hierarchy that runs
+    from the whole package all the way down to one transistor, and each level in
+    that hierarchy exists to solve a different engineering problem — how much
+    silicon fits in a package, how a controller addresses a specific location, and
+    how much data can be written or erased in a single operation.
+  </p>
+
+  <NandHierarchyFlow client:visible />
+  <p class="nand-caveat">
+    Bar widths are on a log scale to fit five orders of magnitude on one chart &mdash;
+    they show containment order (package &sup; die &sup; block &sup; page &sup; cell),
+    not literal proportional size.
+  </p>
+
+  <p>
+    Cells are organized into <strong>pages</strong> (the smallest unit that can be
+    written) and pages are grouped into <strong>blocks</strong> (the smallest unit
+    that can be erased). A cell can only hold one voltage state at a time, so more
+    bits per cell means finer voltage steps packed into the same physical range —
+    and the finer those steps get, the more precisely the controller has to read
+    a cell's charge to tell one state from its neighbor:
+  </p>
+  <CellVoltageDiagram client:visible />
+  <p>
+    NAND has one quirk that shapes everything above it: it can write to an empty
+    page, but it <strong>cannot overwrite</strong> a page directly &mdash; the whole block
+    must be erased first. An SSD controller works around this by writing updates to
+    a fresh page elsewhere and marking the old one invalid, then later copying the
+    still-valid pages out of a block and erasing it wholesale. This background
+    process is called <strong>garbage collection</strong>, and it's the reason a
+    drive that's nearly full often feels slower than one with room to spare — the
+    controller has fewer clean blocks to write into and has to do more shuffling
+    to free new ones.
+  </p>
+</section>
+
+<section id="lifespan">
+  <h2>Wear Leveling and Flash Lifespan</h2>
+  <p>
+    Each erase cycle stresses the oxide layer around the floating gate a little
+    more. Eventually a cell can no longer reliably hold a charge, so every NAND
+    cell has a finite budget of <strong>program/erase (P/E) cycles</strong> &mdash;
+    roughly 100,000 for SLC, down to just a few hundred for QLC, a gap of two to
+    three orders of magnitude between the most and least durable cell types. That
+    budget is why "how many bits per cell" isn't just a capacity and cost question
+    &mdash; it's also a direct trade against how long the drive will last under
+    sustained writes.
+  </p>
+
+  <p>
+    If a drive always rewrote the same "hot" blocks &mdash; a swap file, a database log &mdash;
+    those blocks would wear out in weeks while the rest of the chip sat untouched.
+    <strong>Wear leveling</strong> algorithms prevent this by spreading writes
+    evenly across the whole chip, trading a small amount of controller overhead
+    for a dramatic increase in the drive's usable lifespan. There are two
+    complementary strategies at work:
+  </p>
+
+  <WearLevelingAnimation client:visible />
+
+  <p>
+    Neither strategy works in isolation. Dynamic leveling alone would still leave
+    long-idle data pinned to the same worn blocks forever, and static leveling
+    alone would move data around unnecessarily on a drive that's already writing
+    evenly. Together, they keep every block's wear count within a narrow band of
+    every other block's, which is what lets a drive advertise a single endurance
+    rating instead of "some blocks might die next week."
+  </p>
+
+  <p>
+    Drives also reserve a slice of raw capacity that the user never sees, called
+    <strong>over-provisioning</strong>, to give the controller room to juggle
+    garbage collection and wear leveling without running out of free blocks. The
+    <strong>TRIM</strong> command lets the operating system tell the drive which
+    pages are no longer in use, so the controller can erase them ahead of time
+    instead of scrambling during a write.
+  </p>
+</section>
+
+<section id="interfaces">
+  <h2>SATA vs. NVMe Interfaces</h2>
+  <p>
+    An SSD is only as fast as the road connecting it to the CPU. Early SSDs were
+    built into the 2.5" form factor and spoke <strong>SATA</strong> &mdash; a protocol
+    and connector designed in 2003 for spinning platters. SATA III tops out around
+    6 Gbps (about 550 MB/s after overhead), and its command layer, <strong>AHCI</strong>,
+    supports exactly one command queue, 32 commands deep &mdash; plenty for a mechanical
+    drive that could barely keep that queue full, but a hard ceiling for flash, which
+    can service far more requests at once than a spinning platter ever could.
+  </p>
+
+  <InterfacePathDiagram />
+
+  <p>
+    That single queue is the bottleneck the whole interface was built around, because
+    AHCI was never designed with flash in mind &mdash; it inherited its assumptions
+    from decades of hard drives, where one slow mechanical arm made a deep queue
+    pointless anyway. Flash broke that assumption the moment it arrived, and for
+    years SSDs were stuck running at a fraction of their real potential simply
+    because the road connecting them to the CPU hadn't caught up with the drive
+    itself.
+  </p>
+
+  <p>
+    <strong>NVMe</strong> (Non-Volatile Memory Express) throws out that legacy path
+    entirely. It talks straight to the CPU over <strong>PCIe lanes</strong> instead
+    of a storage-specific bus, and its command set was designed from scratch around
+    what flash can actually do: up to <strong>65,535 queues</strong>, each up to
+    <strong>65,536 commands</strong> deep, so a modern multi-core CPU can issue
+    requests to the drive in parallel instead of standing in one line. Every core
+    can effectively own its own queue, which is exactly the kind of parallelism
+    AHCI had no way to express.
+  </p>
+
+  <BusSpeedRace client:visible />
+
+  <p>
+    The gap isn't just bandwidth &mdash; it's overhead. Every AHCI command travels
+    through a driver stack built for disks that took milliseconds to respond. NVMe
+    strips that stack down to the operations flash actually needs, cutting CPU
+    cycles spent per command and letting drives fully exploit PCIe's lanes as
+    generations move from PCIe 3.0 to 4.0 and beyond.
+  </p>
+</section>
+
+<section id="performance">
+  <h2>Storage Performance: Latency and IOPS</h2>
+  <p>
+    Two numbers describe how "fast" a drive really feels in everyday use, and
+    neither of them is the big MB/s figure on the box. Sequential throughput
+    matters for copying one large file, but most real workloads &mdash; opening
+    an app, loading a level, running a database query &mdash; are made of many
+    small, scattered requests, and that's where these two numbers actually
+    decide how responsive a drive feels.
+  </p>
+  <ul>
+    <li>
+      <strong>Latency</strong> &mdash; the delay before a single request starts
+      returning data. An HDD pays for a physical seek and rotational delay, often
+      several milliseconds, because a physical arm has to travel to the right
+      spot on a spinning platter before it can read anything. Flash has no moving
+      parts to wait for, so NVMe latency is typically measured in
+      <strong>microseconds</strong> instead.
+    </li>
+    <li>
+      <strong>IOPS</strong> (Input/Output Operations Per Second) &mdash; how many
+      individual read or write operations a drive can complete per second,
+      especially with small, random requests. This is the metric that matters for
+      databases, virtual machines, and boot times, where the workload is thousands
+      of tiny scattered requests rather than one long stream, and where a drive's
+      advertised sequential speed says almost nothing about how it will actually
+      perform.
+    </li>
+  </ul>
+  <p>
+    A 7,200 RPM HDD manages roughly 100&ndash;200 random IOPS, limited by how fast its
+    arm can physically move from one track to the next. A SATA SSD reaches tens of
+    thousands, already a leap of two to three orders of magnitude with no moving
+    parts left to slow it down. An NVMe drive, freed from AHCI's single queue, can
+    push past a million &mdash; not because flash reads any single cell faster
+    than that, but because thousands of requests can be in flight across its
+    parallel queues at once, arriving faster than any one queue could ever drain
+    them.
+  </p>
+
+  <IopsGaugeCluster client:visible />
+  <p class="nand-caveat">Log-scaled again — NVMe's real advantage over a spinning HDD is on the order of 10,000&times;, not the ~7&times; the bar lengths alone would suggest.</p>
+</section>
+
+<section id="simulator">
+  <h2>Interactive: SSD Speed Challenge</h2>
+  <p>
+    Picture a computer that needs to read 16 different pieces of data from a
+    storage drive, all at once &mdash; this is a completely normal thing that
+    happens constantly, e.g. when a game loads or an app starts up. Pick a drive,
+    fire the requests, and watch how differently an HDD, SATA SSD, and NVMe SSD
+    cope with the exact same workload.
+  </p>
+
+  <SSDSpeedChallenge client:load />
+</section>
+
+<section id="references">
+  <h2>References</h2>
+  <ul>
+    <li>Micheloni, R., Marelli, A., & Eshghi, K. (2013). <em>Inside Solid State Drives (SSDs).</em> Springer.</li>
+    <li>NVM Express, Inc. (2021). <em>NVM Express Base Specification, Revision 1.4c.</em></li>
+    <li>Cai, Y., Haratsch, E. F., Mutlu, O., & Mai, K. (2012). Error Patterns in MLC NAND Flash Memory. <em>Design, Automation & Test in Europe (DATE).</em></li>
+    <li>Serial ATA International Organization. (2013). <em>Serial ATA Revision 3.2 Specification.</em></li>
+    <li>SanDisk Corporation. (1991). <em>First Commercial Solid-State Drive Announcement.</em> Company archives.</li>
+  </ul>
+</section>

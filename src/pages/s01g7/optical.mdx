@@ -1,0 +1,420 @@
+---
+layout: '../../components/s01g7/S01_Group7_ExhibitPageLayout.astro'
+title: "The Optical Age: Full Capacity"
+pageTitle: "THE OPTICAL AGE:"
+subtitle: "CDs, DVDs, and Their Limits"
+author: "Parado, Sky Hannah G."
+readingTime: "~12 minute read"
+toc:
+  - href: "#intro"
+    label: "Introduction"
+  - href: "#how-it-works"
+    label: "How It Works"
+  - href: "#pits-lands"
+    label: "Pits & Lands"
+  - href: "#error-correction"
+    label: "Error Correction"
+  - href: "#standards"
+    label: "CD vs DVD vs Blu-ray"
+  - href: "#recordable"
+    label: "Recordable & Rewritable Discs"
+  - href: "#decline"
+    label: "The Decline of Optical Media"
+  - href: "#simulator"
+    label: "Interactive Simulator"
+  - href: "#references"
+    label: "References"
+---
+
+import '../../styles/s01g7/horizon-simulator.css';
+import '../../styles/s01g7/optical.css';
+import OpticalEncoder from '../../components/s01g7/OpticalEncoder.jsx';
+import OpticalDiagram from '../../components/s01g7/OpticalDiagram.astro';
+import WavelengthLab from '../../components/s01g7/WavelengthLab.astro';
+import CapacityChart from '../../components/s01g7/CapacityChart.astro';
+import InterleavingDiagram from '../../components/s01g7/InterleavingDiagram.astro';
+import RecordableDiscDiagram from '../../components/s01g7/RecordableDiscDiagram.astro';
+import OpticalDeclineChart from '../../components/s01g7/OpticalDeclineChart.astro';
+
+<OpticalDiagram />
+
+<section id="intro">
+  <h2>Introduction</h2>
+  <p>
+    Magnetic storage was fast but fragile: disks warped, drives crashed, tapes degraded.
+    In 1982, Sony and Philips answered with the <strong>Compact Disc</strong>: 650 MB on
+    a coaster-sized disc, read by light alone, never touching the surface. It outlasted
+    every magnetic medium of its era.
+  </p>
+  <p>
+    Over 30 years, optical storage evolved through three generations: CD (1982),
+    DVD (1995), and Blu-ray (2006), each squeezing more data onto the same disc by
+    using shorter and shorter wavelengths of laser light.
+  </p>
+
+  <div class="gen-banner" aria-hidden="true">
+    <div class="gen-disc gen-cd">
+      <div class="gen-face"></div>
+      <span class="gen-name">CD</span>
+      <span class="gen-meta">1982<br />780 nm &middot; infrared</span>
+    </div>
+    <div class="gen-disc gen-dvd">
+      <div class="gen-face"></div>
+      <span class="gen-name">DVD</span>
+      <span class="gen-meta">1995<br />650 nm &middot; red</span>
+    </div>
+    <div class="gen-disc gen-bd">
+      <div class="gen-face"></div>
+      <span class="gen-name">BLU-RAY</span>
+      <span class="gen-meta">2006<br />405 nm &middot; violet</span>
+    </div>
+  </div>
+  <p class="gen-caption">Three generations, one disc size &mdash; each read by a shorter wavelength than the last.</p>
+  <p>
+    Optical discs weren't the first medium to encode information as light-readable
+    marks. The <strong>LaserDisc</strong>, launched in 1978, pioneered the idea of a
+    reflective analog video disc read by laser. But LaserDiscs were bulky (the size of
+    a vinyl record) and analog, storing video as a continuously varying signal rather
+    than discrete bits. The CD's breakthrough was combining the laser-reading concept
+    with fully <strong>digital</strong> encoding, governed by the Red Book standard
+    Sony and Philips published in 1980, the first time an optical format's physical
+    and logical specifications were locked down before mass production, letting every
+    manufacturer's discs play in every manufacturer's player.
+  </p>
+</section>
+
+<section id="how-it-works">
+  <h2>How Optical Storage Works</h2>
+  <p>
+    A disc is a sandwich of layers. The laser reads from the bottom up:
+  </p>
+
+  <div class="cd-diagram">
+    <div class="cd-layer">
+      <span class="cd-layer-label">Label &amp; printing</span>
+      <div class="cd-layer-bar layer-label"></div>
+    </div>
+    <div class="cd-layer">
+      <span class="cd-layer-label">Lacquer (protective coat)</span>
+      <div class="cd-layer-bar layer-lacquer"></div>
+    </div>
+    <div class="cd-layer">
+      <span class="cd-layer-label">Reflective aluminum layer</span>
+      <div class="cd-layer-bar layer-reflect"></div>
+    </div>
+    <div class="cd-layer">
+      <span class="cd-layer-label">Polycarbonate substrate</span>
+      <div class="cd-layer-bar layer-pc"></div>
+    </div>
+    <div class="cd-layer">
+      <span class="cd-layer-label">&#x2191; Laser reads from here</span>
+      <div class="cd-layer-bar layer-laser"></div>
+    </div>
+  </div>
+
+  <p>
+    Data is stamped into the polycarbonate as a spiral of microscopic bumps called
+    <strong>pits</strong>, separated by flat areas called <strong>lands</strong>.
+    A <strong>laser diode</strong> shines through the base onto the track: lands reflect
+    the beam back cleanly (high signal), while pit edges scatter it (low signal).
+    Those highs and lows become binary data.
+  </p>
+
+  <h3>Why Wavelength Matters</h3>
+  <p>
+    A laser can only resolve features about half its wavelength in size. Shorter = smaller
+    pits = more data. CD uses <strong>780 nm</strong> (infrared), DVD uses <strong>650 nm</strong>
+    (red), and Blu-ray uses <strong>405 nm</strong> (violet), which is why capacity jumps
+    so dramatically across formats.
+  </p>
+
+  <WavelengthLab />
+</section>
+
+<section id="pits-lands">
+  <h2>Pits and Lands as Binary Data</h2>
+  <p>
+    Common misconception: pits ≠ 1s and lands ≠ 0s. On real CDs, it's the
+    <strong>transitions</strong> between pit and land that represent a
+    <code style="color:var(--accent-green)">1</code>. Staying on either surface
+    (no transition) is a <code style="color:var(--accent-green)">0</code>.
+    This is called <strong>NRZI</strong> encoding.
+  </p>
+
+  <div class="nrzi-stage" aria-hidden="true">
+    <div class="nrzi-track">
+      <div class="nrzi-strip">
+        <span class="nrzi-seg is-land" style="--w:3"></span>
+        <span class="nrzi-seg is-pit"  style="--w:5"></span>
+        <span class="nrzi-seg is-land" style="--w:4"></span>
+        <span class="nrzi-seg is-pit"  style="--w:7"></span>
+        <span class="nrzi-seg is-land" style="--w:3"></span>
+        <span class="nrzi-seg is-pit"  style="--w:6"></span>
+        <span class="nrzi-seg is-land" style="--w:9"></span>
+        <span class="nrzi-seg is-pit"  style="--w:4"></span>
+        <span class="nrzi-seg is-land" style="--w:3"></span>
+        <span class="nrzi-seg is-pit"  style="--w:8"></span>
+        <span class="nrzi-seg is-land" style="--w:5"></span>
+        <span class="nrzi-seg is-pit"  style="--w:4"></span>
+        <span class="nrzi-seg is-land" style="--w:3"></span>
+        <span class="nrzi-seg is-pit"  style="--w:5"></span>
+        <span class="nrzi-seg is-land" style="--w:4"></span>
+        <span class="nrzi-seg is-pit"  style="--w:7"></span>
+        <span class="nrzi-seg is-land" style="--w:3"></span>
+        <span class="nrzi-seg is-pit"  style="--w:6"></span>
+        <span class="nrzi-seg is-land" style="--w:9"></span>
+        <span class="nrzi-seg is-pit"  style="--w:4"></span>
+        <span class="nrzi-seg is-land" style="--w:3"></span>
+        <span class="nrzi-seg is-pit"  style="--w:8"></span>
+        <span class="nrzi-seg is-land" style="--w:5"></span>
+        <span class="nrzi-seg is-pit"  style="--w:4"></span>
+      </div>
+      <div class="nrzi-head"></div>
+    </div>
+    <div class="nrzi-legend">
+      <span class="lg-land">Land (reflects)</span>
+      <span class="lg-pit">Pit (scatters)</span>
+      <span class="lg-one">Transition = 1</span>
+    </div>
+  </div>
+  <ul>
+    <li><strong>Noise immunity</strong>: no baseline needed between bits, easier to read at speed.</li>
+    <li><strong>Self-clocking</strong>: the drive syncs its clock to the transitions themselves.</li>
+  </ul>
+  <p>
+    Before hitting the disc, data also goes through <strong>Eight-to-Fourteen Modulation (EFM)</strong>,
+    which converts each byte into a 14-bit pattern, guaranteeing no run of identical signal
+    is too long or too short for the optics to track.
+  </p>
+</section>
+
+<section id="error-correction">
+  <h2>Error Correction: Surviving Scratches and Dust</h2>
+  <p>
+    A CD spins at up to 500 RPM under a laser reading marks measured in hundredths of a
+    micron, so a single fingerprint smudge, dust particle, or hairline scratch can wipe out
+    thousands of consecutive bits. Optical media survives this because every byte written
+    to the disc is protected by <strong>CIRC</strong> (Cross-Interleaved Reed-Solomon Code),
+    developed for the Red Book standard alongside EFM.
+  </p>
+  <p>
+    CIRC works in two layers. First, a <strong>Reed-Solomon</strong> code adds parity symbols
+    that let the player reconstruct missing or corrupted bytes through math alone, without
+    ever needing to re-read the disc. Second, and just as important, the encoder
+    <strong>interleaves</strong> the data, spreading each chunk of a file across
+    widely separated physical locations on the spiral track before writing it. A scratch
+    that destroys one contiguous stretch of the disc surface therefore only damages a few
+    scattered bytes from many different chunks, each easily recoverable by Reed-Solomon,
+    rather than annihilating one chunk completely.
+  </p>
+  <p>
+    This is why a CD with a visible scratch across its surface will often still play
+    perfectly, while a single deep scratch on a hard drive platter can be catastrophic.
+    The interleaving trades a small amount of storage overhead for a large amount of
+    physical resilience.
+  </p>
+
+  <InterleavingDiagram />
+</section>
+
+<section id="standards">
+  <h2>CD vs. DVD vs. Blu-ray</h2>
+  <p>Shorter wavelength = smaller pits = more data. Same disc, totally different capacity:</p>
+
+  <CapacityChart />
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Format</th>
+        <th>Year</th>
+        <th>Laser</th>
+        <th>Wavelength</th>
+        <th>Track pitch</th>
+        <th>Min. pit size</th>
+        <th>Capacity (1 layer)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CD</td>
+        <td>1982</td>
+        <td>Infrared</td>
+        <td>780 nm</td>
+        <td>1,600 nm</td>
+        <td>833 nm</td>
+        <td>700 MB</td>
+      </tr>
+      <tr>
+        <td>DVD</td>
+        <td>1995</td>
+        <td>Red</td>
+        <td>650 nm</td>
+        <td>740 nm</td>
+        <td>400 nm</td>
+        <td>4.7 GB</td>
+      </tr>
+      <tr>
+        <td>Blu-ray</td>
+        <td>2006</td>
+        <td>Violet</td>
+        <td>405 nm</td>
+        <td>320 nm</td>
+        <td>149 nm</td>
+        <td>25 GB</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The track pitch shrinks 5&times; from CD to Blu-ray, giving Blu-ray ~35&times; more
+    capacity on the exact same diameter disc. The tradeoff: Blu-ray's thinner protective
+    layer (0.1 mm vs. DVD's 0.6 mm) makes it more scratch-prone.
+  </p>
+  <p>
+    Capacity could also be doubled without shrinking pits further, by stacking a second
+    semi-transparent recording layer beneath the first. <strong>Dual-layer DVDs (DVD-9)</strong>
+    hold 8.5 GB by refocusing the laser deeper into the disc for the second layer, and
+    Blu-ray pushed the same trick to <strong>BD-XL</strong> discs with up to four layers
+    and 128 GB, though each additional layer demands a more precise, more expensive laser
+    assembly to focus through the layers above it without cross-talk.
+  </p>
+</section>
+
+<section id="recordable">
+  <h2>Recordable & Rewritable Discs</h2>
+  <p>
+    Factory-pressed discs like retail CDs have their pits physically stamped into the
+    polycarbonate at manufacture, so there is no "writing" involved at all. Consumer
+    recordable discs had to fake the same optical behavior using materials a laser
+    could alter at home, which split the technology into two families.
+  </p>
+  <p>
+    <strong>CD-R and DVD±R</strong> ("recordable") discs replace the reflective aluminum
+    layer's neighbor with a layer of light-sensitive organic <strong>dye</strong>. A
+    high-power write laser heats spots along the dye layer, permanently darkening them
+    so they scatter light instead of reflecting it, mimicking a pit optically, even
+    though the disc surface itself never actually deforms. Because the dye can't
+    revert once burned, these discs are <strong>write-once</strong>: ideal for archival
+    backups precisely because the data can't later be altered or accidentally erased.
+  </p>
+  <p>
+    <strong>CD-RW and DVD±RW</strong> ("rewritable") discs use a <strong>phase-change
+    alloy</strong> instead of dye, typically a silver-indium-antimony-tellurium
+    compound. The write laser can heat this alloy to two different temperatures: a
+    high heat that melts it into a disordered, light-scattering <em>amorphous</em>
+    state (representing a pit), or a lower, sustained heat that lets it cool slowly
+    back into an ordered, reflective <em>crystalline</em> state (erasing that spot back
+    to a land). This reversible melt-and-anneal cycle is what lets rewritable discs be
+    erased and rewritten roughly 1,000 times, at the cost of a dimmer reflectivity
+    contrast than a stamped disc, which is why rewritable media generally demands a
+    more sensitive, more expensive laser pickup to read reliably.
+  </p>
+
+  <div class="burn-stage" aria-hidden="true">
+    <div class="burn-cell burn-r">
+      <div class="burn-row">
+        <span class="burn-dot" style="--i:0"></span>
+        <span class="burn-dot" style="--i:1"></span>
+        <span class="burn-dot" style="--i:2"></span>
+        <span class="burn-dot" style="--i:3"></span>
+        <span class="burn-dot" style="--i:4"></span>
+        <span class="burn-dot" style="--i:5"></span>
+      </div>
+      <span class="burn-label">CD-R &middot; DYE</span>
+      <span class="burn-note">Each spot darkens once and stays dark. Write-once, by chemistry.</span>
+    </div>
+    <div class="burn-cell burn-rw">
+      <div class="burn-row">
+        <span class="burn-dot" style="--i:0"></span>
+        <span class="burn-dot" style="--i:1"></span>
+        <span class="burn-dot" style="--i:2"></span>
+        <span class="burn-dot" style="--i:3"></span>
+        <span class="burn-dot" style="--i:4"></span>
+        <span class="burn-dot" style="--i:5"></span>
+      </div>
+      <span class="burn-label">CD-RW &middot; ALLOY</span>
+      <span class="burn-note">Melts to amorphous, anneals back to crystalline. The same spot, ~1,000 times.</span>
+    </div>
+  </div>
+
+  <RecordableDiscDiagram />
+</section>
+
+<section id="decline">
+  <h2>The Decline of Optical Media</h2>
+  <p>
+    Blu-ray, released in 2006, turned out to be the last mainstream optical format.
+    Its arrival coincided almost exactly with two shifts that made physical discs feel
+    increasingly unnecessary: consumer broadband made streaming video and downloadable
+    software practical, and flash memory prices fell fast enough that USB drives and SD
+    cards became cheaper, faster, rewritable, and far more durable per gigabyte than any
+    disc could be.
+  </p>
+  <p>
+    By the early 2010s, laptop manufacturers began shipping models without an optical
+    drive at all, and software distribution moved to digital storefronts. Optical media
+    never fully disappeared. It remains dominant in film physical-media collecting,
+    professional archival workflows (thanks to CIRC's resilience and long dye/inorganic
+    shelf life), and regions with limited broadband, but its three-decade run as the
+    default medium for distributing music, movies, games, and software effectively ended
+    within a decade of Blu-ray's launch.
+  </p>
+
+  <OpticalDeclineChart />
+</section>
+
+<section id="simulator">
+  <h2>Interactive: Optical Pit &amp; Land Encoder</h2>
+  <p style="text-align:justify;">
+    Launch the simulator to observe how an optical disc stores and retrieves data. Type up
+    to 3 characters, hit <strong>Encode</strong> to see your text as a disc track
+    (dark = pit, bright = land), then <strong>Scan</strong> to watch the laser read it back.
+  </p>
+
+  <OpticalEncoder client:load />
+</section>
+
+<section id="references">
+  <h2>References</h2>
+  <ul>
+    <li>
+      Bouwhuis, G., Braat, J., Huijser, A., Pasman, J., van Rosmalen, G., &amp; Immink, K. A. S.
+      (1985). <em>Principles of optical disc systems.</em> Adam Hilger.
+      https://www.researchgate.net/publication/283451476_Principles_of_Optical_Disc_Systems
+    </li>
+    <li>
+      Elanangai, V. (2015). Implementation of NRZI encoding/decoding in USB host controller.
+      <em>International Journal of Applied Engineering Research, 10</em>(4).
+      https://www.researchgate.net/publication/297508177_Implementation_of_NRZI_encodingdecoding_in_USB_host_controller
+    </li>
+    <li>
+      Ogawa, H., &amp; Immink, K. A. S. (1982). EFM: The modulation method for the Compact Disc
+      digital audio system. In <em>Digital audio: Collected papers from the AES premiere
+      conference</em> (pp. 117–124). Audio Engineering Society.
+      https://www.researchgate.net/publication/237785672_EFM_The_Modulation_Method_for_the_Compact_Disc_Digital_Audio_System
+    </li>
+    <li>
+      Rimage. (2022). <em>Optical media solution</em> [White paper]. Rimage Corporation.
+      https://www.rimage.com/wp-content/uploads/2022/02/Rimage-Optical-Media-Solution.pdf
+    </li>
+    <li>
+      Tsao, J. Y., Han, J., Haitz, R. H., &amp; Pattison, P. M. (2015). The Blue LED Nobel Prize:
+      Historical context, current scientific understanding, human benefit.
+      <em>Annalen der Physik, 527</em>(5–6), A53–A54. https://doi.org/10.1002/andp.201570058
+    </li>
+    <li>
+      Yale University. (n.d.). <em>CDs and DVDs: Application.</em>
+      https://volga.eng.yale.edu/teaching-resources/cds-and-dvds/application
+    </li>
+    <li>
+      Wicker, S. B., &amp; Bhargava, V. K. (Eds.). (1994). <em>Reed-Solomon codes and
+      their applications.</em> IEEE Press.
+    </li>
+    <li>
+      Nishiuchi, K., &amp; Yamada, H. (1998). Phase-change optical recording. In
+      <em>Photonic Materials and Optical Storage</em> (pp. 175–186). Springer.
+      https://doi.org/10.1007/978-1-4615-5341-2_12
+    </li>
+  </ul>
+</section>

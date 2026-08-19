@@ -1,0 +1,371 @@
+/* Ambient motion for the Optical page.
+   Only loaded by optical.mdx, so the bare `.article-body > section` selector
+   below can't leak onto the other exhibit pages that share the same layout.
+
+   Everything here is decorative and loops on its own — no user input, no data.
+   All of it sits behind prefers-reduced-motion so the page still reads fine
+   completely still. */
+
+/* ---------------------------------------------------------------
+   1. Sections drift up as they scroll into view
+   --------------------------------------------------------------- */
+
+/* Scroll-driven animations aren't in Firefox/Safari yet. @supports keeps this
+   an enhancement: unsupported browsers just get the normal static sections
+   rather than content stuck at opacity 0. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .article-body > section {
+      animation: sectionRise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    /* The first section is already on screen at load, so it never "enters" —
+       it would otherwise sit frozen partway through the fade at ~30% opacity.
+       It gets no reveal; everything below it scrolls in normally.
+       :first-of-type, not :first-child — <OpticalDiagram /> is rendered above
+       it, so the intro section is not actually the first child here. */
+    .article-body > section:first-of-type {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    @keyframes sectionRise {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+}
+
+/* ---------------------------------------------------------------
+   2. Intro — the three optical generations, spinning
+   --------------------------------------------------------------- */
+
+.gen-banner {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin: 2rem 0 1.25rem;
+  padding: 2.25rem 1rem 1.75rem;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.07), transparent 70%);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.gen-disc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 130px;
+}
+
+.gen-face {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  /* the data spiral: fine concentric rings under the sheen */
+  background:
+    repeating-radial-gradient(circle at 50% 50%,
+      rgba(255, 255, 255, 0.07) 0 1px,
+      transparent 1px 4px),
+    radial-gradient(circle at 50% 50%, #12002a 0 18%, #2a0b4d 19%, #180133 70%, #0d001a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 18px var(--gen-glow, rgba(0, 255, 255, 0.35));
+  overflow: hidden;
+}
+
+/* the iridescent sheen every disc has — a conic rainbow that sweeps around */
+.gen-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--gen-glow, #00ffff) 30deg,
+    transparent 70deg,
+    transparent 180deg,
+    var(--gen-glow, #00ffff) 210deg,
+    transparent 250deg,
+    transparent 360deg);
+  opacity: 0.4;
+  mix-blend-mode: screen;
+}
+
+/* centre hole, punched over the sheen so it stays dark */
+.gen-face::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* each generation spins a little faster than the last — CD 500 RPM up to
+     Blu-ray's much quicker read speeds */
+  .gen-face::before { animation: discSpin var(--gen-speed, 8s) linear infinite; }
+
+  @keyframes discSpin {
+    to { transform: rotate(360deg); }
+  }
+}
+
+.gen-cd  { --gen-glow: #ff5a3c; --gen-speed: 9s; }   /* 780 nm infrared */
+.gen-dvd { --gen-glow: #ff2d5e; --gen-speed: 6s; }   /* 650 nm red */
+.gen-bd  { --gen-glow: #9d4bff; --gen-speed: 3.5s; } /* 405 nm violet */
+
+.gen-name {
+  font-family: var(--font-head);
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  color: var(--text);
+}
+
+.gen-meta {
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.gen-caption {
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(170, 170, 204, 0.55);
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------------------------------------------------------------
+   3. Pits & lands — a track running under the read head
+   --------------------------------------------------------------- */
+
+.nrzi-stage {
+  margin: 1.75rem 0 0.5rem;
+  padding: 1.75rem 0 1.5rem;
+  background: rgba(10, 0, 20, 0.75);
+  border: 1px solid rgba(255, 0, 255, 0.22);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.nrzi-track {
+  position: relative;
+  /* tall enough to clear the "1" labels that sit above the transition marks —
+     the track clips its overflow to hide the loop seam, so anything taller
+     than this gets cut off */
+  height: 74px;
+  overflow: hidden;
+  /* fade both ends so the loop seam never reads as a hard cut */
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.nrzi-strip {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: max-content;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the strip holds the pattern twice, so shifting exactly -50% loops seamlessly */
+  .nrzi-strip { animation: trackRun 14s linear infinite; }
+
+  @keyframes trackRun {
+    to { transform: translateX(-50%); }
+  }
+}
+
+.nrzi-seg {
+  position: relative;
+  flex: 0 0 auto;
+  width: calc(var(--w, 2) * 22px);
+  height: 26px;
+}
+
+.nrzi-seg.is-land {
+  background: linear-gradient(180deg, rgba(0, 255, 255, 0.55), rgba(0, 255, 255, 0.25));
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.nrzi-seg.is-pit {
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* every pit/land boundary is a transition, and in NRZI a transition is a 1 —
+   so the marker sits on the edge between two segments, not on a segment */
+.nrzi-seg + .nrzi-seg::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: -9px;
+  width: 2px;
+  height: 44px;
+  background: var(--accent-magenta);
+  box-shadow: 0 0 8px var(--accent-magenta);
+}
+
+.nrzi-seg + .nrzi-seg::after {
+  content: '1';
+  position: absolute;
+  left: -4px;
+  top: -23px;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-magenta);
+  text-shadow: 0 0 8px var(--accent-magenta);
+}
+
+/* the fixed read head the track passes beneath */
+.nrzi-head {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(180deg, transparent, #ff3c3c 20%, #ff3c3c 80%, transparent);
+  box-shadow: 0 0 14px #ff3c3c;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nrzi-head { animation: headGlow 1.6s ease-in-out infinite; }
+
+  @keyframes headGlow {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 1; }
+  }
+}
+
+.nrzi-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.nrzi-legend span::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  margin-right: 0.45rem;
+  vertical-align: middle;
+}
+
+.nrzi-legend .lg-land::before { background: rgba(0, 255, 255, 0.5); }
+.nrzi-legend .lg-pit::before  { background: rgba(255, 255, 255, 0.12); }
+.nrzi-legend .lg-one::before  { width: 2px; background: var(--accent-magenta); box-shadow: 0 0 6px var(--accent-magenta); }
+
+/* ---------------------------------------------------------------
+   4. Recordable — dye burns once, alloy cycles forever
+   --------------------------------------------------------------- */
+
+.burn-stage {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin: 1.75rem 0 0.5rem;
+  padding: 1.75rem 1.25rem 1.5rem;
+  background: rgba(10, 0, 20, 0.75);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 10px;
+}
+
+.burn-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 190px;
+}
+
+.burn-row {
+  display: flex;
+  gap: 6px;
+}
+
+.burn-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background: rgba(220, 220, 220, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* CD-R: each spot darkens in turn and stays dark — the burn is one-way, so
+     the loop only resets after the whole row has gone */
+  .burn-r .burn-dot {
+    animation: dyeBurn 7s linear infinite;
+    animation-delay: calc(var(--i) * 0.55s);
+  }
+
+  @keyframes dyeBurn {
+    0%, 6%    { background: rgba(220, 220, 220, 0.45); }
+    12%, 92%  { background: rgba(40, 10, 5, 0.9); box-shadow: inset 0 0 6px rgba(255, 90, 60, 0.5); }
+    100%      { background: rgba(220, 220, 220, 0.45); }
+  }
+
+  /* CD-RW: the alloy melts to amorphous and anneals back to crystalline,
+     over and over — same spot, reused */
+  .burn-rw .burn-dot {
+    animation: phaseCycle 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.18s);
+  }
+
+  @keyframes phaseCycle {
+    0%, 100% { background: rgba(220, 220, 220, 0.45); box-shadow: none; }
+    30%      { background: rgba(255, 200, 80, 0.75); box-shadow: 0 0 10px rgba(255, 180, 60, 0.7); }
+    55%      { background: rgba(60, 45, 90, 0.85); box-shadow: none; }
+    80%      { background: rgba(220, 220, 220, 0.45); }
+  }
+}
+
+.burn-label {
+  font-family: var(--font-head);
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+}
+
+.burn-r .burn-label  { color: #ff5a3c; }
+.burn-rw .burn-label { color: var(--accent-green); }
+
+.burn-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.55;
+  max-width: 230px;
+}
+
+@media (max-width: 700px) {
+  .gen-banner { gap: 1.5rem; }
+  .gen-disc { width: 100px; }
+  .gen-face { width: 84px; height: 84px; }
+  .burn-stage { gap: 1.75rem; }
+}

@@ -1,0 +1,169 @@
+---
+// Visual for the "Error Correction" section: same scratch, two layouts.
+// Top row keeps a file's chunks contiguous on the track, so the scratch wipes
+// one chunk out completely. Bottom row interleaves the same chunks, so the
+// same-width scratch only nicks one block out of each chunk - recoverable by
+// Reed-Solomon since a chunk never loses more than it can reconstruct.
+const CHUNK_COLORS = ['#39FF14', '#00FFFF', '#FF00FF', '#FFE600'];
+const BLOCKS = 16;
+const SCRATCH_START = 6;
+const SCRATCH_LEN = 4;
+
+function chunkOf(i: number) {
+  return i % CHUNK_COLORS.length;
+}
+---
+
+<figure class="ild" data-ild aria-label="Comparison of contiguous versus interleaved data layout under a disc scratch">
+  <figcaption class="ild-cap">
+    WHY INTERLEAVING SURVIVES A SCRATCH
+    <span>same scratch, same width &mdash; different outcome</span>
+  </figcaption>
+
+  <div class="ild-row">
+    <p class="ild-row-label">Without interleaving</p>
+    <div class="ild-track">
+      {Array.from({ length: BLOCKS }).map((_, i) => {
+        const chunk = Math.floor(i / 4);
+        const inScratch = i >= SCRATCH_START && i < SCRATCH_START + SCRATCH_LEN;
+        return (
+          <span
+            class="ild-block"
+            class:list={[{ 'ild-scratched': inScratch }]}
+            style={`background:${CHUNK_COLORS[chunk % CHUNK_COLORS.length]}`}
+            title={`Chunk ${chunk + 1}`}
+          />
+        );
+      })}
+    </div>
+    <p class="ild-verdict ild-bad">Chunk 2 loses 4 of its 4 blocks &mdash; unrecoverable.</p>
+  </div>
+
+  <div class="ild-row">
+    <p class="ild-row-label">With interleaving</p>
+    <div class="ild-track">
+      {Array.from({ length: BLOCKS }).map((_, i) => {
+        const chunk = chunkOf(i);
+        const inScratch = i >= SCRATCH_START && i < SCRATCH_START + SCRATCH_LEN;
+        return (
+          <span
+            class="ild-block"
+            class:list={[{ 'ild-scratched': inScratch }]}
+            style={`background:${CHUNK_COLORS[chunk]}`}
+            title={`Chunk ${chunk + 1}`}
+          />
+        );
+      })}
+    </div>
+    <p class="ild-verdict ild-good">Each chunk loses only 1 of its 4 blocks &mdash; Reed&ndash;Solomon rebuilds it.</p>
+  </div>
+
+  <p class="ild-legend">
+    <span class="ild-swatch" style={`background:${CHUNK_COLORS[0]}`}></span> Chunk 1
+    <span class="ild-swatch" style={`background:${CHUNK_COLORS[1]}`}></span> Chunk 2
+    <span class="ild-swatch" style={`background:${CHUNK_COLORS[2]}`}></span> Chunk 3
+    <span class="ild-swatch" style={`background:${CHUNK_COLORS[3]}`}></span> Chunk 4
+    <span class="ild-swatch ild-swatch-x"></span> Scratch (same width both rows)
+  </p>
+</figure>
+
+<style>
+  .ild {
+    background: rgba(10, 0, 20, 0.55);
+    border: 1px solid rgba(57, 255, 20, 0.18);
+    border-radius: 10px;
+    padding: 1.25rem 1.25rem 1.1rem;
+    margin: 1.5rem 0;
+  }
+  .ild-cap {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--accent-green);
+    text-align: center;
+    margin-bottom: 1.1rem;
+  }
+  .ild-cap span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: rgba(170, 170, 204, 0.6);
+    margin-top: 0.3rem;
+  }
+
+  .ild-row { margin-bottom: 1.1rem; }
+  .ild-row-label {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .ild-track {
+    display: flex;
+    gap: 3px;
+    height: 32px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #05000f;
+    padding: 3px;
+  }
+  .ild-block {
+    flex: 1;
+    border-radius: 2px;
+    opacity: 0.85;
+    position: relative;
+  }
+  .ild-block.ild-scratched {
+    opacity: 0.25;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 45, 45, 0.9) 0,
+      rgba(255, 45, 45, 0.9) 3px,
+      transparent 3px,
+      transparent 6px
+    );
+  }
+
+  .ild-verdict {
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.3px;
+  }
+  .ild-bad { color: #ff6b6b; }
+  .ild-good { color: var(--accent-green); }
+
+  .ild-legend {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .ild-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-left: 0.5rem;
+  }
+  .ild-swatch:first-child { margin-left: 0; }
+  .ild-swatch-x {
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 45, 45, 0.9) 0,
+      rgba(255, 45, 45, 0.9) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+    border: 1px solid rgba(255, 45, 45, 0.5);
+  }
+
+  @media (max-width: 560px) {
+    .ild-track { height: 26px; }
+  }
+</style>

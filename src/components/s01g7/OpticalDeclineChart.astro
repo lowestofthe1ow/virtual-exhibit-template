@@ -1,0 +1,149 @@
+---
+// Visual for "The Decline of Optical Media": a simple declining bar chart of
+// physical discs' share of media distribution, with the milestones that
+// triggered the fall marked directly above the bars closest to their year.
+// Figures are illustrative, not measured data - the point is the shape of
+// the curve (a fast, sustained fall after Blu-ray), not exact percentages.
+const BARS = [
+  { year: '2000', pct: 96 },
+  { year: '2004', pct: 90 },
+  { year: '2006', pct: 82, note: 'Blu-ray launches' },
+  { year: '2008', pct: 60, note: 'Streaming goes mainstream' },
+  { year: '2012', pct: 30, note: 'Cheap USB flash & cloud sync' },
+  { year: '2016', pct: 12 },
+  { year: '2020', pct: 4, note: 'Laptops ship with no drive' },
+];
+---
+
+<figure class="odc" data-odc aria-label="Declining share of physical optical media in distribution from 2000 to 2020">
+  <figcaption class="odc-cap">
+    OPTICAL MEDIA'S SHARE OF DISTRIBUTION
+    <span>illustrative trend, not measured data &mdash; the shape is the point</span>
+  </figcaption>
+
+  <div class="odc-chart">
+    {BARS.map((b) => (
+      <div class="odc-col">
+        {b.note && <p class="odc-note">{b.note}</p>}
+        <div class="odc-bar-track">
+          <div class="odc-bar" data-odc-bar style={`--pct:${b.pct}%`}>
+            <span class="odc-val">{b.pct}%</span>
+          </div>
+        </div>
+        <p class="odc-year">{b.year}</p>
+      </div>
+    ))}
+  </div>
+</figure>
+
+<style>
+  .odc {
+    background: rgba(10, 0, 20, 0.55);
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 1.25rem 1.25rem 1.1rem;
+    margin: 1.5rem 0;
+  }
+  .odc-cap {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--accent-cyan);
+    text-align: center;
+    margin-bottom: 1.4rem;
+  }
+  .odc-cap span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: rgba(170, 170, 204, 0.6);
+    margin-top: 0.3rem;
+  }
+
+  .odc-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: 200px;
+  }
+  .odc-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    position: relative;
+  }
+  .odc-note {
+    font-size: 0.62rem;
+    line-height: 1.35;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 0.4rem;
+    max-width: 90px;
+  }
+  .odc-bar-track {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .odc-bar {
+    width: 60%;
+    max-width: 34px;
+    height: 4px;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(180deg, var(--accent-cyan), rgba(0, 255, 255, 0.15));
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
+    position: relative;
+    transition: height 1s cubic-bezier(0.16, 0.8, 0.3, 1);
+  }
+  .odc.drawn .odc-bar { height: var(--pct); }
+
+  .odc-val {
+    position: absolute;
+    top: -1.3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .odc-year {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .odc-bar { height: var(--pct) !important; transition: none !important; }
+  }
+
+  @media (max-width: 700px) {
+    .odc-chart { height: 240px; }
+    .odc-note { font-size: 0.56rem; max-width: 70px; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-odc]').forEach((odc) => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = () => odc.classList.add('drawn');
+    if (reduce) {
+      start();
+    } else {
+      const io = new IntersectionObserver(
+        (entries, obs) => entries.forEach((e) => {
+          if (e.isIntersecting) { start(); obs.disconnect(); }
+        }),
+        { threshold: 0.3 }
+      );
+      io.observe(odc);
+    }
+  });
+</script>
