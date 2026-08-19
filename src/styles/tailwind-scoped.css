@@ -1,0 +1,9 @@
+/* Shared Tailwind v4 entry for exhibits.
+ *
+ * Deliberately omits preflight: it is a global element reset and would leak
+ * out of the importing exhibit into every other page. An exhibit that
+ * genuinely needs the reset re-adds it scoped under its own wrapper element
+ * in src/styles/<slug>/base.css.
+ */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
