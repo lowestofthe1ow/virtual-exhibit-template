@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync, unlinkSync } from 'node:fs';
-import { join, extname, basename, resolve, sep } from 'node:path';
+import { join, extname, basename, resolve } from 'node:path';
 
 const MEDIA = new Set([
   '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.avif',
@@ -79,8 +79,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // These repos build references at runtime via import.meta.glob, which basename
   // matching can't see — the report above cannot be trusted for them. Deletion is
   // refused unless an operator has reviewed it by hand and passes --force-glob-repo.
-  const dirSegments = resolve(dir).split(sep);
-  const globSlug = GLOB_REPOS.find((slug) => dirSegments.includes(slug));
+  // Match the slug as a token bounded by non-alphanumeric characters (or string
+  // boundaries) anywhere in the resolved path — NOT as a whole path segment.
+  // Production stages exhibits at `.integration-src/<slug>-stage`, so an exact-
+  // segment check never fires there. Over-matching is fine: a false refusal costs
+  // one extra flag; a false pass destroys student assets irreversibly.
+  const resolvedDir = resolve(dir);
+  const globSlug = GLOB_REPOS.find((slug) =>
+    new RegExp(`(^|[^a-z0-9])${slug}([^a-z0-9]|$)`, 'i').test(resolvedDir),
+  );
 
   if (apply) {
     if (globSlug && !forceGlobRepo) {

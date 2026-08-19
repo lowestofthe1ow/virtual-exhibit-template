@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findOrphans, TEMPLATE_LEFTOVERS } from '../assets/prune.mjs';
+import { findOrphans, TEMPLATE_LEFTOVERS, GLOB_REPOS } from '../assets/prune.mjs';
 
 const PRUNE_CLI = fileURLToPath(new URL('../assets/prune.mjs', import.meta.url));
 
@@ -67,9 +67,9 @@ test('the template leftover list covers the stock distro images', () => {
 // run directly — importing the module in-process (as the tests above do) never
 // touches disk.
 
-function globFixture(slug) {
+function globFixture(...segments) {
   const parent = mkdtempSync(join(tmpdir(), 'prune-glob-'));
-  const dir = join(parent, slug);
+  const dir = join(parent, ...segments);
   mkdirSync(join(dir, 'src', 'assets'), { recursive: true });
   writeFileSync(join(dir, 'src', 'assets', 'orphan.png'), 'x'.repeat(100));
   return dir;
@@ -92,7 +92,7 @@ test('--apply deletes exactly the reported set and nothing else', () => {
   assert.ok(!existsSync(join(dir, 'src', 'assets', 'proposal.pdf')), 'document must be deleted');
 });
 
-test('a path naming a glob-repo slug refuses to delete under --apply', () => {
+test('a path naming a glob-repo slug as a whole segment refuses to delete under --apply', () => {
   const dir = globFixture('s03g8');
   const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
   assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'glob-repo files must survive without --force-glob-repo');
@@ -101,10 +101,50 @@ test('a path naming a glob-repo slug refuses to delete under --apply', () => {
   assert.match(output, /--force-glob-repo/);
 });
 
-test('--force-glob-repo overrides the refusal and deletes', () => {
-  const dir = globFixture('s03g8');
+test('the production staging shape "<slug>-stage" refuses to delete under --apply', () => {
+  // This is the exact shape Task 9's orchestrator uses: join('.integration-src', `${slug}-stage`).
+  // A whole-path-segment check never fires here since the segment is "s03g8-stage", not "s03g8".
+  const dir = globFixture('s03g8-stage');
+  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'glob-repo files must survive without --force-glob-repo');
+  assert.match(output, /refusing to delete/);
+  assert.match(output, /s03g8/);
+  assert.match(output, /--force-glob-repo/);
+});
+
+test('the production staging shape ".integration-src/<slug>-stage" refuses to delete under --apply', () => {
+  const dir = globFixture('.integration-src', 's03g8-stage');
+  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'glob-repo files must survive without --force-glob-repo');
+  assert.match(output, /refusing to delete/);
+  assert.match(output, /s03g8/);
+});
+
+test('--force-glob-repo overrides the refusal for the "<slug>-stage" shape and deletes', () => {
+  const dir = globFixture('s03g8-stage');
   execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply', '--force-glob-repo'], { encoding: 'utf8' });
   assert.ok(!existsSync(join(dir, 'src', 'assets', 'orphan.png')), '--force-glob-repo must allow deletion');
+});
+
+test('a path naming no glob-repo slug still deletes normally under --apply', () => {
+  const dir = globFixture('ordinary-exhibit-stage');
+  const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+  assert.ok(!existsSync(join(dir, 'src', 'assets', 'orphan.png')), 'unrelated exhibits must still be pruned');
+  assert.doesNotMatch(output, /refusing to delete/);
+});
+
+test('the guard fires for all seven glob-repo slugs at the production "<slug>-stage" shape', () => {
+  assert.deepEqual(
+    GLOB_REPOS,
+    ['s03g2', 's03g5', 's03g7', 's03g8', 's04g1', 's05g5', 's40g5'],
+    'this test enumerates GLOB_REPOS directly, so it stays in sync if the list changes',
+  );
+  for (const slug of GLOB_REPOS) {
+    const dir = globFixture(`${slug}-stage`);
+    const output = execFileSync(process.execPath, [PRUNE_CLI, '--dir', dir, '--apply'], { encoding: 'utf8' });
+    assert.ok(existsSync(join(dir, 'src', 'assets', 'orphan.png')), `${slug} files must survive without --force-glob-repo`);
+    assert.match(output, /refusing to delete/, `${slug} must trigger the refusal`);
+  }
 });
 
 test('a delete failure on one file does not prevent the others from being attempted', () => {
