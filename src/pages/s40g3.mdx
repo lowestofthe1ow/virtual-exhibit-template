@@ -1,0 +1,193 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "The Digitizer Matrix & Pressure-Sensitive Technology"
+author: "Tayzon, Hannah; Obcena, Hans Gabriel; Alvarez, James Edsel; Viray, Jarick; Suerte, Lorenzo"
+readingTime: "12 minute read"
+---
+
+{/* Interactive React component (hydrated in the browser with client:load) */}
+
+import InteractiveCanvas from "../components/s40g3/S40_Group3_InteractiveCanvas.jsx";
+
+# The Digitizer Matrix & Pressure-Sensitive Technology
+
+## Introduction: How Drawing Tablets Work
+
+When an artist drags a pen across a drawing tablet, a stroke appears on the
+screen almost instantly, thicker where they press hard and thinner where they
+press lightly. Between the pen tip and the pixel, an entire chain of computer
+architecture is at work: an analog input device, sensor matrices, an
+analog-to-digital converter, memory-mapped registers, a data bus, and a
+hardware interrupt that finally gets the CPU's attention.
+
+This exhibit breaks that chain into its three stages:
+
+1. **The Coordinate Plane**: the *digitizer matrix* that tracks the pen's
+   X, Y position in space.
+2. **The Force Plane**: the *pressure-sensitive technology* that quantizes
+   how hard the pen presses (the Z-axis).
+3. **The Reporting Process**: how the tablet packages both readings and
+   delivers them to the CPU.
+
+Try the simulator below at any point; every concept in this article maps to
+something you can see in it.
+
+## Try It: The Drawing Tablet Simulator
+
+Move your cursor (or finger, or stylus) over the tablet's active area and
+watch the digitizer traces light up beneath the pen. Press and drag to draw:
+the tip switch closes, interrupt requests fire, and your stroke is echoed on
+the monitor with a thickness that follows the **Pen Force** slider. The right
+panel is a live view of the registers, ADC output, and bus traffic your
+movements generate. No mouse handy? Focus the tablet with Tab and drive the
+pen with the arrow keys (Space presses and lifts the tip), or click **Demo
+stroke** to watch the pipeline run itself. The **How to read this panel**
+legend on the data feed explains each readout.
+
+<InteractiveCanvas client:load />
+
+## 1. The Coordinate Plane: The Digitizer Matrix (X, Y Spatial Tracking)
+
+### Hardware and Architecture
+
+Underneath the tablet's plastic surface lies a **grid of tiny conductive
+traces**, one set running horizontally and one set running vertically, forming a
+matrix. These traces do the spatial sensing, using one of two dominant
+techniques:
+
+- **Electromagnetic resonance (EMR).** The grid acts as an array of antenna
+  coils. The tablet briefly transmits an electromagnetic field; a resonant
+  circuit inside the pen absorbs that energy and re-radiates it. The tablet
+  then switches to listening mode and measures which conductors receive the
+  strongest returning signal. Because the pen is powered by the field itself,
+  EMR pens need no battery. This is the approach popularized by Wacom's
+  digitizers [1].
+- **Capacitive sensing (active pens).** The grid measures tiny changes in
+  capacitance caused by a powered pen tip near the surface, using the same
+  principle as a touchscreen but with a finer, pen-specific protocol [3].
+
+### From Analog Signal to a Coordinate Value
+
+No single wire "is" the pen's position. The pen's field spreads across several
+neighboring traces, so the tablet's controller reads the **signal strength on
+each nearby conductor** and interpolates a weighted center between them. That
+is why a digitizer's resolution (thousands of counts across the surface) is
+far finer than its physical wire spacing.
+
+The result of every scan cycle is a pair of integers. In our simulator, the
+logical coordinate space is **16,384 × 10,240 counts**, so a position near the
+upper-right of the pad might be reported as `X = 0x3A21 (14881)`,
+`Y = 0x0512 (1298)`. These values are written into the controller's
+**position registers**, ready to be packaged and shipped to the host. You can
+watch these registers update live in the simulator's `X,Y MATRIX SENSOR DATA`
+panel.
+
+## 2. The Force Plane: Pressure-Sensitive Technology (Z-Axis Force Quantization)
+
+### Hardware and Architecture
+
+The pen's nib is not rigidly fixed. It floats against a **pressure-sensing
+mechanism** inside the barrel. When you press the pen onto the tablet, the nib
+slides back a fraction of a millimeter and physically squeezes the sensor.
+Depending on the design, that squeeze changes an electrical property:
+
+- a **variable capacitor** whose plates move closer together (common in EMR
+  pens, where the changed capacitance shifts the pen's resonant frequency,
+  so the tablet literally *hears* the pressure in the pen's reply signal) [1];
+- or a **force-sensitive resistor / strain element** whose resistance drops
+  under load, producing a varying analog voltage.
+
+### Quantization: Turning a Squeeze into a Number
+
+Either way, the raw reading is **analog**: a continuously varying physical
+quantity. The computer needs a discrete number, so the signal is fed through
+an **analog-to-digital converter (ADC)**. The ADC performs *quantization*: it
+snaps the continuous input onto one of a fixed number of steps.
+
+Modern pens commonly advertise **8,192 pressure levels**. That number is not
+marketing magic. It is simply **2¹³**, the count of values a **13-bit** ADC
+word can represent:
+
+```text
+analog force (0.0 - 1.0)  →  ADC  →  level = round(force × 8191)
+
+  0% force  →  level    0  →  0000000000000
+ 65% force  →  level 5324  →  1010011001100
+100% force  →  level 8191  →  1111111111111
+```
+
+More bits mean finer steps between "barely touching" and "pressing hard,"
+which the drawing application maps onto brush size or opacity. Drag the
+simulator's **Pen Force** slider and watch the `Z-AXIS PRESSURE SENSOR` panel
+perform exactly this conversion: percent in, 13-bit binary word out.
+
+## 3. The Reporting Process: How the Tablet Communicates Data to the CPU
+
+### Hardware and Architecture
+
+Once a scan cycle has produced fresh X, Y, and pressure values, the tablet's
+controller packs them, along with status bits such as the **tip switch**
+(is the pen touching?) and side-button states, into a single **report
+packet**. Tablets are HID (Human Interface Device) class peripherals, and the
+layout of this packet follows the HID *Digitizers* usage page defined by the
+USB Implementers Forum [2]. A minimal pen report looks like the 8-byte packet
+streamed in the simulator's `DATA BUS STREAM` panel:
+
+```text
+byte 0: report ID          byte 4: Y low byte
+byte 1: status bits        byte 5: Y high byte
+        (tip switch,       byte 6: pressure low byte
+         in-range, ...)    byte 7: pressure high byte
+byte 2: X low byte
+byte 3: X high byte
+```
+
+### The Hardware Interrupt
+
+The packet travels over the bus (USB or Bluetooth) to the host, where it
+triggers a **hardware interrupt**, a signal that tells the CPU "an I/O device
+has data that needs handling *now*." The CPU suspends what it was doing, runs
+the **interrupt service routine** installed by the tablet driver, copies the
+packet out of the buffer, and then resumes its previous work [5]. The driver
+translates the raw counts into screen coordinates and pressure values, hands
+them to the operating system's input pipeline [3][4], and the drawing
+application finally renders the stroke.
+
+Interrupt-driven I/O is why the tablet feels instant: instead of the CPU
+wasting cycles repeatedly *polling* ("any data yet? any data yet?"), the
+device speaks up only when it has something to say. Tablets repeat this whole
+cycle at a fixed **report rate**, commonly in the 133-266 reports-per-second
+range, which is why fast strokes still come out smooth. In the simulator,
+every position sample while drawing raises one IRQ; sketch quickly and watch
+the `IRQs SERVICED` counter and `REPORT RATE` readout climb.
+
+## Putting It All Together
+
+<div className="tx-table">
+
+| Stage | Hardware | Architecture concept |
+| --- | --- | --- |
+| X, Y sensing | Conductive trace matrix + pen coil | Sensor arrays, signal interpolation, memory-mapped position registers |
+| Z sensing | Nib pressure sensor + ADC | Analog-to-digital conversion, 13-bit quantization (8,192 levels) |
+| Reporting | Controller + bus + interrupt line | I/O report packets, hardware interrupts vs. polling, interrupt service routines |
+
+</div>
+
+A drawing tablet, in other words, is a compact tour of computer organization:
+analog physics at the surface, digital quantization in the middle, and
+interrupt-driven I/O at the top. Every stroke you draw is thousands of tiny
+packets, each one politely interrupting a billion-instruction-per-second CPU
+to say: *the pen is here, and this is how hard it is pressing.*
+
+## References
+
+1. Wacom Co., Ltd. *EMR (Electro-Magnetic Resonance) Technology*. Wacom
+   Business Solutions. [https://www.wacom.com/en-us/enterprise/business-solutions/components/technologies/emr-technology](https://www.wacom.com/en-us/enterprise/business-solutions/components/technologies/emr-technology)
+2. USB Implementers Forum. *HID Usage Tables for Universal Serial Bus (USB)*,
+   Version 1.5, Chapter 16: "Digitizers Page (0x0D)". [https://usb.org/document-library/hid-usage-tables-15](https://usb.org/document-library/hid-usage-tables-15)
+3. Microsoft Learn. *Pen devices and the Windows pen driver / HID pen device
+   requirements*. [https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/pen-devices](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/pen-devices)
+4. MDN Web Docs. *PointerEvent: pressure property*. [https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/pressure](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/pressure)
+5. Patterson, D. A., & Hennessy, J. L. (2020). *Computer Organization and
+   Design: The Hardware/Software Interface* (RISC-V ed.). Morgan Kaufmann.
+   See the chapters on interrupt-driven I/O and exception handling.
