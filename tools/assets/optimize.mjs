@@ -12,6 +12,10 @@ const MAX_VIDEO_WIDTH = 1920;
 const SVG_RASTER_THRESHOLD = 1024 * 1024;
 const EMBEDDED_RASTER_MIN = 64 * 1024;
 
+// Shared cap for every failure/skip reason string, so the two call sites
+// that used to truncate independently (150 vs 200 chars) cannot drift.
+export const FAILURE_REASON_MAX = 200;
+
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (SKIP_DIRS.has(entry.name)) continue;
@@ -61,6 +65,22 @@ function safeUnlink(unlink, path) {
   } catch {
     // deliberately swallowed — cleanup must never throw over the original error
   }
+}
+
+// Every failure/skip reason ends up as a Markdown table cell in
+// formatReport(). Raw encoder stderr (execFileSync's thrown .message) can
+// contain newlines, tabs, and literal pipe characters, any of which breaks
+// a hand-built Markdown table: a newline splits the row across lines, and a
+// pipe adds a phantom column. Route every reason through this single
+// chokepoint — called both where reasons are constructed AND, as the final
+// guarantee, inside formatReport itself — so no path can reach a table cell
+// unsanitized, no matter where the string originated.
+export function sanitizeReason(reason) {
+  return String(reason)
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\|/g, '&#124;')
+    .slice(0, FAILURE_REASON_MAX);
 }
 
 function convert(conversion) {
@@ -130,29 +150,29 @@ export function validateOutput(kind, path) {
   try {
     size = statSync(path).size;
   } catch {
-    return { valid: false, reason: 'output file is missing' };
+    return { valid: false, reason: sanitizeReason('output file is missing') };
   }
-  if (size === 0) return { valid: false, reason: 'output file is empty' };
+  if (size === 0) return { valid: false, reason: sanitizeReason('output file is empty') };
 
   if (kind === 'image' || kind === 'gif' || kind === 'hdr') {
     let out;
     try {
       out = execFileSync('magick', ['identify', path]).toString();
     } catch (error) {
-      return { valid: false, reason: `magick identify failed: ${String(error.message).slice(0, 150)}` };
+      return { valid: false, reason: sanitizeReason(`magick identify failed: ${error.message}`) };
     }
     if (!/\d+x\d+/.test(out)) {
-      return { valid: false, reason: 'magick identify reported no dimensions' };
+      return { valid: false, reason: sanitizeReason('magick identify reported no dimensions') };
     }
   } else if (kind === 'video') {
     let out;
     try {
       out = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=codec_type', path]).toString();
     } catch (error) {
-      return { valid: false, reason: `ffprobe failed: ${String(error.message).slice(0, 150)}` };
+      return { valid: false, reason: sanitizeReason(`ffprobe failed: ${error.message}`) };
     }
     if (!/codec_type=/.test(out)) {
-      return { valid: false, reason: 'ffprobe reported no streams' };
+      return { valid: false, reason: sanitizeReason('ffprobe reported no streams') };
     }
   } else if (kind === 'model') {
     const head = readFileSync(path).subarray(0, 4).toString('ascii');
@@ -160,13 +180,13 @@ export function validateOutput(kind, path) {
       try {
         JSON.parse(readFileSync(path, 'utf8'));
       } catch {
-        return { valid: false, reason: 'model output is neither GLB magic nor valid JSON' };
+        return { valid: false, reason: sanitizeReason('model output is neither GLB magic nor valid JSON') };
       }
     }
   } else if (kind === 'svg') {
     const content = readFileSync(path, 'latin1');
     if (!content.includes('<svg')) {
-      return { valid: false, reason: 'svg output missing <svg root element' };
+      return { valid: false, reason: sanitizeReason('svg output missing <svg root element') };
     }
   }
   return { valid: true };
@@ -191,13 +211,13 @@ export function promote(conversion, { tmp, beforeBytes, ops } = {}) {
     afterBytes = stat(tmp).size;
   } catch (error) {
     safeUnlink(unlink, tmp);
-    return { ...conversion, beforeBytes, afterBytes: beforeBytes, failed: `output missing: ${String(error.message).slice(0, 150)}` };
+    return { ...conversion, beforeBytes, afterBytes: beforeBytes, failed: sanitizeReason(`output missing: ${error.message}`) };
   }
 
   const validation = validateOutput(conversion.kind, tmp);
   if (!validation.valid) {
     safeUnlink(unlink, tmp);
-    return { ...conversion, beforeBytes, afterBytes: beforeBytes, failed: `invalid output: ${validation.reason}` };
+    return { ...conversion, beforeBytes, afterBytes: beforeBytes, failed: sanitizeReason(`invalid output: ${validation.reason}`) };
   }
 
   if (afterBytes >= beforeBytes) {
@@ -210,7 +230,7 @@ export function promote(conversion, { tmp, beforeBytes, ops } = {}) {
     rename(tmp, conversion.to);
   } catch (error) {
     safeUnlink(unlink, tmp);
-    return { ...conversion, beforeBytes, afterBytes: beforeBytes, failed: `rename failed: ${String(error.message).slice(0, 150)}` };
+    return { ...conversion, beforeBytes, afterBytes: beforeBytes, failed: sanitizeReason(`rename failed: ${error.message}`) };
   }
 
   // Rename succeeded — conversion.to now holds the new file. Only now is it
@@ -239,7 +259,7 @@ export async function optimizeTree(dir, { apply = false } = {}) {
       // before throwing; that path is deterministic from the conversion, so
       // it can be cleaned up even though convert() never returned it.
       safeUnlink(unlinkSync, tmpPathFor(conversion));
-      results.push({ ...conversion, beforeBytes, afterBytes: beforeBytes, failed: String(error.message).slice(0, 200) });
+      results.push({ ...conversion, beforeBytes, afterBytes: beforeBytes, failed: sanitizeReason(error.message) });
       continue;
     }
     results.push(promote(conversion, { tmp, beforeBytes }));
@@ -250,14 +270,22 @@ export async function optimizeTree(dir, { apply = false } = {}) {
 // Markdown table, one row per file. Kept greppable and stable — Task 61
 // collects these into docs/asset-optimization-report.md — rather than
 // optimized for prose readability.
+//
+// r.failed / r.skipped are sanitized again here even though every internal
+// call site already sanitizes at construction time: this function is the
+// last thing that runs before a reason becomes a table cell, and it is
+// exported and callable with any result object (tests, or Task 61 itself),
+// so it is the one place that must guarantee the invariant on its own.
 export function formatReport(results) {
   const header = '| kind | from | to | beforeBytes | afterBytes | outcome |\n' +
     '| --- | --- | --- | --- | --- | --- |';
   const rows = results.map((r) => {
-    const outcome = r.failed
-      ? `failed: ${r.failed}`
-      : r.skipped
-        ? `skipped: ${r.skipped}`
+    const failed = r.failed != null ? sanitizeReason(r.failed) : null;
+    const skipped = r.skipped != null ? sanitizeReason(r.skipped) : null;
+    const outcome = failed
+      ? `failed: ${failed}`
+      : skipped
+        ? `skipped: ${skipped}`
         : r.afterBytes == null
           ? 'planned'
           : 'converted';

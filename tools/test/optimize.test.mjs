@@ -136,3 +136,57 @@ test('formatReport renders a stable, greppable markdown table with an outcome pe
   assert.ok(report.includes('failed: ffprobe reported no streams'));
   assert.ok(report.includes('planned'));
 });
+
+// --- Fix round 2 additions: reason sanitization so failures don't break the report table ---
+
+import { sanitizeReason, FAILURE_REASON_MAX } from '../assets/optimize.mjs';
+
+test('a failure reason containing newlines renders as a single-line table row', () => {
+  const results = [
+    {
+      kind: 'model', from: '/a.glb', to: '/a.glb', beforeBytes: 100, afterBytes: 100,
+      failed: 'Command failed: npx gltf-transform\nnpm notice New version available\nExit code 1',
+    },
+  ];
+  const report = formatReport(results);
+  const lines = report.split('\n').filter((l) => l.length > 0);
+  // header (2 lines) + exactly one data row for the one result
+  assert.equal(lines.length, 3);
+  const dataRow = lines[2];
+  assert.ok(dataRow.startsWith('| model |'));
+  assert.ok(!dataRow.includes('\n'));
+});
+
+test('a failure reason containing a literal pipe does not add a table column', () => {
+  const results = [
+    {
+      kind: 'image', from: '/b.png', to: '/b.webp', beforeBytes: 100, afterBytes: 100,
+      failed: 'magick identify failed: bad header | corrupt stream',
+    },
+  ];
+  const report = formatReport(results);
+  const dataRow = report.split('\n').filter((l) => l.length > 0)[2];
+  // 6 columns -> 7 pipe delimiters, no more, no less
+  const pipeCount = (dataRow.match(/\|/g) || []).length;
+  assert.equal(pipeCount, 7);
+  assert.ok(!dataRow.includes(' | corrupt stream |'), 'a raw pipe must not survive as a delimiter');
+});
+
+test('a very long failure reason is truncated to the shared limit', () => {
+  const longReason = 'x'.repeat(FAILURE_REASON_MAX * 3);
+  const sanitized = sanitizeReason(longReason);
+  assert.ok(sanitized.length <= FAILURE_REASON_MAX);
+
+  const results = [
+    { kind: 'video', from: '/c.mp4', to: '/c.mp4', beforeBytes: 100, afterBytes: 100, failed: longReason },
+  ];
+  const report = formatReport(results);
+  const dataRow = report.split('\n').filter((l) => l.length > 0)[2];
+  assert.ok(dataRow.length < longReason.length);
+});
+
+test('sanitizeReason collapses whitespace, trims, escapes pipes, and enforces the shared cap', () => {
+  assert.equal(sanitizeReason('  a\n\tb   c  '), 'a b c');
+  assert.equal(sanitizeReason('left | right'), 'left &#124; right');
+  assert.equal(sanitizeReason('y'.repeat(1000)).length, FAILURE_REASON_MAX);
+});
