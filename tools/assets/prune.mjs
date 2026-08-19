@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync, unlinkSync } from 'node:fs';
-import { join, extname, basename } from 'node:path';
+import { join, extname, basename, resolve, sep } from 'node:path';
 
 const MEDIA = new Set([
   '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.avif',
@@ -67,6 +67,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const args = process.argv.slice(2);
   const dir = args[args.indexOf('--dir') + 1];
   const apply = args.includes('--apply');
+  const forceGlobRepo = args.includes('--force-glob-repo');
   const orphans = findOrphans(dir);
   const total = orphans.reduce((n, o) => n + o.bytes, 0);
 
@@ -75,9 +76,36 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   }
   console.log(`\n${orphans.length} files, ${(total / 1048576).toFixed(1)} MB`);
 
+  // These repos build references at runtime via import.meta.glob, which basename
+  // matching can't see — the report above cannot be trusted for them. Deletion is
+  // refused unless an operator has reviewed it by hand and passes --force-glob-repo.
+  const dirSegments = resolve(dir).split(sep);
+  const globSlug = GLOB_REPOS.find((slug) => dirSegments.includes(slug));
+
   if (apply) {
-    for (const o of orphans) unlinkSync(o.path);
-    console.log('deleted.');
+    if (globSlug && !forceGlobRepo) {
+      console.log(
+        `\nrefusing to delete: '${dir}' is inside '${globSlug}', which uses import.meta.glob, ` +
+        'so references built at runtime are invisible to this report and it cannot be trusted. ' +
+        'Review the list above by hand, then re-run with --force-glob-repo to delete anyway.',
+      );
+    } else {
+      let deleted = 0;
+      let failed = 0;
+      let reclaimed = 0;
+      for (const o of orphans) {
+        try {
+          unlinkSync(o.path);
+          deleted += 1;
+          reclaimed += o.bytes;
+          console.log(`deleted  ${o.path}`);
+        } catch (err) {
+          failed += 1;
+          console.log(`failed   ${o.path}  (${err.message})`);
+        }
+      }
+      console.log(`\n${deleted} deleted, ${failed} failed, ${(reclaimed / 1048576).toFixed(1)} MB reclaimed`);
+    }
   } else {
     console.log('dry run — pass --apply to delete');
   }
