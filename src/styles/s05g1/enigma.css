@@ -1,0 +1,978 @@
+/* Scoping: mdx content is wrapped in .s05g1-page inside the shared layout's
+   <article class="article">. Rules that style descendants of that wrapper
+   (headings, paragraphs, links, etc.) are prefixed with .s05g1-page directly.
+   .article/.toc/.content__titlemeta/.header__titleblock/footer are COUSINS or
+   ANCESTORS of the wrapper elsewhere in the shared layout, so they need
+   :has()/body:has() to stay scoped to only this page. */
+
+body:has(.s05g1-page) .header__titleblock {
+  background: #0d1117 !important;
+  border-color: rgba(201, 168, 76, 0.25) !important;
+  color: #e8dcc8 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+body:has(.s05g1-page) .header__titleblock strong {
+  color: #e8dcc8;
+}
+
+body:has(.s05g1-page) .header__subtitle {
+  color: #a09880 !important;
+}
+
+body:has(.s05g1-page) .header .button {
+  background: #1a1f2e !important;
+  border-color: rgba(201, 168, 76, 0.3) !important;
+  color: #c9a84c !important;
+}
+
+body:has(.s05g1-page) .header .button:hover {
+  border-color: #c9a84c !important;
+  color: #f0c040 !important;
+  background: #252b3e !important;
+}
+
+body:has(.s05g1-page) .content__titlemeta {
+  background: linear-gradient(135deg, #0a0e17, #1a1f2e) !important;
+  border-color: rgba(201, 168, 76, 0.25) !important;
+  color: #e8dcc8 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+body:has(.s05g1-page) .content__titlemeta h1 {
+  color: #c9a84c !important;
+}
+
+body:has(.s05g1-page) .content__titlemeta span {
+  color: #a09880 !important;
+}
+
+.article:has(.s05g1-page) {
+  background: #0d1117 !important;
+  border-color: rgba(201, 168, 76, 0.2) !important;
+  color: #c0b8a0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+.s05g1-page h1,
+.s05g1-page h2,
+.s05g1-page h3,
+.s05g1-page h4,
+.s05g1-page h5,
+.s05g1-page h6 {
+  color: #c9a84c !important;
+  border-bottom-color: rgba(201, 168, 76, 0.15) !important;
+}
+
+.s05g1-page p {
+  color: #c0b8a0;
+}
+
+.s05g1-page strong {
+  color: #e8dcc8;
+}
+
+.s05g1-page em {
+  color: #d0c8b0;
+}
+
+.s05g1-page a {
+  color: #c9a84c;
+  text-decoration-color: rgba(201, 168, 76, 0.4);
+}
+
+.s05g1-page a:hover {
+  color: #f0c040;
+  text-decoration-color: #f0c040;
+}
+
+.s05g1-page hr {
+  border-color: rgba(201, 168, 76, 0.15);
+  border-style: solid;
+  border-width: 1px 0 0;
+}
+
+.s05g1-page ul,
+.s05g1-page ol {
+  color: #c0b8a0;
+}
+
+.s05g1-page li {
+  color: #c0b8a0;
+}
+
+.s05g1-page li a {
+  color: #c9a84c;
+}
+
+body:has(.s05g1-page) .toc {
+  background: #0d1117 !important;
+  border-color: rgba(201, 168, 76, 0.2) !important;
+  color: #c0b8a0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+body:has(.s05g1-page) .toc h2 {
+  color: #c9a84c !important;
+  border-bottom-color: rgba(201, 168, 76, 0.15) !important;
+}
+
+body:has(.s05g1-page) .toc__item a {
+  color: rgba(201, 168, 76, 0.8) !important;
+  text-decoration-style: dotted;
+}
+
+body:has(.s05g1-page) .toc__item a:hover {
+  color: #f0c040 !important;
+  text-decoration: underline;
+}
+
+body:has(.s05g1-page) footer {
+  background-color: #060810 !important;
+  color: #6a6050 !important;
+}
+
+.enigma-hero-card {
+  background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 50%, #0d1117 100%);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 12px;
+  padding: 2.5rem;
+  margin: 2rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.enigma-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+}
+
+.enigma-hero-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+}
+
+.enigma-hero-text {
+  color: #e8dcc8;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto 1rem;
+}
+
+.enigma-hero-subtext {
+  color: #a09880;
+  font-size: 0.95rem;
+  font-style: italic;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.enigma-how-works {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #b0a890;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-left: 3px solid #c9a84c;
+  background: rgba(201, 168, 76, 0.04);
+  border-radius: 0 8px 8px 0;
+}
+
+.enigma-components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.enigma-component-card {
+  background: linear-gradient(135deg, #0a0e17, #1a1f2e);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.enigma-component-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 168, 76, 0.5);
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.1);
+}
+
+.enigma-component-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 168, 76, 0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #c9a84c;
+  font-family: "Lora Variable", serif;
+  font-style: italic;
+  background: rgba(201, 168, 76, 0.06);
+}
+
+.enigma-component-card h4 {
+  color: #c9a84c !important;
+  margin: 0 0 0.5rem !important;
+  font-family: "Lora Variable", serif;
+  font-size: 1.1rem;
+  border: none !important;
+}
+
+.enigma-component-card p {
+  color: #b0a890;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.enigma-diagram {
+  background: linear-gradient(135deg, #0a0e17, #141926);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.enigma-diagram-title {
+  color: #c9a84c;
+  font-family: "Lora Variable", serif;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.enigma-diagram-pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: nowrap;
+  min-width: 600px;
+}
+
+.enigma-diagram-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 10px;
+  background: rgba(26, 31, 46, 0.6);
+  min-width: 90px;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.enigma-diagram-stage.active {
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+}
+
+.enigma-diagram-stage-label {
+  font-size: 0.7rem;
+  color: #8a8070;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.enigma-diagram-stage-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: "Courier New", monospace;
+  color: #555;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enigma-diagram-stage.active .enigma-diagram-stage-value {
+  color: #f0c040;
+  text-shadow: 0 0 12px rgba(240, 192, 64, 0.5);
+}
+
+.enigma-diagram-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 0.4rem;
+  color: #3a3a3a;
+  font-size: 1.2rem;
+  transition: color 0.4s ease;
+  flex-shrink: 0;
+}
+
+.enigma-diagram-arrow.active {
+  color: #c9a84c;
+}
+
+.enigma-diagram-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.enigma-diagram-select {
+  background: #1a1f2e;
+  color: #e8dcc8;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.enigma-diagram-select:hover,
+.enigma-diagram-select:focus {
+  border-color: #c9a84c;
+  outline: none;
+}
+
+.enigma-diagram-btn {
+  background: linear-gradient(135deg, #c9a84c, #b8943e);
+  color: #0a0e17;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  letter-spacing: 0.03em;
+}
+
+.enigma-diagram-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
+}
+
+.enigma-diagram-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.enigma-diagram-state-label {
+  color: #8a8070;
+  font-size: 0.85rem;
+}
+
+.enigma-diagram-state-value {
+  color: #c9a84c;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.enigma-sim {
+  background: linear-gradient(145deg, #0a0e17, #111827);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  font-family: "Noto Sans Variable", sans-serif;
+  color: #e8dcc8;
+}
+
+.enigma-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 1.25rem 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.enigma-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #5a5a5a;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.enigma-progress-step.active {
+  color: #c9a84c;
+}
+
+.enigma-progress-step.completed {
+  color: #4ade80;
+}
+
+.enigma-progress-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #3a3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.enigma-progress-step.active .enigma-progress-dot {
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.15);
+  color: #c9a84c;
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.2);
+}
+
+.enigma-progress-step.completed .enigma-progress-dot {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+.enigma-progress-connector {
+  width: 40px;
+  height: 2px;
+  background: #2a2a2a;
+  margin: 0 0.5rem;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.enigma-progress-connector.done {
+  background: #4ade80;
+}
+
+.enigma-challenge-card {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  text-align: center;
+}
+
+.enigma-challenge-title {
+  font-family: "Lora Variable", serif;
+  font-size: 1.15rem;
+  color: #c9a84c;
+  margin: 0 0 0.5rem;
+}
+
+.enigma-challenge-desc {
+  font-size: 0.95rem;
+  color: #b0a890;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.enigma-challenge-hint {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.4rem 1rem;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 6px;
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  color: #f0c040;
+  letter-spacing: 0.15em;
+}
+
+.enigma-machine {
+  padding: 2rem 1.5rem;
+  background: linear-gradient(180deg, #1a2035, #151b2e, #111827);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.enigma-rotor-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.enigma-rotor-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6a6a6a;
+}
+
+.enigma-rotor-drum {
+  position: relative;
+  width: 100px;
+  height: 120px;
+  overflow: hidden;
+  border: 3px solid #c9a84c;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #060a10, #0e1420, #060a10);
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.7),
+    0 0 15px rgba(201, 168, 76, 0.1);
+}
+
+.enigma-rotor-letters {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-top: 40px;
+}
+
+.enigma-rotor-slot {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.enigma-rotor-current {
+  font-family: "Courier New", monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f0c040;
+  text-shadow: 0 0 10px rgba(240, 192, 64, 0.5);
+  width: 30px;
+  text-align: center;
+}
+
+.enigma-rotor-notch {
+  font-family: "Courier New", monospace;
+  font-size: 0.75rem;
+  color: #4a4a4a;
+  width: 16px;
+  text-align: center;
+}
+
+.enigma-rotor-shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.enigma-rotor-shade.top {
+  top: 0;
+  background: linear-gradient(180deg, #060a10 20%, transparent);
+}
+
+.enigma-rotor-shade.bottom {
+  bottom: 0;
+  background: linear-gradient(0deg, #060a10 20%, transparent);
+}
+
+.enigma-rotor-indicator {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  right: 4px;
+  height: 38px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.enigma-lampboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.enigma-lamp-row {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.enigma-lamp {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #2a2a2a;
+  background: #151b2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4a4a4a;
+  font-family: monospace;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.enigma-lamp.lit {
+  background: radial-gradient(circle, #f5d060 0%, #c9a84c 60%, #8a6f2a 100%);
+  color: #0a0e17;
+  border-color: #f0c040;
+  box-shadow: 0 0 16px rgba(240, 192, 64, 0.6), 0 0 30px rgba(240, 192, 64, 0.2);
+}
+
+.enigma-keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.enigma-key-row {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.enigma-key {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  background: radial-gradient(circle at 35% 35%, #2e3445, #1a1f2e);
+  color: #d0c8b0;
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: monospace;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.enigma-key:hover {
+  border-color: #c9a84c;
+  background: radial-gradient(circle at 35% 35%, #3a4055, #252b3e);
+  transform: translateY(-1px);
+}
+
+.enigma-key:active,
+.enigma-key.pressed {
+  transform: translateY(2px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  border-color: #c9a84c;
+  background: radial-gradient(circle at 35% 35%, #252b3e, #1a1f2e);
+}
+
+.enigma-key:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.enigma-tapes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.enigma-tape-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.enigma-tape-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6a6a6a;
+}
+
+.enigma-tape {
+  background: #0a0e14;
+  border: 2px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+  letter-spacing: 0.15em;
+  color: #e8dcc8;
+}
+
+.enigma-tape.output-tape {
+  color: #f0c040;
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+.enigma-tape-placeholder {
+  color: #3a3a3a;
+  font-style: italic;
+  letter-spacing: normal;
+}
+
+.enigma-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.25rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(201, 168, 76, 0.1);
+  flex-wrap: wrap;
+}
+
+.enigma-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.enigma-slider-label {
+  font-size: 0.75rem;
+  color: #8a8070;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.enigma-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 180px;
+  height: 6px;
+  border-radius: 3px;
+  background: #2a2a2a;
+  outline: none;
+  cursor: pointer;
+}
+
+.enigma-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #c9a84c;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(201, 168, 76, 0.4);
+}
+
+.enigma-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #c9a84c;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 6px rgba(201, 168, 76, 0.4);
+}
+
+.enigma-btn {
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 8px;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.enigma-btn-reset {
+  background: transparent;
+  color: #b0a890;
+}
+
+.enigma-btn-reset:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+.enigma-btn-primary {
+  background: linear-gradient(135deg, #c9a84c, #b8943e);
+  color: #0a0e17;
+  border-color: transparent;
+}
+
+.enigma-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(201, 168, 76, 0.3);
+}
+
+.enigma-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.enigma-success-overlay {
+  padding: 1.25rem 2rem;
+  text-align: center;
+  background: rgba(74, 222, 128, 0.06);
+  border-top: 1px solid rgba(74, 222, 128, 0.15);
+  animation: enigmaFadeIn 0.4s ease;
+}
+
+.enigma-success-icon {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #4ade80;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.enigma-success-text {
+  color: #4ade80;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.enigma-intro-screen,
+.enigma-complete-screen {
+  padding: 3rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.enigma-intro-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #c9a84c;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 168, 76, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 168, 76, 0.06);
+  font-family: "Lora Variable", serif;
+}
+
+.enigma-intro-title {
+  font-family: "Lora Variable", serif;
+  font-size: 1.5rem;
+  color: #c9a84c;
+  margin: 0;
+}
+
+.enigma-intro-desc {
+  color: #b0a890;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 500px;
+}
+
+.enigma-complete-score {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.enigma-complete-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(74, 222, 128, 0.1);
+  border: 2px solid #4ade80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #4ade80;
+  font-family: "Lora Variable", serif;
+}
+
+.enigma-saved-display {
+  background: rgba(201, 168, 76, 0.06);
+  border: 1px dashed rgba(201, 168, 76, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  display: inline-flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.enigma-saved-label {
+  color: #8a8070;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+.enigma-saved-value {
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  color: #f0c040;
+  letter-spacing: 0.15em;
+}
+
+@keyframes enigmaFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes enigmaPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(201, 168, 76, 0.15); }
+}
+
+@media (max-width: 640px) {
+  .enigma-hero-card { padding: 1.5rem; }
+  .enigma-hero-text { font-size: 1rem; }
+  .enigma-components-grid { grid-template-columns: 1fr; }
+  .enigma-diagram-pipeline { min-width: 0; flex-wrap: wrap; justify-content: center; gap: 0.25rem; }
+  .enigma-diagram-arrow { display: none; }
+  .enigma-key { width: 36px; height: 36px; font-size: 0.75rem; }
+  .enigma-lamp { width: 30px; height: 30px; font-size: 0.65rem; }
+  .enigma-tapes { grid-template-columns: 1fr; }
+  .enigma-progress-step span { display: none; }
+  .enigma-progress-connector { width: 20px; }
+  .enigma-challenge-card { padding: 1rem 1.25rem; }
+}

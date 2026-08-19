@@ -1,0 +1,75 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Historical Computing (Cryptography): The Enigma Machine"
+author: "Clave, Benjamin; Co, Stephen, Go, Timothy; Wang, Shao Wei"
+readingTime: "30 minutes"
+description: "An interactive exploration of the WW2 Enigma cipher architecture."
+---
+
+import EnigmaSimulator from '../components/s05g1/EnigmaSimulator.jsx';
+import EnigmaDiagram from '../components/s05g1/EnigmaDiagram.jsx';
+import '../styles/s05g1/enigma.css';
+
+<div class="s05g1-page">
+
+# Historical Cryptography: The Enigma Machine
+
+<div class="enigma-hero-card">
+  <div class="enigma-hero-text">During World War II, Nazi Germany deployed a cipher device so sophisticated that the Allies believed it to be <strong>unbreakable</strong>. This machine — the <strong>Enigma</strong> — could produce roughly 159 quintillion possible configurations, making brute-force decryption seemingly impossible.</div>
+  <div class="enigma-hero-subtext">The breaking of the Enigma code — first by Polish mathematicians under Marian Rejewski in the 1930s, and later by Alan Turing's team at Bletchley Park — is widely credited with shortening the war by at least two years.</div>
+</div>
+
+---
+
+## How the Enigma Works
+
+<div class="enigma-how-works">Understanding the Enigma requires grasping three core components that work together to create a <em>polyalphabetic substitution cipher</em> — one where the same input letter can encode to different outputs depending on the machine's internal state.</div>
+
+<div class="enigma-components-grid">
+  <div class="enigma-component-card">
+    <span class="enigma-component-icon">R</span>
+    <h4>The Rotor</h4>
+    <p>A scrambled wiring mapping (permutation of 26 letters) that shifts position after each keypress, changing the entire cipher.</p>
+  </div>
+  <div class="enigma-component-card">
+    <span class="enigma-component-icon">T</span>
+    <h4>The Reflector</h4>
+    <p>A fixed wiring of paired letter swaps. No letter maps to itself — this property was the Enigma's crucial weakness.</p>
+  </div>
+  <div class="enigma-component-card">
+    <span class="enigma-component-icon">S</span>
+    <h4>The State</h4>
+    <p>An integer (0–25) representing the rotor's current position. It advances with each keypress, making every encoding unique.</p>
+  </div>
+</div>
+
+### Signal Path
+
+The signal passes through the machine in a specific order: **Input → Rotor (forward) → Reflector → Rotor (reverse) → Output**. Use the interactive diagram below to trace the encoding of any letter at any rotor state.
+
+<EnigmaDiagram client:load />
+
+---
+
+## Interactive Challenges
+
+The Enigma machine had several remarkable properties that made it both powerful and ultimately breakable. Complete the three challenges below to discover these properties for yourself.
+
+<EnigmaSimulator client:load />
+
+---
+
+## References
+
+- Enigma machine overview: https://en.wikipedia.org/wiki/Enigma_machine
+- Marian Rejewski biography and the breaking of Enigma: https://en.wikipedia.org/wiki/Marian_Rejewski
+- Cryptanalysis of the Enigma (Polish Cipher Bureau, the bomba, and handoff to Bletchley Park): https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma
+- IEEE Milestone on the first breaking of Enigma by the Polish Cipher Bureau team (1932–1939): https://ethw.org/Milestones:First_Breaking_of_Enigma_Code_by_the_Team_of_Polish_Cipher_Bureau,_1932-1939
+- IEEE AESS History Column on Rejewski, Różycki, and Zygalski: https://ieee-aess.org/post/blog/history-column-polish-cryptographers-marian-rejewski-jerzy-rozycki-and-henryk-zygalski
+- Enigma machine history: [Wikipedia — Enigma Machine](https://en.wikipedia.org/wiki/Enigma_machine)
+- Breaking the code: [Wikipedia — Cryptanalysis of the Enigma](https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma)
+- Marian Rejewski's contribution: [Wikipedia — Marian Rejewski](https://en.wikipedia.org/wiki/Marian_Rejewski)
+
+</div>
+=======
+---
