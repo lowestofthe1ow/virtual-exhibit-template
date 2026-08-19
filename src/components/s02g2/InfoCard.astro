@@ -1,0 +1,35 @@
+---
+const { title, body } = Astro.props;
+const countryKey = title.toLowerCase().replace(/\s+/g, "");
+---
+
+<div class={`info-card country-${countryKey}`}>
+  <h3>{title}</h3>
+  <p set:html={body} />
+</div>
+
+<style>
+  .info-card {
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+  }
+
+  .info-card h3 {
+    font-size: 1.75rem;
+}
+
+  .info-card br {
+  display: block;
+  content: "";
+  margin-top: 1rem;
+}
+
+  .info-card.country-china h3 {color: #A83A3A !important ;}
+  .info-card.country-japan h3 {color: #D68A3C !important ;}
+  .info-card.country-southkorea h3 {color: #4F8F5B !important ;}
+  .info-card.country-taiwan h3 {color: #3F7FC1 !important ;}
+</style>

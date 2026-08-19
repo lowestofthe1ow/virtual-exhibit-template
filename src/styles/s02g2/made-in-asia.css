@@ -1,0 +1,426 @@
+.mia-hero {
+    background: #1b1b1b;
+    color: #d0d4db;
+    text-align: center;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.mia-kicker {
+    color: #d6b84f;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    opacity: 1;
+}
+
+.mia-hero h2 {
+    color: #ffffff;
+    margin: 1rem 0;
+    font-size: 2rem;
+}
+
+.mia-hero p {
+    max-width: 900px;
+    margin: 1rem auto;
+    color: #9ca3af;
+}
+
+.mia-exhibit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.mia-map-panel,
+.mia-info-panel,
+.mia-section-panel,
+.mia-trivia-panel,
+.mia-goal-card {
+    background: #1b1b1b;
+    color: #d0d4db;
+    border: none;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+
+.mia-placeholder {
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0.6;
+}
+
+.mia-large-placeholder {
+    min-height: 300px;
+}
+
+.mia-trivia-panel {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.mia-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.mia-goals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 800px) {
+    .mia-exhibit-grid,
+    .mia-trivia-panel,
+    .mia-goals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mia-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mia-reference-group h3 {
+    color: #ef6464;
+    margin-top: 20px;
+    border-bottom: 1px solid #374151;
+}
+
+.mia-reference-group ul {
+    list-style-type: square;
+    padding-left: 20px;
+}
+
+.mia-reference-group li {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #d0d4db;
+}
+
+.mia-reference-group a {
+    color: #d6b84f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.mia-reference-group a:hover {
+    text-decoration: underline;
+}
+
+/* Map */
+.exhibit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.map-container,
+.country-info-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.country-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    flex-grow: 1;
+}
+
+.map-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-svg {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    background: #16324f;
+    border-radius: var(--radius);
+}
+
+.country {
+    fill: var(--bg2, #f1f5f9);
+    stroke: var(--text, #94a3b8);
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.country:hover,
+.country:focus-visible {
+    filter: brightness(1.15);
+}
+
+.country-inert {
+    fill: #6B7280;
+    stroke: var(--text, #94a3b8);
+    stroke-width: 0.5;
+    opacity: 1;
+    pointer-events: none;
+}
+
+.country-china {fill: #A83A3A;}
+.country-japan {fill: #D68A3C;}
+.country-southkorea {fill: #4F8F5B;}
+.country-taiwan {fill: #3F7FC1;}
+
+.country-active {
+    fill: #d6b84f;
+    stroke: #a8842f;
+    stroke-width: 2;
+    filter: brightness(1.15);
+}
+
+.country-info h3 {
+    margin-top: 0;
+    font-family: "Lora Variable";
+}
+
+.country-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.country-info-text {
+    min-width: 0;
+}
+
+.country-info-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.country-thumb {
+    width: 325px;
+    max-width: 75%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid #374151;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.country-thumb:hover,
+.country-thumb:focus-visible {
+    transform: scale(1.02);
+    opacity: 0.9;
+    border-color: #d6b84f;
+}
+
+@media (max-width: 420px) {
+    .country-info-gallery {
+        flex-wrap: wrap;
+    }
+}
+
+.image-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: zoom-out;
+    padding: 2rem;
+}
+
+.image-lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.placeholder {
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0.6;
+}
+
+@media (max-width: 800px) {
+    .exhibit-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Made in Asia Theme ===== */
+
+.article {
+    background: #1b1b1b !important;
+    color: #d0d4db;
+}
+
+/* ===== Layout Fixes ===== */
+
+.article {
+    overflow-x: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.article * {
+    box-sizing: border-box;
+}
+
+.mia-hero,
+.mia-map-panel,
+.mia-info-panel,
+.mia-section-panel,
+.mia-trivia-panel,
+.mia-goal-card,
+.map-container,
+.country-info-panel {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.mia-hero p,
+.mia-section-panel p,
+.mia-trivia-panel p,
+.mia-goal-card,
+.mia-reference-group li,
+.mia-reference-group a {
+    overflow-wrap: anywhere;
+}
+
+/* Fix trivia layout */
+.mia-trivia-panel {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.mia-trivia-panel > h3 {
+    color: #EF6464;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #374151;
+}
+
+.mia-trivia-card {
+    border-top: 1px solid #374151;
+    padding: 1.25rem 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.mia-trivia-card h4 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.mia-options button {
+    white-space: normal;
+}
+
+/* ===== Full Page Width Fix ===== */
+
+.content,
+.content__block,
+.content__titlemeta,
+.article,
+.header,
+.header__titleblock,
+.toc,
+.padder {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.content {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.content__block {
+    overflow-x: hidden;
+}
+
+.content__titlemeta {
+    overflow-wrap: anywhere;
+}
+
+.content__titlemeta h1,
+.header__titleblock strong,
+.header__subtitle {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.article {
+    width: 100%;
+}
+
+.article p,
+.article li,
+.article a,
+.article h1,
+.article h2,
+.article h3,
+.article h4 {
+    overflow-wrap: anywhere;
+}
+
+@media (min-width: 1100px) {
+    .content__block {
+        flex: 4;
+        min-width: 0;
+    }
+
+    .toc {
+        flex: 0 0 180px;
+    }
+
+    .padder {
+        flex: 0 0 0;
+        display: none;
+    }
+}
+
+/* ===== Interactive Trivia Styling ===== */
+
+.mia-options button.correct {
+    background: #16a34a;
+    color: #ffffff;
+    border-color: #16a34a;
+}
+
+.mia-options button.wrong {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+}
+
+.mia-result {
+    font-weight: bold;
+    color: #d6b84f;
+}

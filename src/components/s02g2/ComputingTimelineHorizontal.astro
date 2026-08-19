@@ -1,0 +1,398 @@
+---
+export interface TimelineEntry {
+  date: string;
+  title: string;
+  glyph?: string;
+  region: string;
+  body: string;
+  archNote: string;
+  country: "china" | "japan" | "southkorea" | "taiwan";
+}
+
+const entries: TimelineEntry[] = [
+  {
+    date: "c. 500–300 BCE",
+    title: "Counting Rods",
+    glyph: "筹算",
+    region: "China",
+    country: "china",
+    body: "Bamboo or bone sticks laid on a grid to represent numbers in a decimal, place-value system, moved between columns to add, subtract, multiply, and divide.",
+    archNote: "Ancestor of place-value registers.", 
+  },
+  {
+    date: "c. 2nd Century CE",
+    title: "Suanpan",
+    glyph: "算盘",
+    region: "China",
+    country: "china",
+    body: "The Chinese abacus formalizes rod-counting into beads on wires, a hybrid decimal/quinary system fast enough to outpace early mechanical calculators.",
+    archNote: "Fixed-width \"registers\" with manual carry propagation.",
+  },
+  {
+    date: "1092",
+    title: "Su Song's Clocktower",
+    glyph: "水运仪象台",
+    region: "China (Song)",
+    country: "china",
+    body: "A water-driven tower in Kaifeng combined an escapement, armillary sphere, and celestial globe to track time and star positions automatically.",
+    archNote: "Escapement = an early clock signal.",
+  },
+  {
+    date: "c. 1600s",
+    title: "Soroban",
+    glyph: "そろばん",
+    region: "Japan",
+    country: "japan",
+    body: "A refined, simplified bead layout for faster single-hand operation — so embedded in education that mental \"anzan\" arithmetic is still taught today.",
+    archNote: "Hardware redesign for throughput.",
+  },
+  {
+    date: "1946",
+    title: "Abacus vs. Calculator",
+    region: "Tokyo, Japan",
+    country: "japan",
+    body: "A U.S. Army electro-mechanical calculator faced a soroban in a public contest — the soroban won most rounds.",
+    archNote: "An early literal hardware benchmark.",
+  },
+  {
+    date: "1958",
+    title: "The 103 Computer",
+    glyph: "103机",
+    region: "China",
+    country: "china",
+    body: "China's first operational digital computer, built with Soviet assistance — a vacuum-tube machine at roughly 30 operations per second.",
+    archNote: "Entry into stored-program architecture.",
+  },
+  {
+    date: "1954–1956",
+    title: "FUJIC & FACOM 100",
+    region: "Japan",
+    country: "japan",
+    body: "Okazaki Bunji builds FUJIC, Japan's first electronic computer, largely alone. Fujitsu follows with the FACOM line.",
+    archNote: "Relay → tube → transistor logic in one lineage.",
+  },
+  {
+    date: "1967–1970s",
+    title: "Korea's First Computers",
+    region: "South Korea",
+    country: "southkorea",
+    body: "An imported IBM 1401 handles the 1967 census; KIST begins domestic computing research shortly after.",
+    archNote: "Batch-processing before Korea's chip industry existed.",
+  },
+  {
+    date: "1976–1980s",
+    title: "The VLSI Push",
+    glyph: "超LSI計画",
+    region: "Japan",
+    country: "japan",
+    body: "NEC, Hitachi, Fujitsu, Toshiba, and Mitsubishi pool research to master VLSI manufacturing, leading global DRAM production through the 1980s.",
+    archNote: "A national leap in transistor density.",
+  },
+  {
+    date: "1987",
+    title: "TSMC Founded",
+    glyph: "台積電",
+    region: "Taiwan",
+    country: "taiwan",
+    body: "Morris Chang founds a \"pure-play foundry\" that only fabricates chips designed by other companies.",
+    archNote: "Fabless/foundry split still standard today.",
+  },
+  {
+    date: "1990s–2000s",
+    title: "Samsung's Memory Rise",
+    region: "South Korea",
+    country: "southkorea",
+    body: "Samsung overtakes Japanese rivals to lead global DRAM and NAND flash production.",
+    archNote: "Global-scale memory hierarchy.",
+  },
+  {
+    date: "2016–Present",
+    title: "TaihuLight & the AI Era",
+    region: "China / Region-wide",
+    country: "china",
+    body: "China's Sunway TaihuLight tops supercomputer rankings on domestic processors; focus shifts to AI accelerators and RISC-V.",
+    archNote: "Massively parallel, domestic ISA design.",
+  },
+];
+---
+
+<section class="timeline-root">
+  <div class="timeline-head">
+    <span class="timeline-kicker">Timeline</span>
+    <h2>Contributions Through Time</h2>
+    <p>Scroll to browse {entries.length} milestones, from counting rods to modern supercomputers.</p>
+  </div>
+
+  <div class="timeline-wrap">
+    <button class="timeline-nav timeline-prev" aria-label="Scroll to earlier era" data-dir="-1" type="button">&#8592;</button>
+
+    <div class="timeline-viewport">
+      <div class="timeline-track" id="timelineTrack">
+        <div class="timeline-line"><div class="timeline-line-fill" id="timelineLineFill"></div></div>
+
+        {entries.map((entry) => (
+          <div class={`timeline-card country-${entry.country}`}>
+            <div class="timeline-dot"></div>
+            <div class="timeline-panel">
+              <span class="timeline-date">{entry.date}</span>
+              <h3>{entry.title}{entry.glyph && <span class="timeline-glyph">{entry.glyph}</span>}</h3>
+              <span class="timeline-region">{entry.region}</span>
+              <p>{entry.body}</p>
+              <div class="timeline-note"><b>Architecture link:</b> {entry.archNote}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="timeline-scrollbar" id="timelineScrollbar">
+        <div class="timeline-handle" id="timelineHandle"></div>
+      </div>
+    </div>
+
+    <button class="timeline-nav timeline-next" aria-label="Scroll to later era" data-dir="1" type="button">&#8594;</button>
+  </div>
+</section>
+
+<style>
+  .timeline-root{
+    padding: 56px 0 72px;
+  }
+
+  .timeline-head{
+    max-width: 640px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .timeline-wrap{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .timeline-nav{
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+  }
+
+  .timeline-viewport{
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .timeline-track{
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding: 22px 24px 24px;
+    scrollbar-width: none;
+  }
+  .timeline-track::-webkit-scrollbar{ display: none; }
+
+  .timeline-line{
+    position: absolute;
+    top: 22px;
+    left: 24px;
+    height: 3px;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .timeline-line-fill{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+  }
+
+  .timeline-card{
+    flex: 0 0 auto;
+    width: 260px;
+    scroll-snap-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .timeline-dot{
+    width: 28px;
+    height: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .timeline-panel{
+    padding: 20px 20px 18px;
+    width: 100%;
+  }
+
+  .timeline-date{
+    display: block;
+    margin-bottom: 6px;
+  }
+  .timeline-panel h3{
+    margin: 0 0 4px;
+  }
+  .timeline-glyph{
+    margin-left: 6px;
+  }
+  .timeline-region{
+    display: block;
+    margin-bottom: 10px;
+  }
+  .timeline-panel p{
+    margin: 0;
+  }
+  .timeline-note{
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .timeline-scrollbar{
+    position: relative;
+    height: 6px;
+    margin: 4px 24px 0;
+    cursor: pointer;
+  }
+  .timeline-handle{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 60px;
+    height: 14px;
+    transform: translateY(-50%);
+    cursor: grab;
+  }
+  .timeline-handle:active{ cursor: grabbing; }
+
+  @media (max-width: 640px){
+    .timeline-nav{ display: none; }
+    .timeline-card{ width: 220px; }
+  }
+
+  .timeline-card.country-china .timeline-dot { background: #A83A3A; border-radius: 50%; }
+  .timeline-card.country-japan .timeline-dot { background: #D68A3C; border-radius: 50%; }
+  .timeline-card.country-southkorea .timeline-dot { background: #4F8F5B; border-radius: 50%; }
+  .timeline-card.country-taiwan .timeline-dot { background: #3F7FC1; border-radius: 50%; }
+  
+  .timeline-card.country-china .timeline-panel { border-top: 3px solid #A83A3A; }
+  .timeline-card.country-japan .timeline-panel { border-top: 3px solid #D68A3C; }
+  .timeline-card.country-southkorea .timeline-panel { border-top: 3px solid #4F8F5B; }
+  .timeline-card.country-taiwan .timeline-panel { border-top: 3px solid #3F7FC1; }
+</style>
+
+<script>
+  function setupTimeline() {
+    const root = document.querySelector('.timeline-root');
+    if (!root) return;
+
+    const track = root.querySelector('#timelineTrack');
+    const lineFill = root.querySelector('#timelineLineFill');
+    const scrollbar = root.querySelector('#timelineScrollbar');
+    const handle = root.querySelector('#timelineHandle');
+    const cards = root.querySelectorAll('.timeline-card');
+    const navButtons = root.querySelectorAll('.timeline-nav');
+
+    if (!track || !lineFill || !scrollbar || !handle) return;
+
+    const observer = new IntersectionObserver(
+      function (observed) {
+        observed.forEach(function (item) {
+          if (item.isIntersecting) item.target.classList.add('active');
+        });
+      },
+      { root: track, threshold: 0.6 }
+    );
+    cards.forEach(function (card) { observer.observe(card); });
+
+    function maxScroll() {
+      return Math.max(track.scrollWidth - track.clientWidth, 0);
+    }
+
+    function sync() {
+      const line = track.querySelector('.timeline-line');
+      if (line) line.style.width = (track.scrollWidth - 48) + 'px';
+
+      const max = maxScroll();
+      const pct = max > 0 ? (track.scrollLeft / max) * 100 : 0;
+      lineFill.style.width = pct + '%';
+
+      const barWidth = scrollbar.clientWidth;
+      const handleWidth = handle.offsetWidth;
+      const travel = Math.max(barWidth - handleWidth, 1);
+      handle.style.left = (travel * (pct / 100)) + 'px';
+    }
+
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+
+    track.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+
+      const atStart = track.scrollLeft <= 0;
+      const atEnd = track.scrollLeft >= maxScroll() - 1;
+      const forward = e.deltaY > 0;
+
+      if ((forward && atEnd) || (!forward && atStart)) {
+        return;
+      }
+
+      e.preventDefault();
+      track.scrollLeft += e.deltaY;
+    }, { passive: false });
+
+    navButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const dir = Number(btn.getAttribute('data-dir') || '1');
+        const first = cards[0];
+        const cardWidth = first ? first.offsetWidth : 260;
+        track.scrollBy({ left: dir * (cardWidth + 28), behavior: 'smooth' });
+      });
+    });
+
+    let dragging = false;
+
+    function moveTo(clientX) {
+      const rect = scrollbar.getBoundingClientRect();
+      const handleWidth = handle.offsetWidth;
+      const travel = Math.max(rect.width - handleWidth, 1);
+      const raw = clientX - rect.left - handleWidth / 2;
+      const clamped = Math.min(Math.max(raw, 0), travel);
+      const pct = clamped / travel;
+      track.scrollLeft = pct * maxScroll();
+    }
+
+    handle.addEventListener('pointerdown', function (e) {
+      dragging = true;
+      handle.setPointerCapture(e.pointerId);
+    });
+    handle.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      moveTo(e.clientX);
+    });
+    handle.addEventListener('pointerup', function () { dragging = false; });
+    handle.addEventListener('pointercancel', function () { dragging = false; });
+
+    scrollbar.addEventListener('click', function (e) {
+      if (e.target === handle) return;
+      moveTo(e.clientX);
+    });
+  }
+
+  setupTimeline();
+  document.addEventListener('astro:page-load', setupTimeline);
+</script>

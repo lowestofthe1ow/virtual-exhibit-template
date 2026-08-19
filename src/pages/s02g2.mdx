@@ -1,0 +1,125 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Made in Asia"
+description: "An interactive virtual exhibit showcasing East Asia’s pivotal (and often overlooked) contributions to the history of computing and computer architecture."
+author: "Rance Laus; Justine Aniko Po Major; Jonah Pajarillo; Aaron Zander Romero; Luis Andre Vito"
+readingTime: "20 minutes"
+---
+import ComputingTimelineHorizontal from '../components/s02g2/ComputingTimelineHorizontal.astro';
+import '../styles/s02g2/made-in-asia.css';
+import InfoCard from '../components/s02g2/InfoCard.astro';
+import Map from '../components/s02g2/map.jsx';
+import TriviaQuiz from '../components/s02g2/TriviaQuiz.jsx';
+
+# Made in Asia: Contributions of East Asia in Computing
+
+<section className="mia-hero">
+  <p className="mia-kicker">----- CSARCH2 Virtual Exhibit • S02 • Group 2 -----</p>
+
+  <h2>Made in Asia: Contributions of East Asia in Computing</h2>
+
+  <p>
+    When we talk about the history of computing, we usually recognize the inventions of the Americans or the Europeans: Silicon Valley, IBM, Apple, and other companies that have had an impact on the digital world. However, there is much more to the story than what is obvious. East Asia wasn't just a mere contributor; it revolutionized the world of technology and allowed it to reach the point it is at today.
+  </p>
+
+  <p>
+    This exhibit explores different countries, specifically those located in East Asia, and their often unrecognized contributions to computing and computer architecture. Starting from the earliest contributions up to the latest, the group shall present these contributions chronologically and categorized by country.
+  </p>
+</section>
+
+## Country Information
+
+<InfoCard title="Japan" body=" Japan’s contribution to computer architecture started at the birth of the modern CPU. In 1971, Japanese engineer <i>Masatoshi Shima</i> co-designed <i>the Intel 4004</i>, the world’s first commercial microprocessor, originally intended for a Japanese calculator (Busicom). Busicom, the company that had commissioned this chip, was unhappy with the project and allowed Intel to repurchase the right to the chip but kept the calculators to itself. Busicom then went bankrupt in 1974, just three years after Intel bought back the rights to the microprocessor. <b> This had shifted the paradigm from multi-chip processors to a single-chip logic architecture. </b> <br /><br />
+
+Japan also revolutionized data storage architecture when <i>Fujio Masuoka</i> at Toshiba invented the <i>NAND Flash Memory</i> in the 1980s. Toshiba's bonus for this invention was only a few hundred dollars, while later trying to demote him. He sued them in 2006 and settled for approximately 758,000 USD. Despite all of that, this invention completely changed the memory hierarchy of computers. It eventually lead to the replacement of mechanical hard drives with Solid State Drives (SSDs). <br /><br />
+
+Today, Japan continues to lead in high-performance architecture through the <i>Fugaku supercomputer</i>, which utilizes an ARM-based A64FX processor that heavily utilizes massive parallel processing and, on top of that, energy efficiency. This supercomputer was the first ever to top four major world rankings simultaneously. It has 7,630,848 ARM cores and 442 Petaflops (or 442 quadrillion computations per second). That is <b> three times </b> the computational capabilities of the 2nd fastest machine in the world. <br /><br />
+
+Additionally, entertainment giants Sony and Nintendo transformed specialized computer architecture; the <i>Nintendo 64</i> brought 64-bit computing to the masses, while Sony’s <i>PlayStation series</i> pushed the limits of high-performance RISC and parallel processing through custom-engineered silicon like the Cell engine. Oddly enough, most N64 games barely used the 64-bit instructions because 32-bit operations actually ran faster on the hardware." />
+
+<InfoCard title="Taiwan" body="Taiwan’s role in computer architecture is defined by the Foundry Model and the standardization of the PC. TSMC (Taiwan Semiconductor Manufacturing Company) revolutionized the industry by <i>separating chip design from chip manufacturing</i>. Morris Chang, the founder of TSMC, actually pitched this earlier to Texas Instruments in the 1970s, only to get rejected. It was not until the Taiwanese government asked him to start a semiconductor industry in 1987 that this continued. This allowed architectural giants like Apple, Nvidia, and AMD to push the boundaries of complex circuit design without the burden of operating factories. <br /><br />
+
+Beyond the silicon itself, Taiwanese companies like ASUS, Gigabyte, and Acer were instrumental in the 1990s for perfecting the <i>motherboard architecture</i>. They standardized the layout of the Northbridge/Southbridge chipsets and expansion slots (like PCI and later PCIe), which dictated how CPUs communicate with peripherals in almost every desktop computer used today." />
+
+<InfoCard title="South Korea" body="While other nations focused on logic, South Korea perfected the architecture of <i>the Memory Wall</i>. Samsung and SK Hynix dominate the global development of DRAM and NAND Flash. Their architectural innovations in High-Bandwidth Memory (HBM) have become the backbone of modern AI and GPU architectures, allowing data to move between the memory and the processor at speeds previously thought impossible. <br /><br />
+
+South Korea also led the transition to <i>modern mobile architectures</i>; through the development of System-on-Chip (SoC) designs for their smartphones, they helped integrate CPU, GPU, and cellular modems into a single, power-efficient architectural footprint that defines modern mobile computing." />
+
+<InfoCard title="China" body="China has rapidly moved from a consumer of technology to an architect of <i>high-performance computing (HPC)</i>. China’s Sunway TaihuLight supercomputer gained international fame because its architecture was built entirely on homegrown processors (the SW26010), rather than relying on Western chips like Intel or AMD. This demonstrated a massive leap in many-core processor architecture. Each SW26010 chip packs 260 cores. The full system runs 40,960 of these chips and peaks at 125 petaflops (or 125 quadrillion computations per second). <br /><br />
+
+Currently, China is a global leader in the adoption of RISC-V, an open-source instruction set architecture (ISA). By investing heavily in RISC-V, Chinese architects are creating a new generation of processors that are independent of proprietary Western standards (like the x86 or ARM), aiming for a future of open computer architecture for everything from IoT (Internet of Things) devices to data centers. The push for the RISC-V is explicitly tied by industry analysts to reducing dependence on foreign chip tech amidst U.S. export restrictions." />
+
+## Interactive Map
+
+<Map client:load />
+
+## Timeline
+
+<ComputingTimelineHorizontal />
+
+## Trivia Game
+
+<TriviaQuiz client:load />
+
+
+## Exhibit Goals
+
+<section className="mia-goals-grid">
+  <div className="mia-goal-card">Show East Asia’s role in computing history.</div>
+  <div className="mia-goal-card">Connect each country to specific technologies or systems.</div>
+  <div className="mia-goal-card">Explain computing contributions in a concise and visual way.</div>
+  <div className="mia-goal-card">Allow visitors to interact with the exhibit through a map and trivia game.</div>
+</section>
+
+## References
+
+<section class="mia-section-panel">
+  <div class="mia-reference-group">
+    <h3>Japan</h3>
+    <ul>
+      <li>Shima, M. <a href="https://ethw.org/Oral-History:Masatoshi_Shima" target="_blank">Oral-History: Masatoshi Shima and the 4004</a>. Engineering and Technology History Wiki.</li>
+      <li>Computer History Museum. <a href="https://www.computerhistory.org/revolution/memory-storage/8/256" target="_blank">Memory & Storage: The First Microprocessors</a>.</li>
+      <li>Computer History Museum. <a href="https://www.computerhistory.org/revolution/memory-storage/8/256">Fujio Masuoka.</a></li>
+      <li>Kioxia. <a href="https://www.kioxia.com/en-jp/insights/history-of-our-memory-201910.html" target="_blank">History of Our Memory: The Invention of NAND Flash</a>.</li>
+      <li>Amazon Web Services. <a href="https://aws.amazon.com/blogs/publicsector/why-fugaku-japans-fastest-supercomputer-went-virtual-on-aws/" target="_blank">Why Fugaku, Japan’s Fastest Supercomputer, Went Virtual</a>.</li>
+      <li>Copetti. <a href="https://www.copetti.org/writings/consoles/nintendo-64/" target="_blank">Nintendo 64 Architecture</a>.</li>
+      <li>David Bader. <a href="https://davidbader.net/post/20180608-dcd/" target="_blank">The PlayStation Supercomputer</a>.</li>
+      <li>Engineering and Technology History Wiki. <a href="https://ethw.org/Oral-History:Masatoshi_Shima" target="_blank">Masatoshi Shima.</a></li>
+      <li>Intel. <a href="https://www.intel.com/content/www/us/en/history/virtual-vault/articles/the-intel-4004.html" target="_blank">The Intel 4004.</a></li>
+      <li>Tech Radar. <a href="https://www.techradar.com/news/the-worlds-fastest-supercomputer-is-now-even-more-absurdly-powerful-than-before" target="_blank">Arm's Fugaku Supercomputer</a></li>
+      <li>ExtremeTech. <a href="https://www.extremetech.com/computing/105029-intel-4004-the-first-cpu-is-40-years-old-today" target="_blank">Intel 4004, the First CPU, is 40 Years Old Today</a>.</li>
+      <li>JAPAN Forward. <a href="https://japan-forward.com/a-look-at-the-magic-behind-fugaku-the-worlds-leading-supercomputer/" target="_blank">A Look at the Magic Behind Fugaku, the World's Leading Supercomputer</a>.</li>
+    </ul>
+
+    <h3>Taiwan</h3>
+    <ul>
+      <li>TSMC. <a href="https://www.tsmc.com/english/aboutTSMC/dc_infographics_foundry" target="_blank">Infographics: The Dedicated IC Foundry Model</a>.</li>
+      <li>Culpium. <a href="https://www.culpium.com/p/exclusiveapple-is-fighting-for-tsmc" target="_blank">Apple’s Strategic Partnership with TSMC for 2nm Chips</a>.</li>
+      <li>ASUS. <a href="https://www.asus.com/event/pcdiy/sg/our-legacy.html" target="_blank">Our Legacy: Leading the Motherboard Industry</a>.</li>
+      <li>Jabroo Tech. <a href="https://jabroo.blogspot.com/2011/09/motherboard.html" target="_blank">A Detailed History of the Motherboard</a>.</li>
+      <li>Spectrum. <a href="https://spectrum.ieee.org/morris-chang-foundry-father" target="_blank">Morris Chang.</a></li>
+      <li>Reuters. <a href="https://www.reuters.com/world/asia-pacific/taiwan-contract-chipmaker-tsmcs-us-investments-2026-01-16/" target="_blank">Taiwan Contract Chipmaker TSMC's U.S. Investments</a>.</li>
+    </ul>
+
+    <h3>South Korea</h3>
+    <ul>
+      <li>Reuters. <a href="https://www.reuters.com/world/asia-pacific/south-korean-president-unveil-massive-ai-chip-investment-drive-2026-06-29/" target="_blank">South Korea to Unveil Massive AI Chip Investment Drive</a>.</li>
+      <li>Reuters. <a href="https://www.reuters.com/world/asia-pacific/south-koreas-sk-hynix-launch-28-billion-us-listing-ride-global-ai-wave-2026-07-06/" target="_blank">SK Hynix: Riding the Global AI Wave</a>.</li>
+      <li>Yahoo Finance. <a href="https://finance.yahoo.com/technology/articles/south-korea-rescue-worlds-biggest-113500553.html" target="_blank">Rescue Plan for the World's Biggest Memory Makers</a>.</li>
+      <li>BigGo News. <a href="https://finance.biggo.com/news/36a29647-eaab-43d4-bc23-19456f25ef71" target="_blank">Trends in South Korean Semiconductor Growth</a>.</li>
+      <li>Wccftech. <a href="https://wccftech.com/samsung-next-gen-dram-solutions-36-gbps-gddr7-32gb-ddr5-memory-over-1000-v-nand-layers-by-2030/" target="_blank">Samsung Talks Next-Gen DRAM Solutions: 36 Gbps GDDR7, 32Gb DDR5 Memory, Over 1000 V-NAND Layers By 2030</a>.</li>
+      <li>Wevolver. <a href="https://www.wevolver.com/article/high-bandwidth-memory" target="_blank">High Bandwidth Memory: Concepts, Architecture, and Applications</a>.</li>
+    </ul>
+
+    <h3>China</h3>
+    <ul>
+      <li>BBC News. <a href="https://www.bbc.com/news/articles/c9q2pwzngjqo" target="_blank">The Global Impact of China's Computing Sector</a>.</li>
+      <li>The State Council Information Office of China. <a href="http://www.scio.gov.cn/news_0/202209/t20220921_415792.html" target="_blank">The Digital Economy and High-Tech Innovation in China</a>.</li>
+      <li>Jamestown Foundation. <a href="https://jamestown.substack.com/p/examining-chinas-grand-strategy-for" target="_blank">Examining China’s Grand Strategy for Tech Leadership</a>.</li>
+      <li>National Science Review.<a href="https://academic.oup.com/nsr/article/3/3/265/2236604" target="_blank">Sunway TaihuLight Supercomputer.</a></li>
+      <li>BusinessCraft. <a href="https://businesscraft.se/macro-economics/chinas-risc-v-revolution-and-the-new-era-of-tech-sovereignty/" target="_blank">China's RISC-V Revolution and the New Era of Tech Sovereignty</a>.</li>
+      <li>South China Morning Post. <a href="https://www.scmp.com/tech/big-tech/article/3180037/chinas-supercomputer-sunway-taihulight-falls-sixth-place-amid" target="_blank">China's Supercomputer Sunway TaihuLight Falls to Sixth Place</a>.</li>
+      <li>Science China Information Sciences. <a href="http://scis.scichina.com/en/2016/072001.pdf" target="_blank">The Sunway TaihuLight Supercomputer: System and Applications</a>.</li>
+    </ul>
+  </div>
+</section>
