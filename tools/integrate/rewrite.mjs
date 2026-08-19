@@ -4,6 +4,12 @@ const { join, dirname, relative, normalize } = posix;
 
 const SPECIFIER = /(["'`])(\.\.?\/[^"'`]+)\1/g;
 
+// A route or public-asset name must be followed by a quote/backtick, a path
+// separator, a query/fragment marker, or the end of the string — never by a
+// hyphen, letter, digit, or dot. Without this, 'references' would splice into
+// 'references-appendix' and 'simulator' into 'simulator2'.
+const TRAILING_BOUNDARY = '(?=[`\'"/#?]|$)';
+
 export function remapSpecifier(spec, { fromDir, toDir, pathMap }) {
   if (!spec.startsWith('.')) return spec;
 
@@ -43,7 +49,7 @@ export function rewriteFile(
   for (const route of routes) {
     // ${base}route/  ->  ${base}<slug>/route/
     const pattern = new RegExp(
-      '(\\$\\{base[A-Za-z]*\\})(' + route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b',
+      '(\\$\\{base[A-Za-z]*\\})(' + route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')' + TRAILING_BOUNDARY,
       'g',
     );
     out = out.replace(pattern, `$1${slug}/$2`);
@@ -54,11 +60,11 @@ export function rewriteFile(
   for (const asset of publicAssets) {
     const escaped = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     out = out.replace(
-      new RegExp('(\\$\\{base[A-Za-z]*\\})(' + escaped + ')', 'g'),
+      new RegExp('(\\$\\{base[A-Za-z]*\\})(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
       `$1${slug}/$2`,
     );
     out = out.replace(
-      new RegExp('(["\'`])/(' + escaped + ')', 'g'),
+      new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
       `$1/${slug}/$2`,
     );
   }

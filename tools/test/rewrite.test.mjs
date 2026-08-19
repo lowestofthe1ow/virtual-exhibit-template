@@ -72,3 +72,45 @@ test('a base-relative link to a route the exhibit does not own is untouched', ()
   });
   assert.equal(out, 'href={`${base}`}');
 });
+
+test('a route that is a hyphen-prefix of another route is not spliced', () => {
+  const out = rewriteFile('href={`${base}references-appendix/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's04g4', routes: ['references'],
+  });
+  assert.equal(out, 'href={`${base}references-appendix/`}');
+});
+
+test('the exact route is still rewritten when a longer route shares its prefix', () => {
+  const out = rewriteFile('href={`${base}references/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's04g4', routes: ['references'],
+  });
+  assert.match(out, /\$\{base\}s04g4\/references\//);
+});
+
+test('a route that is a digit-prefix of another route is not spliced', () => {
+  const out = rewriteFile('href={`${base}simulator2/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's01g1', routes: ['simulator'],
+  });
+  assert.equal(out, 'href={`${base}simulator2/`}');
+});
+
+test('a public asset name that is a prefix of another filename is not spliced', () => {
+  const out = rewriteFile('<img src="/logo.png.bak">', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', routes: [], publicAssets: ['logo.png'],
+  });
+  assert.equal(out, '<img src="/logo.png.bak">');
+});
+
+test('the exact public asset is still rewritten when a longer filename shares its prefix', () => {
+  const out = rewriteFile('<img src="/logo.png">', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', routes: [], publicAssets: ['logo.png'],
+  });
+  assert.match(out, /src="\/s03g9\/logo\.png"/);
+});
+
+test('a route reference with no trailing slash before the closing backtick still rewrites', () => {
+  const out = rewriteFile('href={`${base}silicon-minds`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's01g5', routes: ['silicon-minds'],
+  });
+  assert.match(out, /\$\{base\}s01g5\/silicon-minds`/);
+});
