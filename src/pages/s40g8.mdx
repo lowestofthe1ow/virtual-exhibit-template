@@ -1,0 +1,120 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "How SSDs Work"
+author: "Dela Cruz; Ramos; Tengco; Vicencio; Willie"
+readingTime: "12 minutes"
+---
+
+{/* We import the interactive React components used in this exhibit. */}
+
+import SSDvsHDD from "../components/s40g8/SSDvsHDD.jsx"
+import SSDQuiz from "../components/s40g8/SSDQuiz.jsx"
+
+# How SSDs Work
+
+The Solid State Drive (SSD) has quietly replaced the mechanical hard drive as the
+default way computers store data. Boot times dropped from a minute to a few
+seconds, laptops got thinner and quieter, and the familiar hum and click of a
+spinning disk disappeared. But what actually changed inside the box?
+
+This exhibit walks through **how an SSD works** — how it differs from a mechanical
+Hard Disk Drive (HDD), how data is written and stored inside NAND flash memory, and
+the role of the SSD controller that ties it all together.
+
+## SSD vs. HDD: No Moving Parts
+
+A traditional **HDD** stores data as magnetic charges on spinning platters. To read
+or write, it swings a mechanical arm — the read/write head — to the right track and
+waits for the platter to rotate the data underneath it. That physical movement is
+tiny, but it adds up: every scattered piece of data means another *seek* and another
+wait for the platter to spin into place.
+
+An **SSD** has **no moving parts at all**. Data lives in flash memory chips, and the
+drive reaches any location electronically. There is no head to move and no platter to
+wait for, so the delay that dominates HDD performance simply disappears.
+
+The difference is easiest to *see*. Press **Run** below to watch both drives fetch
+the same set of scattered data blocks:
+
+<SSDvsHDD client:load />
+
+*(This is a custom React component. It uses component state and timers to animate the
+two drives fetching data at their real-world speed ratio.)*
+
+## Inside the SSD: NAND Flash Memory
+
+The data on an SSD is stored in **NAND flash memory** — a type of *non-volatile*
+memory, meaning it keeps its contents even when the power is off. That is what makes
+it usable as permanent storage rather than temporary memory like RAM.
+
+NAND flash is built from billions of tiny **memory cells**, each of which traps
+electric charge to represent bits:
+
+- **SLC** (Single-Level Cell) stores 1 bit per cell — fastest and most durable.
+- **MLC / TLC / QLC** store 2, 3, or 4 bits per cell — cheaper and denser, but
+  slower and with fewer write cycles before they wear out.
+
+Cells are organized into a strict hierarchy: cells make up **pages** (the smallest
+unit you can write), and pages are grouped into **blocks** (the smallest unit you can
+erase).
+
+### The catch: writing vs. erasing
+
+Here is the quirk that shapes almost everything about SSD design:
+
+> You can **write** data one page at a time, but you can only **erase** a whole
+> **block** at once.
+
+Because you cannot simply overwrite a single page in place, an SSD has to be clever
+about *where* it puts data. When you "change" a file, the drive usually writes the
+new version to a fresh page and marks the old one as stale. Later, a background
+process called **garbage collection** consolidates the still-valid pages and erases
+whole blocks to reclaim space. The **TRIM** command helps by letting the operating
+system tell the drive which pages are no longer needed.
+
+## The SSD Controller: The Brain of the Drive
+
+None of this happens by magic — it is managed by the **SSD controller**, a small
+processor built into every SSD. The controller is what makes a pile of flash chips
+behave like a fast, reliable disk. Its main jobs:
+
+- **Placement & mapping** — deciding which physical flash pages your data goes to,
+  and keeping a map between the addresses the computer uses and the real locations.
+- **Wear-leveling** — flash cells wear out after many write cycles, so the controller
+  spreads writes evenly across all cells instead of hammering the same few. This is a
+  major reason modern SSDs last for years of normal use.
+- **Error correction (ECC)** — detecting and fixing the occasional bit that flips, so
+  your data stays intact.
+- **Garbage collection & TRIM** — reclaiming stale pages in the background to keep the
+  drive fast as it fills up.
+- **Talking to the computer** — communicating over the drive's interface.
+
+## Interfaces: How Fast Can It Talk?
+
+An SSD is only as fast as the connection it uses to reach the rest of the computer:
+
+- **SATA** — the same interface older hard drives used. Convenient and compatible,
+  but it caps out around **550 MB/s** — a bottleneck for modern flash.
+- **NVMe over PCIe** — connects the SSD directly to the CPU's PCI Express lanes,
+  bypassing the SATA bottleneck entirely. NVMe drives routinely reach **several
+  thousand MB/s**, many times faster than SATA.
+
+This is why two SSDs can feel very different: a NVMe drive and a SATA drive may use
+similar flash, but the interface changes everything.
+
+## Test Your Knowledge
+
+You've seen how an SSD stores data in NAND flash, why it leaves the mechanical HDD
+behind, and what the controller does behind the scenes. Ready to check what stuck?
+
+Fill in your name, pick an answer for every question, then press **Send** to grade 
+the quiz and see your score with an explanation for each question.
+
+<SSDQuiz client:load />
+
+## References
+
+- Micron Technology — *How SSDs Work* / NAND flash overview: https://www.micron.com/about/blog
+- Kingston Technology — *SSD vs HDD: What's the Difference?*: https://www.kingston.com/en/blog/pc-performance/ssd-vs-hdd
+- Crucial (Micron) — *What is an SSD?*: https://www.crucial.com/articles/about-ssd
+- NVM Express — *About NVMe technology*: https://nvmexpress.org/about/
