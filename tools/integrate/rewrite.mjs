@@ -48,20 +48,27 @@ export function rewriteFile(
 
   for (const route of routes) {
     // ${base}route/  ->  ${base}<slug>/route/
+    // ${base}/route/ -> ${base}/<slug>/route/
+    // Student code writes both shapes (with and without a single separating
+    // slash between the base template literal and the route name); the
+    // optional slash is captured and echoed back unchanged so the slug is
+    // spliced in without altering whichever shape the source used.
     const pattern = new RegExp(
-      '(\\$\\{base[A-Za-z]*\\})(' + route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')' + TRAILING_BOUNDARY,
+      '(\\$\\{base[A-Za-z]*\\})(/?)(' + route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')' + TRAILING_BOUNDARY,
       'g',
     );
-    out = out.replace(pattern, `$1${slug}/$2`);
+    out = out.replace(pattern, `$1$2${slug}/$3`);
   }
 
   // Files served from public/ move to public/<slug>/, so both the base-relative
   // and the root-absolute reference shapes need the slug inserted.
   for (const asset of publicAssets) {
     const escaped = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Same optional-slash blind spot as routes above: ${base}/logo.png and
+    // ${base}logo.png both occur in the wild.
     out = out.replace(
-      new RegExp('(\\$\\{base[A-Za-z]*\\})(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      `$1${slug}/$2`,
+      new RegExp('(\\$\\{base[A-Za-z]*\\})(/?)(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
+      `$1$2${slug}/$3`,
     );
     out = out.replace(
       new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),

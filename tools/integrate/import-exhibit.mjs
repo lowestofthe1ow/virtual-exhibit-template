@@ -100,7 +100,46 @@ const walk = (dir, out = []) => {
   }
   return out;
 };
-for (const kind of ['components', 'assets', 'styles']) {
+
+// Every top-level src/ directory except pages/ and layouts/ gets namespaced
+// the same way components/, assets/ and styles/ always have. Repos are free
+// to keep code or assets anywhere else under src/ — a fonts/ directory, a
+// zustand store/, or (for at least one repo) the exhibit's entire component
+// tree under its own directory name — and skipping those directories would
+// silently drop them from the site while the build stayed green. Computed
+// from the staged tree (post-prune) rather than hardcoded, so nothing new
+// needs to be taught to this script by name.
+const NAMESPACED_KINDS = readdirSync(stage, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && e.name !== 'pages' && e.name !== 'layouts')
+  .map((e) => e.name)
+  .sort();
+
+// Files sitting directly at the root of src/ (e.g. content.config.ts) are not
+// namespaced into a per-exhibit directory: unlike components/assets/styles/
+// etc. they are not referenced by relative import from the exhibit's own
+// code, they define project-wide Astro configuration (e.g. content
+// collections) that Astro only reads from src/'s root, and more than one
+// repo ships one. Blindly copying or merging one over the umbrella site's
+// own src/content.config.ts (or over another already-integrated exhibit's)
+// risks silently breaking every exhibit, not just this one — the opposite of
+// "fail loudly". They are left in place in the stage for a human to
+// reconcile by hand; flagged here so that review can't be skipped silently.
+const rootFiles = readdirSync(stage, { withFileTypes: true })
+  .filter((e) => e.isFile())
+  .map((e) => e.name)
+  .sort();
+if (rootFiles.length) {
+  console.log(
+    `\nWARNING: ${rootFiles.length} loose file(s) at the root of src/ were NOT imported: ` +
+    `${rootFiles.join(', ')}`,
+  );
+  console.log(
+    '  These likely define project-wide Astro config (e.g. content collections) and must be ' +
+    `reconciled by hand against the umbrella src/. They remain at ${stage}/ for review.`,
+  );
+}
+
+for (const kind of NAMESPACED_KINDS) {
   for (const file of walk(join(stage, kind))) {
     const rel = relative(stage, file).split(/[\\/]/).join('/');
     const [top, ...rest] = rel.split('/');
@@ -131,9 +170,9 @@ console.log(`public assets to re-point: ${publicAssets.length}`);
 console.log(`\nentry page: ${entry} -> src/pages/${slug}.mdx`);
 if (subdir) console.log(`sub-pages : ${subdir}/ -> src/pages/${slug}/`);
 if (hasPublic) console.log(`public    : -> public/${slug}/`);
-console.log(`components: -> src/components/${slug}/`);
-console.log(`assets    : -> src/assets/${slug}/`);
-console.log(`styles    : -> src/styles/${slug}/`);
+for (const kind of NAMESPACED_KINDS) {
+  console.log(`${kind.padEnd(10)}: -> src/${kind}/${slug}/`);
+}
 if (!apply) { console.log('\ndry run — pass --apply to write into src/'); process.exit(0); }
 
 // 7. Copy into place, rewriting as we go.
@@ -148,7 +187,7 @@ const copyRewritten = (fromPath, toPath, fromDir, toDir) => {
   );
 };
 
-for (const kind of ['components', 'assets', 'styles']) {
+for (const kind of NAMESPACED_KINDS) {
   for (const file of walk(join(stage, kind))) {
     const rel = relative(stage, file).split(/[\\/]/).join('/');
     const to = pathMap.get(rel);

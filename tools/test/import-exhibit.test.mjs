@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -83,4 +83,74 @@ test('a dry run on a glob slug exits 0 and still prints its orphan report', () =
   assert.equal(result.status, 0);
   assert.match(result.stdout, /orphans: 1 files/);
   assert.ok(!existsSync(join(cwd, 'src')), 'a dry run must never write into src/');
+});
+
+// A fixture whose src/ keeps a directory outside the three the orchestrator
+// used to hardcode (components/assets/styles), mirroring real repos that use
+// src/fonts/, a repo-named component tree, a store/, etc. A stylesheet
+// references a file in that directory the same way real CSS does (a quoted
+// relative url()), so a rewritten reference proves the extra directory made
+// it into the path map, not just onto disk.
+function fixtureRepoWithExtraDir() {
+  const dir = mkdtempSync(join(tmpdir(), 'import-exhibit-src-'));
+  mkdirSync(join(dir, 'src', 'pages'), { recursive: true });
+  // optimizeTree (not under test here, and out of scope to change) assumes
+  // src/assets/ exists; every fixture needs it present, even empty.
+  mkdirSync(join(dir, 'src', 'assets'), { recursive: true });
+  mkdirSync(join(dir, 'src', 'fonts'), { recursive: true });
+  mkdirSync(join(dir, 'src', 'styles'), { recursive: true });
+  writeFileSync(join(dir, 'src', 'pages', 'entry.mdx'), '# Entry\n');
+  writeFileSync(join(dir, 'src', 'fonts', 'Test.ttf'), 'FONTDATA');
+  writeFileSync(
+    join(dir, 'src', 'styles', 'site.css'),
+    "@font-face { font-family: 'Test'; src: url('../fonts/Test.ttf'); }\n",
+  );
+  return dir;
+}
+
+test('a directory other than components/assets/styles/pages/layouts is namespaced', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepoWithExtraDir();
+  const result = runCli(
+    ['--slug', 's99g9', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /fonts\s*: -> src\/fonts\/s99g9\//);
+  assert.ok(
+    existsSync(join(cwd, 'src', 'fonts', 's99g9', 'Test.ttf')),
+    'the extra directory should have been namespaced and copied, not skipped',
+  );
+});
+
+test('a stylesheet reference into that directory is rewritten to the namespaced path', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepoWithExtraDir();
+  const result = runCli(
+    ['--slug', 's99g9', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  const css = readFileSync(join(cwd, 'src', 'styles', 's99g9', 'site.css'), 'utf8');
+  assert.match(css, /url\('\.\.\/\.\.\/fonts\/s99g9\/Test\.ttf'\)/);
+});
+
+test('a loose file at the root of src/ is left in the stage and flagged, not silently dropped', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepo();
+  writeFileSync(join(repo, 'src', 'content.config.ts'), 'export const collections = {};\n');
+  const result = runCli(
+    ['--slug', 's01g1', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /WARNING.*content\.config\.ts/s);
+  assert.ok(
+    existsSync(join(cwd, '.integration-src', 's01g1-stage', 'content.config.ts')),
+    'the loose file should remain in the stage for manual review',
+  );
+  assert.ok(
+    !existsSync(join(cwd, 'src', 'content.config.ts')),
+    'the loose file must not be copied verbatim into the shared src/ root',
+  );
 });

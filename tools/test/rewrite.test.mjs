@@ -114,3 +114,32 @@ test('a route reference with no trailing slash before the closing backtick still
   });
   assert.match(out, /\$\{base\}s01g5\/silicon-minds`/);
 });
+
+test('a slash-separated base link is rewritten and keeps its leading slash', () => {
+  const out = rewriteFile('href={`${baseUrl}/S01_Group7_fullcapacity/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's01g7', routes: ['S01_Group7_fullcapacity'],
+  });
+  assert.match(out, /\$\{baseUrl\}\/s01g7\/S01_Group7_fullcapacity\//);
+});
+
+test('a no-separator base link is rewritten and gains no slash', () => {
+  const out = rewriteFile('href={`${base}shared-bus-problem/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's04g4', routes: ['shared-bus-problem'],
+  });
+  assert.match(out, /\$\{base\}s04g4\/shared-bus-problem\//);
+  assert.doesNotMatch(out, /\$\{base\}\/s04g4/);
+});
+
+test('the boundary still holds for the slash-separated form: a hyphen-prefix route is not spliced', () => {
+  const out = rewriteFile('href={`${base}/references-appendix/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's04g4', routes: ['references'],
+  });
+  assert.equal(out, 'href={`${base}/references-appendix/`}');
+});
+
+test('a slash-separated public asset reference is rewritten and keeps its leading slash', () => {
+  const out = rewriteFile('href={`${base}/moon.svg`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', routes: [], publicAssets: ['moon.svg'],
+  });
+  assert.match(out, /\$\{base\}\/s03g9\/moon\.svg/);
+});
