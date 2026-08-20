@@ -1,0 +1,13 @@
+import EraCard from '../../../components/s02g4/EraCard.jsx';
+import Rasterizer1970s from '../../../components/s02g4/eras/Rasterizer1970s.jsx';
+
+<EraCard client:load 
+  stage="02" 
+  era="1970s" 
+  title="Early Bitmaps & Rasterization" 
+  description="The 1970s marketed a fundamental shift in how computers learned to see with the adoption of raster graphics. With the introduction of semiconductor memory, vector display techniques gave way to raster techniques using a discretely sampled pixel representation. The term “raster” originated from the mechanism of older vacuum tube monitors, where an electron beam swept across rows of pixels. This transition transformed graphics, it simplified the leap from outlines to solid images. Pixels evolved from a simple set or not set bitmap state to carrying independent color information." 
+  renderType="RASTERIZED" 
+  color="#ef4444"
+>
+  <Rasterizer1970s client:load />
+</EraCard>

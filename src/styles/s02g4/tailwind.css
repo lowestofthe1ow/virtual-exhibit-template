@@ -1,0 +1,29 @@
+@import "../tailwind-scoped.css";
+
+@layer utilities {
+  /* Global Webkit Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(57, 255, 20, 0.4);
+    border-radius: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(57, 255, 20, 0.8);
+  }
+  
+  /* Global Firefox Scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(57, 255, 20, 0.5) rgba(0, 0, 0, 0.3);
+  }
+}

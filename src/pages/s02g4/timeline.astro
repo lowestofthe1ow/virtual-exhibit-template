@@ -1,0 +1,55 @@
+---
+import TimelineLayout from "../../components/s02g4/TimelineLayout.astro";
+import IntroTV from "../../components/s02g4/IntroTV.jsx";
+import SourcesButton from "../../components/s02g4/SourcesButton.jsx";
+import Exhibit3D from "../../components/s02g4/Exhibit3D.jsx";
+---
+
+<TimelineLayout>
+  <!-- The Retro Intro Sequence -->
+  <IntroTV client:load />
+
+  <!-- Museum Masthead -->
+  <header class="fixed top-0 left-0 right-0 z-[60] pointer-events-none flex justify-between items-start">
+    <div class="mx-8 mt-6 flex items-start gap-6">
+      <div class="flex flex-col gap-1.5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-2 rounded-full bg-[#39FF14] shadow-[0_0_8px_#39FF14,0_0_20px_rgba(57,255,20,0.3)] animate-breathe"></div>
+          <span class="museum-label text-[#39FF14]/80 text-[10px]">True 3D Exhibit — Active</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-display font-bold text-white tracking-tight uppercase leading-tight">
+          How Computers <br />
+          <span class="text-[#39FF14] drop-shadow-[0_0_20px_rgba(57,255,20,0.4)]">Learned to See</span>
+        </h1>
+        <div class="flex items-center gap-3 mt-1">
+          <div class="w-12 h-[1px] bg-gradient-to-r from-[#39FF14]/60 to-transparent"></div>
+          <p class="museum-label text-zinc-500 text-[9px]">The Living Timeline · 1960 — 2020</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exit Button -->
+    <div class="mx-8 mt-6 pointer-events-auto">
+      <a href={`${import.meta.env.BASE_URL}`} class="px-5 py-2.5 bg-black/40 backdrop-blur-md border border-white/10 text-white/80 rounded-full hover:bg-white/10 hover:text-white transition-all museum-label text-[10px] uppercase tracking-wider flex items-center gap-2 group shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform"><path d="M15 18l-6-6 6-6"/></svg>
+        Exit Exhibit
+      </a>
+    </div>
+  </header>
+
+  <!-- The True 3D React Component -->
+  <main class="w-screen h-screen relative z-0">
+    <Exhibit3D client:only="react" />
+  </main>
+
+  <SourcesButton client:load />
+
+  <!-- Bottom Museum Footer Bar -->
+  <div class="fixed bottom-4 left-0 right-0 z-[70] flex justify-center pointer-events-none">
+    <div class="flex items-center gap-4 px-6 py-2 bg-black/40 backdrop-blur-md rounded-full border border-white/5">
+      <span class="museum-label text-zinc-600 text-[8px]">Scroll to Travel Through Time</span>
+      <div class="w-[1px] h-3 bg-white/10"></div>
+      <span class="museum-label text-zinc-600 text-[8px]">Click Terminal Cards to Explore</span>
+    </div>
+  </div>
+</TimelineLayout>
