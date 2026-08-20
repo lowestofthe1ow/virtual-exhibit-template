@@ -16,6 +16,7 @@
 // otherwise unchanged from the original schema.
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { s04g1Operations } from './content/s04g1/S04_Group1_operations/collection';
 
 const s01g5Eras = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/s01g5/eras' }),
@@ -72,4 +73,10 @@ const s01g5Quiz = defineCollection({
   }),
 });
 
-export const collections = { s01g5Eras, s01g5Processors, s01g5Quiz };
+// s04g1 "Inside the ALU": collection defined in its own namespaced loader
+// file (src/content/s04g1/S04_Group1_operations/collection.ts, moved there
+// automatically by the orchestrator since content/ is a namespaced kind).
+// Only the export key and the getCollection() string were renamed to
+// s04g1Operations for the umbrella's slug-prefixed convention; the schema
+// (including the image() diagram field) is unchanged from the original.
+export const collections = { s01g5Eras, s01g5Processors, s01g5Quiz, s04g1Operations };

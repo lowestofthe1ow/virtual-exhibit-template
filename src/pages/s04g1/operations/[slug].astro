@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import ExhibitLayout from '../../../components/s04g1/Layout.astro';
+import S04_Group1_ExhibitShell from '../../../components/s04g1/S04_Group1_ExhibitShell.astro';
+
+export async function getStaticPaths() {
+  const operations = await getCollection('s04g1Operations');
+  return operations.map((op) => ({
+    params: { slug: op.id },
+    props: { op },
+  }));
+}
+
+const { op } = Astro.props;
+const { data } = op;
+const { Content, headings } = await render(op);
+const base = import.meta.env.BASE_URL;
+---
+
+<ExhibitLayout
+  title={`${data.title} - Inside the ALU`}
+  author="Group 1"
+  readingTime="4 minute read"
+  headings={headings}
+>
+  <S04_Group1_ExhibitShell>
+  <div class="op wrap">
+    <a class="op__back" href={`${base}/s04g1/#operations`}>&larr; Back to operations</a>
+
+    <header class="op__header">
+      <div class="op__badges">
+        <span class="op__mnemonic">{data.mnemonic}</span>
+        <span class="op__opcode mono-value">{data.opcode}</span>
+        <span class="op__category eyebrow">{data.category}</span>
+      </div>
+      <h1>{data.title} <span class="op__symbol">{data.symbol}</span></h1>
+      <p class="op__summary">{data.summary}</p>
+      <div class="op__flags">
+        <span class="eyebrow">Flags affected</span>
+
+        {data.flagsAffected.map((f) => <span class="op__flag mono-value">{f}</span>)}
+      </div>
+    </header>
+
+    {
+      data.diagram && (
+        <div class="op__diagram">
+          <Image src={data.diagram} alt={`Gate-level diagram for ${data.title}`} width={640} height={360} />
+        </div>
+      )
+    }
+
+    <div class="op__body">
+      <Content />
+    </div>
+  </div>
+  </S04_Group1_ExhibitShell>
+
+</ExhibitLayout>

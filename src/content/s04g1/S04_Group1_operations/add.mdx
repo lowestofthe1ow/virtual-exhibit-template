@@ -1,0 +1,63 @@
+---
+title: Addition
+mnemonic: ADD
+opcode: '0000'
+symbol: '+'
+category: arithmetic
+summary: Binary addition with carry-out, built from a chain of full adders.
+flagsAffected: [Z, C, N, V]
+order: 1
+scope: core
+---
+
+import S04_Group1_AdderCircuit from '../../../components/s04g1/S04_Group1_AdderCircuit.jsx';
+
+Addition is the operation the rest of the ALU is often built around — a subtractor is usually
+just an adder fed an inverted second operand. A 4-bit adder is four **full adders** chained
+together, each one passing its carry-out to the next bit's carry-in.
+
+## Truth table for one bit
+
+Each full adder takes three inputs — the two operand bits and a carry-in — and produces a sum
+bit and a carry-out.
+
+| A | B | Carry-in | Sum | Carry-out |
+| - | - | -------- | --- | --------- |
+| 0 | 0 | 0        | 0   | 0         |
+| 0 | 1 | 0        | 1   | 0         |
+| 1 | 0 | 0        | 1   | 0         |
+| 1 | 1 | 0        | 0   | 1         |
+| 1 | 1 | 1        | 1   | 1         |
+
+## Two ways to wire the carry chain
+
+Chaining full adders is simple to build, but that simplicity has a cost: each stage has to wait
+for the carry from the stage before it. Real ALUs weigh that cost against a more complex circuit
+that computes every carry sooner.
+
+**Ripple-carry adder.** Stage *i* can't produce its carry-out until stage *i − 1* has produced
+its carry-out — the carry ripples down the chain one full adder at a time. It's the fewest gates,
+but the worst-case delay grows with the width of the adder: a 64-bit ripple-carry adder is
+roughly sixteen times slower than a 4-bit one.
+
+**Carry-lookahead adder.** Instead of waiting on its neighbor, every stage computes two signals
+up front — **generate** (`G = A · B`, "this stage makes a carry no matter what") and
+**propagate** (`P = A OR B`, "this stage passes a carry through if one arrives"). A separate block
+of gates combines *all* the G and P signals directly against the carry-in to produce every carry
+bit in parallel, in a fixed number of gate delays no matter how wide the adder is. The trade is
+more gates and more wiring for that flat delay.
+
+Switch between the two below and watch the carry chain settle — ripple-carry lights up one node
+at a time, left to right; carry-lookahead lights the whole chain up in a single step.
+
+<S04_Group1_AdderCircuit client:visible />
+
+## Reading the flags
+
+- **Z** — set when all four result bits are 0.
+- **C** — set when the top bit's adder produces a carry-out, meaning the true sum didn't fit in
+  4 bits.
+- **N** — set when the result's top bit is 1 (its sign bit, if you're treating the result as a
+  signed number).
+- **V** — set when the *signed* result is wrong even though the *unsigned* bits are correct — for
+  example, adding two positive 4-bit numbers and landing on a negative-looking result.

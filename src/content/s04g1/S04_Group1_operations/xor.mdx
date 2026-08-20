@@ -1,0 +1,33 @@
+---
+title: Bitwise XOR
+mnemonic: XOR
+opcode: '0110'
+symbol: '⊕'
+category: logic
+summary: Outputs 1 when its inputs differ — the basis of bit-flipping and comparison.
+flagsAffected: [Z, N]
+order: 5
+scope: core
+---
+
+XOR — "exclusive or" — outputs 1 exactly when its two input bits differ. It's built from a
+small combination of AND, OR, and NOT gates, or from two NAND-based stages in denser
+implementations.
+
+## Truth table
+
+| A | B | A ⊕ B |
+| - | - | ----- |
+| 0 | 0 | 0     |
+| 0 | 1 | 1     |
+| 1 | 0 | 1     |
+| 1 | 1 | 0     |
+
+## Two things XOR is good for
+
+**Comparison.** `A ⊕ B` is all zeros exactly when `A` equals `B` — which is why the **Z** flag
+after an XOR is often used as an equality test.
+
+**Flipping bits.** XORing any value with `1111` inverts every bit, and XORing a value with
+itself always clears it to zero — a trick old assembly code used to zero a register in a single
+cheap instruction.

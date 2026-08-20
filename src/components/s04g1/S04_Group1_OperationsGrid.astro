@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import S04_Group1_OperationCard from './S04_Group1_OperationCard.astro';
+
+const operations = (await getCollection('s04g1Operations')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<div class="operations__grid">
+  {
+    operations.map((op) => (
+      <S04_Group1_OperationCard
+        id={op.id}
+        title={op.data.title}
+        mnemonic={op.data.mnemonic}
+        opcode={op.data.opcode}
+        symbol={op.data.symbol}
+        summary={op.data.summary}
+        scope={op.data.scope}
+        diagram={op.data.diagram}
+      />
+    ))
+  }
+</div>

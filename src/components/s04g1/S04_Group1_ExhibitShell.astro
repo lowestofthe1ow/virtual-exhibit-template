@@ -1,0 +1,55 @@
+---
+import '../../styles/s04g1/S04_Group1_global.css';
+import '../../styles/s04g1/S04_Group1_polish.css';
+
+const base = import.meta.env.BASE_URL;
+const home = `${base}/s04g1/`;
+---
+
+<div class="S04_Group1_exhibit">
+  <nav class="S04_Group1_local-nav" aria-label="Inside the ALU sections">
+    <a href={`${home}#anatomy`}>What is an ALU?</a>
+    <a href={`${home}#binary-basics`}>Binary Basics</a>
+    <a href={`${home}#operations`}>Operations</a>
+    <a href={`${home}#simulator`}>Simulator</a>
+    <a href={`${home}#ripple-carry-adder`}>Ripple Adder</a>
+    <a href={`${home}#adder-comparison`}>Adder Circuits</a>
+    <a href={`${home}#history`}>History</a>
+    <a href={`${home}#tech-stack`}>Tech Stack</a>
+  </nav>
+  <slot />
+</div>
+
+<style>
+  .S04_Group1_local-nav {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0.75rem;
+    overflow-x: auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    scrollbar-width: thin;
+  }
+
+  .S04_Group1_local-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    flex: 0 0 auto;
+    padding: 0.45rem 0.75rem;
+    color: var(--paper-dim);
+    border-radius: var(--radius);
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .S04_Group1_local-nav a:hover,
+  .S04_Group1_local-nav a:focus-visible {
+    color: var(--trace);
+    background: var(--trace-dim);
+  }
+</style>

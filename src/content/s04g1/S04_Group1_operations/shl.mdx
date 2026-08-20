@@ -1,0 +1,30 @@
+---
+title: Shift Left
+mnemonic: SHL
+opcode: '1000'
+symbol: '≪'
+category: shift
+summary: Slides every bit one place left, dropping the top bit into Carry.
+flagsAffected: [Z, C, N]
+order: 7
+scope: advanced
+---
+
+A shift is wiring, not arithmetic — each output bit is simply connected to the input one
+position over. Shifting left moves every bit toward the most-significant position and fills the
+new low bit with 0.
+
+## What happens to each bit
+
+| Before   | After shifting left | Bit shifted out |
+| -------- | -------------------- | ---------------- |
+| 0001 (1) | 0010 (2)              | 0                 |
+| 0110 (6) | 1100 (12)             | 0                 |
+| 1010 (10)| 0100 (4)              | 1 → sets Carry    |
+
+## Why it matters
+
+Shifting a binary number left by one place is the same as multiplying it by 2 — as long as
+nothing meaningful falls out the top. That's exactly what the **C** flag is watching here: if a
+1 bit gets shifted out, the result no longer represents "×2" of the original value, and C tells
+you so.

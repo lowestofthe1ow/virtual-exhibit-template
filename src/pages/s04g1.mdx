@@ -1,0 +1,400 @@
+---
+layout: ../components/s04g1/Layout.astro
+title: "Inside the ALU: How Computers Perform Arithmetic and Logic Operations"
+description: Explore how computers perform arithmetic and logic operations using binary, then simulate an ALU and ripple-carry adder.
+author: "Corral, Matthew; De Castro, Jediaelle Denise; Del Mundo, Joshua; Fabricante, Jeruel; Young, Cedric"
+readingTime: "15 minute read"
+---
+
+import S04_Group1_ExhibitShell from '../components/s04g1/S04_Group1_ExhibitShell.astro';
+import S04_Group1_ALUSimulator from '../components/s04g1/S04_Group1_ALUSimulator.jsx';
+import S04_Group1_OperationsGrid from '../components/s04g1/S04_Group1_OperationsGrid.astro';
+import S04_Group1_RippleCarryAdderSimulator from '../components/s04g1/S04_Group1_RippleCarryAdderSimulator.jsx';
+import S04_Group1_AluSchematic from '../components/s04g1/S04_Group1_AluSchematic.astro';
+import S04_Group1_BinaryWidget from '../components/s04g1/S04_Group1_BinaryWidget.jsx';
+
+<S04_Group1_ExhibitShell>
+
+<section className="hero">
+  <div className="wrap hero__content">
+    <span className="hero__badge">COMPUTER ARCHITECTURE - INTERACTIVE EXHIBIT</span>
+    <h1>Arithmetic Logic Unit</h1>
+    <p className="hero__lede">The brain of the CPU. Explore how computers perform arithmetic and logic operations using binary &mdash; and simulate it yourself.</p>
+    <a href="#simulator" className="btn btn--primary">Launch Simulator</a>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="anatomy" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">01 &mdash; WHAT IS AN ALU?</span>
+      <span className="line"></span>
+    </div>
+
+    <div className="split-layout">
+      <div className="split-layout__text">
+        <h2>The Calculator Inside Your CPU</h2>
+        <p>The Arithmetic Logic Unit (ALU) is a fundamental component of the Central Processing Unit (CPU). It is the circuit responsible for executing every mathematical and logical operation a computer performs.</p>
+        <p>Unlike how humans do arithmetic in their heads, the ALU works entirely with binary numbers &mdash; sequences of 0s and 1s. Every number, every instruction, every result is represented as a pattern of bits.</p>
+        <p>The ALU receives two binary inputs (Operand A and Operand B), applies a selected operation, and produces a binary result along with status flags that help the CPU make decisions.</p>
+      </div>
+
+      <div className="info-cards">
+        <article className="info-card">
+          <span className="dot dot--input"></span>
+          <div className="info-card__content">
+            <h3>Inputs</h3>
+            <p>Two binary operands (A and B)</p>
+          </div>
+        </article>
+        <article className="info-card">
+          <span className="dot dot--op"></span>
+          <div className="info-card__content">
+            <h3>Operation</h3>
+            <p>Selected via opcode from the control unit</p>
+          </div>
+        </article>
+        <article className="info-card">
+          <span className="dot dot--output"></span>
+          <div className="info-card__content">
+            <h3>Output</h3>
+            <p>Binary result of the operation</p>
+          </div>
+        </article>
+        <article className="info-card">
+          <span className="dot dot--flags"></span>
+          <div className="info-card__content">
+            <h3>Flags</h3>
+            <p>Zero, Carry, Overflow, Sign</p>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div className="alu-schematic-frame">
+      <S04_Group1_AluSchematic />
+    </div>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="binary-basics" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">02 &mdash; BINARY BASICS</span>
+      <span className="line"></span>
+    </div>
+
+    <div className="split-layout">
+      <div className="split-layout__text">
+        <h2>Computers Think in 0s and 1s</h2>
+        <p>Every piece of data in a computer &mdash; numbers, text, images, instructions &mdash; is ultimately stored and processed as binary digits (bits). A bit has only two states: 0 (off) or 1 (on).</p>
+        <p>In a binary number, each bit position represents a power of 2. The rightmost bit is 2<sup>0</sup> (=1), the next is 2<sup>1</sup> (=2), then 2<sup>2</sup> (=4), and so on. To find the decimal value, add up the weights of all positions where the bit is 1.</p>
+
+        <div className="code-box">
+          <span className="code-title">0110 in binary:</span>
+          <code>0&times;8 + 1&times;4 + 1&times;2 + 0&times;1<br />= 0 + 4 + 2 + 0 = 6</code>
+        </div>
+      </div>
+
+      <S04_Group1_BinaryWidget client:load />
+    </div>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="operations" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">03 &mdash; ALU OPERATIONS</span>
+      <span className="line"></span>
+    </div>
+    <h2>What the ALU Can Do</h2>
+
+    <S04_Group1_OperationsGrid />
+
+    <div className="simulator-focus-box">
+      <p><span className="highlight">The six proposal operations are ADD, SUB, AND, OR, XOR, and NOT.</span> The Mini ALU also retains SHL and SHR as advanced operations, with RCA/CLA comparison available for ADD and SUB.</p>
+    </div>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="simulator" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">04 &mdash; MINI ALU SIMULATOR</span>
+      <span className="line"></span>
+    </div>
+    <h2>Binary Calculator</h2>
+    <p className="section__desc">Enter up to 64 binary digits for Operand A and Operand B. Select an operation and word width to see how the ALU pads, masks, shifts, derives carries, and reports status flags.</p>
+
+    <S04_Group1_ALUSimulator client:load />
+
+    <div className="simulator-helpers">
+      <article className="helper-card">
+        <span className="dot"></span>
+        <div className="helper-card__content">
+          <h3>Click bits</h3>
+          <p>Toggle 0 and 1 in each operand</p>
+        </div>
+      </article>
+      <article className="helper-card">
+        <span className="dot"></span>
+        <div className="helper-card__content">
+          <h3>Switch operations</h3>
+          <p>ADD uses direct inputs; SUB inverts B and adds 1 (two's complement)</p>
+        </div>
+      </article>
+      <article className="helper-card">
+        <span className="dot"></span>
+        <div className="helper-card__content">
+          <h3>Compare adders</h3>
+          <p>Switch between Ripple Carry and Carry Lookahead to see different carry paths</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="ripple-carry-adder" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">04B &mdash; RIPPLE-CARRY ADDER LAB</span>
+      <span className="line"></span>
+    </div>
+    <h2>Trace Carries Through Full Adders</h2>
+    <p className="section__desc">Enter two binary values up to 64 bits and choose the carry-in. The simulator pads the shorter operand, adds from least significant bit to most significant bit, and shows how each carry-out becomes the next full adder's carry-in.</p>
+
+    <S04_Group1_RippleCarryAdderSimulator client:load />
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="adder-comparison" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">05 &mdash; ADDER CIRCUITS COMPARED</span>
+      <span className="line"></span>
+    </div>
+    <h2>Ripple Carry vs. Carry Lookahead</h2>
+
+    <div className="comparison__grid">
+      <div className="comparison__card">
+        <div className="card__header">
+          <span className="badge badge--rca">RCA</span>
+          <h3>Ripple Carry Adder</h3>
+        </div>
+        <p className="card__desc">Each Full Adder waits for the carry-out from the previous stage before computing its sum bit.</p>
+        <div className="card__lists">
+          <div className="list__group">
+            <h4>Advantages</h4>
+            <ul>
+              <li className="pos">Simple circuit design</li>
+              <li className="pos">Fewer logic gates</li>
+              <li className="pos">Easy to implement</li>
+            </ul>
+          </div>
+          <div className="list__group trade-offs">
+            <h4>Trade-offs</h4>
+            <ul>
+              <li className="neg">Slow &mdash; each carry must ripple forward</li>
+              <li className="neg">Delay grows linearly with bit width</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="comparison__card">
+        <div className="card__header">
+          <span className="badge badge--cla">CLA</span>
+          <h3>Carry Lookahead Adder</h3>
+        </div>
+        <p className="card__desc">Uses Generate (G) and Propagate (P) signals to calculate all carry values simultaneously before summing.</p>
+        <div className="card__lists">
+          <div className="list__group">
+            <h4>Advantages</h4>
+            <ul>
+              <li className="pos">Fast &mdash; all carries computed at once</li>
+              <li className="pos">Reduced carry-path depth through parallel logic</li>
+              <li className="pos">Used in real CPUs</li>
+            </ul>
+          </div>
+          <div className="list__group trade-offs">
+            <h4>Trade-offs</h4>
+            <ul>
+              <li className="neg">More complex circuitry</li>
+              <li className="neg">Higher gate count</li>
+              <li className="neg">More wiring overhead</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="subtraction__panel">
+      <h3>How Subtraction Works: Two's Complement</h3>
+      <p>Instead of building a separate subtraction circuit, the ALU reuses the adder. To compute A - B, it calculates A + (-B). In binary, the negative of a number is its <strong>two's complement</strong>: flip all bits (~B), then add 1.</p>
+
+      <div className="steps__grid mono-value">
+        <div className="step__item">
+          <span className="step__label">Step 1: Original B</span>
+          <span className="step__val text-blue">B = 0011 (3)</span>
+        </div>
+        <div className="step__item">
+          <span className="step__label">Step 2: Invert all bits</span>
+          <span className="step__val text-orange">~B = 1100</span>
+        </div>
+        <div className="step__item">
+          <span className="step__label">Step 3: Add 1 (carry-in = 1)</span>
+          <span className="step__val text-green">~B + 1 = 1101 (-3)</span>
+        </div>
+      </div>
+
+      <p className="subtraction__footer">In the simulator, when SUB is selected, Operand B is automatically inverted and the initial carry-in is set to 1 &mdash; exactly replicating this hardware behavior.</p>
+    </div>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="history" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">06 &mdash; HOW IT GOT HERE</span>
+      <span className="line"></span>
+    </div>
+
+    <h2>From Relays to Silicon</h2>
+
+    <div className="timeline__container">
+      <div className="timeline__card">
+        <div className="timeline__header">
+          <span className="timeline__year mono-value">1937-44</span>
+          <h3>Relay logic</h3>
+        </div>
+        <p className="timeline__body">Electromechanical relays open and close to perform binary addition &mdash; slow, audible, and the first machines to compute with switches instead of gears.</p>
+      </div>
+
+      <div className="timeline__card">
+        <div className="timeline__header">
+          <span className="timeline__year mono-value">1945</span>
+          <h3>Vacuum-tube arithmetic</h3>
+        </div>
+        <p className="timeline__body">ENIAC's accumulators add and subtract using thousands of tubes, trading relay speed limits for heat and constant tube failures.</p>
+      </div>
+
+      <div className="timeline__card">
+        <div className="timeline__header">
+          <span className="timeline__year mono-value">1958-63</span>
+          <h3>Discrete transistors</h3>
+        </div>
+        <p className="timeline__body">Transistorized logic shrinks the arithmetic unit onto circuit boards small enough to fit inside a single cabinet.</p>
+      </div>
+
+      <div className="timeline__card">
+        <div className="timeline__header">
+          <span className="timeline__year mono-value">1970</span>
+          <h3>The 74181 IC</h3>
+        </div>
+        <p className="timeline__body">A single 24-pin chip packages a full 4-bit ALU &mdash; sixteen arithmetic and logic operations selectable by four control lines.</p>
+      </div>
+
+      <div className="timeline__card">
+        <div className="timeline__header">
+          <span className="timeline__year mono-value">1971-today</span>
+          <h3>Embedded in the CPU</h3>
+        </div>
+        <p className="timeline__body">From the Intel 4004 onward, the ALU stops being a separate unit and becomes a block on the processor's own die.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr className="hairline" />
+
+<section id="tech-stack" className="section">
+  <div className="wrap">
+    <div className="section__eyebrow">
+      <span className="line"></span>
+      <span className="text">07 &mdash; TECH STACK</span>
+      <span className="line"></span>
+    </div>
+    <div className="tech-stack__grid">
+      <div className="tech-stack__info">
+        <h2>How This Exhibit Is Built</h2>
+        <p className="tech-stack__lede">The exhibit is an Astro static-site module with MDX content and React JSX islands for the interactive Mini ALU and Ripple Carry Adder Lab. It is verified on the professor template's Astro 5.18/React 18 stack and this repository's Astro 6/React 19 stack.</p>
+
+        <div className="stack-plan__box">
+          <div className="stack-plan__header">
+            <span className="drag-handle">::</span> Tech Stack Plan:
+          </div>
+          <table className="stack-plan__table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Plan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Main framework</td><td>Astro 5.18 / 6 compatible</td></tr>
+              <tr><td>Runtime</td><td className="text-link">Node.js 26</td></tr>
+              <tr><td>Content</td><td>MDX</td></tr>
+              <tr><td>Interactive component</td><td>React JSX</td></tr>
+              <tr><td>Styling</td><td>CSS / Astro scoped styles</td></tr>
+              <tr><td>Assets</td><td>PNG</td></tr>
+              <tr><td>Repository</td><td>GitHub</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="tech-stack__pills">
+        <div className="stack-pill">
+          <span className="pill__label">Main framework</span>
+          <span className="pill__value text-green">Astro 5.18 / 6</span>
+        </div>
+        <div className="stack-pill">
+          <span className="pill__label">Runtime</span>
+          <span className="pill__value text-green">Node.js 26</span>
+        </div>
+        <div className="stack-pill">
+          <span className="pill__label">Content</span>
+          <span className="pill__value text-green">MDX</span>
+        </div>
+        <div className="stack-pill">
+          <span className="pill__label">Interactive component</span>
+          <span className="pill__value text-green">React JSX</span>
+        </div>
+        <div className="stack-pill">
+          <span className="pill__label">Styling</span>
+          <span className="pill__value text-green">CSS / Astro scoped styles</span>
+        </div>
+        <div className="stack-pill">
+          <span className="pill__label">Assets</span>
+          <span className="pill__value text-green">PNG</span>
+        </div>
+        <div className="stack-pill">
+          <span className="pill__label">Repository</span>
+          <span className="pill__value text-green">GitHub</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</S04_Group1_ExhibitShell>

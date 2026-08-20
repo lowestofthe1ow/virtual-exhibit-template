@@ -1,0 +1,24 @@
+---
+title: Bitwise NOT
+mnemonic: NOT
+opcode: '0111'
+symbol: '¬'
+category: logic
+summary: Inverts every bit of A; Operand B is not used.
+flagsAffected: [Z, N]
+order: 6
+scope: core
+---
+
+Bitwise NOT is a unary operation: every 0 in Operand A becomes 1 and every 1 becomes 0. Operand B is disconnected for this instruction.
+
+## Truth table
+
+| A | NOT A |
+| - | ----- |
+| 0 | 1     |
+| 1 | 0     |
+
+## Word width matters
+
+NOT flips every bit inside the selected word. Thus NOT `0101` is `1010` at 4 bits, while the same value padded to 8 bits becomes `11111010` after inversion.

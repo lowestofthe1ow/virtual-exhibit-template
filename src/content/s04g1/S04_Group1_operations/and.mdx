@@ -1,0 +1,29 @@
+---
+title: Bitwise AND
+mnemonic: AND
+opcode: '0100'
+symbol: '∧'
+category: logic
+summary: One AND gate per bit position — used constantly to mask off bits.
+flagsAffected: [Z, N]
+order: 3
+scope: core
+---
+
+Bitwise AND runs four independent AND gates in parallel, one per bit position — there's no
+carry chain here, so every bit resolves at the same time.
+
+## Truth table
+
+| A | B | A ∧ B |
+| - | - | ----- |
+| 0 | 0 | 0     |
+| 0 | 1 | 0     |
+| 1 | 0 | 0     |
+| 1 | 1 | 1     |
+
+## Where it's used
+
+Software uses AND to **mask** bits — clearing everything outside a region of interest. ANDing a
+byte with `00001111` keeps only its low nibble and zeroes the rest, which is exactly how this
+exhibit's bit switches are read out.

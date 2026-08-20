@@ -1,0 +1,32 @@
+---
+title: Subtraction
+mnemonic: SUB
+opcode: '0001'
+symbol: '−'
+category: arithmetic
+summary: Reuses the adder by inverting B and adding 1 — two's complement in action.
+flagsAffected: [Z, C, N, V]
+order: 2
+scope: core
+---
+
+Most ALUs don't build a separate subtractor circuit. Instead they compute `A − B` as
+`A + (¬B) + 1` — invert every bit of B, then add it to A with a carry-in of 1. That's the
+definition of two's complement negation, and it means subtraction can share the exact same
+adder hardware as addition.
+
+## Why invert-and-add-one works
+
+Flipping every bit of a 4-bit number and adding 1 produces its negative in two's complement.
+So `¬B + 1` is just `−B`, and `A + (−B)` is `A − B`.
+
+| B (binary) | ¬B (binary) | ¬B + 1 | Value  |
+| ---------- | ----------- | ------ | ------ |
+| 0011 (3)   | 1100        | 1101   | −3     |
+| 0101 (5)   | 1010        | 1011   | −5     |
+
+## Reading the flags
+
+This exhibit reports **C** using the *no-borrow* convention: C is set when `A ≥ B`, meaning the
+subtraction didn't need to borrow. Some real processors invert this convention — always check a
+chip's datasheet before relying on its carry flag after a subtract.

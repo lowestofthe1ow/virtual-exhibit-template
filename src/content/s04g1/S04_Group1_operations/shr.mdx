@@ -1,0 +1,24 @@
+---
+title: Shift Right
+mnemonic: SHR
+opcode: '1001'
+symbol: '≫'
+category: shift
+summary: Advanced operation that moves bits right and reports the dropped low bit in Carry.
+flagsAffected: [Z, C, N]
+order: 8
+scope: advanced
+---
+
+Logical shift right moves every bit one position toward the least-significant end, fills the new most-significant bit with 0, and copies the bit that falls off into Carry.
+
+## Examples
+
+| Before | After SHR | Carry |
+| ------ | --------- | ----- |
+| 1000   | 0100      | 0     |
+| 0111   | 0011      | 1     |
+
+## Why it matters
+
+For an unsigned value, shifting right by one is integer division by 2. Any remainder appears as the bit shifted into Carry. This exhibit retains SHR as an advanced operation beyond the six core proposal operations.

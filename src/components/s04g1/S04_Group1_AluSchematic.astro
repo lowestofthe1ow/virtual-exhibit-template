@@ -1,0 +1,94 @@
+---
+// A hand-drawn-feeling block diagram: two operand buses and an opcode
+// line go in, a result bus and a flag register come out. This is the
+// shape every operation in the exhibit will specialize.
+---
+
+<svg
+  class="schematic"
+  viewBox="0 0 760 320"
+  role="img"
+  aria-labelledby="schematicTitle schematicDesc"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title id="schematicTitle">Block diagram of an Arithmetic Logic Unit</title>
+  <desc id="schematicDesc">
+    Inputs A, B, and a 4-bit opcode enter the ALU. The ALU outputs a result
+    bus and a flag register holding Zero, Carry, Negative, and Overflow bits.
+  </desc>
+
+  <!-- buses -->
+  <path d="M 20 70 H 210" class="wire" />
+  <path d="M 20 170 H 210" class="wire" />
+  <path d="M 130 40 V 130" class="wire wire--thin" />
+  <path d="M 130 130 H 210" class="wire wire--thin" />
+  <path d="M 430 120 H 560" class="wire wire--live" />
+  <path d="M 500 120 V 220" class="wire wire--thin" />
+  <path d="M 500 220 H 560" class="wire wire--thin" />
+
+  <!-- input labels -->
+  <text x="20" y="58" class="lbl">A[3:0]</text>
+  <text x="20" y="158" class="lbl">B[3:0]</text>
+  <text x="70" y="34" class="lbl lbl--dim">OPCODE[3:0]</text>
+
+  <!-- ALU core -->
+  <path d="M 210 20 L 430 60 L 430 240 L 210 280 Z" class="core" />
+  <text x="290" y="158" class="core-label">ALU</text>
+
+  <!-- outputs -->
+  <rect x="560" y="90" width="150" height="60" rx="3" class="box" />
+  <text x="635" y="125" text-anchor="middle" class="lbl">RESULT[3:0]</text>
+
+  <rect x="560" y="190" width="150" height="60" rx="3" class="box" />
+  <text x="635" y="216" text-anchor="middle" class="lbl">FLAGS</text>
+  <text x="635" y="236" text-anchor="middle" class="lbl lbl--dim">Z · C · N · V</text>
+
+  <style>
+    .wire {
+      fill: none;
+      stroke: var(--border-strong);
+      stroke-width: 2;
+    }
+    .wire--thin {
+      stroke-width: 1.5;
+      stroke-dasharray: 3 3;
+    }
+    .wire--live {
+      stroke: var(--trace);
+    }
+    .core {
+      fill: var(--panel-raised);
+      stroke: var(--trace);
+      stroke-width: 1.5;
+    }
+    .core-label {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      fill: var(--paper);
+      text-anchor: middle;
+    }
+    .box {
+      fill: var(--panel);
+      stroke: var(--border-strong);
+      stroke-width: 1.5;
+    }
+    .lbl {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      fill: var(--paper);
+    }
+    .lbl--dim {
+      fill: var(--paper-dim);
+      font-size: 11px;
+    }
+  </style>
+</svg>
+
+<style>
+  .schematic {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

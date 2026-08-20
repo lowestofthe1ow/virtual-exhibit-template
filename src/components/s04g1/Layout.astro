@@ -1,0 +1,77 @@
+---
+/* Shared professor-template exhibit layout. Keep this file aligned with the
+ * museum template; Group 1 customizations belong in group-prefixed files. */
+import type { MarkdownHeading } from 'astro';
+import 'normalize.css';
+import '@fontsource-variable/lora';
+import '@fontsource-variable/noto-sans';
+import '../../styles/s04g1/global.css';
+import { Icon } from 'astro-icon/components';
+
+interface LayoutMetadata {
+  title?: string;
+  author?: string;
+  readingTime?: string;
+}
+
+const metadata = (Astro.props.frontmatter ?? Astro.props) as LayoutMetadata;
+const { title, author, readingTime } = metadata;
+const headings = (Astro.props.headings ?? []) as MarkdownHeading[];
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} - CSARCH2 Virtual Exhibit</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__titleblock">
+        <a href={baseUrl} class="button" aria-label="Return to museum homepage">
+          <Icon name="ic:round-home" />
+        </a>
+        <strong>{title}</strong>
+        <span class="header__subtitle">by {author}</span>
+      </div>
+    </header>
+
+    <main class="content">
+      {headings && headings.length > 0 && (
+        <nav class="toc" aria-label="Table of contents">
+          <h2>Table of contents</h2>
+          <ul class="toc__list">
+            {headings.filter((heading) => heading.depth > 1).map((heading) => (
+              <li class={`toc__item depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
+      <div class="content__block">
+        <div class="content__titlemeta">
+          <h1>{headings?.find((heading) => heading.depth === 1)?.text || title}</h1>
+          <span>by {author} ・ {readingTime || '5 minute read'}</span>
+        </div>
+        <article class="article">
+          <slot />
+        </article>
+      </div>
+
+      <div class="toc padder"></div>
+    </main>
+
+    <footer>CSARCH2 Virtual Exhibit &mdash; "Computer Architecture is Forever"</footer>
+  </body>
+</html>
+
+<style>
+  .article :global(h1:first-of-type) {
+    display: none;
+  }
+</style>

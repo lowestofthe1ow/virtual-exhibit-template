@@ -1,0 +1,26 @@
+---
+title: Bitwise OR
+mnemonic: OR
+opcode: '0101'
+symbol: '∨'
+category: logic
+summary: Sets each result bit when either matching input bit is 1.
+flagsAffected: [Z, N]
+order: 4
+scope: core
+---
+
+Bitwise OR runs one OR gate at every bit position. Each result bit becomes 1 when A, B, or both inputs are 1. Since positions do not depend on one another, all gates can resolve in parallel.
+
+## Truth table
+
+| A | B | A OR B |
+| - | - | ------ |
+| 0 | 0 | 0      |
+| 0 | 1 | 1      |
+| 1 | 0 | 1      |
+| 1 | 1 | 1      |
+
+## Where it is used
+
+OR is useful for setting selected bits without disturbing the others. ORing a byte with `00001111`, for example, guarantees that its lower four bits become 1.
