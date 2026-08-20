@@ -1,0 +1,329 @@
+<section id="background" class="background-section">
+  <div class="bg-intro container">
+    <p class="section-kicker"> <span class="text-gold">Apollo 11 / Background</span></p>
+    <h1 class="section-heading">Background of Apollo 11</h1>
+    <p class="bg-desc">
+      Before the 1202 alarm became a Mission Control decision, Apollo 11 was already deep into one of the most difficult phases of the mission: landing the Lunar Module Eagle on the Moon. This section introduces the mission, the descent, and the computer alarm that turned a historic landing into a real-time systems problem.
+    </p>
+  </div>
+  <div class="carousel-container">
+  <div class="carousel-viewport">
+    <div class="carousel-track" id="slide-track">
+      
+      <!-- Slide 1 -->
+      <div class="slide">
+        <div class="slide-wrapper">
+          <div class="info-box">
+            <img src="/virtual-exhibit-template/s03g9/astronauts.webp" alt="Apollo 11 Astronauts" class="slide-img" />
+            <div class="text-content">
+              <span class="slide-label">01 Mission</span>
+              <h2>MISSION CONTEXT</h2>
+              <p class="subtitle">The historic mission to land humans on the Moon.</p>
+              <p>
+                Apollo 11 is the American spaceflight mission to land humans on the Moon for the first time 
+                which launched on July 16, 1969 and returned to Earth on July 24, 1969.
+              </p>
+              <p>
+                After entering orbit, Armstrong and Aldrin entered the Lunar Module Eagle. 
+                They detached from the main command module and began their high stakes descent toward the Moon's surface.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="slide">
+        <div class="slide-wrapper">
+          <div class="info-box">
+            <img src="/virtual-exhibit-template/s03g9/eagle.webp" alt="Lunar Module Eagle during descent" class="slide-img" />
+            <div class="text-content">
+              <span class="slide-label">02 Descent</span>
+              <h2>THE PROBLEM APPEARS</h2>
+              <p class="subtitle">The 1202 alarm is flashing during the descent.</p>
+              <p>
+                As Eagle descended towards the surface, the Apollo Guidance Computer (AGC) suddenly began flashing a 1202 alarm warning to the astronauts.
+              </p>
+              <p>
+                This alarm indicated that the computer's processing core was heavily overloaded with data. 
+                The system was receiving more information than it could process while trying to manage the complex landing sequence.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide">
+        <div class="slide-wrapper">
+          <div class="info-box">
+            <img src="/virtual-exhibit-template/s03g9/landing.webp" alt="The Moon" class="slide-img" />
+            <div class="text-content">
+              <span class="slide-label">03 Alarm</span>
+              <h2>WHY THEY DIDN’T ABORT</h2>
+              <p class="subtitle">"Houston, Tranquility Base here, The Eagle has landed."</p>
+              <p>
+                Mission Control knew from pre-flight simulations that a 1202 alarm did not mean the AGC was broken and endangering the mission.
+              </p>
+              <p>
+                The AGC was automatically dropping low priority tasks to focus all of its processing power on keeping the module flying. 
+                Mission Control confidently made the call: GO.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="carousel-controls">
+    <button class="btn-prev" id="btn-prev">← PREV</button>
+    <button class="btn-next" id="btn-next">NEXT →</button>
+  </div>
+  </div>
+</section>
+
+<style>
+  *, *::before, *::after {
+  box-sizing: border-box;
+  }
+
+  .background-section {
+    padding: var(--space-2xl) 8%;
+    min-height: 80vh;
+  }
+
+  .bg-intro {
+    margin-bottom: var(--space-md);
+  }
+
+  .carousel-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    transition: transform 0.8s ease-in-out;
+    will-change: transform;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .slide-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  .info-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 3.5rem;
+    flex-grow: 1;
+    min-height: 440px;
+  }
+
+  .slide-img {
+    width: 42%;
+    max-width: 460px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+  }
+
+  .text-content {
+    flex: 1;
+  }
+
+  .slide-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--amber);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .bg-desc {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Static controls outside the sliding track */
+  .carousel-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 1.75rem auto 0;
+  }
+
+  .btn-prev, .btn-next {
+    padding: 0.8rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--primary-light);
+    border: 2px solid var(--primary-light);
+    transition: all 0.3s ease;
+    font-family: var(--font-heading);
+    letter-spacing: 0.08em;
+  }
+
+  .btn-prev:hover, .btn-next:hover {
+    background: color-mix(in srgb, var(--primary) 20%, transparent);
+    box-shadow: 0 0 14px rgba(124, 58, 237, 0.28);
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .background-section {
+      min-height: unset;
+      padding: var(--space-lg) 1.5rem;
+      overflow-x: hidden;
+    }
+
+    .bg-intro {
+      margin-bottom: var(--space-sm);
+    }
+
+    .info-box {
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 1.5rem;
+      text-align: left;
+      min-height: unset;
+      width: 100%;
+      box-sizing: border-box; 
+      overflow-wrap: break-word;
+    }
+
+    .text-content {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .slide-img {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 6vw, 2rem);
+    }
+
+    .carousel-controls {
+      gap: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .btn-prev, .btn-next {
+      flex: 1;
+      text-align: center;
+    }
+</style>
+
+<script>
+  const track   = document.getElementById('slide-track');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+
+  if (track && btnPrev && btnNext) {
+    const realSlides = Array.from(track.querySelectorAll('.slide'));
+    const totalReal  = realSlides.length; // 3
+
+    // Clone last → prepend (index 0), clone first → append (index 4)
+    // Final order: [Clone-Slide3, Slide1, Slide2, Slide3, Clone-Slide1]
+    // Next always increments index (moves track left), Prev always decrements (moves right).
+    const firstClone = realSlides[0].cloneNode(true);
+    const lastClone  = realSlides[totalReal - 1].cloneNode(true);
+    firstClone.setAttribute('aria-hidden', 'true');
+    lastClone.setAttribute('aria-hidden',  'true');
+    track.appendChild(firstClone);               // index totalReal + 1 (4)
+    track.insertBefore(lastClone, realSlides[0]); // index 0
+
+    let current = 1; // start on real Slide1
+    let busy    = false;
+
+    function goTo(index, animate) {
+      if (!animate) {
+        track.style.transition = 'none';
+        void track.offsetWidth; // force reflow so 'none' takes effect before transform changes
+      } else {
+        track.style.transition = 'transform 0.8s ease-in-out';
+      }
+      track.style.transform = `translateX(${index * -100}%)`;
+      current = index;
+    }
+
+    goTo(1, false); // initialise without animation
+
+    // After animated transition: if on a clone, snap silently to the real slide
+    track.addEventListener('transitionend', () => {
+      busy = false;
+      if (current === 0)             goTo(totalReal, false); // clone of last → real last
+      if (current === totalReal + 1) goTo(1,          false); // clone of first → real first
+    });
+
+    btnNext.addEventListener('click', () => {
+      if (busy) return;
+      busy = true;
+      goTo(current + 1, true); // always increments → track moves left → forward
+    });
+
+    btnPrev.addEventListener('click', () => {
+      if (busy) return;
+      busy = true;
+      goTo(current - 1, true); // always decrements → track moves right → backward
+    });
+  }
+</script>

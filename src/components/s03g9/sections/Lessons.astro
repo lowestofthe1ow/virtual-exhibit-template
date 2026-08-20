@@ -1,0 +1,316 @@
+---
+/**
+ * Lessons.astro
+ * Exhibit Section VI — "Lessons Learned"
+ *
+ * Static section. Scoped styles only (global.css is never touched).
+ *
+ * MOON (/moon.webp in public/):
+ *   PINNED on the LEFT (fixed, vertically centered, right-half showing) and
+ *   SPINS with scroll. It is CLIPPED to this section's on-screen bounds, so it
+ *   is cut off exactly at the top/bottom edges of Lessons and never bleeds over
+ *   the sections above or below. References carries an identical clipped moon,
+ *   so across the seam the two halves tile into one moon.
+ *
+ *   Structure: an unrotated WRAP does the clipping (clip-path updated on scroll
+ *   by the script); the inner IMG does the spinning (rotate). That keeps the cut
+ *   a straight horizontal line even while the moon rotates.
+ *
+ *   Spin: shared handler writes --moon-rot on :root. Down -> clockwise (right);
+ *   up -> counter-clockwise (left).
+ *
+ *   >>> The moon `width` MUST stay identical in LessonsLearned + References, and
+ *   the padding-left's 32vw/48vh/590px must equal HALF that width. <<<
+ *
+ * SECTION ID: id="lessons" matches the navbar anchor (#lessons).
+ */
+
+const lessons = [
+  {
+    index: "01",
+    tag: "Task scheduling",
+    title: "Prioritize, don't just process",
+    body: `A real-time system has to guarantee its most critical work finishes on time. The AGC's EXECUTIVE gave every job a priority and always ran the highest first, so guidance and engine control never lost CPU time to display updates. Priority-based scheduling is still how modern real-time and embedded systems stay safe under load.`,
+  },
+  {
+    index: "02",
+    tag: "Resource constraints",
+    title: "Good design beats raw power",
+    body: `With roughly a 2 MHz processor, 4 KB of RAM, and 72 KB of ROM, the AGC had less capability than a pocket calculator — yet it landed humans on the Moon. Efficient software architecture, not faster hardware, made that possible. Working well within tight resource limits is the heart of embedded design.`,
+  },
+  {
+    index: "03",
+    tag: "Error handling",
+    title: "Recover instead of crashing",
+    body: `When the AGC ran out of scheduling resources, it didn't halt. The BAILOUT restart routine shed low-priority jobs and reloaded critical tasks near where they left off. Graceful degradation and fault recovery keep a system running through an overload rather than letting one fault end the mission.`,
+  },
+  {
+    index: "04",
+    tag: "Reliability",
+    title: "Architecture is more than speed",
+    body: `Computer architecture is often judged by clock speed and throughput, but the AGC succeeded on reliability, scheduling, and recovery. A well-built system balances performance with fault tolerance and predictable timing — the same priorities that guide safety-critical design today.`,
+  },
+  {
+    index: "05",
+    tag: "Real-world impact",
+    title: "Systems design shapes real decisions",
+    body: `The 1201 and 1202 alarms weren't failures — they were the computer reporting a controlled overload. Because engineers understood the architecture, Mission Control could confidently call “GO.” How a system is designed, and how well its behavior is understood, directly shapes the decisions people make under pressure.`,
+  },
+];
+---
+
+<section id="lessons" class="lessons">
+  <div class="lessons__moon-wrap" aria-hidden="true">
+    <img class="lessons__moon" src="/virtual-exhibit-template/s03g9/moon.webp" alt="" />
+  </div>
+
+  <div class="lessons__inner">
+    <p class="section-kicker">Apollo 11 / Debrief</p>
+    <h1 class="section-heading">Lessons Learned</h1>
+    <p class="lessons__lede section-lede">
+      What a resource-starved 1960s computer still teaches us about building
+      systems that hold together under pressure.
+    </p>
+
+    <ol class="lessons__list">
+      {
+        lessons.map((lesson) => (
+          <li class="lesson">
+            <div class="lesson__index">{lesson.index}</div>
+            <div class="lesson__main">
+              <span class="lesson__tag">{lesson.tag}</span>
+              <h3 class="lesson__title">{lesson.title}</h3>
+              <p class="lesson__body">{lesson.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const start = () => {
+      const section = document.getElementById("lessons");
+      if (!section) return;
+
+      // Clip the pinned moon to this section's on-screen bounds so it is cut at
+      // the section edges and never bleeds into the sections above/below.
+      const wrap = section.querySelector(
+        ".lessons__moon-wrap",
+      ) as HTMLElement | null;
+      if (wrap) {
+        let clipTicking = false;
+        const clip = () => {
+          clipTicking = false;
+          const r = section.getBoundingClientRect();
+          const h = wrap.offsetHeight || 1;
+          const vh =
+            window.innerHeight || document.documentElement.clientHeight;
+          const wrapTop = vh / 2 - h / 2;
+          const wrapBottom = vh / 2 + h / 2;
+          const top = Math.min(Math.max(r.top - wrapTop, 0), h);
+          const bottom = Math.min(Math.max(wrapBottom - r.bottom, 0), h);
+          wrap.style.clipPath = `inset(${top}px 0px ${bottom}px 0px)`;
+        };
+        const onScrollClip = () => {
+          if (!clipTicking) {
+            clipTicking = true;
+            requestAnimationFrame(clip);
+          }
+        };
+        window.addEventListener("scroll", onScrollClip, { passive: true });
+        const updateClip = () => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                clip();
+                wrap.style.visibility = "visible";
+                wrap.style.opacity = "0.6";
+              });
+            });
+          });
+        };
+
+        window.addEventListener("load", updateClip);
+        window.addEventListener("resize", updateClip);
+
+        if (document.readyState === "complete") {
+          updateClip();
+        }
+        wrap.style.visibility = "visible";
+        wrap.style.opacity = "0.6";
+      }
+
+      // Shared moon scroll-spin — set up once, even though both sections ship it.
+      const moonState = window as any;
+      const reduce = moonState.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (!reduce && !moonState.__moonSpin) {
+        moonState.__moonSpin = true;
+        let rot = 0;
+        let lastY = moonState.scrollY || moonState.pageYOffset || 0;
+        let spinTicking = false;
+        const FACTOR = 0.1; // degrees of spin per pixel scrolled
+        const apply = () => {
+          const y = moonState.scrollY || moonState.pageYOffset || 0;
+          rot += (y - lastY) * FACTOR; // down -> clockwise, up -> counter-clockwise
+          lastY = y;
+          document.documentElement.style.setProperty("--moon-rot", rot + "deg");
+          spinTicking = false;
+        };
+        moonState.addEventListener(
+          "scroll",
+          () => {
+            if (!spinTicking) {
+              spinTicking = true;
+              requestAnimationFrame(apply);
+            }
+          },
+          { passive: true },
+        );
+      }
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start);
+    } else {
+      start();
+    }
+  })();
+</script>
+
+<style>
+  .lessons {
+    position: relative;
+    isolation: isolate; /* confines the fixed moon's stacking to this section */
+    background: rgba(6, 6, 15, 0.78); /* match --bg-primary base so color is consistent with rest of page */
+    scroll-margin-top: 96px; /* offset for the fixed navbar */
+
+    /* Content box spans from the moon's right edge to the screen's right edge;
+       the inner block is centered inside it (margin: auto), so the text sits in
+       the MIDDLE of the space to the right of the moon.
+       Keep 32vw/48vh/590px equal to HALF the moon width (64vw/96vh/1180px). */
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+    padding-left: calc(min(32vw, 48vh, 590px) + 2rem);
+    padding-right: 2rem;
+  }
+
+  .lessons__inner {
+    position: relative;
+    z-index: 1; /* above the moon */
+    max-width: 52rem;
+    margin-inline: auto; /* centers the text in the space right of the moon */
+  }
+
+  .lessons__title {
+    margin-bottom: var(--space-sm);
+  }
+
+  .lessons__lede {
+    max-width: 48ch;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ---- Flat debrief list: no cards, no glow, just hairline dividers ---- */
+  .lessons__list {
+    list-style: none;
+  }
+
+  .lesson {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md);
+    align-items: start;
+    padding: var(--space-md) 0;
+    border-top: 1px solid color-mix(in srgb, var(--primary-light) 22%, var(--border));
+  }
+
+  .lesson__index {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: var(--fw-bold);
+    line-height: 1;
+    color: var(--text-muted);
+    transition: color var(--transition);
+  }
+
+  .lesson:hover .lesson__index {
+    color: var(--amber);
+  }
+
+  .lesson__tag {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary-light);
+    margin-bottom: 0.4rem;
+  }
+
+  .lesson__title {
+    font-size: 1.35rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .lesson__body {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  /* PINNED moon wrapper (does the clipping; no rotation).
+     Default clip = fully hidden until the script measures the section bounds.
+     width MUST match References.astro. */
+  .lessons__moon-wrap {
+    position: fixed;
+    z-index: 0;
+    left: 0;
+    top: 50%;
+    width: min(64vw, 96vh, 1180px);
+    height: auto;
+    transform: translate(-50%, -50%);
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+    clip-path: inset(50% 0px 50% 0px);
+  }
+
+  /* The image spins; the wrapper clips it. */
+  .lessons__moon {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: rotate(var(--moon-rot, 0deg));
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lessons__moon {
+      transform: none; /* no spin under reduced motion */
+    }
+  }
+
+  @media (max-width: 760px) {
+    .lessons {
+      padding-left: 7%;
+      padding-right: 7%;
+    }
+    .lesson {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+    .lessons__moon-wrap {
+      width: min(88vw, 62vh, 560px);
+      opacity: 0.14;
+    }
+  }
+</style>

@@ -1,0 +1,477 @@
+---
+/**
+ * References.astro
+ * Exhibit Section VII — "References"
+ *
+ * Static section, scoped styles only (global.css untouched).
+ *
+ * MOON: identical PINNED + SPINNING + CLIPPED moon as LessonsLearned.astro.
+ *   It is clipped to THIS section's on-screen bounds, so it is cut at the top of
+ *   References (continuing the Lessons half at the seam) and at the bottom, and
+ *   never bleeds into the section below.
+ *   >>> Keep the moon `width` identical to LessonsLearned.astro. <<<
+ *
+ * >>> HOW TO ADD YOUR SOURCES <<<
+ * Each source is one object inside a group's `items` array:
+ *   {
+ *     authors: "Averill, C.",
+ *     year: "2021",
+ *     title: "A brief analysis of the Apollo Guidance Computer.",
+ *     source: "arXiv.",                          // optional
+ *     url: "https://arxiv.org/pdf/2201.08230",   // optional; renders as a link
+ *   }
+ *
+ * Sources are split into three tiers, strongest first:
+ *   1. NASA & primary sources   — mission records, NASA, original AGC material
+ *   2. Technical references     — peer-reviewed / architecture analyses
+ *   3. Supporting articles      — secondary explainers and context
+ * Drop each new source into the right group; items auto-sort alphabetically by
+ * `authors` within their group, and the [n] numbers run continuously top-to-bottom.
+ *
+ * SECTION ID: id="references" matches the navbar anchor (#references).
+ */
+
+const referenceGroups = [
+  {
+    label: "NASA & Primary Sources",
+    items: [
+      {
+        authors: "Adler, P.",
+        year: "1998",
+        title: "Apollo 11 Lunar Surface Journal: Program Alarms.",
+        source: "NASA.",
+        url: "https://www.nasa.gov/wp-content/uploads/static/history/alsj/a11/a11.1201-pa.html",
+      },
+      {
+        authors: "MIT Instrumentation Laboratory",
+        year: "n.d.",
+        title: "Apollo Guidance Computer Documentation.",
+        source: "ibiblio Apollo Guidance Computer Archive.",
+        url: "https://www.ibiblio.org/apollo/",
+      },
+      {
+        authors: "NASA",
+        year: "2025",
+        title: "Apollo 11 Mission Overview.",
+        source: "NASA.",
+        url: "https://www.nasa.gov/mission/apollo-11/",
+      },
+      {
+        authors: "NASA",
+        year: "n.d.",
+        title: "The Apollo Lunar Surface Journal and Apollo Flight Journal.",
+        source: "NASA.",
+        url: "https://www.hq.nasa.gov/alsj/",
+      },
+      {
+        authors: "NASA History Division",
+        year: "n.d.",
+        title: "Apollo 11 Lunar Surface Journal.",
+        source: "NASA History.",
+        url: "https://history.nasa.gov/alsj/a11/a11.html",
+      },
+      {
+        authors: "NASA Science",
+        year: "n.d.",
+        title: "Margaret Hamilton.",
+        source: "NASA Science.",
+        url: "https://science.nasa.gov/people/margaret-hamilton/",
+      },
+      {
+        authors: "Virtual AGC",
+        year: "n.d.",
+        title: "Luminary099: Apollo Lunar Module Guidance Computer Software.",
+        source: "GitHub.",
+        url: "https://github.com/virtualagc/virtualagc/tree/master/Luminary099",
+      },
+    ],
+  },
+  {
+    label: "Technical References",
+    items: [
+      {
+        authors: "Averill, C.",
+        year: "2021",
+        title: "A Brief Analysis of the Apollo Guidance Computer.",
+        source: "arXiv.",
+        url: "https://arxiv.org/pdf/2201.08230",
+      },
+      {
+        authors: "GeeksforGeeks",
+        year: "2022",
+        title: "Preemptive Priority CPU Scheduling Algorithm.",
+        source: "GeeksforGeeks.",
+        url: "https://www.geeksforgeeks.org/operating-systems/preemptive-priority-cpu-scheduling-algortithm/",
+      },
+      {
+        authors: "Mattioli, M.",
+        year: "2021",
+        title: "Apollo Guidance Computer.",
+        source: "IEEE Micro, 41(6).",
+        url: "https://www.computer.org/csdl/magazine/mi/2021/06/09623432/1yJTxgRWQgg",
+      },
+      {
+        authors: "Shirriff, K.",
+        year: "2019",
+        title:
+          "A Computer Built from NOR Gates: Inside the Apollo Guidance Computer.",
+        source: "Righto.",
+        url: "https://www.righto.com/2019/09/",
+      },
+    ],
+  },
+  {
+    label: "Supporting Articles",
+    items: [
+      {
+        authors: "Kutner, J.",
+        year: "2019",
+        title: "We're Go On That Alarm: Inside the Apollo Operating System.",
+        source: "Software's Giant Leap (Medium).",
+        url: "https://medium.com/softwares-giant-leap/were-go-on-that-alarm-inside-the-apollo-operating-system-8d753e7a1e17",
+      },
+      {
+        authors: "Royal Museums Greenwich",
+        year: "n.d.",
+        title: "Apollo 11 Moon landing: minute by minute.",
+        source: "Royal Museums Greenwich.",
+        url: "https://www.rmg.co.uk/stories/topics/apollo-11-moon-landing-minute-minute",
+      },
+    ],
+  },
+];
+
+// Sort each group alphabetically by author; preserve group order.
+const sortedGroups = referenceGroups.map((group) => ({
+  label: group.label,
+  items: [...group.items].sort((a, b) => a.authors.localeCompare(b.authors)),
+}));
+
+const totalRefs = sortedGroups.reduce((n, g) => n + g.items.length, 0);
+---
+
+<section id="references" class="references">
+  <div class="references__moon-wrap" aria-hidden="true">
+    <img class="references__moon" src="/virtual-exhibit-template/s03g9/moon.webp" alt="" />
+  </div>
+
+  <div class="references__inner">
+    <p class="section-kicker">Apollo 11 / Sources</p>
+    <h1 class="section-heading">References</h1>
+    <p class="references__lede section-lede">
+      Sources consulted for the historical account and the computer-architecture
+      explanations in this exhibit.
+    </p>
+
+    {
+      totalRefs === 0 ? (
+        <p class="references__empty">References will be listed here.</p>
+      ) : (
+        <div class="references__list">
+          {sortedGroups.map(
+            (group) =>
+              group.items.length > 0 && (
+                <div class="references__group">
+                  <h2 class="references__group-title">{group.label}</h2>
+                  <ol class="references__group-list">
+                    {group.items.map((ref) => (
+                      <li class="reference">
+                        <span class="reference__authors">{ref.authors}</span>
+                        {ref.year && (
+                          <span class="reference__year"> ({ref.year}).</span>
+                        )}
+                        <span class="reference__ref-title"> {ref.title}</span>
+                        {ref.source && (
+                          <span class="reference__source"> {ref.source}</span>
+                        )}
+                        {ref.url && (
+                          <>
+                            {" "}
+                            <a
+                              class="reference__link"
+                              href={ref.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {ref.url}
+                            </a>
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ),
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  (() => {
+    interface Window {
+      __moonSpin?: boolean;
+    }
+
+    const start = () => {
+      const section = document.getElementById("references");
+      if (!section) return;
+
+      const wrap = section.querySelector<HTMLElement>(".references__moon-wrap");
+      if (wrap) {
+        let clipTicking = false;
+        const clip = () => {
+          clipTicking = false;
+          const r = section.getBoundingClientRect();
+          const h = wrap.offsetHeight || 1;
+          const vh =
+            window.innerHeight || document.documentElement.clientHeight;
+          const wrapTop = vh / 2 - h / 2;
+          const wrapBottom = vh / 2 + h / 2;
+          const top = Math.min(Math.max(r.top - wrapTop, 0), h);
+          const bottom = Math.min(Math.max(wrapBottom - r.bottom, 0), h);
+          wrap.style.clipPath = `inset(${top}px 0px ${bottom}px 0px)`;
+        };
+        const onScrollClip = () => {
+          if (!clipTicking) {
+            clipTicking = true;
+            requestAnimationFrame(clip);
+          }
+        };
+        window.addEventListener("scroll", onScrollClip, { passive: true });
+        const updateClip = () => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                clip();
+                wrap.style.visibility = "visible";
+                wrap.style.opacity = "0.6";
+              });
+            });
+          });
+        };
+
+        window.addEventListener("load", updateClip);
+        window.addEventListener("resize", updateClip);
+
+        if (document.readyState === "complete") {
+          updateClip();
+        }
+        wrap.style.visibility = "visible";
+        wrap.style.opacity = "0.6";
+      }
+
+      // Shared moon scroll-spin — set up once (guarded by window.__moonSpin).
+      const moonWindow = window;
+      const moonState = moonWindow as Window & { __moonSpin?: boolean };
+      const reduce = moonWindow.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (!reduce && !moonState.__moonSpin) {
+        moonState.__moonSpin = true;
+        let rot = 0;
+        let lastY = moonWindow.scrollY || moonWindow.pageYOffset || 0;
+        let spinTicking = false;
+        const FACTOR = 0.1; // degrees of spin per pixel scrolled
+        const apply = () => {
+          const y = moonWindow.scrollY || moonWindow.pageYOffset || 0;
+          rot += (y - lastY) * FACTOR; // down -> clockwise, up -> counter-clockwise
+          lastY = y;
+          document.documentElement.style.setProperty("--moon-rot", rot + "deg");
+          spinTicking = false;
+        };
+        moonWindow.addEventListener(
+          "scroll",
+          () => {
+            if (!spinTicking) {
+              spinTicking = true;
+              requestAnimationFrame(apply);
+            }
+          },
+          { passive: true },
+        );
+      }
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start);
+    } else {
+      start();
+    }
+  })();
+</script>
+
+<style>
+  .references {
+    position: relative;
+    isolation: isolate; /* confines the fixed moon's stacking to this section */
+    background: rgba(6, 6, 15, 0.78); /* match --bg-primary base so color is consistent with rest of page */
+    scroll-margin-top: 96px; /* offset for the fixed navbar */
+
+    /* Text centered in the space to the right of the moon — matches Lessons.
+       Keep 32vw/48vh/590px equal to HALF the moon width. */
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+    padding-left: calc(min(32vw, 48vh, 590px) + 2rem);
+    padding-right: 2rem;
+  }
+
+  .references__inner {
+    position: relative;
+    z-index: 1; /* above the moon */
+    max-width: 52rem;
+    margin-inline: auto; /* centers the text in the space right of the moon */
+  }
+
+  .references__title {
+    margin-bottom: var(--space-sm);
+  }
+
+  .references__lede {
+    max-width: 52ch;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+  }
+
+  .references__empty {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .references__list {
+    counter-reset: ref;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  .references__group {
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+  }
+
+  .references__group-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 0.75rem; /* kill inherited h2 top margin — the real cause of the gap */
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  /* Trailing rule so each tier reads as its own block. */
+  .references__group-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .references__group-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .reference {
+    position: relative;
+    padding-left: 2.5rem; /* hanging-indent look */
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid color-mix(in srgb, var(--primary-light) 22%, var(--border));
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .reference:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .reference::before {
+    counter-increment: ref;
+    content: "[" counter(ref) "]";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--amber);
+  }
+
+  .reference__authors {
+    color: var(--text-primary);
+    font-weight: var(--fw-medium);
+  }
+
+  .reference__ref-title {
+    font-style: italic;
+  }
+
+  .reference__link {
+    color: var(--primary-light);
+    text-decoration: none;
+    word-break: break-word;
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color var(--transition),
+      color var(--transition);
+  }
+
+  .reference__link:hover,
+  .reference__link:focus-visible {
+    color: var(--text-primary);
+    border-bottom-color: var(--primary-light);
+  }
+
+  /* PINNED moon wrapper (clips; no rotation) — width MUST match LessonsLearned. */
+  .references__moon-wrap {
+    position: fixed;
+    z-index: 0;
+    left: 0;
+    top: 50%;
+    width: min(64vw, 96vh, 1180px);
+    height: auto;
+    transform: translate(-50%, -50%);
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+    clip-path: inset(50% 0px 50% 0px);
+  }
+
+  .references__moon {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: rotate(var(--moon-rot, 0deg));
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .references__moon {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .references {
+      padding-left: 7%;
+      padding-right: 7%;
+    }
+    .references__moon-wrap {
+      width: min(88vw, 62vh, 560px);
+      opacity: 0.14;
+    }
+  }
+</style>

@@ -1,0 +1,235 @@
+<section id="hero" class="hero-section">
+  <div class="content-left">
+    <h1>
+      <span class="go">GO</span> or <span class="abort">ABORT</span>:<br/>
+      The Apollo 11 1202 Alarm
+    </h1>
+    <p>
+      A virtual exhibit about how the Apollo Guidance Computer survived overload during the Moon landing, and why Mission Control still chose GO.
+    </p>
+    
+    <div class="button-group">
+      <button id="btn-initiate" class="btn-primary">INITIATE LAUNCH</button>
+      
+      <a href="#interactive" class="btn-secondary">START SIMULATION</a>
+    </div>
+  </div>
+
+  <div class="content-right">
+    <div class="rocket-wrapper" id="rocket-wrapper">
+      <img 
+        id="rocket" 
+        src="/virtual-exhibit-template/s03g9/rocket.webp" 
+        alt="Apollo 11 Rocket Launch" 
+      />
+      <div id="smoke"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80vh;
+    padding: 0 4rem;
+    
+    /* Purple nebula glow only — global body provides the star field */
+    background-image:
+      radial-gradient(circle at 30% 50%, #13133A, transparent 40%),
+      radial-gradient(circle at 55% 30%, #13133A, transparent 40%);
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  .content-left {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .content-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .go { color: #F5C800; }
+  .abort { color: #7C3AED; }
+
+  p {
+    font-size: 1.1rem;
+    color: #EBE8F4;
+    margin-bottom: 2rem;
+    max-width: 80%;
+    line-height: 1.5;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background-color: #7C3AED;
+    color: white;
+    border: none;
+    box-shadow: 0 0 10px #A78BFA;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px #A78BFA;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: #A78BFA;
+    border: 2px solid #A78BFA;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-secondary:hover {
+    background-color: #13133A;
+  }
+
+  .rocket-wrapper {
+    overflow: visible;
+    position: relative; 
+    transition: transform 2.5s ease-in; 
+  }
+
+  .launch-animation {
+    transform: translateY(-1500px); 
+  }
+
+  #rocket {
+    width: 450px;
+    border-radius: 8px;
+    transition: filter 0.3s ease;
+    z-index: 2;
+    position: relative;
+  }
+
+  .ignition {
+    animation: shake-glow 0.3s ease-in-out infinite;
+  }
+
+  @keyframes shake-glow {
+    0% { transform: translate(1px, 1px) rotate(0deg); filter: drop-shadow(0 0 15px #F5C800); }
+    25% { transform: translate(-2px, -2px) rotate(-1deg); filter: drop-shadow(0 0 25px #F5C800); }
+    50% { transform: translate(-3px, 0px) rotate(1deg); filter: drop-shadow(0 0 35px #FC0340); }
+    75% { transform: translate(3px, 2px) rotate(0deg); filter: drop-shadow(0 0 25px #F5C800); }
+    100% { transform: translate(1px, -1px) rotate(0deg); filter: drop-shadow(0 0 15px #F5C800); }
+  }
+
+  #smoke {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, #EBE8F4 0%, transparent 50%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .smoke-active {
+    animation: expand-smoke 1.5s ease-out forwards;
+  }
+
+  @keyframes expand-smoke {
+    0% { transform: translateX(-50%) scale(0.5); opacity: 1; }
+    100% { transform: translateX(-50%) scale(3.5); opacity: 0; } 
+  }
+
+  /* For mobile users */
+  @media (max-width: 900px) {
+    .hero-section {
+      /* Vertical stacking for text and image */
+      flex-direction: column; 
+      justify-content: center;
+      padding: 6rem 1.5rem 3rem 1.5rem; 
+      text-align: left; 
+    }
+
+    .content-left {
+      max-width: 100%; 
+      width: 100%;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem); 
+      word-wrap: break-word;
+    }
+
+    p {
+      max-width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .button-group {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn-primary, .btn-secondary {
+      width: 100%; 
+    }
+
+    .content-right {
+      width: 100%;
+      margin-top: 2rem;
+    }
+
+    #rocket {
+      margin: 0 auto; 
+      display: block;
+      width: 100%;
+      max-width: 400px; 
+    }
+  }
+</style>
+
+<script>
+  const initiateBtn = document.getElementById('btn-initiate');
+  const rocket = document.getElementById('rocket');
+  const rocketWrapper = document.getElementById('rocket-wrapper');
+  const smoke = document.getElementById('smoke');
+
+  initiateBtn?.addEventListener('click', () => {
+    // Ignition sequence
+    rocket?.classList.add('ignition');
+    smoke?.classList.add('smoke-active');
+
+    // Liftoff
+    setTimeout(() => {
+      rocket?.classList.remove('ignition'); 
+      rocketWrapper?.classList.add('launch-animation'); 
+    }, 800); 
+
+    // Scroll timing
+    setTimeout(() => {
+      document.getElementById('background')?.scrollIntoView({ behavior: 'smooth' });
+    }, 3000); 
+  });
+</script>

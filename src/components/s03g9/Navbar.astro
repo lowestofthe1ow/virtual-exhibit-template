@@ -1,0 +1,59 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <a href="#hero" class="logo"> Apollo 11 </a>
+
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#background">Background</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#interactive">Simulation</a></li>
+      <li><a href="#lessons">Lessons</a></li>
+      <li><a href="#references">References</a></li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navLinks");
+
+  toggle?.addEventListener("click", () => {
+    nav?.classList.toggle("open");
+
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!expanded));
+  });
+
+
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav?.classList.remove("open");
+      toggle?.setAttribute("aria-expanded", "false");
+    });
+  });
+</script>
+
+<style>
+  /* widen the navbar so it matches the new full-width layout */
+  .navbar-container {
+    width: min(1520px, 96vw);
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 2.5vw, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+</style>

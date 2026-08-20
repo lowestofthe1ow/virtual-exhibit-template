@@ -1,0 +1,18 @@
+---
+// Import your dynamic interactive React timeline component
+import ConstellationTimeline from "./timeline/ConstellationTimeline.jsx";
+---
+
+<section id="timeline">
+  <div class="container" style="padding: var(--space-md) 0;">
+    <p class="section-kicker">Apollo 11 / Timeline</p>
+    <h1 class="section-heading">The Problem Timeline</h1>
+
+    <p>
+      Trace the critical events of the 1202 alarm sequence. Click each flashing
+      star sequentially to follow the spacecraft's descent.
+    </p>
+
+    <ConstellationTimeline client:load />
+  </div>
+</section>
