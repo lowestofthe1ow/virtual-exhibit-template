@@ -1,0 +1,65 @@
+/* umbrella integration: v3 -> v4 Tailwind migration for s03g3.
+ *
+ * The original repo wired Tailwind via the `@astrojs/tailwind` integration
+ * with its default `applyBaseStyles: true` and no `src/styles/tailwind.css`
+ * of its own — the three `@tailwind base/components/utilities` directives
+ * were injected automatically by the integration rather than written
+ * anywhere in this repo's `src/`. There is nothing to literally replace;
+ * this file is the umbrella-era stand-in for that auto-injected entry.
+ *
+ * The original `tailwind.config.mjs` set `corePlugins: { preflight: false }`
+ * itself, so this exhibit already ran without Tailwind's base reset in v3 —
+ * matching tailwind-scoped.css's own no-preflight design exactly. No
+ * preflight re-add is needed here (contrast s05g3/s01g6/s01g9, which DID
+ * depend on preflight and had to re-add scoped rules).
+ *
+ * theme.extend tokens from tailwind.config.mjs, namespaced with the s03g3
+ * slug so they cannot collide with any other exhibit's tokens:
+ */
+@import "../tailwind-scoped.css";
+
+@theme {
+  --color-s03g3-space: #050505;   /* Deep Space Black — page background */
+  --color-s03g3-ghost: #F8F8FF;   /* Ghost White — primary text */
+  --color-s03g3-ash: #D3D3D3;     /* Light Ash — secondary text */
+  --color-s03g3-orange: #fa6602;  /* Vibrant Orange — accent / headers / HUD */
+  --color-s03g3-alert: #E63946;   /* Alert Red — warnings / "something went wrong" */
+  --color-s03g3-crt: #33ff66;     /* Phosphor green — terminal / mini-game screen */
+
+  --font-s03g3-display: "Monument Extended", system-ui, sans-serif;
+  --font-s03g3-sans: "Roboto Mono Variable", ui-monospace, monospace;
+  --font-s03g3-mono: "Roboto Mono Variable", ui-monospace, monospace;
+  --font-s03g3-term: "Share Tech Mono", "Roboto Mono Variable", monospace;
+
+  --animate-s03g3-blink: s03g3-blink 1s step-end infinite;
+  --animate-s03g3-scanline: s03g3-scanline 6s linear infinite;
+  --animate-s03g3-flicker: s03g3-flicker 3s steps(12) infinite;
+  --animate-s03g3-drift: s03g3-drift 200s linear infinite;
+  --animate-s03g3-pulse2: s03g3-pulse2 2.2s ease-in-out infinite;
+  --animate-s03g3-slow-rotate: s03g3-slow-rotate 45s linear infinite;
+}
+
+@keyframes s03g3-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes s03g3-scanline {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+@keyframes s03g3-flicker {
+  0%, 100% { opacity: .96; }
+  50% { opacity: .88; }
+}
+@keyframes s03g3-drift {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to { background-position: -400px 400px, 300px -300px, -200px -200px; }
+}
+@keyframes s03g3-pulse2 {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+@keyframes s03g3-slow-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
