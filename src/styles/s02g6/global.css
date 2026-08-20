@@ -1,0 +1,77 @@
+@import "../tailwind-scoped.css";
+@import "leaflet/dist/leaflet.css";
+
+/* Header & Body defaults */
+h1, h2, h3 {
+  font-family: "Space Mono", monospace;
+}
+
+body {
+  font-family: "Manrope", system-ui, sans-serif;
+}
+
+/* Background style */
+body {
+  background-color: #0b1d3a;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(206, 17, 38, 0.15), transparent 40%),
+    radial-gradient(circle at 85% 10%, rgba(252, 209, 22, 0.12), transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(0, 56, 168, 0.25), transparent 50%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.015) 0px,
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Philippine-themed slider */
+.ph-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #0038A8, #CE1126);
+  outline: none;
+}
+
+.ph-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FCD116;
+  border: 3px solid #0038A8;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.ph-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.ph-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FCD116;
+  border: 3px solid #0038A8;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.ph-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+.ph-slider::-moz-range-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: transparent;
+}

@@ -1,0 +1,34 @@
+---
+import Quiz from "../../components/s02g6/Quiz.jsx";
+import "../../styles/s02g6/global.css";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Philippine Computing Knowledge Challenge</title>
+  </head>
+
+  <body>
+
+    <div class="max-w-6xl mx-auto px-6 py-10">
+
+      <a
+        href="/virtual-exhibit-template/s02g6/"
+        class="inline-block mb-8 text-cyan-300 hover:text-white transition"
+      >
+        ← Return to Interactive Museum
+      </a>
+
+      <h1 class="text-5xl font-bold text-center text-white mb-10">
+        Philippine Computing Knowledge Challenge
+      </h1>
+
+      <Quiz client:only="react" />
+
+    </div>
+
+  </body>
+</html>
