@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --agc-bg: #0a1a2f;
+  --agc-text: #f2ead9;
+  --agc-accent: #b8860b;
+  --agc-radius: 8px; 
+  --transition-timing: cubic-bezier(0.25, 1, 0.5, 1);
+  --speed: 0.5s;
+}
+
+.timeline-container {
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.timeline-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 440px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+  padding-top: 40px; 
+}
+
+.timeline-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* axis line*/
+.timeline-axis-line {
+  position: absolute;
+  top: 55%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(184, 134, 11, 0.15);
+  z-index: 1;
+}
+
+/* rocket and moon*/
+.timeline-progress-track {
+  position: absolute;
+  top: 15px; 
+  left: 100px;
+  right: 100px;
+  height: 4px;
+  background-color: rgba(184, 134, 11, 0.15);
+  border-radius: 2px;
+  z-index: 10;
+}
+
+.timeline-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--agc-accent);
+  border-radius: 2px;
+  transition: width var(--speed) var(--transition-timing);
+  box-shadow: 0 0 10px #f2ead9;
+}
+
+.timeline-rocket-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  font-size: 2.2rem;
+  z-index: 15;
+  transition: left var(--speed) var(--transition-timing);
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.timeline-progress-node {
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  background-color: rgba(184, 134, 11, 0.3);
+  border: 3px solid rgba(184, 134, 11, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all var(--speed) var(--transition-timing);
+  z-index: 12;
+  cursor: pointer;
+  padding: 0;
+}
+
+.timeline-progress-node:hover {
+  transform: translate(-50%, -50%) scale(1.3);
+  border-color: var(--agc-accent);
+}
+
+.timeline-progress-node.node-active {
+  background-color: var(--agc-accent);
+  border-color: var(--agc-accent);
+  box-shadow: 0 0 12px rgba(184, 134, 11, 0.8);
+}
+
+.timeline-progress-node.node-moon {
+  width: 22px;
+  height: 22px;
+  background: #11223f;
+  border: 2px solid var(--agc-accent);
+}
+
+.moon-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+}
+
+
+/*cards*/
+.timeline-card {
+  position: absolute;
+  width: 320px; 
+  height: 260px; 
+  background-color: var(--agc-bg);
+  border-radius: var(--agc-radius);
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  opacity: 0;
+  overflow: hidden;
+  transform: scale(0.6) translateX(0);
+  transition: transform var(--speed) var(--transition-timing), 
+              opacity var(--speed) var(--transition-timing),
+              box-shadow var(--speed) var(--transition-timing),
+              filter var(--speed) var(--transition-timing);
+}
+
+.card-year-header {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.6rem; 
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  background: var(--agc-bg);
+  color: #f2ead9;
+  border-bottom: 1px solid var(--agc-accent);
+}
+
+.card-image-frame {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.card-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s;
+}
+
+.timeline-card.card-active {
+  transform: scale(1) translateX(0);
+  opacity: 1;
+  z-index: 5;
+  box-shadow: 10px 10px 0px var(--agc-accent);
+  filter: grayscale(0%);
+}
+
+.timeline-card.card-active img {
+  opacity: 1;
+}
+
+/*prev and next cards */
+.timeline-card.card-prev {
+  transform: scale(0.85) translateX(-320px); 
+  opacity: 0.5;
+  z-index: 3;
+  cursor: pointer;
+  filter: grayscale(100%);
+}
+
+.timeline-card.card-next {
+  transform: scale(0.85) translateX(320px); 
+  opacity: 0.5;
+  z-index: 3;
+  cursor: pointer;
+  filter: grayscale(100%);
+}
+
+.timeline-card.card-prev:hover,
+.timeline-card.card-next:hover {
+  opacity: 0.8;
+  filter: grayscale(50%); 
+}
+
+.timeline-card.card-hidden {
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* nav arrows */
+.nav-arrow {
+  position: absolute;
+  top: 55%; 
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--agc-bg);
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.nav-arrow:hover {
+  background-color: var(--agc-accent);
+  border-color: var(--agc-accent);
+  color: var(--agc-bg);
+  box-shadow: 0 0 12px rgba(184, 134, 11, 0.4);
+}
+
+.nav-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.arrow-left { left: calc(50% - 340px); }
+.arrow-right { right: calc(50% - 340px); }
+
+/* details panel */
+.timeline-details-panel {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--agc-bg);
+  color: var(--agc-text);
+  border: 1px solid var(--agc-accent);
+  border-radius: var(--agc-radius);
+  padding: 2rem;
+  margin: 10px auto 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.details-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 1px dashed var(--agc-accent);
+  padding-bottom: 0.5rem;
+}
+
+.details-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  color: rgba(242, 234, 217, 0.9); 
+  text-align: left;
+  line-height: 1.7;
+}
+
+.agc-cardButton {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--agc-accent);
+  color: var(--agc-bg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.agc-cardButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 0px rgba(242, 234, 217, 0.5);
+}
+
+.back-button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 2rem;
+}
+
+@media (min-width: 1100px) {
+  .content:not(:has(> nav.toc)) .content__block {
+    flex: none;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .content:not(:has(> nav.toc)) .toc.padder {
+    display: none;
+  }
+}
+
+html {
+  background-image:
+    linear-gradient(rgba(10, 15, 25, 0.6), rgba(10, 15, 25, 0.75)),
+    var(--custom-html-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.header__titleblock,
+.content__titlemeta,
+.article {
+  background: rgba(53, 46, 36, 0.807);
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  color: #f0ead6;
+  box-shadow: 5px 5px rgba(159, 106, 41, 0.4);
+}
+
+.header__titleblock strong,
+.content__titlemeta h1 {
+  color: #f0ead6;
+}
+
+.header__subtitle,
+.content__titlemeta span {
+  color: #c9c4b8;
+}
+
+.references {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  overflow: hidden; 
+  padding-top: 35px;
+}
+
+.references h2 {
+  font-family: inherit;
+  font-weight: bold;
+  color: #f0ead6;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.4);
+}
+
+.references p,
+.references li,
+.references div {
+  font-family: inherit;
+  font-weight: bold;
+  color: #d8d4c8;
+}
+
+.references a,
+.references a:visited {
+  color: #7fb3e0;
+}
+
+.references a:hover {
+  color: #c9a961;
+}
+
+/* transition */
+body{
+    animation: pageIn .4s ease;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}

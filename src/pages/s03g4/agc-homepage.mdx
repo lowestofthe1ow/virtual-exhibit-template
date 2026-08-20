@@ -1,0 +1,188 @@
+---
+layout: ../../layouts/ExhibitLayout.astro
+title: "Inside the Apollo Guidance Computer: The Technology That Took Us to the Moon"
+description: "How a 1960s computer helped land humans on the Moon."
+author: "ALCASID, Aizy Danielle; DIMAUNAHAN, Chelsea Jei; PANGAN, Aaliyah Maxine Rochelle; ROA, Luis Antonio; SANIDAD, Christian Gabriel"
+readingTime: "7 minutes"
+---
+
+import '../../styles/s03g4/global.css';
+import '../../styles/s03g4/agc_homepage.css';
+import apollo11_nasa from '../../assets/s03g4/apollo11_nasa.webp';
+import dsky_agc from '../../assets/s03g4/dsky_agc.webp';
+import apollo17_rover from '../../assets/s03g4/apollo17_rover.webp';
+import TermTooltip from '../../components/s03g4/TermTooltip.astro';
+import AGCminigame from '../../components/s03g4/AGCminigame.jsx';
+
+# The Apollo Guidance Computer
+<img class="header-image" src={apollo17_rover.src} alt="Apollo 17 Rover" />
+
+<div class="mission-log">
+  MISSION LOG 01
+</div>
+
+## Introduction
+<div class="intro-panel">
+
+    {/* IMAGE: Apollo 11 */}
+    <div class="agc-image">
+        <img src={apollo11_nasa.src} alt="Apollo 11 Rocket Launch" />
+        <p class="caption"> Apollo 11 Rocket Launch. <a href="https://www.nasa.gov/mission/apollo-11/">Source: NASA</a></p>
+    </div>
+
+    <div>
+        The Apollo Guidance Computer (AGC) was developed by the MIT Instrumentation Laboratory between 1961 and 1972. The AGC was one of the first computers to 
+        rely on integrated circuits, which allowed it to meet the strict size, weight, and power restrictions required for the Apollo missions while maintaining 
+        the reliability needed for mission operations.
+
+        This push for miniaturization and dependability set new standards for digital computing. The innovations born from the AGC did not stay on the Moon. 
+        Many of the technologies and design principles pioneered by the AGC later influenced modern smartphones, aircraft systems, and medical devices.
+    </div>
+
+</div>
+
+<div class="mission-log">
+  MISSION LOG 02
+</div>
+## All About the Apollo Guidance Computer (AGC)
+<div>
+
+  <div class="info-block">
+    <h3>Architecture & Memory</h3>
+
+    {/* IMAGE: AGC */}
+    <div class="agc-image">
+      <img src={dsky_agc.src} alt="The Apollo Guidance Computer" />
+      <p class="caption">Apollo Guidance Computer. <a href="https://apollojournals.org/afj/compessay.html">Source: Apollo Flight Journal</a></p>
+    </div>
+
+    Developed by the MIT Instrumentation Laboratory, the _**Apollo Guidance Computer**_ was the first computer built with <TermTooltip term="integrated circuits" info="Multiple transistors and other components combined onto a single small chip. This is what let the AGC be small and light enough for a spacecraft, instead of filling a whole room like earlier computers." /> and used <TermTooltip term="core memory" info="A type of memory made from tiny magnetized rings called cores. The AGC used it as erasable memory for data that changed during flight, an early version of what RAM does today." /> as well as 
+    read-only <TermTooltip term="magnetic rope memory" info="A read-only memory woven by hand: a wire threaded through or around a tiny magnetic core encoded each bit. Because it was physically woven, the software inside could not be changed once the rope was built." /> *(1968 | Timeline of Computer History | Computer History Museum, n.d.)*. Compared to older computers, which took up the space of a whole room, 
+    it was compact and could fit inside a rocket ship. NASA also wanted the astronauts to be able to compute in real-time while in the spacecraft, instead of relying on on-ground, 
+    analog computers (communication and computation using signals), which were neither reliable nor fast enough for a mission to the Moon *(Atkinson, 2025)*. 
+  </div>
+
+  <div class="info-block">
+    <h3>Human-Computer Interaction</h3>
+
+      The AGC also introduced architectural features that were uncommon at the time. It used erasable core memory for changing mission data and magnetic rope memory for permanently 
+      storing software. By separating mission data from mission software, the system became more reliable because critical programs could not be modified during the flight. The magnetic 
+      rope memory stored a large amount of software in a small and compact space, which was important due to the rocket’s weight limitations. In addition, the <TermTooltip term="DSKY (Display and Keyboard)" info="The AGC's interface panel: a small numeric keypad and display. Astronauts typed two-digit Verb and Noun codes into it to run programs and check spacecraft data mid-flight." /> 
+      allowed astronauts to communicate directly with the computer, making it easier to monitor the spacecraft and perform navigation tasks in real time *(Mattioli, 2021)*. 
+      
+      Another important feature of the AGC was its interrupt-driven design and <TermTooltip term="priority scheduling" info="A way of letting urgent tasks jump the queue instead of waiting their turn. This is exactly what saved the Apollo 11 landing: when the computer got overloaded and threw 1202 alarms, it kept running critical guidance tasks and dropped the less important ones." /> system, which allowed the computer to handle multiple tasks at once and prioritize critical 
+      navigation and guidance calculations over less important processes. This enabled the AGC to continue operating even when it became overloaded *(Sotomayor, 2016)*.
+  </div>
+
+  <div class="info-block">
+    <h3>Reliability Under Pressure</h3>
+
+      The AGC did not just solve NASA's problems related to the Moon mission. It also addressed limitations of earlier computers, as it was significantly smaller than the vacuum tube- and 
+      transistor-based computers through the use of integrated circuits. The AGC helped with the adoption of integrated circuits in the computer industry, making the way for smaller, more 
+      reliable, and more portable electronic devices that we see today.
+  </div>
+
+</div>
+
+<div class="fact-box">
+  <h3>Did you know?</h3>
+  <p>
+  The AGC had only <strong>4 KB of RAM</strong>,
+  yet successfully guided astronauts to the Moon.
+  </p>
+</div>
+
+<div class="mission-log">
+  MISSION LOG 03
+</div>
+
+## Key specifications
+    <div class="spec-grid">
+      <div class="spec-card">
+        <span class="spec-label">PROCESSOR SPEED</span>
+        <h3>2.048 MHz</h3>
+        <p>~85,000 instructions per second</p>
+      </div>
+
+      <div class="spec-card">
+        <span class="spec-label">MEMORY ARCHITECTURE</span>
+        <h3>16-bit Word</h3>
+        <p>15 bits of data + 1 parity bit</p>
+      </div>
+
+      <div class="spec-card">
+        <span class="spec-label">RAM</span>
+        <h3>4 KB</h3>
+        <p>2,048 words of magnetic-core erasable memory</p>
+      </div>
+
+      <div class="spec-card">
+        <span class="spec-label">ROM</span>
+        <h3>72 KB</h3>
+        <p>36,864 words of fixed core-rope memory</p>
+      </div>
+
+      <div class="spec-card">
+        <span class="spec-label">DIMENSIONS</span>
+        <h3>1 ft³</h3>
+        <p>24 × 12.5 × 6.5 inches</p>
+      </div>
+
+      <div class="spec-card">
+        <span class="spec-label">WEIGHT</span>
+        <h3>70 lbs</h3>
+        <p>Approximately 32 kilograms</p>
+      </div>
+
+      <div class="spec-card">
+        <span class="spec-label">POWER</span>
+        <h3>55 Watts</h3>
+        <p>28V DC power consumption</p>
+      </div>
+  </div>
+
+<div class="mission-log">
+  MISSION LOG 04
+</div>
+
+## Learn more about the AGC
+<div class="agc-card-grid">
+
+  <a href="/virtual-exhibit-template/s03g4/agc-innovations/" class="agc-card">
+    <h3 class="agc-cardTitle">AGC Innovations Footprint</h3>
+    <p class="agc-cardDesc">See how Apollo-era innovations evolved into modern-day technology.</p>
+    <span class="agc-cardButton">Then vs Now</span>
+  </a>
+
+  <a href="/virtual-exhibit-template/s03g4/timeline/" class="agc-card">
+    <h3 class="agc-cardTitle">AGC Timeline</h3>
+    <p class="agc-cardDesc">Scroll through key events in the AGC's development and the Space Race.</p>
+    <span class="agc-cardButton">View Timeline</span>
+  </a>
+
+  </div>
+
+<div class="mission-log">
+  MISSION LOG 05
+</div>
+
+## Interactive Workshop: Build the AGC
+
+<p>
+Put yourself in the shoes of an MIT Instrumentation Lab engineer. Navigate through structural challenges, manage constraints, and deploy custom hardware architectures directly into 
+the Apollo chassis frame below. 
+</p>
+
+<AGCminigame client:load />
+
+## References
+
+1968 | Timeline of Computer History | Computer History Museum. (n.d.). <a class="sources" href="https://www.computerhistory.org/timeline/1968/#169ebbe2ad45559efbc6eb357204a28c"> https://www.computerhistory.org/timeline/1968/#169ebbe2ad45559efbc6eb357204a28c </a>
+
+Atkinson, N. (2025, June 13). The story of the Apollo Guidance Computer, Part 2. Universe Today. <a class="sources" href="https://www.universetoday.com/articles/the-story-of-the-apollo-guidance-computer-part-2"> https://www.universetoday.com/articles/the-story-of-the-apollo-guidance-computer-part-2 </a>
+
+Mattioli, M. (2021). The Apollo Guidance computer. IEEE Micro, 41(6), 179–182. <a class="sources" href="https://doi.org/10.1109/mm.2021.3121103"> https://doi.org/10.1109/mm.2021.3121103 </a>
+
+Sotomayor, B. (2016, July 9). A Glimpse into the Apollo Guidance Computer. Medium. <a class="sources" href="https://borja.medium.com/a-glimpse-into-the-apollo-guidance-computer-8ee06e5e1a5c"> https://borja.medium.com/a-glimpse-into-the-apollo-guidance-computer-8ee06e5e1a5c </a>
+
+Swift, E. (2021, June 23). The Off-Roading Astronauts of Apollo. Outside. <a class="sources" href="https://www.outsideonline.com/outdoor-adventure/exploration-survival/lunar-rover-apollo-space-lrv/"> ttps://www.outsideonline.com/outdoor-adventure/exploration-survival/lunar-rover-apollo-space-lrv/ </a>

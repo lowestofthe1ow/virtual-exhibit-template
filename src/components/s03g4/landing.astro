@@ -1,0 +1,55 @@
+---
+import "../../styles/s03g4/landing.css";
+import apolloVideo from "../../assets/s03g4/apollo11-video.mp4";
+---
+
+<div class="landing">
+
+    <video
+        class="landing-video"
+        autoplay
+        muted
+        loop
+        playsinline>
+
+        <source src={apolloVideo} type="video/mp4" />
+
+    </video>
+
+    <div class="landing-overlay">
+
+        <div class="landing-content">
+
+            <p class="boot-text">
+                &gt; BOOTING APOLLO GUIDANCE COMPUTER...
+            </p>
+
+                <h1 class="landing-title">
+                    <span class="typing-line line1">APOLLO</span><br />
+                    <span class="typing-line line2">GUIDANCE</span><br />
+                    <span class="typing-line line3">
+                        COMPUTER
+                    </span><span class="cursor">_</span>
+                </h1>
+
+            <p class="landing-description">
+                The computer that took humanity to the Moon.
+            </p>
+
+            <div class="landing-buttons">
+
+                <a href="/virtual-exhibit-template/s03g4/agc-homepage/" class="start-btn">
+                    START MISSION
+                </a>
+
+                <a href="/virtual-exhibit-template/s03g4/" class="back-btn">
+                    RETURN TO MUSEUM
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,170 @@
+---
+/**
+ * TermTooltip.astro
+ *
+ * An inline glossary term for use inside running prose. Renders `term` as a
+ * highlighted, interactive trigger. Hovering it (desktop) or tapping it
+ * (touch) reveals a small popup card with `info`, a short definition.
+ *
+ * ## Behavior
+ * - Desktop / mouse or keyboard: hover or focus reveals the popup. This part
+ *   is pure CSS, no script involved.
+ * - Touch devices: there is no hover, so a small script below toggles the
+ *   popup open and closed on tap, and closes it again when tapping anywhere
+ *   else on the page.
+ *
+ * ## Props
+ *   - term (string) - the word or phrase highlighted in the sentence
+ *   - info (string) - the short definition shown in the popup
+ *
+ * ## Usage Example
+ * ```mdx
+ * <TermTooltip term="DSKY (Display and Keyboard)" info="The AGC's interface panel..." />
+ * ```
+ */
+
+interface Props {
+  term: string;
+  info: string;
+}
+
+const { term, info } = Astro.props;
+
+// Unique id per instance, links the trigger to its popup for aria-describedby.
+const uid = `tt-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<span class="term-tooltip">
+  <button
+    type="button"
+    class="term-tooltip__trigger"
+    aria-expanded="false"
+    aria-describedby={uid}
+  >{term}</button
+  ><span class="term-tooltip__popup" role="tooltip" id={uid}>{info}</span>
+</span>
+
+<style>
+  .term-tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Reset button chrome so it reads as part of the sentence */
+  .term-tooltip__trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: #9bd0ff;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .term-tooltip__trigger:hover,
+  .term-tooltip__trigger:focus-visible {
+    color: #b8860b;
+  }
+
+  .term-tooltip__popup {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    z-index: 20;
+    width: max-content;
+    max-width: 260px;
+
+    background-color: #0a1a2f;
+    color: #f2ead9;
+    border: 1px solid #b8860b;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: left;
+    text-decoration: none;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 6px) scale(0.95);
+    transform-origin: bottom center;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      visibility 0.18s;
+  }
+
+  /* Small pointer, aims the popup at the term it belongs to */
+  .term-tooltip__popup::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #0a1a2f;
+  }
+
+  /* Desktop: reveal on hover or keyboard focus, CSS only */
+  .term-tooltip__trigger:hover + .term-tooltip__popup,
+  .term-tooltip__trigger:focus-visible + .term-tooltip__popup {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  /* Touch: the script below toggles aria-expanded, CSS reveals off that state */
+  .term-tooltip__trigger[aria-expanded="true"] + .term-tooltip__popup {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  /* Keep the card from overflowing narrow phone screens */
+  @media (max-width: 480px) {
+    .term-tooltip__popup {
+      max-width: 70vw;
+    }
+  }
+
+  /* Respect reduced-motion preferences: fade only, no slide or scale */
+  @media (prefers-reduced-motion: reduce) {
+    .term-tooltip__popup {
+      transform: translate(-50%, 0) scale(1);
+      transition: opacity 0.18s ease;
+    }
+  }
+</style>
+
+<script>
+  // Tap-to-toggle fallback for touch devices, which have no hover state.
+  // Desktop hover still works through CSS alone above; this only adds an
+  // on/off tap behavior on top of it, and makes sure just one popup is
+  // open at a time.
+  const triggers = document.querySelectorAll(".term-tooltip__trigger");
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+
+      triggers.forEach((other) => other.setAttribute("aria-expanded", "false"));
+      trigger.setAttribute("aria-expanded", String(!isOpen));
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const clickedInsideTooltip = event.target.closest(".term-tooltip");
+
+    if (!clickedInsideTooltip) {
+      triggers.forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+    }
+  });
+</script>
