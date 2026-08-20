@@ -1,0 +1,145 @@
+---
+layout: "../../components/s01g8/S01_Group8_GPUWarsLayout.astro"
+title: "Evolution of GPU Architecture"
+description: "Examine the architectural innovations that enabled GPUs to support graphics, scientific computing, and artificial intelligence."
+author: "Bendol, Trisha Mae R.; Camato, Karl Kristoffer R.; Descalzo, Alberto Miguel T.; Gregorio, John Marc Joepherl M.; Martin, Kurt Nehemiah Z."
+readingTime: "10 minutes"
+---
+import S01_Group8_ArchitectureExplorer from '../../components/s01g8/S01_Group8_ArchitectureExplorer.jsx';
+
+
+# Evolution of GPU Architecture
+
+### From fixed-function pipelines to AI Accelerated parallel computing
+
+---
+
+## Evolution of GPU Architecture
+
+GPUs did not just become faster over time — they changed internally.
+
+What started as hardware designed only for drawing pixels gradually evolved into systems built for massive parallel computation. Each generation didn’t just add speed; it changed how work is divided, scheduled, and executed inside the chip.
+
+Instead of focusing on *when* these changes happened, this page explores *how* GPU architecture evolved from rigid graphics hardware into programmable, highly parallel compute engines.
+
+---
+
+## Early Architecture: Fixed-Function Pipeline
+
+Early GPUs worked like a strict assembly line for graphics.
+
+Each stage had a single job:
+- Vertex processing handled geometry
+- Rasterization converted shapes into pixels
+- Fragment processing colored each pixel
+
+Everything was hardwired. The pipeline was fast, but inflexible.
+
+If a new effect was needed, the hardware itself couldn’t change — only software tricks on top of the fixed stages.
+
+> Early GPUs were specialized, but not programmable.
+
+---
+
+## Transition: Programmable Shaders
+
+The next big change came when parts of the pipeline became programmable.
+
+Instead of relying entirely on fixed hardware behavior, developers could now write small programs called **shaders** to control how vertices and pixels were processed.
+
+This meant:
+- Lighting could be customized per scene
+- Surfaces could behave in more complex ways
+- Visual effects became programmable instead of prebuilt
+
+Inside the GPU, fixed logic began to give way to flexible execution units.
+
+> The pipeline was no longer fully fixed — parts of it could now be programmed.
+
+This was the first step toward turning the GPU into something more general than a graphics processor.
+
+---
+
+## General-Purpose GPU Computing (CUDA Era)
+
+Then came a major shift: GPUs stopped being just for graphics.
+
+With **CUDA**, the GPU could now run general computation tasks, not just rendering code. Instead of thinking in terms of pixels and triangles, developers could think in terms of parallel work.
+
+At the same time, the internal execution model became clearer:
+- Many lightweight threads run at once
+- A single instruction is applied across many threads (SIMT)
+- Work is grouped into kernels executed on Streaming Multiprocessors (SMs)
+
+Instead of a few powerful cores, GPUs relied on thousands of simpler execution lanes working together.
+
+> The GPU became a machine for parallel thinking.
+
+This change unlocked scientific computing, simulations, and eventually machine learning workloads.
+
+---
+
+## Specialized Compute Units
+
+As workloads became more diverse, GPUs began adding specialized hardware blocks.
+
+Instead of trying to make one type of core handle everything, newer architectures introduced dedicated units:
+
+- **RT Cores** handle ray tracing calculations for realistic lighting
+- **Tensor Cores** accelerate matrix math used in AI models
+- **SMs (Streaming Multiprocessors)** continue to handle general parallel computation
+
+Each unit is designed for a different kind of workload, and modern GPUs route work to the most efficient engine available.
+
+> Modern GPUs are no longer uniform — they are built from specialized compute blocks working together.
+
+---
+
+## Throughput-Oriented Design
+
+A GPU is not designed like a CPU.
+
+Where CPUs focus on completing a few tasks quickly, GPUs focus on completing many tasks at once.
+
+That difference shapes everything:
+- CPUs optimize for low latency and complex logic
+- GPUs optimize for massive parallel throughput
+- GPU cores are simpler but far more numerous
+- Performance comes from scale, not single-thread speed
+
+Instead of speeding up one task, GPUs increase how many tasks can happen at the same time.
+
+> GPUs are built to do many things at once, not one thing quickly.
+
+---
+
+<S01_Group8_ArchitectureExplorer client:load />
+
+---
+
+## Architecture Evolution Summary
+
+GPU architecture can be seen as a gradual expansion of capability:
+
+**Fixed-Function Pipeline**
+--> rigid hardware stages for graphics
+
+**Programmable Shaders**
+--> customizable rendering behavior
+
+**CUDA / General-Purpose Computing**
+--> massive parallel compute model
+
+**RT and Tensor Cores**
+--> specialized acceleration units
+
+**AI-Accelerated Architecture**
+--> hybrid systems built for graphics, simulation, and AI
+
+Each step made GPUs more flexible, more parallel, and more specialized at the same time.
+
+---
+
+Return to: [Main hall -->](/virtual-exhibit-template/s01g8)
+Go back to: [Five Turning Points -->](/virtual-exhibit-template/s01g8/04-turning-points)
+Continue to: [GPU Wars -->](/virtual-exhibit-template/s01g8/06-gpu-wars)

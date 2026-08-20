@@ -1,0 +1,206 @@
+/* gpu-theme.css
+ * Visual identity for the GPU Wars exhibit.
+ * This layers ON TOP of the locked global.css — it never edits it.
+ * Import this file at the top of any .mdx page or .astro component
+ * that should carry the exhibit's look:
+ *
+ *   import './gpu-theme.css';
+ *
+ * Theme concept: a PCB / silicon die. Content panels read as chip
+ * packages (tick marks along the edges = IC pins), dividers read as
+ * copper traces with a via, and section labels read like datasheet
+ * pin-outs. Kept restrained: one signature move (the IC-card), quiet
+ * everywhere else.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Substrate */
+    --pcb-bg: #0b1210;
+    --pcb-surface: #121b18;
+    --pcb-surface-alt: #17211d;
+
+    /* Traces + signal */
+    --pcb-trace: #3f8f6a;      /* muted circuit-board green, not neon */
+    --pcb-trace-dim: #2a5c47;
+    --pcb-copper: #c98a4b;     /* copper pad / gold accent */
+    --pcb-signal: #5aa9c9;     /* data-line blue, used for links/active state */
+    --pcb-heat: #d1653f;       /* thermal accent, reserved for the AI-era section */
+
+    /* Text */
+    --pcb-text: #e7ece9;
+    --pcb-muted: #90a39a;
+    --pcb-border: #24332c;
+
+    --pcb-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* Scope everything under a wrapper so we never leak into the locked
+   layout chrome. Wrap page content in <div class="exhibit-theme"> ... */
+.exhibit-theme {
+    color: var(--pcb-text);
+    font-family: 'Noto Sans Variable', sans-serif; /* stay consistent with the locked body font */
+}
+
+.exhibit-theme :is(h1, h2, h3) {
+    font-family: var(--pcb-mono);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--pcb-text);
+}
+
+.exhibit-theme a {
+    color: var(--pcb-signal);
+    text-decoration-color: var(--pcb-trace-dim);
+    text-underline-offset: 3px;
+}
+
+.exhibit-theme a:hover {
+    color: var(--pcb-copper);
+}
+
+/* --- Pin label: small datasheet-style eyebrow above a section --- */
+.pin-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--pcb-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pcb-trace);
+    margin-bottom: 0.5rem;
+}
+
+.pin-label::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--pcb-trace);
+    box-shadow: 0 0 0 3px rgba(63, 143, 106, 0.18);
+}
+
+/* --- Trace divider: replaces a plain <hr> with a copper trace + via --- */
+.trace-divider {
+    position: relative;
+    height: 1px;
+    background: var(--pcb-border);
+    margin: 2.5rem 0;
+    border: none;
+}
+
+.trace-divider::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--pcb-copper);
+}
+
+/* --- IC card: the signature element. A panel styled like a chip
+   package — small tick marks ("pins") along the top and bottom
+   edges. Use for callouts, key-takeaways, nav cards, stat blocks. --- */
+.ic-card {
+    position: relative;
+    background: var(--pcb-surface);
+    border: 1px solid var(--pcb-border);
+    border-radius: 4px;
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+}
+
+.ic-card::before,
+.ic-card::after {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    right: 1.25rem;
+    height: 2px;
+    background-image: repeating-linear-gradient(
+        90deg,
+        var(--pcb-copper) 0px,
+        var(--pcb-copper) 6px,
+        transparent 6px,
+        transparent 16px
+    );
+    opacity: 0.55;
+}
+
+.ic-card::before { top: -1px; }
+.ic-card::after { bottom: -1px; }
+
+.ic-card h3 {
+    margin-top: 0;
+    font-size: 1.05rem;
+}
+
+/* Grid of IC cards, e.g. for a "galleries" nav list */
+.ic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.ic-grid .ic-card {
+    margin: 0;
+}
+
+.ic-grid a {
+    font-family: var(--pcb-mono);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.ic-grid p {
+    color: var(--pcb-muted);
+    font-size: 0.9rem;
+    margin: 0.4rem 0 0;
+}
+
+/* --- Feature call-to-action button in the exhibit's own voice --- */
+.trace-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--pcb-mono);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--pcb-bg);
+    background: var(--pcb-trace);
+    border-radius: 4px;
+    padding: 0.65rem 1.1rem;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.trace-button:hover {
+    background: var(--pcb-copper);
+    color: var(--pcb-bg);
+    transform: translateY(-1px);
+}
+
+/* --- Footer credit line, quiet + monospace --- */
+.exhibit-theme .credit-line {
+    font-family: var(--pcb-mono);
+    font-size: 0.75rem;
+    color: var(--pcb-muted);
+    letter-spacing: 0.02em;
+}
+
+/* --- Responsive --- */
+@media (max-width: 640px) {
+    .ic-card { padding: 1.1rem 1.25rem; }
+    .ic-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+    .trace-button { transition: none; }
+}

@@ -1,0 +1,90 @@
+---
+import '../../styles/s01g8/gpu-theme.css';
+const baseUrl = import.meta.env.BASE_URL;
+const nav = [
+    { href: '/01-main', label: 'Museum Hub' },
+    { href: '/SO1_Group8_subpages/02-introduction', label: 'Introduction' },
+    { href: '/SO1_Group8_subpages/03-before-gpus', label: 'Before GPUs' },
+    { href: '/SO1_Group8_subpages/04-turning-points', label: 'Timeline' },
+    { href: '/SO1_Group8_subpages/05-architecture', label: 'Architecture' },
+    { href: '/SO1_Group8_subpages/06-gpu-wars', label: 'GPU Wars' },
+    { href: '/SO1_Group8_subpages/07-conclusion', label: 'Conclusion' },
+];
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="exhibit-header exhibit-theme">
+    <a href={`${baseUrl.replace(/\/$/, '')}/01-main`} class="exhibit-header__brand">GPU WARS</a>
+
+    <nav class="exhibit-header__nav">
+        {nav.map((item) => (
+            <a
+                href={`${baseUrl.replace(/\/$/, '')}/${item.href.replace(/^\//, '')}`}
+                class:list={['exhibit-header__link', { 'is-active': currentPath === item.href }]}
+            >
+                {item.label}
+            </a>
+        ))}
+    </nav>
+</header>
+
+<style>
+    .exhibit-header {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        background: var(--pcb-bg, #0b1210);
+        border-bottom: 1px solid var(--pcb-border, #24332c);
+        padding: 0.85rem 1.5rem;
+    }
+
+    .exhibit-header__brand {
+        font-family: var(--pcb-mono, monospace);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: var(--pcb-text, #e7ece9);
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    .exhibit-header__nav {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+    }
+
+    .exhibit-header__link {
+        font-family: var(--pcb-mono, monospace);
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
+        color: var(--pcb-muted, #90a39a);
+        text-decoration: none;
+        padding-bottom: 2px;
+        border-bottom: 2px solid transparent;
+        transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .exhibit-header__link:hover {
+        color: var(--pcb-trace, #3f8f6a);
+    }
+
+    .exhibit-header__link.is-active {
+        color: var(--pcb-copper, #c98a4b);
+        border-color: var(--pcb-copper, #c98a4b);
+    }
+
+    @media (max-width: 640px) {
+        .exhibit-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .exhibit-header__nav {
+            gap: 0.9rem;
+        }
+    }
+</style>

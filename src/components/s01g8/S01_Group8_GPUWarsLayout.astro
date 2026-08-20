@@ -1,0 +1,189 @@
+---
+/* S01_Group8_GPUWarsLayout.astro
+ * Self-contained layout for CSARCH2 Virtual Exhibit - Group 8 (GPU Wars)
+ * Replicates the Rebel Alliance Archives theme from the Figma design bundle.
+ */
+
+const { title, author, readingTime } = Astro.props.frontmatter ?? Astro.props;
+const { headings } = Astro.props; 
+
+import 'normalize.css';
+import '../../styles/s01g8/S01_Group8_gpuwars-theme.css';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Identify which tab is active based on the URL
+const pathname = Astro.url.pathname;
+let activeTab = 'prologue';
+if (pathname.includes('04-turning-points')) {
+  activeTab = 'timeline';
+} else if (pathname.includes('05-architecture')) {
+  activeTab = 'architecture';
+} else if (pathname.includes('08-shader-lab')) {
+  activeTab = 'lab';
+} else if (pathname.includes('06-gpu-wars') || pathname.includes('07-conclusion')) {
+  activeTab = 'archives';
+} else if (pathname.includes('09-crew')) {
+  activeTab = 'crew';
+}
+---
+
+<!DOCTYPE html>
+<html lang="en" class="gpuwars-theme-html">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title} - GPU Wars Rebel Archives</title>
+        <link rel="icon" type="image/png" href={`${baseUrl}/gpu_wars_favicon_green_gold.png`} />
+        <!-- Load Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    </head>
+    <body class="gpuwars-theme-body">
+        <!-- Starfield Background -->
+        <div class="starfield" id="starfield"></div>
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <span>REBEL ALLIANCE ARCHIVES &mdash; SECTOR 76</span>
+            <span>
+                CLASSIFICATION: <span class="text-green">OPEN</span>
+                &nbsp;|&nbsp; CLEARANCE: <span class="text-green">ALL</span>
+                &nbsp;|&nbsp; <span id="live-clock">00:00:00</span>
+            </span>
+        </div>
+
+        <!-- Hero Header -->
+        <header class="rebel-hero">
+            <p class="hero-sub">EPISODE I &mdash; A PIXEL HISTORY</p>
+            <h1 class="hero-title">GPU WARS</h1>
+            <p class="hero-sub2">FIVE TURNING POINTS THAT CHANGED COMPUTING</p>
+            <p class="hero-desc">
+                A long time ago, in a render pipeline far, far away…the CPU carried the
+                burden of every triangle. Then came the GPU — and the galaxy of computing
+                was never the same.
+            </p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href={`${baseUrl}/01-main`} class={activeTab === 'prologue' ? 'active' : ''}>PROLOGUE</a>
+            <a href={`${baseUrl}/SO1_Group8_subpages/04-turning-points`} class={activeTab === 'timeline' ? 'active' : ''}>THE TIMELINE</a>
+            <a href={`${baseUrl}/SO1_Group8_subpages/05-architecture`} class={activeTab === 'architecture' ? 'active' : ''}>THE ARCHITECTURE</a>
+            <a href={`${baseUrl}/SO1_Group8_subpages/08-shader-lab`} class={activeTab === 'lab' ? 'active' : ''}>THE LAB</a>
+            <a href={`${baseUrl}/SO1_Group8_subpages/06-gpu-wars`} class={activeTab === 'archives' ? 'active' : ''}>THE ARCHIVES</a>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-layout">
+            <!-- Left TOC (standard requirement, styled nicely) -->
+            {headings && headings.length > 0 && (
+                <aside class="toc-sidebar">
+                    <h3 class="sidebar-title">TABLE OF CONTENTS</h3>
+                    <ul class="toc-list">
+                        {headings.filter(h => h.depth > 1).map((heading) => (
+                            <li class={`toc-item depth-${heading.depth}`}>
+                                <a href={`#${heading.slug}`}>{heading.text}</a>
+                            </li>
+                        ))}
+                    </ul>
+                </aside>
+            )}
+
+            <!-- Middle Main Content Block -->
+            <div class="content-block">
+                <article class="article">
+                    <slot />
+                </article>
+            </div>
+
+            <!-- Right Sidebar: Sector Briefings -->
+            <aside class="briefings-sidebar">
+                <h3 class="sidebar-title">SECTOR BRIEFINGS</h3>
+                <div class="sidebar-sections">
+                    <a href={`${baseUrl}/SO1_Group8_subpages/03-before-gpus`} class="sidebar-sec-card">
+                        <p class="sec-num">SECTION 01</p>
+                        <p class="sec-title">BEFORE THE GPU</p>
+                        <p class="sec-desc">The Empire of fixed-function pipelines and software renderers.</p>
+                    </a>
+                    <a href={`${baseUrl}/SO1_Group8_subpages/04-turning-points`} class="sidebar-sec-card">
+                        <p class="sec-num">SECTION 02</p>
+                        <p class="sec-title">3DFX VOODOO, 1996</p>
+                        <p class="sec-desc">A disturbance in the pipeline – the first strike against the CPU.</p>
+                    </a>
+                    <a href={`${baseUrl}/SO1_Group8_subpages/04-turning-points`} class="sidebar-sec-card">
+                        <p class="sec-num">SECTION 03</p>
+                        <p class="sec-title">GEFORCE 256, 1999</p>
+                        <p class="sec-desc">NVIDIA names its weapon. The GPU era officially begins.</p>
+                    </a>
+                    <a href={`${baseUrl}/SO1_Group8_subpages/05-architecture`} class="sidebar-sec-card">
+                        <p class="sec-num">SECTION 04</p>
+                        <p class="sec-title">SHADER REVOLUTION</p>
+                        <p class="sec-desc">The Force becomes programmable. Artists gain the upper hand.</p>
+                    </a>
+                    <a href={`${baseUrl}/SO1_Group8_subpages/08-shader-lab`} class="sidebar-sec-card highlight">
+                        <p class="sec-num">INTERACTIVE LAB</p>
+                        <p class="sec-title">THE HOLODECK</p>
+                        <p class="sec-desc">Manipulate shaders. See the rendering revolution in real time.</p>
+                    </a>
+                </div>
+
+                <div class="intel-tags-section">
+                    <p class="sidebar-subtitle">INTEL TAGS</p>
+                    <div class="intel-tags">
+                        <span>HARDWARE</span>
+                        <span>CUDA</span>
+                        <span>NVIDIA</span>
+                        <span>3DFX</span>
+                        <span>SHADERS</span>
+                        <span>HISTORY</span>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="rebel-footer">
+            <span>CSARCH2 &mdash; GROUP 8</span>
+            <span class="footer-center">GPU WARS: FIVE TURNING POINTS</span>
+            <span>
+                <span id="footer-clock">00:00:00</span>
+                &nbsp;&nbsp;3RD TERM 2025–2026
+            </span>
+        </footer>
+
+        <!-- Scripts for live clock & starfield -->
+        <script is:inline>
+            // Live clock update
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+                const clockEl = document.getElementById('live-clock');
+                const footerClockEl = document.getElementById('footer-clock');
+                if (clockEl) clockEl.textContent = timeString;
+                if (footerClockEl) footerClockEl.textContent = timeString;
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // Dynamic Starfield Generation
+            const starfield = document.getElementById('starfield');
+            if (starfield) {
+                for (let i = 0; i < 120; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    const size = Math.random() * 1.5 + 0.5;
+                    star.style.width = size + 'px';
+                    star.style.height = size + 'px';
+                    star.style.opacity = Math.random() * 0.6 + 0.2;
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    starfield.appendChild(star);
+                }
+            }
+        </script>
+    </body>
+</html>

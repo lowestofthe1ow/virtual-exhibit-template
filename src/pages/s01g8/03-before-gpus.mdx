@@ -1,0 +1,113 @@
+---
+layout: "../../components/s01g8/S01_Group8_GPUWarsLayout.astro"
+title: "Before Dedicated Graphics Hardware"
+description: "Explore how early computers relied entirely on CPUs for graphics rendering and why this approach eventually became a performance bottleneck."
+author: "Bendol, Trisha Mae R.; Camato, Karl Kristoffer R.; Descalzo, Alberto Miguel T.; Gregorio, John Marc Joepherl M.; Martin, Kurt Nehemiah Z."
+readingTime: "5 minutes"
+---
+
+import TextWithImage from "../../components/s01g8/TextWithImage.astro";
+
+import iBM5150 from "../../assets/s01g8/iBM5150.webp";
+import triangleRasterization from "../../assets/s01g8/triangleRasterization.webp";
+import utahTeaPot from "../../assets/s01g8/utahTeaPot.webp";
+
+# Before Dedicated Graphics Hardware
+
+<TextWithImage
+    heading="When the CPU Handled Everything"
+    body={`
+Early computers did not have specialized graphics processors. Instead, all computation (including graphics rendering) was handled by the CPU. This meant that the same processor responsible for running programs and system logic was also responsible for generating visual output on the screen.
+
+At the time, computer graphics were relatively simple, often limited to basic 2D visuals and early interface designs. However, as software evolved and visual output became more important in areas like gaming, design, and simulation, the demands placed on the CPU increased significantly.
+
+As graphical applications became more complex, this approach began to show serious performance limitations.
+`}
+    imageSrc={iBM5150.src}
+    imageAlt="Early computer system using a CPU to handle general computing and graphics tasks."
+    imageCaption="Before dedicated graphics processors existed, CPUs handled both program execution and graphical output, like the computer IBM5150."
+/>
+
+---
+
+<TextWithImage
+    heading="CPU-Based Graphics Rendering"
+    body={`
+Before dedicated graphics hardware existed, the CPU was responsible for nearly every step of rendering an image. This included calculating shapes, determining colors, and updating pixels on the screen.
+
+Modern computer graphics represent images using pixel-based systems where each pixel must be computed and stored in memory. Even early forms of raster graphics required the CPU to process large numbers of individual pixel values to form a complete image.
+
+As a result, the CPU handled tasks such as:
+- Computing basic geometry for objects on screen
+- Updating pixel data for each frame
+- Managing screen refresh and visual output
+
+Since all of these operations were handled in software, rendering depended heavily on available CPU cycles.
+`}
+    imageSrc={triangleRasterization.src}
+    imageAlt="Diagram showing the CPU performing graphics calculations before sending output to the display."
+    imageCaption="Early systems relied on the CPU for geometry calculations, pixel processing, and display updates. Here, triangle rasterization was used to transform geometric shapes into pixels for computers to display."
+    reverse={true}
+/>
+
+---
+
+<TextWithImage
+    heading="Why This Became a Problem"
+    body={`
+As computer applications evolved, the demand for more advanced graphics increased rapidly. This included:
+- Real-time 3D games
+- More detailed user interfaces
+- Interactive simulations and visualization tools
+
+At the same time, CPUs were designed primarily for general-purpose computing tasks, executing instructions sequentially and handling complex logic efficiently. Graphics workloads, however, require performing many similar calculations repeatedly across thousands or even millions of pixels.
+
+This mismatch created a fundamental issue: the CPU became a bottleneck for graphics-intensive workloads.
+`}
+    imageSrc={utahTeaPot.src}
+    imageAlt="The Utah Teapot, a classic 3D computer graphics model used to demonstrate rendering techniques."
+    imageCaption="As computer graphics evolved toward more complex 3D models and scenes, the computational demands of rendering increased, pushing the limits of CPU-based graphics processing."
+    reverse={true}
+/>
+
+---
+
+## Performance Bottlenecks
+
+As visual complexity increased, CPUs struggled to maintain smooth and responsive rendering. Even small increases in scene complexity could significantly impact performance.
+
+Key limitations included:
+- Limited ability to process many operations simultaneously
+- Slower frame updates in visually complex scenes
+- Increasing delay in rendering 3D environments
+- Growing gap between CPU processing power and graphics demands
+
+In practice, this meant that systems could either run complex programs or render advanced graphics efficiently, but not both at the same time.
+
+---
+
+## Transition to Dedicated Graphics Hardware
+
+These limitations highlighted the need for a new approach to graphics processing. Instead of relying entirely on general-purpose CPUs, computers required specialized hardware designed specifically to handle visual computation more efficiently.
+
+This shift marked a major turning point in computer architecture.
+
+The first generation of dedicated graphics accelerators would soon emerge, laying the foundation for what would become modern GPUs.
+
+---
+
+## Key Insight
+
+**General-purpose CPUs were not inefficient—they were simply not designed for the highly repetitive and parallel nature of graphics workloads.**
+
+---
+
+## Transition
+
+The move toward specialized graphics hardware began when engineers started designing systems that could offload visual computation away from the CPU.
+
+This change marked the beginning of a new era in computing—one defined by dedicated graphics acceleration.
+
+Return to: [Main hall -->](/virtual-exhibit-template/s01g8)
+Go back to: [Introduction: Rise of GPUs -->](/virtual-exhibit-template/s01g8/02-introduction)
+Continue to: [Five Turning Points -->](/virtual-exhibit-template/s01g8/04-turning-points)

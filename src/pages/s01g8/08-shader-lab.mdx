@@ -1,0 +1,30 @@
+---
+layout: "../../components/s01g8/S01_Group8_GPUWarsLayout.astro"
+title: "Interactive Shader Lab"
+description: "Adjust ambient, diffuse, and specular parameters to see how Phong shading processes light on a 3D surface."
+author: "Bendol, Trisha Mae R.; Camato, Karl Kristoffer R.; Descalzo, Alberto Miguel T.; Gregorio, John Marc Joepherl M.; Martin, Kurt Nehemiah Z."
+readingTime: "3 minutes"
+---
+import S01_Group8_ShaderLab from "../../components/s01g8/S01_Group8_ShaderLab.jsx";
+
+# The Holodeck: Phong Shader Simulator
+
+## Manipulating Shaders in Real Time
+
+This interactive simulator demonstrates the **Phong reflection model**, a mathematical lighting model developed by Bui Tuong Phong in 1973. It is one of the most fundamental algorithms in computer graphics, bridging the gap between flat shading and photorealistic rendering.
+
+Use the sliders on the right to adjust how different light properties affect the material surface of the sphere.
+
+---
+
+<S01_Group8_ShaderLab client:load />
+
+---
+
+## Technical Details
+
+The Phong reflection model computes the color of a point on a 3D surface as a combination of three distinct components:
+
+1. **Ambient Lighting**: Represents uniform background light scattered throughout the environment. It ensures that parts of the object not directly hit by the light source do not appear completely black.
+2. **Diffuse Lighting**: Represents light reflected equally in all directions from the surface. The intensity depends on the angle between the light source and the surface normal (Lambertian reflection).
+3. **Specular Lighting**: Creates bright highlights (shininess) on glossy surfaces. It is view-dependent and relies on the reflection direction of the light vector relative to the camera viewpoint.
