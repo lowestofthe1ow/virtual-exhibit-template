@@ -1,0 +1,578 @@
+---
+import "../../styles/s04g6/S04_Group6_ram.css";
+
+import WhatIsRam from "./S04_Group6_WhatIsRam.jsx";
+import RamJourney from "./S04_Group6_RamJourney.jsx";
+import EvolutionLogic from "./S04_Group6_Evolution.jsx";
+import MemComSim from "./S04_Group6_MemoryCommunication.jsx";
+import QuizLogic from "./S04_Group6_ChallengeQuiz.jsx";
+
+import switchPokemon from "../../assets/s04g6/S04_Group6_switch-pokemon.webp";
+import nintendoSwitch from "../../assets/s04g6/S04_Group6_ir-nintendo.webp";
+---
+
+<section class="ram-stage">
+  <div class="ram-page">
+
+    <!-- =====================================================
+         SECTION 0 — TITLE SECTION
+         ===================================================== -->
+
+    <header
+      id="ram-exhibit-title"
+      class="ram-hero"
+    >
+
+      <!-- Decorative HUD layer -->
+      <div
+        class="hero-hud"
+        aria-hidden="true"
+      >
+        <div class="hero-grid"></div>
+        <div class="hero-circle-glow"></div>
+        <div class="hero-frame"></div>
+        <div class="hero-scan-line"></div>
+      </div>
+
+      <!-- System status -->
+      <div
+        class="hero-system-status"
+        aria-hidden="true"
+      >
+        <span class="hero-status-dots"></span>
+
+        <span class="hero-status-text">
+          SYSTEM ONLINE
+        </span>
+
+        <span class="hero-status-dots"></span>
+      </div>
+
+      <!-- Main title -->
+      <div class="hero-title-block">
+        <h1 class="glow-title">
+          INSIDE RAM
+        </h1>
+
+        <p>
+          COMPUTER MEMORY IN MOTION
+        </p>
+      </div>
+
+      <!-- Left information panel -->
+      <aside
+        class="hero-fact-panel"
+        aria-label="RAM fact"
+      >
+        <div class="hero-panel-heading">
+          <span
+            class="hero-panel-marker"
+            aria-hidden="true"
+          ></span>
+
+          <span class="hero-panel-kicker">
+            DID YOU KNOW?
+          </span>
+        </div>
+
+        <p>
+          The earliest form of computer memory used a large rotating
+          magnetic drum. Over time, memory became smaller, faster,
+          and powerful enough to support modern handheld systems
+          such as the Nintendo Switch.
+        </p>
+
+        <div
+          class="hero-fact-status"
+          aria-hidden="true"
+        >
+          <span>MEMORY ARCHIVE</span>
+          <span>READY</span>
+        </div>
+      </aside>
+
+      <!-- Center illustration -->
+      <div class="hero-visual">
+
+        <div
+          class="hero-reticle"
+          aria-hidden="true"
+        ></div>
+
+        <div
+          class="hero-target-frame"
+          aria-hidden="true"
+        ></div>
+
+        <div
+          class="hero-target-crosshair"
+          aria-hidden="true"
+        ></div>
+
+        <img
+          class="hero-switch"
+          src={switchPokemon.src}
+          alt="Nintendo Switch showing a game scene"
+        />
+
+        <div class="hero-device-readout">
+          <span
+            class="hero-device-dot"
+            aria-hidden="true"
+          ></span>
+
+          <span class="hero-device-label">
+            NINTENDO SWITCH
+          </span>
+
+          <span class="hero-device-code">
+            ACTIVE MEMORY SYSTEM
+          </span>
+        </div>
+      </div>
+
+      <!-- Right navigation panel -->
+      <nav
+        class="hero-directory"
+        aria-label="Exhibit Navigation"
+      >
+        <div class="hero-directory-heading">
+          <span
+            class="hero-directory-marker"
+            aria-hidden="true"
+          ></span>
+
+          <span>
+            DISCUSSION DIRECTORY
+          </span>
+        </div>
+
+        <a href="#what-is-ram">
+          <span
+            class="hero-nav-icon"
+            aria-hidden="true"
+          >
+            ▣
+          </span>
+
+          <span class="hero-nav-copy">
+            <small>SECTION 01</small>
+            <strong>What is RAM?</strong>
+          </span>
+
+          <span
+            class="hero-nav-arrow"
+            aria-hidden="true"
+          >
+            ›
+          </span>
+        </a>
+
+        <a href="#the-evolution-of-ram">
+          <span
+            class="hero-nav-icon"
+            aria-hidden="true"
+          >
+            ⌁
+          </span>
+
+          <span class="hero-nav-copy">
+            <small>SECTION 02</small>
+            <strong>The Evolution of RAM</strong>
+          </span>
+
+          <span
+            class="hero-nav-arrow"
+            aria-hidden="true"
+          >
+            ›
+          </span>
+        </a>
+
+        <a href="#inside-the-ram-the-internal-data-journey">
+          <span
+            class="hero-nav-icon"
+            aria-hidden="true"
+          >
+            ◇
+          </span>
+
+          <span class="hero-nav-copy">
+            <small>SECTION 03</small>
+            <strong>Inside RAM</strong>
+          </span>
+
+          <span
+            class="hero-nav-arrow"
+            aria-hidden="true"
+          >
+            ›
+          </span>
+        </a>
+
+        <a href="#memory-access-and-communication">
+          <span
+            class="hero-nav-icon"
+            aria-hidden="true"
+          >
+            ⌾
+          </span>
+
+          <span class="hero-nav-copy">
+            <small>SECTION 04</small>
+            <strong>Memory Access and Communication</strong>
+          </span>
+
+          <span
+            class="hero-nav-arrow"
+            aria-hidden="true"
+          >
+            ›
+          </span>
+        </a>
+
+        <a href="#challenge-quiz">
+          <span
+            class="hero-nav-icon"
+            aria-hidden="true"
+          >
+            ◆
+          </span>
+
+          <span class="hero-nav-copy">
+            <small>SECTION 05</small>
+            <strong>Challenge Quiz</strong>
+          </span>
+
+          <span
+            class="hero-nav-arrow"
+            aria-hidden="true"
+          >
+            ›
+          </span>
+        </a>
+      </nav>
+
+      <!-- Bottom HUD -->
+      <div
+        class="hero-bottom-hud"
+        aria-hidden="true"
+      >
+        <div class="hero-bottom-line hero-bottom-line-left"></div>
+
+        <div class="hero-bottom-center-mark">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="hero-bottom-line hero-bottom-line-right"></div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <a
+        class="hero-scroll-cue"
+        href="#what-is-ram"
+        aria-label="Scroll to Section 1"
+      >
+        <span class="hero-scroll-label">
+          BEGIN EXHIBIT
+        </span>
+
+        <span
+          class="hero-scroll-chevron"
+          aria-hidden="true"
+        ></span>
+
+        <span
+          class="hero-scroll-chevron"
+          aria-hidden="true"
+        ></span>
+      </a>
+
+    </header>
+
+    <!-- =====================================================
+         SECTION 1 — UNDERSTANDING RAM
+         ===================================================== -->
+
+    <div
+      id="ram-exhibit-what-is-ram"
+      class="ram-section-anchor"
+    >
+      <WhatIsRam client:load />
+    </div>
+
+    <!-- =====================================================
+         SECTION 2 — EVOLUTION OF RAM
+         ===================================================== -->
+
+    <div
+      id="ram-exhibit-evolution"
+      class="ram-section-anchor"
+    >
+      <EvolutionLogic client:load />
+    </div>
+
+    <!-- =====================================================
+         SECTION 3 — INTERNAL DATA JOURNEY
+         ===================================================== -->
+
+    <div
+      id="ram-exhibit-internal-journey"
+      class="ram-section-anchor"
+    >
+      <section
+        id="inside-the-ram-the-internal-data-journey"
+        class="big-section journey-section"
+      >
+        <!-- Decorative HUD background matching Sections 2, 4, and 5 -->
+        <div
+          class="journey-hud-background"
+          aria-hidden="true"
+        >
+          <div class="journey-background-grid"></div>
+          <div class="journey-background-glow"></div>
+          <div class="journey-outer-frame"></div>
+        </div>
+
+        <!-- Section header -->
+        <header class="journey-header">
+          <div class="journey-section-marker">
+            <span class="journey-marker-dots"></span>
+
+            <span>
+              SECTION 03
+            </span>
+
+            <span class="journey-marker-dots"></span>
+          </div>
+
+          <h2 class="journey-title glow-title">
+            INSIDE THE RAM
+          </h2>
+
+          <p class="journey-subtitle">
+            THE INTERNAL DATA JOURNEY
+          </p>
+        </header>
+
+        <!-- Interactive Nintendo Switch journey -->
+        <div
+          id="switch-container"
+          class="switch-container"
+        >
+          <div class="nintendo-wrapper">
+            <img
+              class="nintendo-image"
+              src={nintendoSwitch.src}
+              alt="Nintendo Switch"
+            />
+          </div>
+
+          <div class="switch-screen-content">
+            <RamJourney client:load />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- =====================================================
+        SECTION 4 — MEMORY ACCESS
+        ===================================================== -->
+
+    <div
+      id="ram-exhibit-memory-access"
+      class="ram-section-anchor"
+    >
+      <section
+        id="memory-access-and-communication"
+        class="memory-section"
+      >
+        <!-- Decorative background -->
+        <div
+          class="memory-hud-background"
+          aria-hidden="true"
+        >
+          <div class="memory-background-grid"></div>
+          <div class="memory-background-glow"></div>
+          <div class="memory-outer-frame"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="memory-header">
+          <div class="memory-section-marker">
+            <span class="memory-marker-dots"></span>
+
+            <span>
+              SECTION 04
+            </span>
+
+            <span class="memory-marker-dots"></span>
+          </div>
+
+          <h2 class="glow-title">
+            MEMORY ACCESS SIMULATOR
+          </h2>
+
+          <p class="memory-subtitle">
+            CPU TO RAM COMMUNICATION
+          </p>
+        </header>
+
+        <!-- React simulator -->
+        <MemComSim client:load />
+      </section>
+    </div>
+
+    <!-- =====================================================
+        SECTION 5 — CHALLENGE QUIZ
+        ===================================================== -->
+
+    <div
+      id="ram-exhibit-challenge-quiz"
+      class="ram-section-anchor"
+    >
+      <section
+        id="challenge-quiz"
+        class="quiz-section"
+      >
+        <!-- Decorative HUD background -->
+        <div
+          class="quiz-hud-background"
+          aria-hidden="true"
+        >
+          <div class="quiz-grid"></div>
+          <div class="quiz-background-glow"></div>
+          <div class="quiz-outer-frame"></div>
+        </div>
+
+        <!-- Section header -->
+        <header class="quiz-header">
+          <div class="quiz-section-marker">
+            <span class="quiz-marker-dots"></span>
+
+            <span>
+              SECTION 05
+            </span>
+
+            <span class="quiz-marker-dots"></span>
+          </div>
+
+          <h2>
+            CHALLENGE QUIZ
+          </h2>
+
+          <p class="quiz-header-subtitle">
+            TEST YOUR KNOWLEDGE
+          </p>
+
+          <div class="quiz-introduction">
+            <p class="quiz-introduction-hook">
+              A computer is only as reliable as the information it can
+              retrieve—and so is your memory.
+            </p>
+
+            <p class="quiz-instructions">
+              Complete all ten questions by selecting one answer per item.
+              Each response will be checked immediately, and your final
+              retention score will be revealed after the last question.
+            </p>
+          </div>
+        </header>
+
+        <!-- React controls the questions, answers, progress, and score -->
+        <QuizLogic client:load />
+      </section>
+    </div>
+</section>
+
+<script is:inline>
+  const ramSectionMap = {
+    "#title":
+      "#ram-exhibit-title",
+
+    "#what-is-ram":
+      "#ram-exhibit-what-is-ram",
+
+    "#the-evolution-of-ram":
+      "#ram-exhibit-evolution",
+
+    "#inside-the-ram-the-internal-data-journey":
+      "#ram-exhibit-internal-journey",
+
+    "#inside-the-ram---the-internal-data-journey":
+      "#ram-exhibit-internal-journey",
+
+    "#memory-access-and-communication":
+      "#ram-exhibit-memory-access",
+
+    "#challenge-quiz":
+      "#ram-exhibit-challenge-quiz"
+  };
+
+  function scrollToRamSection(hash, behavior = "smooth") {
+    const targetSelector = ramSectionMap[hash];
+
+    if (!targetSelector) {
+      return false;
+    }
+
+    const target = document.querySelector(targetSelector);
+
+    if (!target) {
+      return false;
+    }
+
+    target.scrollIntoView({
+      behavior,
+      block: "start"
+    });
+
+    history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}${hash}`
+    );
+
+    return true;
+  }
+
+  document.addEventListener("click", (event) => {
+    const clickedElement = event.target;
+
+    if (!(clickedElement instanceof Element)) {
+      return;
+    }
+
+    const link = clickedElement.closest('a[href^="#"]');
+
+    if (!link) {
+      return;
+    }
+
+    const hash = link.getAttribute("href");
+
+    if (!hash || !ramSectionMap[hash]) {
+      return;
+    }
+
+    event.preventDefault();
+
+    scrollToRamSection(hash);
+  });
+
+  window.addEventListener("load", () => {
+    const currentHash = window.location.hash;
+
+    if (!ramSectionMap[currentHash]) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToRamSection(currentHash, "auto");
+      });
+    });
+  });
+</script>
