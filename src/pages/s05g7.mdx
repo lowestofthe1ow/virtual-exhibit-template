@@ -1,0 +1,299 @@
+import ClassicOsLayout from '../components/s05g7/S05_Group7_ClassicOsLayout.astro';
+import MacGuiExhibit from '../components/s05g7/GuiExhibit.jsx';
+
+import appleLogo from '../assets/s05g7/apple-black.webp';
+import ibmPcjr from '../assets/s05g7/ibm-pcjr.webp';
+import appleLisa from '../assets/s05g7/lisa-apple.webp';
+import macPlus from '../assets/s05g7/MacintoshPlus.webp';
+import macSE from '../assets/s05g7/MacintoshSE.webp';
+import macPort from '../assets/s05g7/MacintoshPortable.webp';
+import macClass from '../assets/s05g7/MacintoshClassic.webp';
+import powerMac61 from '../assets/s05g7/PowerMac6100.webp';
+import powerBook from '../assets/s05g7/PowerBook500.webp';
+import anivMac from '../assets/s05g7/20thAnniversaryMac.webp';
+import imacG3 from '../assets/s05g7/IMacG3.webp';
+import macbookPro from '../assets/s05g7/MacBookPro.webp';
+import macGrater from '../assets/s05g7/MacProGrater.jpg';
+import macTrash from '../assets/s05g7/MacProTrash.webp';
+import macPro from '../assets/s05g7/MacPro2019.webp';
+import era1icon from '../assets/s05g7/era1icon.webp';
+import era2icon from '../assets/s05g7/era2icon.webp';
+import era3icon from '../assets/s05g7/era3icon.webp';
+import era4icon from '../assets/s05g7/era4icon.webp';
+import era5icon from '../assets/s05g7/era5icon.webp';
+import era6icon from '../assets/s05g7/era6icon.png';
+import AppleMacBookAir from '../assets/s05g7/AppleMacBookAir.webp';
+import M1Ultra from '../assets/s05g7/M1Ultra.webp';
+import M4MacBookPro from '../assets/s05g7/M4-MacBook-Pro.webp';
+import timelineOS from '../assets/s05g7/timelineOS.webp';
+
+export const eras = [
+  {
+    id: 'era1',
+    navLabel: 'Birth of the Macintosh',
+    icon: era1icon.src,
+    title: 'The Birth of the Macintosh | 1984 - 1990',
+    body: [
+      { type: 'p', text: "The original Macintosh (1984) marked a major shift in personal computing by making graphical computing accessible to everyday users. Unlike earlier personal computers that emphasized technical capability, the Macintosh focused on usability through a graphical user interface (GUI), built-in display, mouse input, and an integrated all-in-one design." },
+      { type: 'p', text: "At the time, the Mac's main rival for the home user market was the IBM PCjr, which had a 14-inch monitor." },
+      { type: 'img', src: ibmPcjr.src, alt: 'IBM PCjr', caption: 'The IBM PCjr' },
+      { type: 'p', text: "It was not the first computer to use a mouse. It was not even the first computer from Apple to be or have any of these things. The Apple Lisa, released a year before, had them all." },
+      { type: 'img', src: appleLisa.src, alt: 'Apple Lisa', caption: 'The Apple Lisa' },
+      { type: 'p', text: "The Macintosh revolutionized the personal computing industry and everything that was to follow because of its emphasis on providing a satisfying, simplified user experience." },
+      { type: 'p', text: "Architecturally, the Macintosh used the Motorola 68000, a single-core 16/32-bit processor running effectively at 6 MHz. It included 128 KB of RAM, which was extremely limited even for its time. Apple originally designed the machine with memory support only for 128 KB, but engineers quietly added extra address lines that made later expansion to 512 KB possible through unofficial hardware modifications." },
+      { type: 'p', text: "This period showed a broader architectural transition: computers were no longer improving only through faster processors—they were becoming easier to interact with." },
+    ],
+  },
+  {
+    id: 'era2',
+    navLabel: 'Classic Mac OS',
+    icon: era2icon.src, 
+    title: 'The Classic Mac OS | 1986 - 1990',
+    body: [
+      { type: 'subheading', text: 'Macintosh Plus (1986): Bumped the RAM and introduced SCSI peripheral support.' },
+      { type: 'img', src: macPlus.src, alt: 'Macintosh Plus', caption: 'Macintosh Plus' },
+      { type: 'p', text: "The Macintosh Plus improved everyday computing by addressing one of the original Macintosh's biggest limitations: memory capacity. Using the same single-core Motorola 68000 architecture at 7.8 MHz, the Macintosh Plus increased baseline memory to 1 MB RAM (later 2–4 MB configurations) and introduced SCSI support, allowing faster external storage and peripherals. It also adopted the Hierarchical File System (HFS) for better file organization." },
+      { type: 'p', text: "Despite improvements, memory remained limited because of motherboard addressing constraints and the absence of a dedicated Memory Management Unit (MMU)." },
+
+      { type: 'subheading', text: 'Macintosh SE (1987): Brought internal expansion capabilities to the compact lineup.' },
+      { type: 'img', src: macSE.src , alt: 'Macintosh SE', caption: 'Macintosh SE' },
+      { type: 'p', text: "The Macintosh SE introduced a more expandable architecture while retaining the Motorola 68000 platform. Running at 7.8 MHz, the SE improved overall responsiveness through faster memory access and a redesigned system architecture. Most importantly, it introduced the Processor Direct Slot (PDS), allowing hardware upgrades and accelerator cards. This reflected a shift in computing design: systems were beginning to prioritize expandability rather than fixed hardware." },
+
+      { type: 'subheading', text: 'Macintosh Portable (1989): Bringing Macintosh computing into mobility.' },
+      { type: 'img', src: macPort.src, alt: 'Macintosh Portable', caption: 'Macintosh Portable' },
+      { type: 'p', text: "Apple's Macintosh Portable represented an early attempt at mobile computing and laid foundations for later portable Mac systems. Powered by a 16 MHz Motorola 68000 and equipped with 1 MB of SRAM, it achieved noticeably faster responsiveness compared to the original Macintosh 128K primarily because the clock speed was more than doubled, also it used expensive, high-speed Static RAM (SRAM), which eliminated the severe memory-access wait states and bottlenecks present in the original desktop Mac. This allowed it to achieve a much faster, more responsive \"instant on\" sleep mode and high overall performance for its time." },
+      { type: 'p', text: "Did you know that the Macintosh Portable weighed a massive 16 pounds (7.3 kg), and a huge chunk of that weight came from its power source: it ran on a sealed lead-acid battery, which is essentially the exact same chemical technology used to start a gasoline car. Because of how its power management was wired, the computer physically could not boot up without a charged battery installed, even if you had it plugged directly into the wall outlet." },
+
+      { type: 'subheading', text: 'Macintosh Classic (1990): Offered an affordable entry point into the Mac ecosystem.' },
+      { type: 'img', src: macClass.src, alt: 'Macintosh Classic', caption: 'Macintosh Classic' },
+      { type: 'p', text: "Using the same Motorola 68000 architecture at 7.8 MHz, it maintained compatibility while reducing cost, becoming Apple's first Macintosh to sell below $1,000. Performance was roughly on par with the older Macintosh SE, delivering up to a 25 percent speed improvement over the Macintosh Plus primarily through refined logic board efficiencies and the inclusion of Apple's 1.44 MB SuperDrive floppy disk controller. The machine shipped in two configurations offering either 1 MB or 2 MB of RAM, but it faced strict physical memory limitations maxing out at 4 MB, a ceiling that could only be reached by installing a specialized, proprietary memory expansion card. The Classic reflected a new stage of computing evolution: making graphical personal computing accessible to a wider audience." },
+    ],
+  },
+  {
+    id: 'era3',
+    navLabel: 'PowerPC', 
+    icon: era3icon.src,
+    title: 'PowerPC | 1994 - 2006',
+    theme: {
+      mainBg: '#3d8f88',
+      mainBgImage: 'none',
+      headerBg: '#dcdcdc',
+    },
+    body: [
+      { type: 'p', text: "The PowerPC era marked one of the largest architectural transitions in Macintosh history. Apple abandoned the Motorola 68k processors that had powered the Mac since 1984 and adopted the PowerPC architecture, developed jointly by Apple, IBM, and Motorola. Unlike the earlier 68k processors, PowerPC used RISC (Reduced Instruction Set Computer) architecture, which simplified instruction execution and allowed the processor to complete more work per clock cycle." },
+      { type: 'p', text: "This shift improved overall efficiency rather than simply increasing processor speed. The transition also introduced more advanced system capabilities, including integrated Memory Management Units (MMU) for virtual memory support and built-in software compatibility layers that allowed older Macintosh applications to continue running during the migration." },
+
+      { type: 'subheading', text: 'Power Macintosh 6100' },
+      { type: 'img', src: powerMac61.src, alt: 'Power Macintosh 6100', caption: 'Power Macintosh 6100' },
+      { type: 'p', text: "Released in March 1994, the Power Macintosh 6100 became Apple's first mainstream desktop to adopt PowerPC architecture. It was powered by a single-core PowerPC 601 processor, utilizing a 32-bit architecture with a 64-bit data path and running at 60 MHz." },
+      { type: 'p', text: "Performance improved dramatically compared to earlier Motorola-based systems because the RISC design executed instructions in fewer cycles while maintaining software compatibility through a built-in 68LC040 software emulator stored inside the 4 MB system ROM." },
+      { type: 'p', text: "The system shipped with 8 MB of RAM, and unlike previous Macintosh generations, memory became virtual through the integrated MMU, allowing inactive data to be temporarily stored on the hard drive. Native memory officially reached 72 MB, although unofficial upgrades pushed this further. This machine established the architectural foundation that the rest of the PowerPC era would build upon." },
+
+      { type: 'subheading', text: 'PowerBook 500 series' },
+      { type: 'img', src: powerBook.src, alt: 'PowerBook 500 series', caption: 'PowerBook 500 series' },
+      { type: 'p', text: "Although introduced during the PowerPC era, the PowerBook 500 series still relied on the older single-core Motorola 68LC040 architecture, operating at 25 MHz or 33 MHz depending on model." },
+      { type: 'p', text: "Rather than introducing new processor technology, its innovation came from internal design. Apple mounted the processor on a removable daughtercard, making the notebook upgradeable to a 100 MHz PowerPC 603e later on. This made it one of Apple's first portable systems designed with long-term architectural transition in mind." },
+      { type: 'p', text: "The machines shipped with 4 MB or 12 MB of RAM, supported virtual memory, and separated graphics processing through 512 KB of dedicated VRAM instead of sharing system memory." },
+
+      { type: 'subheading', text: 'Twentieth Anniversary Macintosh' },
+      { type: 'img', src: anivMac.src, alt: 'Twentieth Anniversary Macintosh', caption: 'Twentieth Anniversary Macintosh' },
+      { type: 'p', text: "By 1997, PowerPC architecture had matured and Apple shifted toward integrating computing performance with multimedia capability." },
+      { type: 'p', text: "The Twentieth Anniversary Macintosh used a single-core PowerPC 603ev processor running at 250 MHz, a major increase from the first Power Macintosh systems. Although it inherited much of the internal architecture of the Power Macintosh 6500 series, it demonstrated how PowerPC performance had evolved to support multimedia workloads." },
+      { type: 'p', text: "It shipped with 32 MB of RAM and paired its processor with an ATI 3D RAGE II graphics processor and 2 MB of dedicated SGRAM VRAM, allowing the built-in display to operate at 800 × 600 resolution with 16-bit color. Despite its premium positioning, critics often considered its performance modest relative to its cost." },
+
+      { type: 'subheading', text: 'iMac G3' },
+      { type: 'img', src: imacG3.src, alt: 'iMac G3', caption: 'iMac G3' },
+      { type: 'p', text: "The iMac G3 brought PowerPC computing into the mainstream and demonstrated that architectural efficiency could matter more than raw processor speed." },
+      { type: 'p', text: "Powered by the single-core PowerPC 750 (G3), clock speeds began at 233 MHz and eventually reached 700 MHz across later revisions. However, its biggest performance gain came from the addition of a backside Level 2 cache, which operated independently from main memory and reduced delays when accessing frequently used data." },
+      { type: 'p', text: "Memory configurations expanded throughout production, eventually supporting up to 1 GB of RAM, while graphics processing evolved from the ATI Rage IIc to the ATI Rage 128 Ultra with up to 16 MB of dedicated VRAM." },
+      { type: 'p', text: "Architecturally, the iMac also reduced reliance on large motherboard ROM systems through the adoption of Common Hardware Reference Platform (CHRP) standards, helping simplify startup behavior and future hardware development." },
+      { type: 'p', text: "The iMac G3 helped redefine consumer computing by standardizing USB connectivity and making internet access part of the default desktop experience." },
+    ],
+  },
+  {
+    id: 'era4',
+    navLabel: 'OS Architecture', 
+    icon: era4icon.src,
+    title: 'OS Architecture | 1999 - 2016',
+    theme: {
+      mainBg: '#31427B',
+      mainBgImage: 'none',
+      headerBg: '#dcdcdc',
+      mainFont: 'EB Garamond',
+    },
+    body: [
+      
+      { type: 'p', text: "From the Mac OS X to the modern MacOS, Apple’s operating systems have gone through a multitude of changes and improvements to its design, architecture, performance, security, and hardware support and has remained the core software component of Apple’s Mac computers.\n\n " },
+
+      { type: 'subheading', text: 'Mac OS X Server 1.0 and Public Beta' },
+      { type: 'p', text: "The first version of the Mac OS X was in the form of a server known as the Mac OS X Server 1.0, which was first developed in 1999, following this Apple unveiled the modern desktop Mac OS X in January 2000 and released a public beta in September 2000, which became the first available version.\n " },
+      { type: 'subheading', text: 'Mac OS X 10.0 Cheetah' },
+      { type: 'p', text: "The Mac OS X 10.0 was released to the general public in 2001 and became the first commercial version of Mac OS X. It was notable for establishing the basic architecture and appearance of the modern Mac’s operating system, however it suffered from slow performance, limited hardware support and missing features compared to its predecessors." },
+      { type: 'subheading', text: 'Mac OS X 10.1 Puma' },
+      { type: 'p', text: "The Mac OS X 10.1 was released in September 2001. It set out to fix the problems of the 10.0 and it did, fixing a multitude of the 10.0’s performance and usability issues, helping the Mac OS X become more practical for normal everyday use." },
+      { type: 'subheading', text: 'Mac OS X 10.2 Jaguar' },
+      { type: 'p', text: "Released in August 2002, the Mac OS X 10.2 made the Mac OS X faster, more complete, and better connected to networks and other computers." },
+      { type: 'subheading', text: 'Mac OS X 10.3 Panther' },
+      { type: 'p', text: "The Mac OS X 10.3, released in October 2003 focused more on productivity, security, and multitasking, most notably introducing Exposè, which reinvented the mission control feature and became one of the most era defining traits of the Mac OS X." },
+      { type: 'subheading', text: 'Mac OS X 10.4 Tiger' },
+      { type: 'p', text: "The Mac OS X 10.4, released in August 2005 added more features that would be used down the line for other Mac operating systems, added early native 64-bit application support and 64-bit virtual memory, and lastly was also the version used during Apple’s transition from PowerPC processors to Intel processors." },
+      { type: 'subheading', text: 'Mac OS X 10.5 Leopard' },
+      { type: 'p', text: "The Mac OS X 10.5 released in the October of 2007 was heavily feature oriented aimed at improving quality of life for users, however it was most known for being the last Mac OS X to support both PowerPC and Intel Macs and became the final major Mac OS X release that could run on PowerPC-based Macs." },
+      { type: 'subheading', text: 'Mac OS X 10.6 Snow Leopard' },
+      { type: 'p', text: "Released in August 2009, the Mac OS X 10.6 focused primarily on optimization rather than large visible changes. It refined existing architecture and helped prepare the Mac platform for a more complete transition to 64-bit computing." },
+      { type: 'subheading', text: 'Mac OS X 10.7 Lion' },
+      { type: 'p', text: "On July 20, 2011, the Mac OS X 10.7 was released, it brought several ideas from the Iphone to the Mac, one of which being AirDrop. It also became the first major Mac operating-system upgrade distributed primarily through the Mac App Store instead of physical installation discs." },
+      { type: 'subheading', text: 'OS X 10.8 Mountain Lion' },
+      { type: 'p', text: "On July 25, 2012, with the release of the newest Mac OS X, the 10.8, Apple decided to shorten its name from Mac OS X to OS X, this version apart from its name change had continued to bring iOS features to the Mac and strengthened the integration between the iOS and Mac computers." },
+      { type: 'subheading', text: 'OS X 10.9 Mavericks' },
+      { type: 'p', text: "Released in October 2013, the OS X 10.9 added a variety of features, such as Finder Tabs, Finder Tags, improved multiple-display support, interactive notifications, and improved battery life. However its most notable feature was the fact that this operating-system upgrade and all Mac operating-system upgrades following this would generally be provided free of charge." },
+      { type: 'subheading', text: 'OS X 10.10 Yosemite' },
+      { type: 'p', text: "The OS X 10.10 was released in October 2014 and featured a visual redesign overhauling many design elements from the prior versions, furthermore it made the cooperation between Mac computers, Iphones and Ipads central to the design." },
+      { type: 'subheading', text: 'OS X 10.11 El Capitan' },
+      { type: 'p', text: "The major release under the name OS X was released in September 2015. Known as the OS X 10.11 it included quality of life improvements such as split screen view, stronger system security and fast application launching and window rendering which was overall a refinement and performance improvement from the prior versions." },
+
+      { type: 'subheading', text: 'Timeline of Mac operating systems' },
+      { type: 'img', src: timelineOS.src, alt: 'Timeline of Mac operating systems', caption: 'Timeline of Mac operating systems' },
+    ],
+  },
+  {
+    id: 'era5',
+    navLabel: 'Intel Mac',
+    icon: era5icon.src,
+    title: 'Intel Mac | 2006 - 2019',
+    theme: {
+      mainBg: '#003550',
+      mainBgImage: 'none',
+      headerBg: '#dcdcdc',
+      mainFont: 'EB Garamond',
+    },
+    body: [
+      { type: 'p', text: "Before Intel had transferred to using Intel Processors they were first using PowerPC processors. Part of why they transitioned to Intel Processors was because back in 2003 Steve Jobs had announced that they planned to release the first personal computer to feature a 64-bit processor from IBM's PowerPC G5 product line, but IBM had issues with the fabrication process and added concerns from executives in the company were also concerned with the Jobs' plan." },
+      { type: 'p', text: "When Apple first released their supposed 64-bit processor personal computers they were actually not 64-bit. They were actually 32-bit. The processors were known as the Intel Core Duo. But fast forward to a half a year later they were able to give improvements to their lineup via the Intel Core 2 Duo which were indeed 64-bit processors." },
+
+      { type: 'subheading', text: 'The First MacBook Pro' },
+      { type: 'img', src: macbookPro.src, alt: 'The First MacBook Pro', caption: 'The First MacBook Pro' },
+      { type: 'p', text: "It is also noted that the first MacBook Pro was made during this era. It came with the previously mentioned Intel Core Duo. It came with 1 GB of DDR2 SDRAM with a 2 GB upgrade option. Around 120 GB of storage with a 160 GB option. It even came with optical drives for DVD's. It is also to be noted that it came with a 2.16 GHz and 2.33 GHz option for its processor speed. The 1st generation MacBook Pro is also considered to be the successor to the PowerBook G4." },
+      { type: 'p', text: "The 15-inch model was announced on January 10, 2006 at the Macworld Conference and Expo. The 17-inch model was then introduced 3 months later on April 24, 2006." },
+
+      { type: 'subheading', text: "The Mac Pro 'Cheese Grater'" },
+      { type: 'img', src: macGrater.src , alt: "Mac Pro 'Cheese Grater'", caption: "The Mac Pro 'Cheese Grater'" },
+      { type: 'p', text: "The Mac Pro, or otherwise nicknamed the Mac Pro 'Cheese Grater' was the successor of the Power Mac G5. The Mac Pro was announced on August 7, 2006. It was the last Mac product to transition to Intel Processors. The Mac Pro had 2 2-core Intel Xeons with both having a speed of 2.66 GHz. It came by default with only 1 GB of DDR2 RAM but was upgradable to up to 16 GB. It even came with a graphics card and an optical drive. It has about 250 GB of storage by default but was upgradable to 750 GB." },
+      { type: 'p', text: "Its case was actually very similar to the Power Mac G5, and because the new Intel processors were producing less heat they were able to make some changes to the layout of the machine, which in return accounts for why there was more space for more drives and extensions." },
+      { type: 'p', text: "The Mac Pro 'Cheese Grater' lasted for up to 6 years up until 2012. Almost every 2 years there would be an upgrade to the Mac Pro hardware wise. With the last Mac Pro having a 3.2 GHz 2-core Intel Xeon or an option for two 2.4 GHz 6-core Intel Xeon." },
+      { type: 'p', text: "The Mac Pro is also noted to be a solid “Multiplatform Device” by Ars Technica and it was also noted to be a “great machine” by Sound on Sound for musicians and audio engineers due to the numerous connections it had for audio devices and even its expansion slots. And while it was marketed as a workstation it could also function as a server (mostly for home hosting)." },
+
+      { type: 'subheading', text: "The Mac Pro 'Trash Can'" },
+      { type: 'img', src: macTrash.src, alt: "Mac Pro 'Trash Can'", caption: "The Mac Pro 'Trash Can'" },
+      { type: 'p', text: "The 2013 evolution of the Mac Pro was a very controversial one. They had completely redesigned the Mac Pro into a compact form factor and was aptly nicknamed the 'Trashcan'. This cylindrical Mac Pro was one-fourth the original's weight and one-eighth the volume and it had about a height of 25 cm. It could support only processors with them being different iterations of the Intel Xeon E5. It had about 12 GB of DDR3 RAM with it having upgrades to 64 GB. Note that it did have 256 GB of flash storage with it having options of 512 GB and 1 TB." },
+      { type: 'p', text: "It had 3 different models all released in 2013. The base model was discontinued in 2017 whilst the other two models were discontinued in 2019. It even had issues related to its graphics cards which led to video distortions. The sales for the Mac Pro 'Trashcan' were disappointing." },
+      { type: 'p', text: "It is also to be noted that around 2014 and 2016 was when DDR4 RAM had been released and Bluetooth 5.0 was too. They also could have started working with AMD on more upgrades for their graphics cards. Yet the 2013 model had lasted for almost 6 years with no changes at all. It was made fun of by a number of its buyers, and ultimately led to Apple admitting their failure with the product." },
+
+      { type: 'subheading', text: 'The Mac Pro (2019)' },
+      { type: 'img', src: macPro.src, alt: 'Mac Pro (2019)', caption: 'The Mac Pro (2019)' },
+      { type: 'p', text: "After their failure with the 2013 Mac Pro models, Apple had announced in 2018 that they were redesigning the Mac Pro. It was announced in 2019 and featured a design calling back to the original Mac Pro with its cheese grater-like design. The processors were still of the Intel Xeon line, but with major upgrades. The core number options were now from 8 up to 28 cores. By default it came with 32 GB DDR4 RAM and was even expandable up to either 768 GB or 1.5 TB depending on your chosen model. It first came with one graphics card option but eventually had more as the years went by, note that you could also slot in two graphics cards at the same time. It was even capable of lights-out management." },
+      { type: 'p', text: "Its design was a pure callback but modernization of the original Mac Pro. It also had some options such as wheels as its feet or a rack mount. It was also announced with the Pro Display XDR which was a 6K display that had a similar lattice-like pattern on it." },
+      { type: 'p', text: "The graphics card it was originally paired with was the AMD Radeon Pro W5500X. It eventually received more options, eventually receiving the RDNA-2 based Radeon Pro cards." },
+      { type: 'p', text: "The 2019 Mac Pro was highly regarded, and its initial reviews were positive. It was due to this that it had continuous upgrades, with it receiving new upgrade options up until 2023. It is also to be noted that a number of the parts on the machine were replaceable by your average consumer." },
+      { type: 'p', text: "With this release they were able to overcome their failure and come back to what truly made the Mac Pro a good computer. It was an amazing workstation. They focused on giving it much more memory and space and even better graphics cards for more intensive work. With all of those even being upgradable to a certain degree." },
+    ],
+  },
+  {
+    id: 'era6',
+    navLabel: 'Apple Silicon',
+    icon: era6icon.src,
+    title: 'Apple Silicon | 2020 - 2026',
+    theme: {
+      mainBg: '#f4dfd9',
+      mainBgImage: 'none',
+      headerBg: '#dcdcdc',
+    },
+    body: [
+      { type: 'p', text: "Apple Silicon marked the third major processor transition, moving from Intel to Apple Silicon. This was a result of Apple licensing ARM technology and developing its own custom Apple Silicon processors optimized specifically for Macintosh computers. This gave Apple free reign over both hardware and software design moving forward, allowing the company to optimize performance, efficiency, and battery life." },
+      { type: 'p', text: "Unlike Intel-based Macs, which relied on multiple chips for processing, graphics, memory access, and specialized workloads (for example video encoding and decoding, image processing, and audio processing), these functions were combined into a single chip known as the System on a Chip (SoC), and Apple Silicon uses a series of these SoCs across its lineup. This chip integrates the functions of the CPU, GPU, Neural Engine, security hardware, media engines, and display engines. Due to this, Apple Silicon was able to improve performance and reduce communication delays." },
+      { type: 'p', text: "Unified Memory Architecture (UMA) has become almost synonymous with Apple Silicon. While Intel Mac models had the CPU and GPU maintain separate memory pools, requiring data to be copied between them, in Apple Silicon the CPU, GPU, and Neural Engine all share the same memory pool, allowing faster, more efficient access to data. This had the added benefit of reducing overhead." },
+      { type: 'p', text: "The first Apple Silicon model, the M1, was introduced in 2020 through the MacBook Air, MacBook Pro, and Mac Mini. In this early model, the M1 was shown to match or exceed some of the stronger Intel processors despite consuming significantly less power. It featured an 8-core CPU, an 8-core GPU, a 16-core Neural Engine, and either 8 GB or 16 GB of unified memory." },
+      { type: 'p', text: "As the architecture evolved through M2, M3, and M4, Apple expanded CPU core counts, graphics performance, memory capacities, AI acceleration, and dedicated media processing hardware. These improvements allowed Macs to handle increasingly demanding workloads such as software development, video editing, machine learning, and 3D rendering, while maintaining strong battery life and low heat output." },
+      { type: 'p', text: "However, the improvements of Apple Silicon had a caveat: sacrificing the upgradability of the systems. Because memory and storage are directly integrated into the system architecture, users can no longer add upgrades after purchase, overall reducing hardware flexibility for the benefits Apple Silicon provides." },
+
+      { type: 'subheading', text: 'MacBook Air M1' },
+      { type: 'img', src: AppleMacBookAir.src , alt: 'MacBook Air M1', caption: 'MacBook Air M1' },
+      { type: 'p', text: "The MacBook Air M1, the first consumer-grade Mac to use Apple Silicon, was introduced in 2020. It featured an 8-core GPU and CPU, a 16-core Neural Engine, and up to 16 GB of unified memory. It was showcased to not require a cooling fan whilst delivering better performance and battery life compared to its Intel counterparts." },
+
+      { type: 'subheading', text: 'Mac Studio M1 Ultra' },
+      { type: 'img', src: M1Ultra.src , alt: 'Mac Studio M1 Ultra', caption: 'Mac Studio M1 Ultra' },
+      { type: 'p', text: "The Mac Studio M1 Ultra served as a demonstration of the capabilities of Apple Silicon. Released in 2022, it was effectively two M1 Max processors wrapped in a single package using UltraFusion, an interconnect technology. It had options scaling up to 20 CPU cores, 64 GPU cores, and 128 GB of unified memory, delivering incredible performance while consuming significantly less power than its Intel predecessors. This showed Apple's shifting vision, focusing more on architectural integration, specialized processing hardware, and efficiency, resulting in a new computing model where performance, battery life, graphics processing, AI acceleration, and memory access were all designed as parts of a single unified system." },
+
+      { type: 'subheading', text: 'Mac Pro M4 Max' },
+      { type: 'img', src: M4MacBookPro.src, alt: 'Mac Pro M4 Max', caption: 'Mac Pro M4 Max' },
+      { type: 'p', text: "The Mac Pro M4 Max, released in 2024, stands as the strongest iteration of the Silicon series, boasting up to a 16-core CPU, a 40-core GPU, and a significantly more powerful Neural Engine due to its AI architecture, allowing it to perform much faster than the M1 counterpart. It also featured hardware ray tracing and 128 GB of unified memory. The goal of the M4 Max was to target professional workloads such as software development, artificial intelligence, video production, 3D rendering, and scientific computing, and it excelled at it. At present, it represents a complete professional computing platform and the biggest jump in changes in Apple Silicon history." },
+
+      { type: 'p', text: "Basically, the Apple Silicon era transformed Macintosh computers from traditional multi-chip systems into highly integrated computing platforms. By combining functions such as processing, graphics, memory, AI acceleration, and media engines into a single architecture, Apple created computers that are faster, more efficient, and better optimized than their Intel predecessors." },
+    ],
+  },
+  {
+    id: 'references',
+    navLabel: 'References', 
+    title: 'References',
+    body: [
+      { type: 'p', text: "Wobbrock, J. O. (2024, January 19). Forty years ago, the Mac triggered a revolution in user experience. Smithsonian Magazine. https://www.smithsonianmag.com/innovation/forty-years-ago-the-mac-triggered-a-revolution-in-user-experience-180983623/" },
+
+      { type: 'p', text: "Stromberg, J. (2014, January 23). What reviewers said about the first Mac when it debuted. Smithsonian Magazine. https://www.smithsonianmag.com/history/what-reviewers-said-about-first-mac-when-it-debuted-180949448/" },
+
+      { type: 'p', text: 'Parakh, A. (2021, October 2). A brief history of Apple Computer Inc. and the Graphic User Interface. Medium. https://akshayparakh.medium.com/a-brief-history-of-apple-computer-inc-and-the-graphic-user-interface-459535cfee9e' },
+
+      { type: 'p', text: 'Version Museum. (n.d.). 17 Years of Classic Mac OS design history. Version Museum. https://www.versionmuseum.com/history-of/classic-mac-os' },
+      { type: 'p', text: 'Version Museum. (n.d.). 25 Years of Mac OS X design history. Version Museum. https://www.versionmuseum.com/history-of/mac-os-x' },
+
+      { type: 'p', text: 'Apple. (n.d.). Mac Pro (2019) - Technical Specifications. Apple Support. https://support.apple.com/en-ph/118461' },
+
+      { type: 'p', text: 'Apple. (n.d.). MacBook Pro (Late 2006) - Technical Specifications. Apple Support. https://support.apple.com/en-lb/112489' },
+
+      { type: 'p', text: 'Apple Wiki contributors. (n.d.). MacBook Pro (1st generation). Apple Wiki. https://apple.fandom.com/wiki/MacBook_Pro_(1st_generation)' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). IBM PCjr. Wikipedia. https://en.wikipedia.org/wiki/IBM_PCjr' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Apple Lisa. Wikipedia. https://en.wikipedia.org/wiki/Apple_Lisa' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Macintosh Portable. Wikipedia. https://en.wikipedia.org/wiki/Macintosh_Portable' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Macintosh SE. Wikipedia. https://en.wikipedia.org/wiki/Macintosh_SE' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Macintosh Plus. Wikipedia. https://en.wikipedia.org/wiki/Macintosh_Plus' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Macintosh Classic. Wikipedia. https://en.wikipedia.org/wiki/Macintosh_Classic' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Mac (computer). Wikipedia. https://en.wikipedia.org/wiki/Mac_(computer)' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). PowerPC. Wikipedia. https://en.wikipedia.org/wiki/PowerPC' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Power Macintosh 6100. Wikipedia. https://en.wikipedia.org/wiki/Power_Macintosh_6100' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). PowerBook 500 series. Wikipedia. https://en.wikipedia.org/wiki/PowerBook_500_series' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Twentieth Anniversary Macintosh. Wikipedia. https://en.wikipedia.org/wiki/Twentieth_Anniversary_Macintosh' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). iMac G3. Wikipedia. https://en.wikipedia.org/wiki/IMac_G3' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). PowerBook G4. Wikipedia. https://en.wikipedia.org/wiki/PowerBook_G4' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). iMac G4. Wikipedia. https://en.wikipedia.org/wiki/IMac_G4' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Power Mac G5. Wikipedia. https://en.wikipedia.org/wiki/Power_Mac_G5' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). iMac G5. Wikipedia. https://en.wikipedia.org/wiki/IMac_G5' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). MacOS version history. Wikipedia. https://en.wikipedia.org/wiki/MacOS_version_history#Releases' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Mac Pro. Wikipedia. https://en.wikipedia.org/wiki/Mac_Pro' },
+
+      { type: 'p', text: 'Wikipedia contributors. (n.d.). Pro Display XDR. Wikipedia. https://en.wikipedia.org/wiki/Pro_Display_XDR' },
+      { type: 'p', text: 'Google Gemini was used to learn how to use the Astro framework'  },
+
+    ],
+  },
+];
+
+<ClassicOsLayout title="History of the Macintosh Computer">
+    <MacGuiExhibit client:load appleLogoSrc={appleLogo.src} eras={eras} />
+</ClassicOsLayout>

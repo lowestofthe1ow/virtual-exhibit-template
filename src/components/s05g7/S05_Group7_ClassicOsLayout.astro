@@ -1,0 +1,317 @@
+---
+// This is the frontmatter. JavaScript and build logic go here.
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+</head>
+<body>
+    <slot />
+</body>
+</html>
+
+<style is:global>
+    /* Adding 'is:global' ensures these styles apply to the whole document, just like your old CSS file.
+    * All selectors are scoped under .s05g7-* prefixes so they don't collide with other groups'
+    * pages when merged into the umbrella museum site. */
+    @import url('https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+    .s05g7-main-container,
+    .s05g7-main-container * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto Mono", monospace;
+    }
+
+    .s05g7-main-container button,
+    .s05g7-main-container input,
+    .s05g7-main-container select,
+    .s05g7-main-container textarea,
+    .s05g7-main-container span,
+    .s05g7-main-container div,
+    .s05g7-main-container h1,
+    .s05g7-main-container h2,
+    .s05g7-main-container h3,
+    .s05g7-main-container h4,
+    .s05g7-main-container h5,
+    .s05g7-main-container p,
+    .s05g7-main-container a {
+        font-family: inherit;
+    }
+
+    .s05g7-main-container {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--main-bg-color, #a9a9a9);
+        background-image: var(--main-bg-image, radial-gradient(#333 25%, transparent 25%), radial-gradient(#333 25%, transparent 25%));
+        background-size: 4px 4px;
+        background-position: 0 0, 2px 2px;
+        border: 4px solid #000;
+        display: flex;
+        flex-direction: column;
+        border-radius: 25px;
+        overflow: hidden;
+    }
+
+    .s05g7-header {
+        background-color: var(--header-bg, #fff);
+        height: 75px;
+        border-bottom-width: 2px;
+        border-bottom-color: #000;
+        border-bottom-style: var(--header-border-style, solid);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 12px;
+        box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    .s05g7-header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .s05g7-header-left span{
+        padding-left: 7px;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .s05g7-header-left h3{
+        padding-left: 7px;
+        font-size: 15px;
+        font-weight: normal;
+    }
+
+
+    .s05g7-apple-logo-img {
+        height: 30px;
+        width: auto;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .s05g7-header-right {
+        text-align: right;
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .s05g7-workspace {
+        display: flex;
+        flex: 1;
+        padding: 20px;
+        padding-left: 150px;
+        gap: 25px;
+        height: calc(100vh - 38px);
+    }
+
+    .s05g7-sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 110px;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+    }
+
+    .s05g7-main-container a {
+        color: black;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .s05g7-sidebar button {
+        background: none;
+        border: none;
+        color: black;
+        font-family: inherit;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 10px;
+    }
+
+    /* TRY LANG: icon nav buttons */
+    .s05g7-nav-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .s05g7-sidebar button.s05g7-active {
+        text-decoration: underline;
+    }
+
+    .s05g7-sidebar button.s05g7-active .s05g7-nav-icon {
+        outline: 2px solid #000;
+        border-radius: 6px;
+    }
+
+    .s05g7-content-window {
+        flex: none !important;
+        width: 60vw;
+        height: 75vh;
+        margin: auto;
+        background-color: #fff;
+        border: 2px solid #000;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    }
+
+    .s05g7-window-header {
+        border-bottom: 2px solid #000;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+        font-size: 25px;
+        letter-spacing: 1px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        gap: 12px;
+    }
+
+    .s05g7-window-body {
+        flex: 1;
+        padding: 40px;
+        text-align: justify;
+        font-size: 16px;
+        color: #000;
+        overflow-y: auto;
+    }
+
+
+    .s05g7-body-img {
+        display: block;
+        margin: 20px auto;
+        width: 180px;
+        height: auto;
+        border: 1px solid #000;
+    }
+
+    .s05g7-window-body h5{
+        padding-top: -10px;    text-align: center;
+        font-size: 13px;
+        font-style: italic;
+        font-weight: normal;
+    }
+
+    .s05g7-window-body .s05g7-subheading {
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 4px;
+    }
+
+    .s05g7-window-body .s05g7-placeholder-note {
+        font-style: italic;
+        color: #666;
+        border: 1px dashed #999;
+        padding: 10px;
+        margin-bottom: 12px;
+        background: #f5f5f5;
+    }
+
+/*for mobile compat*/
+
+@media (max-width: 768px) {
+
+    html, body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100% !important;
+        position: relative !important;
+    }
+
+    .s05g7-main-container, ._s05g7-main-container, .main-container {
+        position: relative !important;
+        inset: auto !important;
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow: visible !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+    }
+
+    .s05g7-header, ._s05g7-header, .header {
+        height: auto !important;
+        padding: 12px 10px !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        text-align: center !important;
+    }
+
+    .s05g7-header-left span {
+        font-size: 20px !important;
+    }
+
+    .s05g7-header-right {
+        text-align: center !important;
+        font-size: 12px !important;
+    }
+
+    .s05g7-workspace, ._s05g7-workspace, .workspace {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 10px !important; 
+        height: auto !important;
+        width: 100% !important;
+        gap: 15px !important;
+        overflow: visible !important;
+    }
+
+    .s05g7-sidebar, ._s05g7-sidebar, .sidebar {
+        width: 100% !important;
+        height: auto !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        padding: 10px 0 !important;
+        border-bottom: 2px solid #000 !important;
+    }
+
+    .s05g7-content-window, ._s05g7-content-window, .content-window {
+        width: 100% !important; 
+        height: auto !important;
+        margin: 0 !important;
+        flex: none !important;
+        overflow: visible !important;
+    }
+
+    .s05g7-window-header {
+        font-size: 18px !important;
+        padding: 10px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .s05g7-window-body, ._s05g7-window-body, .window-body {
+        padding: 15px !important;
+        font-size: 14px !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important; 
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .s05g7-body-img, .body-img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+}
+</style>
