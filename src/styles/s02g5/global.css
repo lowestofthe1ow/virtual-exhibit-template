@@ -1,0 +1,57 @@
+@import './arcade-theme.css';
+
+:root {
+  --bg-color: #0b0c10;
+  --surface-color: #1f2833;
+  --text-primary: #c5c6c7;
+  --neon-accent: #66fcf1;
+  --neon-secondary: #45a29e;
+  --font-pixel: 'Press Start 2P', cursive;
+  --font-sans: 'Inter', sans-serif;
+  --transition-speed: 0.3s;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-pixel);
+  color: var(--neon-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Accessibility focus states */
+a:focus, button:focus {
+  outline: 2px solid var(--neon-accent);
+  outline-offset: 4px;
+}
+
+.content-container {
+  animation: fadeUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.crt-effect::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 999;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}

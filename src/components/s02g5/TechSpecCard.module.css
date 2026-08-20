@@ -1,0 +1,19 @@
+.card {
+  background-color: var(--surface-color);
+  border-left: 4px solid var(--neon-accent);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.label {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: var(--neon-secondary);
+}
+
+.value {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}

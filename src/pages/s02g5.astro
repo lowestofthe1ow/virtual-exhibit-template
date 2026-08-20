@@ -1,0 +1,121 @@
+---
+import ExhibitLayout from '../components/s02g5/Layout.astro';
+import ArcadeMenu from '../components/s02g5/ArcadeMenu.jsx';
+import CoinDropIntro from '../components/s02g5/CoinDropIntro.jsx';
+---
+
+  
+
+<ExhibitLayout frontmatter={{ title: "From Pixels to Polygons: A Silicon Quest" }}>
+  
+  <!-- Use client:only="react" so Astro doesn't break the click events! -->
+  <CoinDropIntro client:only="react" />
+
+  <div class="arcade-homepage">
+    <!-- Retro Arcade HUD Ticker -->
+    <div class="arcade-hud">
+      <div class="hud-item"><span>1UP:</span> 008526</div>
+      <div class="hud-item hud-title">SYSTEM: CSARCH2_EXHIBIT_v2.6</div>
+      <div class="hud-item"><span>CREDITS:</span> 01</div>
+    </div>
+
+    <!-- Marquee Banner -->
+    <header class="marquee-header">
+      <div class="cabinet-tag">GROUP 5 PRESENTATION</div>
+      <h1 class="arcade-title">From Pixels to Polygons</h1>
+      <p class="arcade-subtitle">A Silicon Quest Through Gaming Architecture</p>
+    </header>
+
+    <!-- Interactive Game-Select / Era Arcade Menu Component -->
+    <ArcadeMenu client:load />
+
+    <!-- Press Start Instructions -->
+    <div class="boot-prompt">
+      <span class="blink-text">▶ SELECT AN ERA CABINET BELOW TO START QUEST ◀</span>
+    </div>
+  </div>
+</ExhibitLayout>
+
+<style>
+  .arcade-homepage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .arcade-hud {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-pixel);
+    font-size: 0.65rem;
+    color: var(--neon-accent, #66fcf1);
+    border-bottom: 2px dashed rgba(102, 252, 241, 0.3);
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .hud-title {
+    color: #c5c6c7;
+    letter-spacing: 1px;
+  }
+
+  .marquee-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .cabinet-tag {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    background: rgba(102, 252, 241, 0.1);
+    color: var(--neon-accent, #66fcf1);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--neon-accent, #66fcf1);
+    letter-spacing: 2px;
+  }
+
+  .arcade-title {
+    font-family: var(--font-pixel);
+    font-size: 1.8rem;
+    color: #fff;
+    text-shadow: 3px 3px 0px #ff0055, -3px -3px 0px #00f0ff;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .arcade-subtitle {
+    font-size: 1rem;
+    color: #c5c6c7;
+    font-family: var(--font-sans);
+    letter-spacing: 0.5px;
+  }
+
+  .boot-prompt {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .blink-text {
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+    color: #ff0055;
+    animation: textBlink 1s infinite steps(2);
+  }
+
+  @keyframes textBlink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @media (max-width: 768px) {
+    .arcade-title { font-size: 1.1rem; }
+    .arcade-hud { font-size: 0.5rem; }
+  }
+</style>
