@@ -14,6 +14,12 @@
   - [6. What is Astro and MDX?](#6-what-is-astro-and-mdx)
   - [7. Writing an MDX File](#7-writing-an-mdx-file)
   - [8. Rendering Your MDX File](#8-rendering-your-mdx-file)
+- [Merged Site Guide](#merged-site-guide)
+  - [9. The Slug Convention](#9-the-slug-convention)
+  - [10. The Gallery's Source of Truth](#10-the-gallerys-source-of-truth)
+  - [11. Protected Shared Files](#11-protected-shared-files)
+  - [12. Adding or Re-Importing an Exhibit](#12-adding-or-re-importing-an-exhibit)
+  - [13. The s02g7 Exception](#13-the-s02g7-exception)
 
 ---
 
@@ -196,3 +202,97 @@ npm run dev
 ```
 
 2. Visit your page at `localhost:4321/virtual-exhibit-template/topic_name`.
+
+---
+
+# Merged Site Guide
+
+Everything above describes the original single-exhibit contributor template.
+This umbrella repository has since merged all 53 CSARCH2 section/group
+exhibits into one Astro site, each on its own route, listed together on the
+homepage gallery. This section documents that merged structure for whoever
+maintains it next.
+
+## 9. The Slug Convention
+
+Every exhibit has a **slug** of the form `s<section>g<group>` — e.g. `s01g4`
+is Section 01, Group 4; `s40g6` is Section 40, Group 6. The slug is the
+single namespace an exhibit owns everywhere in the tree. A given exhibit may
+own, depending on what it needs:
+
+| Path | Purpose |
+|---|---|
+| `src/pages/<slug>.mdx` (or `.astro`) | The exhibit's entry page — its route is `/<slug>/`. |
+| `src/pages/<slug>/` | The exhibit's sub-pages, if it has more than one (e.g. `src/pages/s01g8/03-before-gpus.mdx`). |
+| `src/components/<slug>/` | The exhibit's own Astro/React/TSX components, including a custom `Layout.astro` if it needs one instead of the shared layout. |
+| `src/assets/<slug>/` | The exhibit's build-time-imported images, models, and other media referenced from its components/pages. |
+| `src/styles/<slug>/` | The exhibit's own stylesheets, imported only from its own pages/components. |
+| `public/<slug>/` | The exhibit's runtime-fetched static assets (large media referenced by absolute URL rather than imported). |
+
+Nothing outside an exhibit's own `<slug>/` namespace should ever reference
+that exhibit's files, and an exhibit should never reach into another
+exhibit's namespace or into the umbrella's own top-level files. This is what
+lets 53 independently-authored codebases coexist in one `src/` tree without
+naming collisions.
+
+## 10. The Gallery's Source of Truth
+
+`src/data/exhibits.json` is the single source of truth for the homepage
+gallery. Each entry carries a `status` field:
+
+- `"live"` — a source-merged Astro exhibit under its own `<slug>` namespace, built and routed by this site.
+- `"external"` — not source-merged; served some other way (see [13](#13-the-s02g7-exception) for the one exhibit currently in this state).
+- `"pending"` — not yet integrated. As of the last full merge, no exhibit carries this status; `tools/test/exhibits.test.mjs` asserts this stays true.
+
+`src/data/rankings.json` is a flat array of up to 15 slugs, in order, that
+drives the "Top exhibits" row at the top of the homepage. Editing it is a
+pure data change — no code edit and no rebuild of any individual exhibit is
+required, it just changes which cards render first.
+
+## 11. Protected Shared Files
+
+**Do not modify these — they are shared by every exhibit:**
+
+- `src/layouts/ExhibitLayout.astro`
+- `src/styles/global.css`
+- `astro.config.mjs`
+- `package.json`
+- `src/styles/tailwind-scoped.css`
+
+If an exhibit needs a layout that differs from `ExhibitLayout.astro` (extra
+nav, different chrome, etc.), copy what it needs into its own
+`src/components/<slug>/Layout.astro` and point that exhibit's page
+frontmatter at the copy. The shared layout and global stylesheet stay
+untouched for everyone else.
+
+## 12. Adding or Re-Importing an Exhibit
+
+Exhibits are brought in with the orchestrator at
+`tools/integrate/import-exhibit.mjs`, driven by
+[`docs/integration-runbook.md`](docs/integration-runbook.md). In short: clone
+the source repo into the gitignored `.integration-src/`, dry-run the
+orchestrator to see its orphan report and proposed changes, apply it once the
+orphan list looks right, then fix the layout reference, place the styles, and
+flip the exhibit's `status` to `"live"` in `exhibits.json`. The orchestrator
+handles namespacing (renaming files/imports under `<slug>/`), reference
+rewriting (base paths, routes, asset extensions after optimization), asset
+pruning (deleting genuinely-unreferenced media), and asset optimization
+(re-encoding images/video/models to shrink the payload) — see
+`docs/asset-optimization-report.md` for what that pass actually did across
+the corpus, including its known false-negative mode on orphan detection.
+Read the runbook before re-running it; several corpus-specific gotchas
+(`import.meta.glob` repos, hardcoded base paths, sub-page route flattening)
+are documented there, not repeated here.
+
+## 13. The s02g7 Exception
+
+`s02g7` is the one exhibit that is **not** a source-merged Astro page. It was
+authored in Next.js, and rather than port it to Astro/MDX, it was built with
+`output: 'export'` and `basePath` set to resolve under this site's route,
+then its static `out/` directory was committed wholesale as
+`public/s02g7/`. It is served as a statically-embedded site-within-a-site
+rather than participating in the Astro build, which is why `exhibits.json`
+lists its `status` as `"external"` rather than `"live"`. This was the only
+exhibit in the entire 53-exhibit corpus that needed this fallback — every
+other exhibit, however unusual its own stack (Tailwind, `import.meta.glob`,
+dynamic routes, content collections), was merged as real Astro source.

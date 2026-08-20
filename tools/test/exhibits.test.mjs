@@ -25,6 +25,12 @@ test('every exhibit carries a status and the two done ones are live', () => {
   assert.ok(live.includes('s01g4'));
 });
 
+test('all 53 exhibits are integrated', () => {
+  const exhibits = loadExhibits();
+  const pending = exhibits.filter((e) => e.status === 'pending').map((e) => e.slug);
+  assert.deepEqual(pending, [], `still pending: ${pending.join(', ')}`);
+});
+
 test('validateExhibits rejects a slug that disagrees with section and group', () => {
   const { ok, errors } = validateExhibits([
     { section: 'S02', group: 4, slug: 's02g4_2', status: 'pending' },
