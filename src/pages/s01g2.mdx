@@ -1,0 +1,36 @@
+---
+layout: '../components/s01g2/S01_Group2_FreeBSDLayout.astro'
+title: "FreeBSD"
+author: "David, Justin; Ortha, Gian; Perdon, Linus; Tan, Neil; Villorente, Khyle"
+readingTime: "69 minutes"
+---
+
+{/* We import various Astro and React components */}
+
+{/* Images have to be imported manually */}
+
+import { Image } from 'astro:assets';
+import beastieLogo from '../assets/s01g2/FreeBSD-logo.webp';
+import '../styles/s01g2/freebsd.css';
+
+{/* Actual content */}
+
+<div className='homepage-container' style={{ display: 'flex', flexDirection: 'column',
+                                             alignItems: 'center', justifyContent: 'center',
+                                             minHeight: '90vh' }}>
+
+    <div style={{ marginTop: '12vh' }}>
+        <Image src={beastieLogo} alt="3D FreeBSD Logo" width={300} />
+    </div>
+
+    <h1 className="freebsd-title">
+        FREEBSD
+    </h1>
+
+    <a href={`${import.meta.env.BASE_URL}/s01g2/info-page`} className="learn-more-btn">
+        Learn More
+    </a>
+
+</div>
+
+

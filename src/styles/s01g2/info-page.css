@@ -1,0 +1,157 @@
+
+
+  .freebsd-wrapper {
+    background-color: transparent;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    padding: 2.5rem 5rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+
+  .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+
+  .logo-wrapper {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    padding-bottom: 0.25rem;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+
+  .hamburger {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 0;
+  }
+
+  .hamburger .line {
+    height: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .hamburger .line-long { width: 32px; }
+  .hamburger .line-short { width: 24px; }
+  .hamburger:hover .line-short { width: 32px; }
+
+  
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    flex: 1;
+  }
+
+
+  .col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .main-heading {
+    font-size: clamp(3rem, 5vw, 5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7),
+                0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .image-container {
+    border-radius: 16px;
+    overflow: hidden;
+    flex-grow: 1;
+    min-height: 300px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .neon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+  }
+
+
+  .col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .glass-card {
+    background: rgba(20, 20, 20, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-icon {
+    width: 24px;
+    height: 24px;
+    color: #ffffff;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .card-text {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+    margin-left: 2.5rem; 
+  }
+
+ 
+  .action-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .freebsd-wrapper {
+      padding: 2rem;
+    }
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+    .image-container {
+      min-height: 400px;
+    }
+  }

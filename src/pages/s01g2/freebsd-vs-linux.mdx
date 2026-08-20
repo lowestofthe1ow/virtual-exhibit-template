@@ -1,0 +1,52 @@
+---
+layout: '../../components/s01g2/S01_Group2_FreeBSDLayout.astro'
+title: "Linux vs FreeBSD"
+author: "David, Justin; Ortha, Gian; Perdon, Linus; Tan, Neil; Villorente, Khyle"
+readingTime: "69 minutes"
+---
+
+
+import '../../styles/s01g2/freebsd.css';
+import '../../styles/s01g2/venn-diagram.css';
+
+import VennDiagram from '../../components/s01g2/freebsd/VennDiagram.tsx';
+import VennModal from '../../components/s01g2/freebsd/VennModal.tsx';
+
+<VennModal client:load />
+
+<h1 className="comparison-title reveal">
+    Linux vs FreeBSD
+</h1>
+
+<div className="hint-container reveal reveal-delay-1">
+    <div className="hover-hint">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        Click the points to reveal details
+    </div>
+</div>
+
+<div className="reveal-scale reveal-delay-2">
+  <VennDiagram client:load />
+</div>
+
+{/* Redirect Button to Venn Diagram */}
+<div class="action-row reveal reveal-delay-1 flex justify-center w-full mt-8">
+    <a href={`${import.meta.env.BASE_URL}/s01g2/where-is-freebsd`} className="btn-history">
+        Where is it used
+    </a>
+</div>
+
+{/* Mobile Detail Drawer */}
+<div id="mobile-detail-drawer" className="mobile-drawer">
+    <div className="mobile-drawer-overlay"></div>
+    <div className="mobile-drawer-content">
+        <button className="mobile-drawer-close" aria-label="Close">&times;</button>
+        <h3 className="mobile-drawer-title"></h3>
+        <div className="mobile-drawer-body"></div>
+    </div>
+</div>
+

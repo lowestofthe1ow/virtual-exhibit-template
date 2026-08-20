@@ -1,0 +1,42 @@
+@import "../tailwind-scoped.css";
+
+/* --- umbrella integration: scoped preflight substitutes ---
+ * The umbrella site imports Tailwind without preflight (a global element
+ * reset would leak into every other exhibit and the homepage), so this
+ * exhibit's original build — which had full Tailwind preflight — loses
+ * resets it visibly depends on. Re-added here; safe unscoped (bare element
+ * selectors) because this stylesheet is bundled only into s01g2's own
+ * pages, never shared with another exhibit or the homepage (see the
+ * integration runbook, step 5).
+ *
+ * 1. SimDashboard's inline command hint is a <button> styled purely as a
+ *    text link (Tailwind text/underline utilities, no bg-* utility). Without
+ *    preflight's `button{background-color:transparent}` it shows the
+ *    browser's native grey button face.
+ * 2. The references bibliography (<ul class="reflist">) and PayoffPanel's
+ *    result list (<ul className="space-y-4">) draw their own bullet
+ *    markers (or none at all) and never apply a list-style utility of their
+ *    own — both relied on preflight's `list-style:none` + zeroed
+ *    margin/padding. context-list and the inline-styled list in
+ *    PortsVsPkg.jsx already set this explicitly and are unaffected by the
+ *    :not() guards below (or harmlessly redundant).
+ */
+button {
+  background-color: transparent;
+}
+
+ul:not(.list-disc):not(.list-decimal),
+ol:not(.list-disc):not(.list-decimal) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. references.mdx's citation links are bare <a> tags with no class and no
+ *    ancestor rule sets their color — preflight's `a{color:inherit;
+ *    text-decoration:inherit}` made them blend into the (white) bibliography
+ *    text; without it the browser default blue/underline shows instead. */
+.bib-container a {
+  color: inherit;
+  text-decoration: none;
+}

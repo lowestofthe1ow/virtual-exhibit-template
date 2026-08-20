@@ -1,0 +1,55 @@
+---
+layout: '../../components/s01g2/S01_Group2_FreeBSDLayout.astro'
+title: "Where can we find FreeBSD today?"
+author: "David, Justin; Ortha, Gian; Perdon, Linus; Tan, Neil; Villorente, Khyle"
+readingTime: "69 minutes"
+---
+
+import '../../styles/s01g2/freebsd.css';
+import '../../styles/s01g2/uses-page.css';
+import '../../styles/s01g2/carousel.css';
+import '../../styles/s01g2/cli.css';
+
+import UsesCarousel from '../../components/s01g2/freebsd/UsesCarousel.tsx';
+
+import netflixLogo from '../../assets/s01g2/netflix.webp';
+import netappLogo from '../../assets/s01g2/netapp.webp';
+import pfsenseLogo from '../../assets/s01g2/pfsense.webp';
+import rgnetsLogo from '../../assets/s01g2/rgnets.png';
+
+export const cardData = [
+  {
+    logoSrc: netflixLogo.src,
+    logoAlt: "Netflix Logo",
+    description: "Netflix powers Open Connect, its global Content Delivery Network (CDN) by running directly on the FreeBSD-CURRENT development branch. Open Connect is a large network of servers across the globe designed to store and transmit heavy video data efficiently to user screens. To keep streams from lagging, Netflix developed Kernel TLS (KTLS) which is a built-in optimization on top of FreeBSD that shifts heavy data encryption directly into the core of their operating system instead of passing it to slower external apps. This allows Netflix to eliminate performance bottlenecks, enabling their servers to transmit 400Gbits/s of secure video traffic to users from all over the world.",
+  },
+  {
+    logoSrc: netappLogo.src,
+    logoAlt: "NetApp Logo",
+    description: "NetApp is an intelligence data infrastructure company that provides unified data storage, integrated data services, and cloud operations solutions to enterprise customers. They utilize FreeBSD as the foundational engine for NetApp ONTAP, a data management software. NetAPP specifically chose FreeBSD for its permissive licensing model which allows NetApp to use its own proprietary technology with FreeBSD's open-source code without risking software licensing issues. NetApp has also upstreamed over 300 changes and has contributed software like bhyve, FreeBSD's hypervisor allowing for significant contributions to FreeBSD making a strong relationship with the community.",
+  },
+  {
+    logoSrc: pfsenseLogo.src,
+    logoAlt: "pfSense Logo",
+    description: "The pfSense Project is a free open-source customized distribution of FreeBSD that is specifically tailored for use as a firewall and router that can be managed entirely via a web interface. pfSense uses FreeBSD for handling heavy internet traffic. In utilizing the multiprocessor capabilities for PF in FreeBSD, developers are able to handle the high packets per second rate required by large scale networks. Today, pfSense is widely used in network security, from small home networks, cloud networks, and even large-scale enterprises. Allowing for accessible network security for all users, even those without any prior UNIX knowledge.",
+  },
+  {
+    logoSrc: rgnetsLogo.src,
+    logoAlt: "RG Nets Logo",
+    description: "RG Nets leverages FreeBSD in constructing rXg, its powerful, multi-functional gateway appliances. They specialize in using FreeBSD for Software Defined Networking (SDN), a technology that allows efficient network management and operation by separating the control plane from the data plane. In taking advantage of FreeBSD's modular architecture, RG Nets integrates FreeBSD Jails and bhyve in virtualization to handle heavy data processing. Allowing them to seamlessly route massive traffic surges. Similar to NetApp, RG Nets also made significant contributions to pf, FreeBSD's packet filter firewall, and altq, FreeBSD's network packet scheduler.",
+  },
+];
+
+<div className="uses-wrapper">
+  
+  <h1 className="uses-title reveal">Where can we find FreeBSD today?</h1>
+
+  <UsesCarousel client:load cards={cardData} />
+
+  <div class="action-row reveal reveal-delay-1">
+      <a href={`${import.meta.env.BASE_URL}/s01g2/portsvspkg`} class="btn-cli">
+          Ports vs Pkg
+      </a>
+  </div>
+
+</div>

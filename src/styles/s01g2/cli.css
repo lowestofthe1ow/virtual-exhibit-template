@@ -1,0 +1,7 @@
+.action-row {
+    display: flex;
+    z-index: 1;      
+    margin: 2.5em 0;
+    width: 100%;
+    justify-content: center;
+}

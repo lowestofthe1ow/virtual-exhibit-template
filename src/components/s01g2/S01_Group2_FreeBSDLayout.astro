@@ -1,0 +1,190 @@
+---
+const { title, author, readingTime } = Astro.props.frontmatter ?? Astro.props;
+const { headings } = Astro.props; 
+
+// import '../styles/global.css';
+import RedWaveBackground from "./freebsd/RedWaveBackground.astro";
+import '../../styles/s01g2/scroll-reveal.css';
+import '../../styles/s01g2/progress-tracker.css';
+
+const exhibitPages = [
+  { path: '/s01g2', label: 'Home' },
+  { path: '/s01g2/info-page', label: 'What is FreeBSD?' },
+  { path: '/s01g2/history-page', label: 'History' },
+  { path: '/s01g2/freebsd-vs-linux', label: 'Compare' },
+  { path: '/s01g2/where-is-freebsd', label: 'Where Used' },
+  { path: '/s01g2/portsvspkg', label: 'Ports vs Pkg' },
+  { path: '/s01g2/cli', label: 'CLI' },
+  { path: '/s01g2/references', label: 'References' },
+];
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Determine current page path relative to base
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const basePath = baseUrl.replace(/\/$/, '');
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title} - CSARCH2 Virtual Exhibit</title>
+
+<style is:global>
+    @import "../../styles/s01g2/tailwind.css";
+</style>
+    </head>
+
+    <body>
+        <RedWaveBackground />
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker" id="progress-tracker">
+            <div class="progress-tracker-inner">
+                {exhibitPages.map((page) => {
+                    const fullPath = `${basePath}${page.path}`.replace(/\/\//g, '/');
+                    return (
+                        <div class="progress-step" data-page-path={fullPath}>
+                            <a href={`${baseUrl}${page.path}`} class="progress-dot" data-label={page.label}></a>
+                        </div>
+                    );
+                })}
+            </div>
+            <span class="progress-fraction" id="progress-fraction">1/8</span>
+        </div>
+
+        <!-- Navigation -->
+        <nav>
+            <span class='nav-title'>FreeBSD</span>
+            <span class='nav-items'>
+                <a href={`${baseUrl}/s01g2`}>Home</a>
+                <a href={`${baseUrl}/s01g2/info-page`}>What is FreeBSD?</a>
+                <a href={`${baseUrl}/s01g2/history-page`}>History</a>
+                <a href={`${baseUrl}/s01g2/freebsd-vs-linux`}>FreeBSD vs Linux</a>
+                <a href={`${baseUrl}/s01g2/where-is-freebsd`}>Where is FreeBSD Used?</a>
+                <a href={`${baseUrl}/s01g2/portsvspkg`}>Ports vs Pkg</a>
+                <a href={`${baseUrl}/s01g2/cli`}>CLI</a>
+                <a href={`${baseUrl}/s01g2/references`}>References</a>
+            </span>
+            <span class='nav-toggle'>
+                ☰
+            </span>
+        </nav>
+        <main>
+            <slot />
+        </main>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Navigation menu toggle
+                const toggle = document.querySelector('.nav-toggle');
+                const items = document.querySelector('.nav-items');
+                if (toggle && items) {
+                    toggle.addEventListener('click', () => {
+                        items.classList.toggle('active');
+                    });
+                }
+
+                // Venn diagram detail drawer
+                const isMobile = () => window.innerWidth < 1024;
+                const drawer = document.getElementById('mobile-detail-drawer');
+                const drawerTitle = drawer ? drawer.querySelector('.mobile-drawer-title') : null;
+                const drawerBody = drawer ? drawer.querySelector('.mobile-drawer-body') : null;
+                const drawerClose = drawer ? drawer.querySelector('.mobile-drawer-close') : null;
+                const drawerOverlay = drawer ? drawer.querySelector('.mobile-drawer-overlay') : null;
+
+                const vennPoints = document.querySelectorAll('.venn-point');
+                if (vennPoints.length > 0) {
+                    vennPoints.forEach(point => {
+                        point.addEventListener('click', (e) => {
+                            if (!isMobile()) return;
+                            
+                            let titleText = '';
+                            for (const node of point.childNodes) {
+                                if (node.nodeType === Node.TEXT_NODE) {
+                                    titleText += node.textContent;
+                                }
+                            }
+                            titleText = titleText.trim();
+
+                            const details = point.querySelector('.point-details');
+                            if (details && drawer && drawerTitle && drawerBody) {
+                                drawerTitle.textContent = titleText;
+                                drawerBody.innerHTML = details.innerHTML;
+                                drawer.classList.add('active');
+                                e.stopPropagation();
+                            }
+                        });
+                    });
+                }
+
+                const closeDrawer = () => {
+                    if (drawer) {
+                        drawer.classList.remove('active');
+                    }
+                };
+
+                if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+                if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+
+                // ── Scroll Reveal (IntersectionObserver) ──
+                const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+                if (revealEls.length > 0) {
+                    const revealObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                revealObserver.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.15 });
+
+                    revealEls.forEach(el => revealObserver.observe(el));
+                }
+
+                // ── Progress Tracker ──
+                const STORAGE_KEY = 'freebsd-exhibit-visited';
+                const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+
+                // Read visited set from sessionStorage (resets on refresh)
+                let visited = [];
+                try {
+                    visited = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+                } catch(e) { visited = []; }
+
+                // Mark current page as visited
+                if (!visited.includes(currentPath)) {
+                    visited.push(currentPath);
+                    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(visited));
+                }
+
+                // Update progress dots
+                const steps = document.querySelectorAll('.progress-step');
+                let totalPages = steps.length;
+                let visitedCount = 0;
+
+                steps.forEach(step => {
+                    const pagePath = step.getAttribute('data-page-path');
+                    const isCurrentPage = currentPath === pagePath || currentPath === pagePath + '/';
+                    const isVisited = visited.includes(pagePath) || visited.includes(pagePath + '/');
+
+                    if (isCurrentPage) {
+                        step.classList.add('current', 'visited');
+                        visitedCount++;
+                    } else if (isVisited) {
+                        step.classList.add('visited');
+                        visitedCount++;
+                    }
+                });
+
+                // Update mobile fraction
+                const fraction = document.getElementById('progress-fraction');
+                if (fraction) {
+                    fraction.textContent = `${visitedCount}/${totalPages} visited`;
+                }
+            });
+        </script>
+    </body>
+</html>

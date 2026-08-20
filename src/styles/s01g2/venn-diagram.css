@@ -1,0 +1,453 @@
+.venn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50px);
+    transform-origin: top center;
+    z-index: 10;
+    width: 1080px;
+    flex-shrink: 0;
+}
+
+.circle {
+    width: 680px;
+    height: 680px;
+    flex-shrink: 0;
+    position: relative;
+
+    border-radius: 50%;
+    /*display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;*/
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+    mix-blend-mode: screen;
+
+    background-image: url('../../assets/s01g2/Cartographer.webp'), radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.3));
+    background-blend-mode: overlay;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    filter: contrast(100%);
+    
+}
+
+.linux-circle {
+    background-image: url('../../assets/s01g2/Cartographer.webp'), radial-gradient(circle at 30% 30%, #363434, #33333369);
+    background-blend-mode: multiply, normal;
+    background-repeat: repeat;
+    background-size: 200px, cover;
+
+    margin-right: -280px;
+    z-index: 1;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding-right: 190px;
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.freebsd-circle {
+    background-image: url('../../assets/s01g2/Cartographer.webp'), radial-gradient(circle at 30% 30%, #3a0a0a, #9900009d);
+    background-blend-mode: multiply, normal;
+    background-repeat: repeat;
+    background-size: 200px, cover;
+
+    z-index: 2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding-left: 190px;
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.circle span {
+    margin: 10px 0;
+}
+
+.comparison-title {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02rem;
+    color: white;
+    font-size: 4rem;
+    margin-top: 5vh;
+    text-align: center;
+}
+
+
+
+.venn-point {
+    position: relative;
+    cursor: help;
+    width: fit-content;
+    margin: 30px auto;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+.venn-point:hover {
+    color: #ffcccc;
+}
+
+.intersection .venn-point {
+    margin: 40px auto;
+    font-size: 1.3rem;
+}
+
+.point-details {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 500px;
+
+    background: rgba(22, 22, 22, 0.65);
+    backdrop-filter: blur(12px);
+    /* -webkit-backdrop-filter: blur(12px); */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: left;
+    color: #dcdcdc;
+}
+
+/* .venn-point:hover .point-details { */
+/*     opacity: 1; */
+/*     visibility: visible; */
+/*     transform: translateX(-50%) translateY(0); */
+/* } */
+/* @media (hover: hover) and (pointer: fine) and (min-width: 1024px) { */
+/*     .venn-point:hover .point-details { */
+/*         opacity: 1; */
+/*         visibility: visible; */
+/*         transform: translateX(-50%) translateY(0); */
+/*     } */
+/* } */
+
+.point-details p {
+    margin-bottom: 1rem;
+}
+
+.point-details p:last-child {
+    margin-bottom: 0;
+}
+
+.outer-point {
+    position: absolute;
+    margin: 0 !important;
+}
+
+/* Linux Placement (Left Circle) */
+.l-pos-1 { top: 20%; left: 35%; }
+.l-pos-2 { top: 40%; left: 27.5%; }
+.l-pos-3 { top: 60%; left: 10%; }
+.l-pos-4 { top: 80%; left: 30%; }
+
+/* FreeBSD Placement (Right Circle) */
+.f-pos-1 { top: 20%; right: 25%; }
+.f-pos-2 { top: 40%; right: 28%; }
+.f-pos-3 { top: 60%; right: 17.5%; }
+.f-pos-4 { top: 80%; right: 35%; }
+
+.hover-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    padding: 8px 20px;
+    color: #cccccc;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    animation: pulse-hint 3s infinite ease-in-out;
+}
+
+@keyframes pulse-hint {
+    0% { opacity: 0.6; box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+    50% { opacity: 1; box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+    100% { opacity: 0.6; box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.hint-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#point-details-global {
+    position: absolute;
+    /* bottom: 120%; */
+    /* left: 50%; */
+    /* transform: translateX(-50%) translateY(10px); */
+    width: 500px;
+
+    background: rgba(22, 22, 22, 0.65);
+    backdrop-filter: blur(12px);
+    /* -webkit-backdrop-filter: blur(12px); */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+
+    opacity: 100;
+    visibility: visible;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: left;
+    color: #dcdcdc;
+}
+
+#venn-modal {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, 0.4);
+    z-index: 100;
+    opacity: 0%;
+    visibility: hidden;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#venn-modal.inactive {
+    opacity: 0%;
+    visibility: hidden;
+}
+
+#venn-modal.active {
+    opacity: 100%;
+    visibility: visible;
+}
+
+#venn-modal-container {
+    position: absolute;
+    width: 500px;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    background: rgba(22, 22, 22, 0.65);
+    backdrop-filter: blur(12px);
+    /* -webkit-backdrop-filter: blur(12px); */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+
+    opacity: 100;
+    z-index: 100;
+    color: #dcdcdc;
+}
+
+#venn-modal-content {
+    display: block;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: left;
+}
+
+#venn-modal-content > p {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#venn-modal-header {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+#venn-modal-close {
+    user-select: none;
+    cursor: pointer;
+    text-align: right;
+}
+
+@media (max-width: 1200px) {
+    .venn-container {
+        transform: translateX(-50%) translateY(-50px) scale(0.8);
+        margin-bottom: -120px;
+    }
+}
+
+@media (max-width: 950px) {
+    .venn-container {
+        transform: translateX(-50%) translateY(-50px) scale(0.65);
+        margin-bottom: -220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .venn-container {
+        transform: translateX(-50%) translateY(-50px) scale(0.5);
+        margin-bottom: -320px;
+    }
+    .comparison-title {
+        font-size: 2.5rem;
+        margin-top: 2vh;
+    }
+}
+
+@media (max-width: 550px) {
+    .venn-container {
+        transform: translateX(-50%) translateY(-50px) scale(0.42);
+        margin-bottom: -380px;
+    }
+}
+
+@media (max-width: 420px) {
+    .venn-container {
+        transform: translateX(-50%) translateY(-50px) scale(0.35);
+        margin-bottom: -430px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .point-details {
+        display: none !important;
+    }
+    .venn-point {
+        cursor: pointer;
+    }
+}
+
+.mobile-drawer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-drawer.active {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.mobile-drawer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.mobile-drawer-content {
+    position: relative;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 2.5rem 1.5rem 3.5rem 1.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-drawer.active .mobile-drawer-content {
+    transform: translateY(0);
+}
+
+.mobile-drawer-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.mobile-drawer-close:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.mobile-drawer-title {
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.2rem;
+    padding-right: 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.mobile-drawer-body {
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #dcdcdc;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.mobile-drawer-body p {
+    margin-bottom: 1rem;
+}
+
+.mobile-drawer-body p:last-child {
+    margin-bottom: 0;
+}

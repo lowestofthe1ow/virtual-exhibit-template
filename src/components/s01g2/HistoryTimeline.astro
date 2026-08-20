@@ -1,0 +1,411 @@
+---
+// This is a pure Astro component
+import freebsdLogo from '../../assets/s01g2/FreeBSD-logo.webp';
+import netflixLogo from '../../assets/s01g2/netflix.webp';
+import infoPageImg from '../../assets/s01g2/infoPage-img.webp';
+import jordanHubbard from '../../assets/s01g2/jordan-hubbard.webp'
+import freebsdv1 from '../../assets/s01g2/freebsd1.0.webp'
+import bsdDevs from '../../assets/s01g2/bsd-devs.webp'
+import net2Lawsuit from '../../assets/s01g2/net2Lawsuit.webp'
+import redevelopFreebsd from '../../assets/s01g2/redevelop-freebsd.webp'
+import freebsdv2 from '../../assets/s01g2/freebsdv2.webp'
+import freebsdjail from '../../assets/s01g2/freebsdjail.webp'
+import freebsdv2_1_5 from '../../assets/s01g2/freebsdv2-1-5.webp'
+import freebsdv9 from '../../assets/s01g2/freebsdv9.webp'
+---
+<div class="history-wrapper">
+  <!-- Timeline Column -->
+  <div class="timeline-column">
+    <div class="timeline-arc"></div>
+    <div class="nodes-container">
+      <div class="node-wrapper node-1"><div class="node active" data-year="1993"><span class="node-text">1993</span></div></div>
+      <div class="node-wrapper node-2"><div class="node" data-year="1994"><span class="node-text">1994</span></div></div>
+      <div class="node-wrapper node-3"><div class="node" data-year="1996"><span class="node-text">1996</span></div></div>
+      <div class="node-wrapper node-4"><div class="node" data-year="2000"><span class="node-text">2000</span></div></div>
+      <div class="node-wrapper node-5"><div class="node" data-year="2012"><span class="node-text">2012</span></div></div>
+      <div class="node-wrapper node-6"><div class="node" data-year="2026"><span class="node-text">2026</span></div></div>
+    </div>
+  </div>
+
+  <!-- Content Card Column -->
+  <div class="content-column">
+    <div class="history-card">
+      <div class="card-text-wrapper" id="text-container">
+        <h2 class="year-title" id="card-year">1993</h2>
+        <div id="card-paragraphs">
+          <div class="card-item-container">
+            <h3 class="card-item-title">Early 1993:</h3>
+            <div class="card-item-row">
+              <img src={infoPageImg.src} alt="Early 1993" class="card-item-image" />
+              <p class="card-item-text">Three developers: <b> Nate Williams, Rod Grimes, and Jordan Hubbard </b> had initially been working on a project called: 386BSD 0.5 or 386BSD Interim. This project had the goal of improving 386BSD, a buggy operating system, that required multiple fixes after a year’s worth of neglect. 
+            Back then, Williams, Grimes and Hubbard had been working to assist Bill Jolitz with fixing 386BSD.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="action-row">
+        <a href={`${import.meta.env.BASE_URL}/s01g2/freebsd-vs-linux`} class="btn-history">
+            Compare
+        </a>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ jordanHubbardSrc: jordanHubbard.src, freebsdv1Src: freebsdv1.src, bsdDevsSrc: bsdDevs.src, 
+net2LawsuitSrc: net2Lawsuit.src, redevelopFreebsdSrc: redevelopFreebsd.src, freebsdv2Src: freebsdv2.src, 
+freebsdjailSrc: freebsdjail.src, freebsdv2_1_5Src: freebsdv2_1_5.src, freebsdv9Src: freebsdv9.src, freebsdLogoSrc: freebsdLogo.src}}>
+  const historyData = {
+    "1993": {
+      img: "jordan-hubbard.png",
+      text: [
+        {
+          title: "FreeBSD's Beginning:",
+          content: "Three developers: <b> Nate Williams, Rod Grimes, and Jordan Hubbard </b> had initially been working on a project called: 386BSD 0.5 or 386BSD Interim. This project had the goal of improving 386BSD, a buggy operating system, that required multiple fixes after a year’s worth of neglect. Back then, Williams, Grimes and Hubbard had been working to assist Bill Jolitz with fixing 386BSD.",
+          img: jordanHubbardSrc
+        },
+        {
+          title: "How FreeBSD was named:",
+          content: "In June, Jolitz suddenly decided to abandon the project. However, as the project continued to grow and take shape, the trio decided to keep pushing forward with the project on their own. During this time, developer <b> David Greenman coined the name “FreeBSD” </b> which became the official name of the operating system.",
+          img: bsdDevsSrc
+        },
+        {
+          title: "FreeBSD 1.0 Release:",
+          content: "<b>In November</b> the first version of FreeBSD was released to the public. To ensure that those who aren’t able to easily access the Internet were able to use FreeBSD, Hubbard reached out to a company called Walnut Creek CD-ROM. The company stepped up and distributed FreeBSD on CD and provided the developers with a machine that has access to fast Internet connection. At its first release, FreeBSD1.0 was based on the 4.3BSD-Lite (Net/2) tape of U.C. Berkeley and had many components provided by 386BSD and the Free Software Foundation.",
+          img: freebsdv1Src
+        }
+    ]
+
+    },
+    "1994": {
+      text: [
+        {
+          title: "The Net/2 Lawsuit:",
+          content: "Just as <b>FreeBSD 1.1</b> was released following the success of <b>FreeBSD 1.0</b>, a long standing lawsuit between Berkeley and Novell over the Net/2 tape had just been settled. As part of the settlement conditions, U.C Berkeley had to remove the files that involved code from Net/2 as these were copyrighted and considered as property of Novell. This included the current FreeBSD distributions. Due to this, FreeBSD was forced to delete significant files that powered the software and re-write its code.",
+          img: net2LawsuitSrc
+        },
+        {
+          title: "Redeveloping FreeBSD:",
+          content: "After releasing <b>FreeBSD 1.1.5.1</b> in July of 1994 the last distribution of FreeBSD that was based under Net/2. FreeBSD’s developers had spent four months re-writing code to work on the new and still incomplete 4.4BSD-Lite due to the settlement clauses from Novell. Developers had to replace the deleted files, integrate various changes, and fix bugs to deliver a brand new version in a short amount of time.",
+          img: redevelopFreebsdSrc
+        },
+        {
+          title: "FreeBSD 2.0 Release: ",
+          content: "<b>FreeBSD 2.0</b> was officially launched and was now completely reworked from the Net/2 based system.",
+          img: freebsdv2Src
+        }
+      ]
+    },
+    "1996": {
+      text: [
+        {
+          title: "The Start of FreeBSD's Success:",
+          content: "<b>FreeBSD 2.1.5</b> was then released and quickly became popular for both Internet Service Providers (ISPs) and commercial communities that resulted in a significant success for FreeBSD.",
+          img: freebsdv2_1_5Src
+        }
+      ]
+    },
+    "2000": {
+      text: [
+        {
+          title: "FreeBSD jail():",
+          content: "<b>FreeBSD 4.0</b> introduced <b>FreeBSD Jails</b> with the command: jail(). This feature is an implementation of virtualization within the operating system (OS) level. This meant that users were now able to separate the OS into mini-computers which laid the foundation for modern cloud containers like <b>Docker</b>. ",
+          img: freebsdjailSrc
+        }
+      ]
+    },
+     "2012": {
+      text: [
+        {
+          title: "FreeBSD Capsicum & sendfile():",
+          content: "<b>January 2012</b> then released FreeBSD 9.0 which improved on the previous version and included an optional feature: <b>Capsicum</b>, a lightweight OS capability and sandbox framework. This allowed developers to perform application compartmentalization which allows them to split up large portions of a software into isolated components. This became significant as Sony used FreeBSD 9.0 and Capsicum to create their own operating system: <b>Orbis OS</b> for the PlayStation 4. <b>Netflix</b> also deployed their first <b>Open Connect</b> Content Delivery Network (CDN) servers using this version. The sendfile() system command included in this version of FreeBSD allowed 10Gbit/s of video per server to be sent across the network with less stress on the computer CPU.",
+          img: freebsdv9Src
+        }
+      ]
+    },
+     "2026": {
+      text: [
+        {
+          title: "FreeBSD at Present:",
+          content: "Today, FreeBSD continues to grow with its latest release of <b>FreeBSD 15.1</b>. Currently, FreeBSD 15.1 features automated patching for modern cloud environments such as AWS and Google Compute Engine, OpenZFS storage optimizations, and advanced virtualization capabilities.",
+          img: freebsdLogoSrc
+        }
+      ]
+    },
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const nodes = document.querySelectorAll('.node');
+    const nodeWrappers = document.querySelectorAll('.node-wrapper');
+    const yearTitle = document.getElementById('card-year');
+    const cardImage = document.getElementById('card-image');
+    const cardParagraphs = document.getElementById('card-paragraphs');
+
+    const years = ["1993", "1994", "1996", "2000", "2012", "2026"];
+    let lastTime = 0;
+    const scrollCooldown = 850; // ms between wheel/swipe transitions
+
+    let currentYear = "1993";
+    let currentCardIndex = 0;
+
+    function updateWheel(activeYear) {
+      const activeIndex = years.indexOf(activeYear);
+      if (activeIndex === -1) return;
+
+      // Check if user is on a mobile screen
+      const isMobile = window.innerWidth <= 768;
+
+      nodeWrappers.forEach((wrapper, index) => {
+        // Reverse the angle multiplier (-1) on mobile so future years are on the right
+        const angle = (index - activeIndex) * 22 * (isMobile ? -1 : 1);
+        wrapper.style.transform = `rotate(${angle}deg)`;
+        
+        const nodeCircle = wrapper.querySelector('.node');
+        if (nodeCircle) {
+          if (index === activeIndex) {
+            nodeCircle.classList.add('active');
+          } else {
+            nodeCircle.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      updateWheel(currentYear);
+    });
+
+    function renderCard(year, index) {
+      const data = historyData[year];
+      if (!data || !cardParagraphs) return;
+
+      cardParagraphs.innerHTML = '';
+
+      const card = data.text[index];
+
+      const container = document.createElement('div');
+      container.className = 'card-item-container';
+
+      const title = document.createElement('h3');
+      title.className = 'card-item-title';
+      title.innerHTML = card.title;
+      container.appendChild(title);
+
+      const row = document.createElement('div');
+      row.className = 'card-item-row';
+
+      if (card.img) {
+        const img = document.createElement('img');
+        img.className = 'card-item-image';
+        img.src = card.img;
+        img.alt = card.title;
+        row.appendChild(img);
+      }
+
+      const p = document.createElement('p');
+      p.className = 'card-item-text';
+      p.innerHTML = card.content;
+
+      if (data.text.length > 1) {
+        container.classList.add('has-arrows');
+
+        const leftBtn = document.createElement('button');
+        leftBtn.className = 'card-arrow card-arrow-left';
+        leftBtn.setAttribute('aria-label', 'Previous card');
+        leftBtn.innerHTML = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        `;
+        leftBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const nextIndex = (index - 1 + data.text.length) % data.text.length;
+          currentCardIndex = nextIndex;
+          transitionCard(year, nextIndex);
+        });
+
+        const rightBtn = document.createElement('button');
+        rightBtn.className = 'card-arrow card-arrow-right';
+        rightBtn.setAttribute('aria-label', 'Next card');
+        rightBtn.innerHTML = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        `;
+        rightBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const nextIndex = (index + 1) % data.text.length;
+          currentCardIndex = nextIndex;
+          transitionCard(year, nextIndex);
+        });
+
+        container.appendChild(leftBtn);
+        container.appendChild(rightBtn);
+
+        row.appendChild(p);
+        container.appendChild(row);
+
+        const dotsContainer = document.createElement('div');
+        dotsContainer.className = 'card-dots';
+        for (let i = 0; i < data.text.length; i++) {
+          const dot = document.createElement('span');
+          dot.className = `card-dot${i === index ? ' active' : ''}`;
+          dotsContainer.appendChild(dot);
+        }
+        container.appendChild(dotsContainer);
+      } else {
+        row.appendChild(p);
+        container.appendChild(row);
+      }
+
+      cardParagraphs.appendChild(container);
+    }
+
+    function transitionCard(year, index) {
+      const container = cardParagraphs.querySelector('.card-item-container');
+      if (container) {
+        container.classList.add('card-transitioning-out');
+        setTimeout(() => {
+          renderCard(year, index);
+          const newContainer = cardParagraphs.querySelector('.card-item-container');
+          if (newContainer) {
+            newContainer.classList.add('card-transitioning-in');
+            newContainer.offsetHeight;
+            newContainer.classList.remove('card-transitioning-in');
+          }
+        }, 200);
+      } else {
+        renderCard(year, index);
+      }
+    }
+
+    function selectYear(year) {
+      const data = historyData[year];
+      if (!data) return;
+
+      currentYear = year;
+      currentCardIndex = 0;
+
+      const textContainer = document.getElementById('text-container');
+      if (textContainer) {
+        textContainer.classList.add('content-transitioning');
+        
+        updateWheel(year);
+
+        setTimeout(() => {
+          if (yearTitle) yearTitle.textContent = year;
+          renderCard(year, currentCardIndex);
+          textContainer.classList.remove('content-transitioning');
+        }, 350);
+      } else {
+        if (yearTitle) yearTitle.textContent = year;
+        renderCard(year, currentCardIndex);
+        updateWheel(year);
+      }
+    }
+
+    nodes.forEach(node => {
+      node.addEventListener('click', function() {
+        
+        // Update the red glowing active state
+        nodes.forEach(n => n.classList.remove('active'));
+        this.classList.add('active');
+
+        // Get the year from the clicked node
+        const year = this.getAttribute('data-year');
+        selectYear(year);
+      });
+    });
+
+    // Scroll wheel handler
+    function handleScroll(e) {
+      const now = performance.now();
+      const activeNode = document.querySelector('.node.active');
+      if (!activeNode) return;
+      const currentYear = activeNode.getAttribute('data-year');
+      let index = years.indexOf(currentYear);
+      if (index === -1) return;
+
+      if (e.deltaY > 0) {
+        // scroll down -> next year
+        if (index < years.length - 1) {
+          e.preventDefault();
+          if (now - lastTime > scrollCooldown) {
+            index++;
+            selectYear(years[index]);
+            lastTime = now;
+          }
+        }
+      } else if (e.deltaY < 0) {
+        // scroll up -> previous year
+        if (index > 0) {
+          e.preventDefault();
+          if (now - lastTime > scrollCooldown) {
+            index--;
+            selectYear(years[index]);
+            lastTime = now;
+          }
+        }
+      }
+    }
+
+    const wrapper = document.querySelector('.history-wrapper');
+    if (wrapper) {
+      wrapper.addEventListener('wheel', handleScroll, { passive: false });
+
+      // Touch swipe handler for mobile
+      let touchStartX = 0;
+      let touchStartY = 0;
+      
+      wrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      wrapper.addEventListener('touchmove', (e) => {
+        const touchEndX = e.touches[0].clientX;
+        const touchEndY = e.touches[0].clientY;
+        
+        const diffX = touchStartX - touchEndX;
+        const diffY = touchStartY - touchEndY;
+        const now = performance.now();
+
+        if (Math.abs(diffX) > 40 || Math.abs(diffY) > 40) {
+          const activeNode = document.querySelector('.node.active');
+          if (!activeNode) return;
+          const currentYear = activeNode.getAttribute('data-year');
+          let index = years.indexOf(currentYear);
+          if (index === -1) return;
+
+          // Strictly limit interaction to Horizontal Swipes
+          if (Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > 0) {
+              // Swipe left -> Next year
+              if (index < years.length - 1) {
+                e.preventDefault();
+                if (now - lastTime > scrollCooldown) {
+                  index++;
+                  selectYear(years[index]);
+                  lastTime = now;
+                }
+              }
+            } else {
+              // Swipe right -> Previous year
+              if (index > 0) {
+                e.preventDefault();
+                if (now - lastTime > scrollCooldown) {
+                  index--;
+                  selectYear(years[index]);
+                  lastTime = now;
+                }
+              }
+            }
+            touchStartX = touchEndX; // Reset tracking point
+          }
+        }
+      }, { passive: false });
+    }
+    // Initialize layout at 1993
+    selectYear("1993");
+  });
+</script>

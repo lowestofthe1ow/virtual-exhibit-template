@@ -1,0 +1,75 @@
+---
+layout: '../../components/s01g2/S01_Group2_FreeBSDLayout.astro'
+title: "Linux vs FreeBSD"
+author: "David, Justin; Ortha, Gian; Perdon, Linus; Tan, Neil; Villorente, Khyle"
+readingTime: "69 minutes"
+---
+import '../../styles/s01g2/info-page.css';
+import '../../styles/s01g2/freebsd.css';
+import FreeBSD from '../../assets/s01g2/infoPage-img.webp';
+
+<div class="freebsd-wrapper">
+
+  {/* Main Content Grid */}
+  <main class="content-grid">
+    
+    {/* Left Column */}
+    <section class="col-left">
+      <h1 class="main-heading reveal-left">What is<br />FreeBSD?</h1>
+      <div class="image-container reveal-right reveal-delay-1">
+        {/* Replace with your actual imported image component if needed */}
+        <img src={FreeBSD.src} alt="InfoPage Image" class="neon-img" />
+      </div>
+    </section>
+
+    {/* Right Column */}
+    <section class="col-right">
+      
+      {/* Service Card 1 */}
+      <div class="glass-card reveal reveal-delay-1">
+        <div class="card-title-row">
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+            <rect x="9" y="9" width="6" height="6"></rect>
+            <line x1="9" y1="1" x2="9" y2="4"></line>
+            <line x1="15" y1="1" x2="15" y2="4"></line>
+            <line x1="9" y1="20" x2="9" y2="23"></line>
+            <line x1="15" y1="20" x2="15" y2="23"></line>
+            <line x1="20" y1="9" x2="23" y2="9"></line>
+            <line x1="20" y1="14" x2="23" y2="14"></line>
+            <line x1="1" y1="9" x2="4" y2="9"></line>
+            <line x1="1" y1="14" x2="4" y2="14"></line>
+          </svg>
+          <h2 class="card-title">Introduction to FreeBSD</h2>
+        </div>
+        <p class="card-text">
+          FreeBSD is a <b>free</b> and <b>open source operating system</b>. This means that anyone anywhere can install and use this operating system free of charge, and that its source code is available online for everyone to see. 
+          As its name suggests, It originates from a version of UNIX called BSD, which was developed at the University of California in Berkeley. <i>(The FreeBSD Project, 2025).</i>
+        </p>
+      </div>
+
+      {/* Service Card 2 */}
+      <div class="glass-card reveal reveal-delay-2">
+        <div class="card-title-row">
+          <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <h2 class="card-title">Core Features and Capabilities</h2>
+        </div>
+        <p class="card-text">
+          FreeBSD prioritizes <b>high performance</b> and <b>stability</b>, offering cutting-edge networking, security, and compatibility features. 
+          It also has great portability and can support a variety of different hardware architectures <i>(The FreeBSD Project, 2025).</i> 
+          This makes it an ideal operating system to run things like servers or embedded systems.
+        </p>
+      </div>
+
+      {/* Action Button */}
+      <div class="action-row reveal reveal-delay-3">
+        <a href={`${import.meta.env.BASE_URL}/s01g2/history-page`} class="btn-history">History</a>
+      </div>
+
+    </section>
+  </main>
+</div>

@@ -1,0 +1,18 @@
+---
+layout: '../../components/s01g2/S01_Group2_FreeBSDLayout.astro'
+title: 'cli'
+---
+
+import SimDashboard from '../../components/s01g2/freebsd/SimDashboard.tsx';
+
+import '../../styles/s01g2/freebsd.css';
+import '../../styles/s01g2/cli.css';
+
+
+<SimDashboard client:load />
+
+<div class="action-row">
+    <a href={`${import.meta.env.BASE_URL}/s01g2/references`} class="btn-cli">
+        References
+    </a>
+</div>

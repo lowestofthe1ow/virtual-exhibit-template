@@ -1,0 +1,180 @@
+<canvas id="bg-canvas"></canvas>
+
+<style>
+  #bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: block;
+    background: #000;
+  }
+</style>
+
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+  };
+
+  const vertexShader = /* glsl */ `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 1.0);
+    }
+  `;
+
+  // Smooth, low-frequency, silk-ribbon shader.
+  const fragmentShader = /* glsl */ `
+    precision highp float;
+    varying vec2 vUv;
+    uniform float uTime;
+    uniform vec2 uResolution;
+
+    // gentle, smooth value noise (large-scale only, used for soft fabric shading)
+    float hash(vec2 p) {
+      return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453);
+    }
+    float smoothNoise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      float a = hash(i);
+      float b = hash(i + vec2(1.0, 0.0));
+      float c = hash(i + vec2(0.0, 1.0));
+      float d = hash(i + vec2(1.0, 1.0));
+      return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+    }
+
+    // A single smooth ribbon centerline made of 2-3 low-frequency sine terms.
+    // No fbm, no warp noise -> stays smooth and "silky" instead of cracked.
+    float ribbonY(float x, float t, float seed) {
+      float y = 0.0;
+      y += sin(x * 1.15 + t * 0.55 + seed) * 0.16;
+      y += sin(x * 0.5  - t * 0.30 + seed * 1.7) * 0.22;
+      y += sin(x * 2.1  + t * 0.20 + seed * 2.3) * 0.045;
+      return y;
+    }
+
+    // distance field to a ribbon curve, with eased thickness variation along x
+    float ribbonField(vec2 p, float t, float seed, float baseOffset, float thickness) {
+      float cy = ribbonY(p.x, t, seed) + baseOffset;
+      float widthMod = 1.0 + 0.4 * sin(p.x * 0.8 + seed * 3.0 + t * 0.15);
+      float d = abs(p.y - cy) / (thickness * widthMod);
+      return d;
+    }
+
+    void main() {
+      vec2 uv = vUv;
+      vec2 p = uv - 0.5;
+      p.x *= uResolution.x / uResolution.y;
+
+      float t = uTime * 0.2;
+
+      // slight diagonal tilt to match the reference composition
+      float ang = -0.16;
+      mat2 rot = mat2(cos(ang), -sin(ang), sin(ang), cos(ang));
+      vec2 q = rot * p;
+
+      // ---- base: black silk with very soft large folds (no hard cracks) ----
+      vec3 col = vec3(0.0);
+      float fold = smoothNoise(q * 1.4 + vec2(t * 0.04, 0.0)) * 0.5
+                 + smoothNoise(q * 0.6 - vec2(0.0, t * 0.02)) * 0.5;
+      float foldShade = (fold - 0.5) * 0.05; // very subtle, keeps it near-black
+      col += vec3(0.05, 0.0, 0.01) + foldShade;
+
+      // ---- ribbons (3 soft strands, smooth sine paths) ----
+      vec3 red    = vec3(0.95, 0.05, 0.08);
+      vec3 orange = vec3(1.0, 0.45, 0.18);
+
+      vec3 lineColor = vec3(0.0);
+
+      // strand 1: thick, dominant, with strong bright glow on the left
+      {
+        float seed = 0.3;
+        float d = ribbonField(q, t, seed, 0.06, 0.085);
+        float core = smoothstep(1.0, 0.0, d) ;
+        core = pow(core, 1.6);
+        float glow = exp(-d * d * 3.0) * 0.7;
+        float c = core * 1.3 + glow;
+        // brighten toward the left side like the reference highlight
+        float leftBoost = smoothstep(0.4, -0.7, q.x) * 1.6 + 1.0;
+        lineColor += c * leftBoost * mix(red, orange, 0.25 + 0.3 * core);
+      }
+
+      // strand 2: thinner secondary line, slightly offset & faster
+      {
+        float seed = 2.1;
+        float d = ribbonField(q, t * 1.15, seed, -0.10, 0.045);
+        float core = smoothstep(1.0, 0.0, d);
+        core = pow(core, 2.0);
+        float glow = exp(-d * d * 5.0) * 0.5;
+        float c = core * 1.1 + glow;
+        lineColor += c * mix(red, orange, 0.4);
+      }
+
+      // strand 3: thin bright accent line, weaving above/below strand 1
+      {
+        float seed = 4.6;
+        float d = ribbonField(q, t * 0.85, seed, 0.18, 0.03);
+        float core = smoothstep(1.0, 0.0, d);
+        core = pow(core, 2.5);
+        float glow = exp(-d * d * 7.0) * 0.4;
+        float c = core * 1.0 + glow;
+        lineColor += c * orange * 0.9;
+      }
+
+      col += lineColor;
+
+      // vignette toward black edges
+      float vig = smoothstep(1.4, 0.15, length(p));
+      col *= mix(0.6, 1.0, vig);
+
+      // very light grain
+      float grain = (hash(uv * uResolution.xy + uTime) - 0.5) * 0.015;
+      col += grain;
+
+      col = clamp(col, 0.0, 1.0);
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader,
+    fragmentShader,
+  });
+
+  const geometry = new THREE.PlaneGeometry(2, 2);
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  function resize() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    renderer.setSize(w, h);
+    uniforms.uResolution.value.set(w, h);
+  }
+  window.addEventListener('resize', resize);
+
+  const clock = new THREE.Clock();
+  function animate() {
+    uniforms.uTime.value = clock.getElapsedTime();
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
