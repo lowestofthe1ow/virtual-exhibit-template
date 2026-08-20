@@ -1,0 +1,323 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Kumusta Mundo: Ang Kaarawan ng Lokal Networks sa Pilipinas"
+author: "Dabuit, Daniel Jedrick C.; Go, John William D.; Liwanag, Ram Miguel C.; Lobo, Shirley Marie A.; Uy, Tara Ysabel P."
+readingTime: "8 minutes"
+---
+
+import InternetSimulation from '../components/s05g9/InternetSimulation.jsx';
+import ExhibitAudio from '../components/s05g9/ExhibitAudio.jsx';
+import mapImage from '../assets/s05g9/Metro_manila_map.webp';
+
+import SmartCafeViewer from '../components/s05g9/SmartCafeViewer.jsx';
+import smartCafeModel from '../assets/s05g9/Smart_Cafe_V2.glb?url';
+
+<ExhibitAudio client:load />
+
+<style>
+{`
+  html {
+    background: #1c1210 !important;
+  }
+  body {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.18) 0px,
+        rgba(0, 0, 0, 0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      ),
+      radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0) 70%,
+        rgba(0, 0, 0, 0.30) 100%
+      ),
+      #1c1210 !important;
+    color: #e8dbb5 !important;
+    padding: 24px 0 !important;
+  }
+.header__titleblock {
+  background: #2a1a12 !important;
+  border: 2px solid #4A2518 !important;
+  box-shadow: none !important;
+  color: #e8dbb5 !important;
+}
+.header__titleblock strong {
+  color: #f0a860 !important;
+  font-family: 'Bebas Neue', monospace !important;
+  letter-spacing: 1px !important;
+}
+.header__titleblock span {
+  color: #e8dbb5 !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 12px !important;
+}
+.button {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: #4A2518 !important;
+  color: #e8dbb5 !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+}
+.button:hover {
+  border-color: #f0a860 !important;
+  color: #f0a860 !important;
+}
+.toc {
+  background: #2a1a12 !important;
+  border: 2px solid #4A2518 !important;
+  box-shadow: 3px 3px #4A2518 !important;
+  color: #e8dbb5 !important;
+}
+.toc h2 {
+  color: #f0a860 !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 12px !important;
+  letter-spacing: 1px !important;
+  border-color: #4A2518 !important;
+}
+.toc__item a {
+  color: #f0a860 !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 13px !important;
+}
+.toc__item a:hover {
+  color: #f5e7bd !important;
+}
+.padder {
+  visibility: hidden !important;
+}
+  .content__titlemeta {
+    display: none !important;
+  }
+  .content {
+    background: transparent !important;
+    padding: 0 1rem !important;
+    max-width: 100% !important;
+  }
+  .content__block {
+    padding: 0 !important;
+    gap: 0 !important;
+    max-width: 780px !important;
+    margin: 0 auto !important;
+    border: 2px solid #4A2518 !important;
+    border-radius: 6px !important;
+    background: rgba(89, 50, 43, 0.35) !important;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(0, 0, 0, 0.25) !important;
+  }
+  .content__block::before {
+    content: "▓▓ ARCHIVE TERMINAL — LOG_0001 // KUMUSTA_MUNDO.TXT ▓▓" !important;
+    display: block !important;
+    background: #3a2a22 !important;
+    color: #e8dbb5 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 10px !important;
+    letter-spacing: 2px !important;
+    padding: 8px 16px !important;
+    border-bottom: 2px solid #4A2518 !important;
+    border-radius: 4px 4px 0 0 !important;
+  }
+  .article {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 1.5rem 0 2rem !important;
+    border-radius: 0 !important;
+    color: #e8dbb5 !important;
+  }
+  .article h1:first-of-type {
+    display: none !important;
+  }
+  .article h2, .article h3, .article h4 {
+    font-family: 'Bebas Neue', 'IBM Plex Mono', monospace !important;
+    color: #f0a860 !important;
+    text-shadow: 0 0 6px rgba(240, 168, 96, 0.55), 0 0 16px rgba(240, 168, 96, 0.25) !important;
+    border-bottom: 2px solid rgba(240, 168, 96, 0.3) !important;
+    padding: 0 0.5rem !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+  }
+  .article h2::after, .article h3::after {
+    content: "_" !important;
+    animation: sim-crt-blink 1s steps(1) infinite !important;
+    margin-left: 2px !important;
+  }
+  @keyframes sim-crt-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  .article p, .article li {
+    color: #e8dbb5 !important;
+    text-shadow: 0 0 2px rgba(232, 219, 181, 0.15) !important;
+    padding: 0 0.5rem !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+  }
+  .exhibit-chart-root p {
+    color: var(--text-secondary) !important;
+    text-shadow: none !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    padding: 0 !important;
+  }
+  .article strong {
+    color: #f5e7bd !important;
+    text-shadow: 0 0 6px rgba(245, 231, 189, 0.4) !important;
+  }
+  .article a {
+    color: #f0a860 !important;
+  }
+  .article hr {
+    border: none !important;
+    border-top: 2px dashed rgba(240, 168, 96, 0.3) !important;
+    margin: 2rem 0.5rem !important;
+  }
+  .article ul {
+    padding-left: 1rem !important;
+    padding-right: 0.5rem !important;
+    list-style: none !important;
+  }
+  .article ul li::before {
+    content: "> " !important;
+    color: #f0a860 !important;
+    font-weight: bold !important;
+  }
+  .article table {
+    width: calc(100% - 1rem) !important;
+    margin: 0 0.5rem !important;
+    border-collapse: collapse !important;
+  }
+  .article th {
+    background: #59322B !important;
+    color: #f5e7bd !important;
+    padding: 10px 14px !important;
+    text-align: left !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
+    border: 2px solid #4A2518 !important;
+  }
+  .article td {
+    padding: 10px 14px !important;
+    border: 2px solid rgba(115, 7, 7, 0.2) !important;
+    color: #7c5a5a !important;
+    font-size: 12px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    background: #e8dbb5 !important;
+  }
+  .article tr:nth-child(even) td {
+    background: #f5e7bd !important;
+  }
+  footer {
+    background: #3a2a22 !important;
+    border-top: 2px solid #4A2518 !important;
+    color: #e8dbb5 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 10px !important;
+    opacity: 0.85 !important;
+  }
+`}
+</style>
+
+# Kumusta Mundo
+
+## Ang Kaarawan ng Lokal Networks sa Pilipinas
+
+*The Birth of the Philippine Internet*
+
+---
+
+Before March 29, 1994, the Philippines existed in a kind of digital isolation. Universities,
+government agencies, and businesses ran their own **Bulletin Board Systems (BBS)** and **UUCP
+networks** — islands of data in a pre-connected archipelago. Sending an email to someone overseas
+required routing through expensive international phone calls, and even then, delivery was never
+guaranteed.
+
+Then, at **1:15 AM on March 29, 1994**, everything changed.
+
+---
+
+## The Historic Connection
+
+Local tech pioneers — working under the multi-institutional **Philnet project** — successfully
+linked a **Cisco 7000 router** at a PLDT facility in Makati to a **64 kbps Sprint leased line**
+in the United States. In doing so, the Philippines became one of the first countries in Southeast
+Asia to establish a full **TCP/IP connection** to the global Internet.
+
+This was not just a technical achievement. It was the moment the Philippine archipelago stopped
+being a collection of isolated networks and became part of the world.
+
+---
+
+## Interactive Simulation
+
+Experience the historic connection yourself. Click the **PLDT Makati node** on the map, select
+the Sprint endpoint, and initiate the link that brought the Philippines online.
+
+<InternetSimulation client:load mapSrc={mapImage.src} />
+
+---
+
+## 3D Spatial Reconstruction: Smart Internet Cafe
+
+Take a closer look at the Smart Communications mobile internet cafe, a container van deployed
+to bring connectivity across the Philippines. Drag to rotate the model, scroll to zoom, and
+explore the exterior of a unit that represented what getting online looked like for many
+Filipinos in the provinces.
+
+<SmartCafeViewer client:visible modelSrc={smartCafeModel.src || smartCafeModel} />
+
+**About the Smart Internet Cafe**
+
+This project was launched by **Smart Telecommunications** alongside **Storage Providers Inc.** in **2006**, aimed at providing internet access to various provinces that were in vast need of internet connectivity. 
+
+This **40-foot container van** consisted of 15 rental computer workstations, bringing faster internet access directly to remote areas through mobile container infrastructure.
+
+---
+
+## What Came After
+
+The 1994 connection set off a chain of developments that shaped Philippine digital life:
+
+- **1994–1996** — The first commercial Internet Service Providers (ISPs) emerge, including
+  PhilNet, MOZCOM, and later PLDT's own ISP division.
+- **Late 1990s** — Internet cafés spread across Metro Manila and provincial cities, democratizing
+  access for students and workers who couldn't afford home connections.
+- **Early 2000s** — The rise of online communities, Friendster, and early OFW communication
+  platforms that kept Filipino families connected across the diaspora.
+- **2010s** — Mobile internet expansion, with Smart and Globe rolling out 3G and later LTE
+  networks reaching even remote barangays.
+- **Today** — The Philippines is one of the world's most active social media nations, with
+  internet usage deeply woven into daily life, commerce, and governance.
+
+---
+
+## The People Behind It
+
+The Philnet project was a collaboration between DOST (Department of Science and Technology),
+ASTI (Advanced Science and Technology Institute), PLDT, and several Philippine universities.
+Key figures like **Benjie Tan** played critical roles in negotiating the international link
+and configuring the infrastructure — often working through the night to make the connection happen.
+
+---
+
+## Technical Specs of the Historic Link
+
+| Component | Detail |
+|-----------|--------|
+| Router | Cisco 7000 Series |
+| Bandwidth | 64 kbps (leased line) |
+| Provider | Sprint (USA) |
+| Protocol | TCP/IP |
+| Location | PLDT Facility, Makati |
+| Date & Time | March 29, 1994 · 01:15 AM |
+
+---
+
+## References
+
+- [The Urban Roamer: Internet in the Philippines — 20 Years Online](https://www.theurbanroamer.com/internet-in-the-philippines-20-years-online/)
+- [The Ayson Chronicles: The Night Benjie Tan Hooked up the Philippines to the Internet](https://jimayson.wordpress.com/2011/08/13/the-night-benjie-hooked-up-the-philippines-to-the-internet/)
+- [PhilStar: Broadbanding the Countryside](https://www.philstar.com/business/telecoms/2006/07/08/346240/smart-click-145broadbanding146-countryside)
+- [Storage Providers Inc — Smart Communications Inc. Internet Cafe](https://storageproviders.ph/smart-communications-inc/)
+- [How the Internet Was Introduced in the Philippines | From Dial-Up to Fiber & 5G!](https://youtu.be/F_neipNS8XI?si=hTmIdNxta4NDTopv)
