@@ -1,0 +1,424 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Evolution of Windows OS"
+description: "The virtual exhibit presents the evolution of the Windows OS from Windows 1 to Windows 11 through an interactive timeline and a quiz."
+author: "Diego, Miguel; Gonzales, Ulrich; Lim, Ethan Yuric; Tan, Mynt; Tiangson, Ezekiel"
+readingTime: "15 minutes"
+---
+
+import ExhibitDashboard from "../components/s02g3/ExhibitDashboard.jsx";
+import "../styles/s02g3/timeline.css";
+
+import win3_startup from "../assets/s02g3/win31.mp3";
+import win95_startup from "../assets/s02g3/win95.mp3";
+import win98_startup from "../assets/s02g3/win98.mp3";
+import me2000_startup from "../assets/s02g3/win2000.mp3";
+import xp_startup from "../assets/s02g3/winxp.mp3";
+import vista_startup from "../assets/s02g3/vista.mp3"; 
+import win11_startup from "../assets/s02g3/win11.mp3";
+
+import windows1 from "../assets/s02g3/windows1.webp";
+import windows3 from "../assets/s02g3/windows3.webp";
+import windows95 from "../assets/s02g3/windows95.webp";
+import windows2000 from "../assets/s02g3/windows2000.webp";
+import windowsme from "../assets/s02g3/windowsme.webp";
+import windowsxp from "../assets/s02g3/windowsxp.webp";
+import windowsvista from "../assets/s02g3/windowsvista.webp";
+import windows7 from "../assets/s02g3/windows7.webp";
+import windows8 from "../assets/s02g3/windows8.webp";
+import windows10 from "../assets/s02g3/windows10.webp";
+import windows11 from "../assets/s02g3/windows11.webp";
+
+import ss_windows1 from "../assets/s02g3/windows1ui.webp";
+import ss_windows2 from "../assets/s02g3/Windows2.webp";
+import ss_windows3 from "../assets/s02g3/Windows3.webp";
+import ss_windows31 from "../assets/s02g3/Windows3.1.webp";
+import ss_windows95 from "../assets/s02g3/windows 95.png";
+import ss_windows98 from "../assets/s02g3/windows 98.webp";
+import ss_windows2000 from "../assets/s02g3/windows 2000.webp";
+import ss_windowsme from "../assets/s02g3/windows me.webp";
+import ss_windowsxp from "../assets/s02g3/windows xp.webp";
+import ss_windowsvista from "../assets/s02g3/windows vista.webp";
+import ss_windows7 from "../assets/s02g3/windows 7.webp";
+import ss_windows8 from "../assets/s02g3/Windows 8.1.webp";
+import ss_windows10 from "../assets/s02g3/windows 10.webp";
+import ss_windows11 from "../assets/s02g3/windows11ui.webp";
+
+export const timelineNodes = [
+  {
+    id: 1,
+    size: "large",
+    title: "Windows 1.0 (1985)",
+    imageSrc: windows1.src,
+    imageAlt: "Windows 1.0 logo",
+    screenshotSrc: ss_windows1.src,
+    content: `Windows 1.0 introduced many users to the idea that a personal computer could be operated through a graphical interface instead of only through typed commands. At the time, that was a major change in everyday computing. The interface used tiled windows, a mouse pointer, menus, and simple icons to make the machine feel more approachable than MS-DOS alone.
+
+Its bundled tools, such as the calculator, notepad, and calendar, were modest by modern standards, but they showed the direction Microsoft wanted to take. The release was not an immediate commercial success, partly because hardware was expensive and many users had to adjust to a new way of working. Even so, it established the foundation for the desktop metaphor that later Windows versions would continue to develop.
+
+Windows 1.0 mattered because it showed that graphical computing had a future on affordable home and office machines. It was not polished, and it did not try to do everything at once, but it introduced the core idea that Windows would keep building on over time.`,
+  },
+  {
+    id: 101,
+    size: "small",
+    title: "Windows 1.01 (1985)",
+    imageSrc: windows1.src,
+    imageAlt: "Windows 1.01 screenshot",
+    screenshotSrc: ss_windows1.src,
+    content: `Windows 1.01 was an early maintenance release that tightened up the first version of Windows. Its main purpose was to correct rough edges, improve reliability, and make the software behave more consistently on the limited hardware available at the time.
+
+For early adopters, even a small fix could make a real difference. When a graphical environment was still new, users needed programs to open properly, menus to respond correctly, and the system to feel less fragile. Updates like this helped make the first experience with Windows more dependable.
+
+The release also showed that Microsoft was treating Windows as a product that would continue to evolve after launch. That mattered because the platform was still trying to earn trust, and steady refinement was part of building that trust.`,
+  },
+  {
+    id: 2,
+    size: "large",
+    title: "Windows 2.0 (1987)",
+    imageSrc: windows1.src,
+    imageAlt: "Windows 2 logo",
+    screenshotSrc: ss_windows2.src,
+    content: `Windows 2.0 made the graphical environment feel much more useful for everyday work. Its biggest change was the ability to overlap and resize windows more naturally, which gave the desktop a layout closer to the multitasking model users expected. The familiar minimize and maximize controls also appeared here, giving the interface a structure that later Windows releases would keep.
+
+This version also arrived with stronger display support and early graphical productivity applications. That mattered because Microsoft was beginning to position Windows as more than a novelty. It was becoming a platform where serious work could happen, especially for people who wanted to combine text, spreadsheets, and visual navigation without spending all day inside a command line.
+
+Windows 2.0 shows Microsoft learning from the first release and responding to actual user behavior. It did not yet dominate the market, but it moved Windows closer to the interface language that computer users would eventually recognize everywhere.`,
+  },
+  {
+    id: 102,
+    size: "small",
+    title: "Windows 2.1x (1988)",
+    imageSrc: windows1.src,
+    imageAlt: "Windows 2.1 screenshot",
+    screenshotSrc: ss_windows2.src,
+    content: `The Windows 2.1 family continued improving the early graphical experience without changing its basic identity. These releases focused on better performance, stronger memory handling, and support for more capable hardware configurations.
+
+That kind of progress mattered in the late 1980s because computers were still resource constrained. Faster response times and fewer compatibility problems made Windows feel less experimental and more practical for regular use.
+
+Windows 2.1 did not become the most famous entry in the series, but it helped keep the platform moving forward. The release is a clear example of how small technical refinements can prepare the ground for larger changes later on.`,
+  },
+  {
+    id: 3,
+    size: "large",
+    title: "Windows 3.0 / 3.1 (1990 / 1992)",
+    soundSrc: win3_startup,
+    imageSrc: windows3.src,
+    imageAlt: "Windows 3 logo",
+    screenshotSrc: ss_windows31.src,
+    content: `Windows 3.0 and 3.1 turned Windows from an interesting project into a mainstream platform. These releases offered a much more polished user interface, better memory management, and improved performance that made the system feel far more capable than the earlier editions. Program Manager and File Manager gave users a clearer way to move between software and documents, which made the whole environment easier to understand.
+
+The visual design also took a major step forward. Better color support, improved fonts, and richer multimedia capabilities gave Windows a more modern identity. This was the era when home users started seeing Windows not only as a business tool, but also as a platform for games, creativity, and everyday productivity.
+
+Windows 3.x brought major attention to Microsoft’s graphical strategy and prepared the market for the even bigger jump that would come with Windows 95. If Windows 1 and 2 were the proof of concept, Windows 3.0 and 3.1 were the proof that the concept could succeed on a large scale.`,
+  },
+  {
+    id: 103,
+    size: "small",
+    title: "Windows 3.11 (1993)",
+    imageSrc: windows3.src,
+    imageAlt: "Windows 3.11 screenshot",
+    screenshotSrc: ss_windows31.src,
+    content: `Windows 3.11 refined the 3.x platform by improving networking, compatibility, and overall stability. For users who were beginning to depend on Windows for both work and home computing, those upgrades made a noticeable difference in everyday confidence.
+
+The release also helped extend the useful life of the 3.x family. Instead of forcing a complete reset, it kept the system familiar while smoothing over problems that could get in the way of productivity. That made it easier for Microsoft to hold on to users as the industry moved toward the next generation.
+
+Windows 3.11 is a good example of how a smaller release can still matter. It polished the experience enough to keep momentum going and made the platform feel more complete before the jump to Windows 95.`,
+  },
+  {
+    id: 4,
+    size: "large",
+    title: "Windows 95 (1995)",
+    soundSrc: win95_startup,
+    imageSrc: windows95.src,
+    imageAlt: "Windows 95 logo",
+    screenshotSrc: ss_windows95.src,
+    content: `Windows 95 changed public expectations for what a personal computer should look and feel like. The Start button, taskbar, and Windows Explorer gave users a more intuitive way to launch programs and manage files. Instead of juggling separate program groups and command line habits, people could navigate the desktop with a clearer sense of structure.
+
+This version also brought major technical and usability improvements, including support for long file names and Plug and Play hardware detection. That combination mattered because it reduced the friction of setting up and using a PC. Microsoft backed the launch with a huge marketing push, and the result was a cultural moment as much as a software release.
+
+Its long-term influence is enormous. Nearly every later Windows release inherited some part of its design language or workflow philosophy, and the release became the template for how everyday users expected to interact with a computer.`,
+  },
+  {
+    id: 104,
+    size: "small",
+    title: "Windows 95 OSR2 (1996)",
+    imageSrc: windows95.src,
+    imageAlt: "Windows 95 OSR2 screenshot",
+    screenshotSrc: ss_windows95.src,
+    content: `Windows 95 OSR2 strengthened an already popular platform without changing its overall identity. It added practical improvements to hardware support, file system capabilities, and system maturity, which made the operating system feel more complete in real-world use.
+
+This release was especially useful for people who had already committed to Windows 95 and wanted the experience to be more dependable. It smoothed out rough edges and made the system better suited for the growing variety of hardware arriving in the mid-1990s.
+
+OSR2 shows how major software often improves through careful follow-up work rather than a single dramatic launch. The core design stayed familiar, but the everyday experience became more stable and more capable.`,
+  },
+  {
+    id: 5,
+    size: "large",
+    title: "Windows 98 (1998)",
+    soundSrc: win98_startup,
+    imageSrc: windows95.src,
+    imageAlt: "Windows 98 logo",
+    screenshotSrc: ss_windows98.src,
+    content: `Windows 98 built directly on the success of Windows 95 and refined the experience for a more internet-connected world. It improved USB support, hardware detection, and general usability, which mattered because personal computers were becoming more peripheral heavy. Devices like scanners, digital cameras, and new generations of mice were becoming part of everyday life, so easier setup was a major benefit.
+
+This version also strengthened the integration of web browsing and system maintenance. Windows Update and Disk Cleanup made the operating system feel more serviceable over time, which was a meaningful shift for users who were starting to expect software to be maintained after installation rather than replaced outright.
+
+Windows 98 remains memorable because it balanced familiarity with practical improvement. It did not reinvent the interface, but it polished the everyday experience enough to make the transition from 95 feel worthwhile.`,
+  },
+  {
+    id: 105,
+    size: "small",
+    title: "Windows 98 SE (1999)",
+    imageSrc: windows95.src,
+    imageAlt: "Windows 98 SE screenshot",
+    screenshotSrc: ss_windows98.src,
+    content: `Windows 98 Second Edition is remembered as the more mature form of Windows 98. It improved networking, internet sharing, and overall system stability, which made it easier for home users and small offices to rely on the platform.
+
+That mattered because the late 1990s were a period when more computers were joining local networks and connecting to the internet. A smoother networking experience made Windows 98 feel better suited to that environment and less prone to friction during setup.
+
+As an update, it shows how refinement can make a familiar product more trustworthy. The core design stayed the same, but the experience became smoother, more reliable, and easier to recommend.`,
+  },
+  {
+    id: 6,
+    size: "large",
+    title: "Windows 2000 (2000)",
+    soundSrc: me2000_startup,
+    imageSrc: windows2000.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windows2000.src,
+    content: `Windows 2000 represented the enterprise side of Microsoft’s strategy at its strongest. Built on the Windows NT architecture, it was designed for reliability, security, and professional use. Compared with the consumer focused Windows 9x line, it was much more stable and much better suited for corporate environments that needed predictable performance.
+
+Its feature set reflected that audience. Active Directory, improved Plug and Play support, and stronger system management tools made it attractive to IT departments and businesses that cared about centralized control. While it was not as playful or flashy as some consumer releases, it earned a reputation as a dependable platform that could carry serious workloads.
+
+Windows 2000 proved that Microsoft’s modern architecture could support both usability and stability. It became a bridge between the older consumer generation and the future that would later be defined by Windows XP.`,
+  },
+  {
+    id: 106,
+    size: "small",
+    title: "Windows 2000 SP4 (2003)",
+    imageSrc: windows2000.src,
+    imageAlt: "Windows 2000 Service Pack 4 screenshot",
+    screenshotSrc: ss_windows2000.src,
+    content: `Windows 2000 Service Pack 4 was one of the final major maintenance milestones for the platform. It strengthened security, compatibility, and reliability in the way long-term deployments often require.
+
+Enterprise users valued that kind of work because stability mattered far more than novelty. A service pack could extend the useful life of the operating system by making it safer and easier to maintain in business environments.
+
+SP4 shows that software history is not only about debut versions. Long after launch, careful maintenance can be just as important as the original feature set.`,
+  },
+  {
+    id: 7,
+    size: "large",
+    title: "Windows Me (2000)",
+    soundSrc: me2000_startup,
+    imageSrc: windowsme.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windowsme.src,
+    content: `Windows Millennium Edition, or Windows Me, is remembered as one of the most controversial consumer releases in the Windows family. It introduced genuinely useful features, including System Restore and Windows Movie Maker, both of which had long-term influence on how users thought about recovery and simple media creation. It also removed much of the visible DOS dependence that had lingered in earlier consumer versions.
+
+The problem was that those improvements were overshadowed by instability. Many users experienced crashes, driver conflicts, and general unreliability, which severely damaged the system’s reputation. Even when features were useful, the overall experience could be so frustrating that people remembered the operating system for its weaknesses instead of its strengths.
+
+Windows Me had ideas that pointed toward the future, but it lacked the polish needed to make those ideas trustworthy. That tension made it a short-lived but important chapter before Windows XP reset expectations.`,
+  },
+  {
+    id: 107,
+    size: "small",
+    title: "Windows Me Hotfix Era (2001)",
+    imageSrc: windowsme.src,
+    imageAlt: "Windows Me hotfix screenshot",
+    screenshotSrc: ss_windowsme.src,
+    content: `The hotfix period around Windows Me reflected Microsoft’s effort to reduce frustration after launch. Patches and compatibility adjustments could not completely change the product’s reputation, but they could make daily use less painful for some users.
+
+This stage shows the difference between a promising feature set and dependable operation. Windows Me had useful ideas, but users still needed the system to behave consistently if they were going to trust it.
+
+The update work did not redefine the platform, but it did show an ongoing attempt to stabilize the consumer line before the next major reset.`,
+  },
+  {
+    id: 8,
+    size: "large",
+    title: "Windows XP (2001)",
+    soundSrc: xp_startup,
+    imageSrc: windowsxp.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windowsxp.src,
+    content: `Windows XP is one of the most iconic operating systems Microsoft ever released. It successfully unified the consumer and business branches of Windows on the NT architecture, giving users a system that was both stable and approachable. The bright blue interface, rounded buttons, and memorable Bliss wallpaper made the platform feel welcoming in a way that earlier versions had not.
+
+Beyond the visuals, XP offered the kind of reliability that made people comfortable keeping it for years. It supported a wide range of hardware, improved multimedia use, and introduced features that made daily work simpler, such as clearer account management and better networking support. For many households, XP became the default image of what a modern PC looked like.
+
+Its cultural longevity was extraordinary. Many users delayed upgrading because XP simply worked, and in practice that was one of the strongest compliments an operating system could receive.`,
+  },
+  {
+    id: 108,
+    size: "small",
+    title: "Windows XP SP2 (2004)",
+    imageSrc: windowsxp.src,
+    imageAlt: "Windows XP Service Pack 2 screenshot",
+    screenshotSrc: ss_windowsxp.src,
+    content: `Windows XP Service Pack 2 was a major security and usability turning point for the platform. It strengthened the firewall, security center, and default system protections at a time when malware and internet threats were becoming more serious.
+
+For many users, SP2 was the version that restored confidence in the operating system. It added practical safeguards without removing the familiarity people liked, which made the system feel safer without feeling unfamiliar.
+
+The release is a strong example of how an incremental update can reshape the reputation of a product. It did not replace XP, but it refined the system in ways that helped it remain relevant for years.`,
+  },
+  {
+    id: 9,
+    size: "large",
+    title: "Windows Vista (2007)",
+    soundSrc: vista_startup,
+    imageSrc: windowsvista.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windowsvista.src,
+    content: `Windows Vista arrived with a dramatic visual overhaul and a large number of architectural changes. Aero Glass gave the desktop a transparent, glossy look that felt futuristic, while improvements such as the redesigned audio stack, built-in search, and User Account Control aimed to modernize the operating system under the hood. It was one of Microsoft’s most ambitious releases.
+
+The problem was that Vista asked much more from hardware than many users were ready to give. Older computers struggled with the new visual effects, driver compatibility problems caused frustration, and UAC prompts became a symbol of the system’s perceived annoyance. Even so, Vista was not a dead end. It introduced many ideas that later versions would keep and improve.
+
+Vista shows what happens when innovation arrives faster than the surrounding ecosystem can comfortably absorb it. The release was widely criticized, but many of its technical foundations helped shape the more successful Windows 7 that followed.`,
+  },
+  {
+    id: 109,
+    size: "small",
+    title: "Windows Vista SP1 (2008)",
+    imageSrc: windowsvista.src,
+    imageAlt: "Windows Vista Service Pack 1 screenshot",
+    screenshotSrc: ss_windowsvista.src,
+    content: `Windows Vista Service Pack 1 was Microsoft’s attempt to improve the experience without discarding the core platform. It addressed performance issues, compatibility problems, and some of the complaints that had dominated Vista’s early reputation.
+
+For users who stayed with the system, the update made the operating system feel more practical. It was also important in enterprise settings, where a stable and better-understood version could be easier to support.
+
+SP1 represents the kind of repair work that often follows a controversial release. It did not erase Vista’s reputation, but it did make the platform easier to live with.`,
+  },
+  {
+    id: 10,
+    size: "large",
+    title: "Windows 7 (2009)",
+    soundSrc: vista_startup,
+    imageSrc: windows7.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windows7.src,
+    content: `Windows 7 is widely remembered as the release that restored confidence after Vista. It kept the modern foundation but improved performance, reduced annoyance, and made the interface feel much more responsive. Users especially appreciated taskbar pinning, Aero Snap, and the sense that the system got out of the way instead of constantly demanding attention.
+
+This was a release defined by refinement. Windows 7 did not need a dramatic visual gamble because it was already building on a familiar and successful desktop pattern. That decision paid off, since the operating system felt both polished and efficient to a broad range of users, from home consumers to office workers.
+
+Its reputation has remained strong because it balanced speed, stability, and usability so effectively. Many people see Windows 7 as one of Microsoft’s best releases because it learned from the failures of the past without overcorrecting.`,
+  },
+  {
+    id: 110,
+    size: "small",
+    title: "Windows 7 SP1 (2011)",
+    imageSrc: windows7.src,
+    imageAlt: "Windows 7 Service Pack 1 screenshot",
+    screenshotSrc: ss_windows7.src,
+    content: `Windows 7 Service Pack 1 strengthened an already well-liked operating system. Its role was not to reinvent the experience, but to improve stability, compatibility, and long-term support.
+
+For many organizations, that made the platform easier to standardize and trust. Even a successful release benefits from a maintenance update that confirms it can remain dependable over time.
+
+SP1 captures the moment when Windows 7 moved from a strong product to a fully mature platform. It quietly locked in reliability.`,
+  },
+  {
+    id: 11,
+    size: "large",
+    title: "Windows 8 (2012)",
+    soundSrc: vista_startup,
+    imageSrc: windows8.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windows8.src,
+    content: `Windows 8 was Microsoft’s bold attempt to redesign the desktop around touch input and a more tablet-friendly experience. It replaced the traditional Start menu with a full-screen Start interface built from colorful live tiles. The company wanted one system that could feel at home on laptops, desktops, and tablets, which made strategic sense even if the execution was polarizing.
+
+Technically, Windows 8 was fast and modern, and it introduced important improvements beneath the surface. The problem was the user interface shock. Long-time mouse and keyboard users often felt like they were being pushed into an unfamiliar workflow that hid familiar desktop habits behind a brand new visual layer.
+
+Windows 8 remains an important lesson in design tradeoffs. It shows that a product can be technologically impressive while still frustrating its core audience if the interaction model changes too abruptly.`,
+  },
+  {
+    id: 12,
+    size: "large",
+    title: "Windows 8.1 (2013)",
+    soundSrc: vista_startup,
+    imageSrc: windows8.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windows8.src,
+    content: `Windows 8.1 was Microsoft’s immediate response to the backlash against Windows 8. It brought back the Start button and gave users more flexibility in how they booted into the desktop, which made the operating system feel less intimidating. The update was designed to reassure users that Microsoft had heard the criticism.
+
+More importantly, it helped bridge the gap between the modern tile-based interface and the traditional desktop workflow. That made Windows 8.1 easier to adopt, especially for users who preferred keyboard and mouse navigation. It was not a full reversal, but it was a meaningful correction in the direction of usability.
+
+Windows 8.1 shows how quickly Microsoft could react when a major design decision landed badly. The release did not become legendary, but it played a crucial role in restoring balance before Windows 10 arrived.`,
+  },
+  {
+    id: 111,
+    size: "small",
+    title: "Windows 8.1 Update (2014)",
+    imageSrc: windows8.src,
+    imageAlt: "Windows 8.1 update screenshot",
+    screenshotSrc: ss_windows8.src,
+    content: `Windows 8.1 Update reduced some of the friction that had defined Windows 8. By easing access to the desktop and improving navigation, it made the system more comfortable for traditional PC users while keeping the modern foundation in place.
+
+That mattered because the original release had clearly shown where users were struggling. This update responded by making familiar actions easier to discover and use, which improved day-to-day comfort.
+
+The update reflects a direct course correction. Microsoft did not abandon its newer design ideas, but it adjusted the experience so the platform could work better for a broader audience.`,
+  },
+  {
+    id: 13,
+    size: "large",
+    title: "Windows 10 (2015)",
+    soundSrc: vista_startup,
+    imageSrc: windows10.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windows10.src,
+    content: `Windows 10 was positioned as the modern unifier for Microsoft’s desktop and mobile ambitions. It brought back the Start menu in a form that blended familiar navigation with live tiles, which helped satisfy users who wanted both tradition and flexibility. This was one of the company’s most pragmatic design decisions in years.
+
+The operating system also embraced the idea of continuous improvement through ongoing feature updates. Cortana, the Edge browser, virtual desktops, and many other tools made Windows 10 feel like a living platform rather than a static release. That approach changed the relationship between users and Windows, since major improvements could arrive without a complete version change.
+
+Windows 10 became a long-running standard because it balanced compatibility, modernization, and ongoing support. For many users and organizations, it represented the safest path between the older desktop world and the cloud-connected future.`,
+  },
+  {
+    id: 112,
+    size: "small",
+    title: "Windows 10 22H2 (2022)",
+    imageSrc: windows10.src,
+    imageAlt: "Windows 10 feature update screenshot",
+    screenshotSrc: ss_windows10.src,
+    content: `Windows 10 22H2 reflects the later phase of the Windows 10 lifecycle, when feature updates had become part of the normal operating rhythm. At this stage, the focus was less on dramatic reinvention and more on stability, compatibility, and long-term support planning.
+
+That made releases like 22H2 important even if they did not dominate headlines. Enterprise customers especially value predictable update channels because they need systems that can be tested, deployed, and maintained with minimal disruption.
+
+The release shows how a successful platform keeps evolving after its headline era ends. The emphasis is on maturity and continuity rather than novelty.`,
+  },
+  {
+    id: 14,
+    size: "large",
+    title: "Windows 11 (2021)",
+    soundSrc: win11_startup,
+    imageSrc: windows11.src,
+    imageAlt: "Windows logo",
+    screenshotSrc: ss_windows11.src,
+    content: `Windows 11 introduced a cleaner, more centered interface that gave the desktop a fresh sense of order. The centered Start menu and taskbar made the system look distinctly modern, while rounded corners, new system sounds, and Snap Layouts emphasized a more polished visual identity. Microsoft clearly wanted this release to feel like a reset in style, not just a routine upgrade.
+
+Under the surface, Windows 11 also pushed newer standards for hardware and security. The TPM 2.0 requirement became one of the most discussed aspects of the release because it excluded many older but still functional machines. That decision marked a shift in how Microsoft defined the baseline for modern PCs.
+
+Despite the controversy, Windows 11 has earned attention for its appearance, multitasking tools, and gaming improvements. It is a reminder that operating systems continue to evolve not only in features, but also in the expectations they place on the hardware beneath them.`,
+  },
+];
+
+## Windows OS Timeline
+
+<ExhibitDashboard nodes={timelineNodes} client:load />
+
+## Content References
+
+1. The birth of windows 1.0: A revolutionary leap in personal computing – computer performance. Computer Performance. (2025, September 17). https://www.computerperformance.org/the-birth-of-windows-1-0-a-revolutionary-leap-in-personal-computing/ 
+2. Carrasqueira, J. (2024, July 11). 36 years ago, Windows 2.0 brought us closer to the version we know today. XDA. https://www.xda-developers.com/on-this-day-windows-2-0-36-years/
+3. Windows 3.0 / 3.1 3.1. WinWorld. (n.d.). https://winworldpc.com/product/windows-3/31
+4. Bagci, T. (2026, May 1). What is Windows 95? | definition, features & versions!. Sysnettech Solutions. https://www.sysnettechsolutions.com/en/what-is-windows-95/
+5. Bagci, T. (2026, May 1). What is Windows 98? | definition, features, Fe/Se Editions!. Sysnettech Solutions. https://www.sysnettechsolutions.com/en/what-is-windows-98/
+6. Bagci, T. (2026c, June 30). What is Windows 2000? discover the nostalgic experience!. Sysnettech Solutions. https://www.sysnettechsolutions.com/en/what-is-windows-2000/
+7. Stockton, B. (2024, November 10). Windows Me was more revolutionary than we think. How-To Geek. https://www.howtogeek.com/windows-me-was-more-revolutionary-than-we-think/
+8. Windows XP definition - what is Windows XP?. TechTerms.com. (n.d.). https://techterms.com/definition/windows_xp
+9. The features and benefits of Windows Vista. Lenovo. (n.d.). https://www.lenovo.com/us/en/glossary/windows-vista/
+10. Windows 7 review (2025 update) – history, features, and Legacy. (2026, May 11). https://thepcdoctor.com.au/windows-7
+11. Case, L. (2012, October 25). Windows 8: The official review | pcworld. PCWorld. https://www.pcworld.com/article/461732/windows-8-the-official-review.html
+12. Rosenblatt, S. (2012, August 15). Windows 8 review: Aggressively innovative Windows 8 forces a steep learning curve - CNET. CNET. https://www.cnet.com/reviews/microsoft-windows-8-pro-upgrade-review/
+13. Ackerman, D. (2013, October 17). Microsoft Windows 8.1 review: Improved Windows still torn between tablet future and PC past - CNET. CNET. https://www.cnet.com/reviews/microsoft-windows-8-1-review/
+14. Poeter, D. (2013, October 17). Microsoft releases Windows 8.1, brings back start button. PCMag. https://www.pcmag.com/news/microsoft-releases-windows-81-brings-back-start-button
+15. Ralph, N. (2015, July 28). Microsoft windows 10 review: Microsoft gets it right - CNET. CNET. https://www.cnet.com/reviews/microsoft-windows-10-review/
+16. Ackerman, D. (n.d.). Windows 11 review: Microsoft’s subtle changes make you ask, update or wait? - CNET. CNET. https://www.cnet.com/tech/computing/microsoft-windows-11-review/
+
+## Sound References
+1. Makowski, D. (n.d.). Windows starting-sounds. Winhistory.de. https://www.winhistory.de/more/winstart/winstart_en.htm
