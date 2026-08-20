@@ -550,7 +550,7 @@
     "url": "https://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/S03_Group7_spectre",
     "submittedDescription": "Project Spectre will take you back to 2018, the moment Spectre and Meltdown shook the tech world to its core and redefined computer security. Step directly onto the chip floor to explore how modern processors accidentally traded hardware security for raw speed through speculative execution. Across three interactive simulators, you will expose hidden passwords via cache-timing side channels, play the role of a CPU balancing performance against cache-trace risks, and command a January 2018 incident response team scrambling to patch exposed infrastructure under a ticking clock. It\u2019s an immersive, high-stakes dive into the ultimate computer architecture dilemma.\n\nhttps://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/",
     "submittedUrl": "https://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/",
-    "status": "pending"
+    "status": "live"
   },
   {
     "section": "S03",
