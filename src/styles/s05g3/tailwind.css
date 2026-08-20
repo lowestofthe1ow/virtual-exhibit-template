@@ -1,0 +1,90 @@
+/* umbrella integration: registers "base" in the cascade-layer order BEFORE
+ * the tailwind-scoped.css import below registers "theme" and "utilities" —
+ * see the @layer base block near the end of this file for why. */
+@layer base;
+@import "../tailwind-scoped.css";
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* --- umbrella integration: scoped preflight substitute ---
+ * The original entry imported full "tailwindcss" (theme + preflight +
+ * utilities); the umbrella imports theme + utilities only. This exhibit has
+ * many bare <button>s (App.jsx's Back/Next nav, Breadcrumb.jsx's step
+ * links, Gallery.jsx's milestone thumbnails, Game.jsx's "proposal_1989.txt"
+ * link) that set no background/border/padding of their own and rely
+ * entirely on preflight's `button{font:inherit;color:inherit;
+ * background-color:transparent;border-radius:0}` plus the universal
+ * `*{margin:0;padding:0;border:0 solid}` reset — without it they show the
+ * browser's native grey button face. It also has plain <ul>s (the
+ * Contributors list in App.jsx, using a literal "•" character instead of a
+ * list-style utility) that rely on preflight's `list-style:none` to avoid
+ * double bullets, and <img>s (Gallery.jsx) that rely on
+ * `img{display:block}` to avoid the inline-replaced-element baseline gap.
+ *
+ * Reproduced here scoped to .article (the shared layout's own wrapper
+ * around this exhibit's slotted content — verified against
+ * ExhibitLayout.astro: the header's home link is an <a>, not a <button>,
+ * and the shared table-of-contents <ul> lives in <nav class="toc">,
+ * OUTSIDE .article, so neither is touched).
+ *
+ * Wrapped in `@layer base` (with the `@layer base;` order-registration
+ * statement up top, before the tailwind-scoped.css import) instead of
+ * s01g6/s01g9's unlayered `:not([class*="..."])` guard approach: this
+ * exhibit mixes many buttons that need the reset with a few that already
+ * set their own explicit background/border/padding utility classes for
+ * DIFFERENT combinations of properties (verified by reading every
+ * <button>/<ul>/<img> in the exhibit's source), which would need a
+ * separate guard per property to get right with the unlayered approach.
+ * Layering these rules into "base" instead makes every Tailwind utility
+ * class in "utilities" (a higher-precedence layer, confirmed by building a
+ * throwaway reproduction with the Tailwind CLI and inspecting the emitted
+ * @layer order) win automatically, regardless of specificity — exactly how
+ * preflight itself would have deferred to them.
+ */
+@layer base {
+    .article button {
+        font: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+        text-align: inherit;
+        background-color: transparent;
+        border-radius: 0;
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .article ul,
+    .article ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .article img {
+        display: block;
+        vertical-align: middle;
+        max-width: 100%;
+        height: auto;
+    }
+}
