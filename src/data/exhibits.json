@@ -65,7 +65,7 @@
     "repo": "https://github.com/mykanadine/WifiGeneration",
     "url": "https://mykanadine.github.io/WifiGeneration/wifi",
     "submittedUrl": "https://mykanadine.github.io/WifiGeneration/",
-    "status": "pending"
+    "status": "live"
   },
   {
     "section": "S01",
@@ -272,7 +272,7 @@
     "authors": [
       "Bueno, Jonathan",
       "Dela Cruz, Louiz Alfredo",
-      "Ibañez, Kane Joshua",
+      "Iba\u00f1ez, Kane Joshua",
       "Ignacio, Miguel Angelo",
       "Solomon, Adonis Mikel"
     ],
@@ -352,7 +352,7 @@
     "slug": "s02g8",
     "title": "Historical Computing: Evolution of Human-Computer Interaction",
     "authors": [
-      "Helaga, Raina Bañaga",
+      "Helaga, Raina Ba\u00f1aga",
       "Lee, Jason Benedict Caparros",
       "Maravilla, Sofia Perico",
       "Plurad, Venice Raeka Martinez",
@@ -542,13 +542,13 @@
       "Lopez, Kent Xavier",
       "Marcos, Alain Zuriel"
     ],
-    "description": "Project Spectre will take you back to 2018, the moment Spectre and Meltdown shook the tech world to its core and redefined computer security. Step directly onto the chip floor to explore how modern processors accidentally traded hardware security for raw speed through speculative execution. Across three interactive simulators, you will expose hidden passwords via cache-timing side channels, play the role of a CPU balancing performance against cache-trace risks, and command a January 2018 incident response team scrambling to patch exposed infrastructure under a ticking clock. It’s an immersive, high-stakes dive into the ultimate computer architecture dilemma.",
+    "description": "Project Spectre will take you back to 2018, the moment Spectre and Meltdown shook the tech world to its core and redefined computer security. Step directly onto the chip floor to explore how modern processors accidentally traded hardware security for raw speed through speculative execution. Across three interactive simulators, you will expose hidden passwords via cache-timing side channels, play the role of a CPU balancing performance against cache-trace risks, and command a January 2018 incident response team scrambling to patch exposed infrastructure under a ticking clock. It\u2019s an immersive, high-stakes dive into the ultimate computer architecture dilemma.",
     "keywords": [
       "Spectre"
     ],
     "repo": "https://github.com/imnotneon-dev/CSARCH2-Virtual-Exhibit",
     "url": "https://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/S03_Group7_spectre",
-    "submittedDescription": "Project Spectre will take you back to 2018, the moment Spectre and Meltdown shook the tech world to its core and redefined computer security. Step directly onto the chip floor to explore how modern processors accidentally traded hardware security for raw speed through speculative execution. Across three interactive simulators, you will expose hidden passwords via cache-timing side channels, play the role of a CPU balancing performance against cache-trace risks, and command a January 2018 incident response team scrambling to patch exposed infrastructure under a ticking clock. It’s an immersive, high-stakes dive into the ultimate computer architecture dilemma.\n\nhttps://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/",
+    "submittedDescription": "Project Spectre will take you back to 2018, the moment Spectre and Meltdown shook the tech world to its core and redefined computer security. Step directly onto the chip floor to explore how modern processors accidentally traded hardware security for raw speed through speculative execution. Across three interactive simulators, you will expose hidden passwords via cache-timing side channels, play the role of a CPU balancing performance against cache-trace risks, and command a January 2018 incident response team scrambling to patch exposed infrastructure under a ticking clock. It\u2019s an immersive, high-stakes dive into the ultimate computer architecture dilemma.\n\nhttps://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/",
     "submittedUrl": "https://imnotneon-dev.github.io/CSARCH2-Virtual-Exhibit/",
     "status": "pending"
   },
@@ -850,9 +850,9 @@
     "authors": [
       "AGSALON, GIANELA KIM ATIENZA,",
       "BIBON, KYLE ADRIAN LAMEYRA",
-      "VILLAFLOR, HERSHEY ANN AÑABEZA"
+      "VILLAFLOR, HERSHEY ANN A\u00d1ABEZA"
     ],
-    "description": "Mga Nanguna (\"Those Who Led\") is a virtual museum exhibit that tells the untold story of Filipino pioneers who shaped the digital world — often against all odds and despite being overlooked in global computing history.\n\nThis exhibit explores how Filipino engineers, educators, and innovators contributed to computing from the early days of silicon chips to the modern tech era, tracing their journey from local institutions to the global stage and back home again.",
+    "description": "Mga Nanguna (\"Those Who Led\") is a virtual museum exhibit that tells the untold story of Filipino pioneers who shaped the digital world \u2014 often against all odds and despite being overlooked in global computing history.\n\nThis exhibit explores how Filipino engineers, educators, and innovators contributed to computing from the early days of silicon chips to the modern tech era, tracing their journey from local institutions to the global stage and back home again.",
     "keywords": [
       "Tech",
       "Filipinos",
@@ -869,7 +869,7 @@
     "title": "deep-dive-apollo",
     "authors": [
       "Ong, David Zachary, Gueverra",
-      "Samonte, Joshua Carlos, Buñing",
+      "Samonte, Joshua Carlos, Bu\u00f1ing",
       "Tizon, Lukas Alfonzo, Mendiola",
       "Yabut, Jade Malik, Paningbatan",
       "Rebollos, Brent Prose, Baje"
@@ -957,7 +957,7 @@
       "Lobo, Shirley Marie Agojo",
       "Uy, Tara Ysabel Phi"
     ],
-    "description": "\"Kumusta Mundo: Ang Kaarawan ng Lokal Networks sa Pilipinas\" is a virtual exhibition that traces the Philippines’ historic connection to the global internet on March 29, 1994, and its 30-year evolution after. Through an interactive network simulation, a rotatable 3D Smart Internet Cafe model, and a CRT-inspired design, the site turns Philippine internet history into an immersive museum experience.",
+    "description": "\"Kumusta Mundo: Ang Kaarawan ng Lokal Networks sa Pilipinas\" is a virtual exhibition that traces the Philippines\u2019 historic connection to the global internet on March 29, 1994, and its 30-year evolution after. Through an interactive network simulation, a rotatable 3D Smart Internet Cafe model, and a CRT-inspired design, the site turns Philippine internet history into an immersive museum experience.",
     "keywords": [
       "Internet",
       "Network",
@@ -1001,7 +1001,7 @@
       "Choa, Bryan",
       "Chua, Keion Clei"
     ],
-    "description": "Clockwork: The Rhythm of the Processor is an interactive web-based simulator that demystifies the fundamental heartbeat of modern computing—the CPU clock cycle. Deployed on Vercel, this educational tool visualizes how a 5-stage RISC pipeline (Instruction Fetch, Decode, Execute, Memory Access, Write Back) processes instructions in real-time, allowing visitors to manipulate clock frequency from 0.5 GHz to 2.0 GHz and observe the cascading effects on instruction throughput and pipeline behavior. Through integrated oscilloscope waveforms, square wave frequency visualizations, and dynamic Gantt charts, Clockwork bridges the gap between abstract timing concepts and tangible hardware physics. Built with interactive controls and rich visual feedback, this simulator transforms computer architecture education from static diagrams into an engaging, hands-on exploration of the timing logic that orchestrates billions of operations per second.",
+    "description": "Clockwork: The Rhythm of the Processor is an interactive web-based simulator that demystifies the fundamental heartbeat of modern computing\u2014the CPU clock cycle. Deployed on Vercel, this educational tool visualizes how a 5-stage RISC pipeline (Instruction Fetch, Decode, Execute, Memory Access, Write Back) processes instructions in real-time, allowing visitors to manipulate clock frequency from 0.5 GHz to 2.0 GHz and observe the cascading effects on instruction throughput and pipeline behavior. Through integrated oscilloscope waveforms, square wave frequency visualizations, and dynamic Gantt charts, Clockwork bridges the gap between abstract timing concepts and tangible hardware physics. Built with interactive controls and rich visual feedback, this simulator transforms computer architecture education from static diagrams into an engaging, hands-on exploration of the timing logic that orchestrates billions of operations per second.",
     "keywords": [
       "CPU Clock"
     ],

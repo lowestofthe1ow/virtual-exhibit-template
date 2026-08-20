@@ -1,0 +1,59 @@
+---
+const { title } = Astro.props;
+const headers = ['IEEE 802.11 Protocol', 'Release Date', 'Frequency Band/s', 'Bandwidth', 'Max Throughput']
+const tableData = [
+    {protocol: '802.11-1997', date: '1997', freq: '2.4', bandwidth: '22', throughput: '2 Mbps'},
+    {protocol: '11b', date: '1999', freq: '2.4', bandwidth: '22', throughput: '11 Mbps'},
+    {protocol: '11a', date: '1999', freq: '5', bandwidth: '20', throughput: '54 Mbps'},
+    {protocol: '11g', date: '2003', freq: '2.4', bandwidth: '20', throughput: '54 Mbps'},
+    {protocol: '11n', date: '2009', freq: '2.4/5', bandwidth: '20/40', throughput: '600 Mbps'},
+    {protocol: '11ac', date: '2013', freq: '2.4', bandwidth: '20/40/80/160', throughput: '6.8 Gbps'},
+    {protocol: '11ax', date: '2019', freq: '2.4', bandwidth: '20/40/80/160', throughput: '9.6 Gbps'},
+    {protocol: '11be', date: '2024', freq: '2.4/5/6', bandwidth: '20/40/80/160/320', throughput: '46 Gbps'}
+]
+---
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        {headers.map((header) => <th>{header}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {tableData.map((row) => (
+        <tr>
+          <td>{row.protocol}</td>
+          <td>{row.date}</td>
+          <td>{row.freq}</td>
+          <td>{row.bandwidth}</td>
+          <td>{row.throughput}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-container {
+    overflow-x: auto;
+    margin: 2rem 0;
+    display: flex;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+  }
+  th {
+    background-color: #002170;
+    color: #fff;
+  }
+</style>

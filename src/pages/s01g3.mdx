@@ -1,0 +1,114 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Wifi Evolution"
+description: "https://mykanadine.github.io/WifiGeneration/wifi/"
+author: "Chua, Myka; Esperanza, MJ; Lim, Julienne; Ong, Eiress; Xu, Kai Wen"
+readingTime: "60 minutes"
+---
+
+import '../styles/s01g3/wifi.css'; 
+
+ {/* We import various Astro and React components */}
+
+import TextWithImage from "../components/s01g3/TextWithImage.astro"
+import howWifiImg from "../assets/s01g3/HOWWIFI.webp"
+import collisionGif from "../assets/s01g3/collision.gif"
+import ImageGallery from '../components/ImageGallery.jsx';
+import KnowledgeCheck from "../components/s01g3/KnowledgeCheck.jsx";
+import summaryGif from "../assets/s01g3/summary.gif"
+import TimelineDemo from "../components/s01g3/Timeline.jsx"
+import Table from "../components/s01g3/Table.astro"
+import DYK from "../components/s01g3/DYK.jsx"
+
+{/* Actual content */}
+
+# The Evolution of Wi-Fi
+
+## What is Wi-Fi?
+
+Wi-Fi is a wireless technology that allows devices like smartphones, laptops, and other devices to exchange data and reach the internet without a physical cable.
+
+## Wireless Communication
+
+Wireless communication is the process of sending and receiving data over a distance without using physical cables or wires. Instead of cords, it relies on invisible electromagnetic waves or radio signals to carry information through the air. Any type of data that can be turned into digital code—including phone calls, text messages, photos, and streaming videos—can be transmitted this way. 
+
+<TextWithImage
+  heading="How does Wi-Fi work?"
+  body="Wi-Fi works by converting digital data into invisible radio waves that travel through the air. When you use a device, its wireless antenna broadcasts these radio signals to a nearby router. The router captures the signals, translates them back into digital data, and sends them out to the global internet via physical cables. Once the internet responds, the router reverses the process, beaming radio waves back to your device to display the requested data."
+  imageSrc={howWifiImg.src}
+  imageAlt="Simple diagram about wifi"
+  imageCaption="A router relays data between your device and the internet using radio waves."
+/>
+
+<TextWithImage
+  heading="Why Wi-Fi Needs Collision Avoidance (CSMA/CA)"
+  body={`Every Wi-Fi generation from 1997 through Wi-Fi 6 relies on **Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA)** because all devices on a wireless network share a single Radio frequency channel. Before transmitting, a device must "listen" to ensure the channel is completely quiet.
+
+Without this rule, devices would transmit simultaneously, causing their radio signals to interfere and cancel each other out. As shown in the diagram, this results in a collision that corrupts the data, forcing both Client 1 and Client 2 to reset, wait, and retry.
+
+While this first-come, first-served system works well with light traffic, it creates a massive bottleneck as more devices are added. To solve this structural limitation, Wi-Fi 6 introduced OFDMA to allow parallel, multi-user communication without collisions.`}
+  imageSrc={collisionGif.src}
+  imageAlt="Diagram showing two Wi-Fi devices colliding while transmitting"
+  imageCaption="When two devices transmit at the same time, the signals collide and both must resend."
+/>
+
+
+## Wi-Fi Over The Years
+
+<TimelineDemo client:load />
+
+## Summary
+<img src={summaryGif.src} 
+  alt="Summary animation" 
+  loading="lazy"
+  style="
+    display: block;
+    width: 75%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 4/3;
+    object-fit: contain;
+    margin: 0 auto;
+  "
+/>
+
+<Table />
+
+## Knowledge Check
+
+<KnowledgeCheck client:load />
+
+## References
+
+Information retrieved from the following:
+- [Wifi Generations Explained | Expl.in](https://expl.in/wifi-generations-explained-wifi-0-to-wifi-7/)
+- [Evolution of Wifi Networks | Wevolver](https://www.wevolver.com/article/the-evolution-of-wi-fi-networks-from-ieee-80211-to-wi-fi-6e)
+- [Wireless Network | HowStuffWorks](https://computer.howstuffworks.com/wireless-network.htm)
+- [Wifi | Verizon](https://www.verizon.com/articles/internet-essentials/wifi-definiton/)
+- [OFDM vs OFDMA | HitronTech](https://us.hitrontech.com/learn/cable-modems-explained-ofdm-vs-ofdma/)
+- [MIMO and MU-MIMO | Vsolcn](https://www.vsolcn.com/blog/what-is-mimo-and-mu-mimo-whats-the-difference.html)
+- [Evolution of Wifi | IEEE Standards](https://standards.ieee.org/beyond-standards/the-evolution-of-wi-fi-technology-and-standards/)
+- [Wifi 7 Performance | FS](https://www.fs.com/blog/multirus-the-key-to-superior-wifi-7-performance-5812.html)
+- [Collision Avoidance (CSMA/CA) | NetworkAcademy.IO](https://www.networkacademy.io/ccna/wireless/collision-avoidance-csma-ca)
+- [What is Wireless LAN (WLAN) in Computer Networks? | NetworkAcademy.IO](https://www.networkacademy.io/ccna/wireless/collision-avoidance-csma-ca)
+- [FHSS: Frequency Hopping Spread Spectrum | Medium](https://medium.com/networks-security/fhss-frequency-hopping-spread-spectrum-860e49c186e8)
+- [FHSS Explained | YouTube](https://youtu.be/CkhA7s5GIGc?si=DtN83my_qY1dL_TG)
+- [Wireless LAN Basics | YouTube](https://youtu.be/-1mxYWvfVWQ?si=R2jbz2kVfhJiSBhw)
+- [DSSS: Direct Sequence Spread Spectrum | Medium](https://medium.com/networks-security/dsss-direct-sequence-spread-spectrum-a31005f281cc)
+- [DSSS Explained | YouTube](https://youtu.be/fIZhDl35_XY?si=apOwtrIW5IRvPFdb)
+- [MIMO Definition | YateBTS](https://yatebts.com/definition-mimo/)
+- [Complementary Code Keying (CCK) | Tutorialspoint](https://www.tutorialspoint.com/article/complementary-code-keying-cck)
+- [MIMO vs MU-MIMO | Vsolcn](https://www.vsolcn.com/blog/what-is-mimo-and-mu-mimo-whats-the-difference.html#part1)
+- [WiFi 7 Multi-Link Operation (MLO) | TP-Link](https://www.tp-link.com/us/blog/1067/what-is-wifi-7-s-multi-link-operation-mlo-/)
+
+Trivia retrieved from:
+- [What does Wifi really mean? | Merriam-Webster](https://www.merriam-webster.com/wordplay/what-does-wi-fi-really-mean)
+- [Hedy Lamarr | National Women's History Museum](https://www.womenshistory.org/education-resources/biographies/hedy-lamarr)
+- [Legacy Intel Wireless Products | Intel](https://www.intel.com/content/www/us/en/support/articles/000005714/wireless/legacy-intel-wireless-products.html)
+- [Beamforming | Huawei](https://info.support.huawei.com/info-finder/encyclopedia/en/Beamforming.html)
+- [OFDMA | Huawei](https://info.support.huawei.com/info-finder/encyclopedia/en/OFDMA.html)
+- [What is WiFi 7 | TP-Link](https://www.tp-link.com/us/blog/1067/what-is-wifi-7-s-multi-link-operation-mlo-/)
+
+<DYK 
+  info = "Loading..."
+  client:load />

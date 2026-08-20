@@ -1,0 +1,2190 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap");
+
+body {
+    --accent: #5076a7;
+    --accent2: #c7dbe4;
+    --bg1: #e2e2e2;
+    --bg2: #ffffff;
+    --bg3: #002170;
+    --text: #1e1e1e;
+    --muted: #646464;
+    --border: #cecece;
+    --border2: #ababab;
+    --shadow: #092242;
+    --radius: 8px;
+
+    --small: 0.8rem;
+}
+
+html:has(.wifi_history_timeline) {
+    overflow-x: hidden;
+}
+
+/* changes the page background only if timeline exists on the screen
+   to prevent leakage into the homepage */
+body:has(.wifi_history_timeline) {
+    --s: 80px;
+    /* control the size*/
+    --c1: #6c8a9d;
+    --c2: #7994a0;
+
+    --_s: calc(2*var(--s)) calc(2*var(--s));
+    --_g: 35.36% 35.36% at;
+    --_c: #0000 66%, var(--c2) 68% 70%, #0000 72%;
+    background:
+        radial-gradient(var(--_g) 100% 25%, var(--_c)) var(--s) var(--s)/var(--_s),
+        radial-gradient(var(--_g) 0 75%, var(--_c)) var(--s) var(--s)/var(--_s),
+        radial-gradient(var(--_g) 100% 25%, var(--_c)) 0 0/var(--_s),
+        radial-gradient(var(--_g) 0 75%, var(--_c)) 0 0/var(--_s),
+        repeating-conic-gradient(var(--c1) 0 25%, #0000 0 50%) 0 0/var(--_s),
+        radial-gradient(var(--_c)) 0 calc(var(--s)/2)/var(--s) var(--s) var(--c1);
+}
+
+body:has(.wifi_history_timeline) {
+    color: var(--text);
+    font-family: "Montserrat", Arial;
+    line-height: 1.5;
+    flex-direction: column;
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body:has(.wifi_history_timeline),
+body:has(.wifi_history_timeline) * {
+    box-sizing: border-box;
+}
+
+/* Top header bar */
+
+.title,
+.subtitle {
+    margin-bottom: 0;
+    color: var(--bg2);
+    text-align: center;
+    font-size: 3rem;
+    font-family: "Lora";
+    text-shadow: 5px 5px 0px var(--text);
+}
+
+.subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.header {
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text);
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+}
+
+.header__titleblock {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.header__subtitle {
+    font-size: var(--small);
+    opacity: 0.8;
+}
+
+.button {
+    align-items: center;
+    background-color: var(--bg2);
+    border-radius: 100px;
+    border: 2px solid var(--border2);
+    color: var(--text);
+    display: inline-flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    text-decoration: none;
+    transition: border-color 0.1s ease;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background-color: var(--accent2);
+}
+
+/* Main body */
+
+.content {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1rem;
+    max-width: 100%;
+    margin: auto;
+    padding: 0 1.5rem;
+    flex: 1;
+}
+
+.content__block {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    flex: 4;
+}
+
+.content__titlemeta {
+    text-align: center;
+}
+
+.content__titlemeta h1 {
+    margin-top: 0;
+    font-family: "Lora";
+}
+
+/* Main exhibit article content */
+
+.header__titleblock,
+.content__titlemeta {
+    color: var(--bg2);
+    background: var(--bg3);
+    border: 1px solid var(--bg3);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 5px 5px var(--shadow);
+}
+
+.article,
+.exhibitlink {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 5px 5px var(--shadow);
+}
+
+.header__titleblock {
+    flex: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+    font-family: "Lora";
+    border-bottom: 1px solid var(--border2);
+}
+
+/* Table of contents */
+
+body:has(.wifi_history_timeline) .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    flex: 1;
+    height: fit-content;
+    /* Prevents stretching */
+    padding: 2rem;
+    box-shadow: 5px 5px var(--shadow);
+}
+
+body:has(.wifi_history_timeline) .padder {
+    flex: 0;
+    box-shadow: none;
+    visibility: hidden;
+}
+
+body:has(.wifi_history_timeline) .toc h2 {
+    border-bottom: 1px solid var(--border2);
+    font-family: "Montserrat";
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+}
+
+.toc__list {
+    list-style: decimal;
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.toc__item a {
+    color: var(--accent);
+    text-decoration-style: dotted;
+}
+
+.toc__item a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: var(--small);
+    background-color: var(--text);
+    color: var(--bg1);
+    margin-top: 4rem;
+}
+
+@media (min-width: 1100px) {
+    .content {
+        max-width: 100%;
+        /* Expanded width to easily fit both columns */
+        display: flex;
+        flex-direction: row;
+    }
+
+    .toc {
+        position: sticky;
+        top: 2rem;
+        /* Gap between top of viewport and component during scroll */
+    }
+}
+
+/* TIMELINE */
+
+/* handles the browser centering and sizing */
+.timeline-modal {
+    border: none;
+    border-radius: var(--radius);
+    background: var(--bg2);
+    color: var(--text);
+    padding: 3rem;
+
+    margin: auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    width: 80vw;
+    height: 80vh;
+    max-width: 1200px;
+    max-height: 850px;
+    overflow-y: auto;
+}
+
+/* target the open state layout styling */
+/* isolate flexbox settings so it doesn't break the browser's close engine */
+.timeline-modal[open] {
+    display: flex !important;
+    flex-direction: column;
+}
+
+.timeline-modal button {
+    align-self: flex-end;
+    margin-top: auto;
+    cursor: pointer;
+    padding: 0.75rem 2rem;
+    background: var(--bg3);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+.timeline-modal button:hover {
+    background: #00174d;
+    /* Darkens slightly when hovered */
+}
+
+/* Style the dark blurred backdrop background */
+.timeline-modal::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+/* simultaneous hover effects for both the cards and circles in timeline*/
+
+/* scale and lift the text card on hover */
+.custom-timeline-element:hover .vertical-timeline-element-content {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* scale and spin/pop the icon circle on hover */
+.custom-timeline-element:hover .vertical-timeline-element-icon {
+    transform: scale(1.1) !important;
+    box-shadow: 0 0 0 3px #ffffff, 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* makes smooth transitions */
+.custom-timeline-element .vertical-timeline-element-content,
+.custom-timeline-element .vertical-timeline-element-icon {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* entry animation for cards and circles in timeline*/
+
+/* define the fade-in and scale up animation */
+@keyframes revealElement {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* apply to both the content boxes and circles */
+.custom-timeline-element .vertical-timeline-element-content,
+.custom-timeline-element .vertical-timeline-element-icon {
+    /* Bind it to your existing timeline scroll tracker */
+    animation: revealElement linear both;
+    animation-timeline: --timelineScroll;
+}
+
+/* stagger reveals using animation-range */
+/* this makes them look at their position relative to the scroll container */
+.custom-timeline-element .vertical-timeline-element-content,
+.custom-timeline-element .vertical-timeline-element-icon {
+    /* entry 0% means start animating as it peeks from the bottom */
+    /* contain 30% forces it to finish revealing much lower on the screen */
+    animation-range: entry 0% contain 10%;
+}
+
+/* keep the main timeline container as the scroll tracker for card and circle reveals */
+.vertical-timeline {
+    view-timeline-name: --timelineScroll;
+    view-timeline-axis: block;
+}
+
+/* keep the vertical track visible at full height */
+.vertical-timeline::before {
+    width: 4px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg3) !important;
+    transform-origin: top;
+}
+
+/* keep position alignment working on mobile */
+@media only screen and (max-width: 1169px) {
+    .vertical-timeline::before {
+        left: 18px;
+        transform: translateX(0);
+    }
+}
+
+/* global settings for the timeline*/
+.custom-timeline-element .vertical-timeline-element-content {
+    color: #ffffff;
+    /* White text for all cards */
+    box-shadow: 5px 4px 0px #dddddd;
+    border-radius: 6px;
+}
+
+/* card or bg colors for each wifi in timeline*/
+
+/* bg of Wifi 1-3*/
+.wifi_1 .vertical-timeline-element-content {
+    background: #a1c4f3;
+}
+
+.wifi_1 .vertical-timeline-element-content-arrow {
+    border-right: 7px solid #a1c4f3;
+}
+
+.wifi_1 .vertical-timeline-element-icon {
+    background: #a1c4f3;
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+.wifi_2a .vertical-timeline-element-content {
+    background: #85b2ec;
+}
+
+.wifi_2a .vertical-timeline-element-content-arrow {
+    border-right: 7px solid #85b2ec;
+}
+
+.wifi_2a .vertical-timeline-element-icon {
+    background: #85b2ec;
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+.wifi_2b .vertical-timeline-element-content {
+    background: #7ca6dd;
+}
+
+.wifi_2b .vertical-timeline-element-content-arrow {
+    border-right: 7px solid #7ca6dd;
+}
+
+.wifi_2b .vertical-timeline-element-icon {
+    background: #7ca6dd;
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+/* bg of Wifi 3*/
+.wifi_3 .vertical-timeline-element-content {
+    background: #658cbf;
+}
+
+.wifi_3 .vertical-timeline-element-content-arrow {
+    border-right: 7px solid #658cbf;
+}
+
+.wifi_3 .vertical-timeline-element-icon {
+    background: #658cbf;
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+/* bg of Wifi 4*/
+.wifi_4 .vertical-timeline-element-content {
+    background: #3d6dab;
+}
+
+.wifi_4 .vertical-timeline-element-content-arrow {
+    border-right: 7px solid #3d6dab;
+}
+
+.wifi_4 .vertical-timeline-element-icon {
+    background: #3d6dab;
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+/* bg of Wifi 5 */
+.wifi_5 .vertical-timeline-element-content {
+    background: #1c4e8f;
+}
+
+.wifi_5 .vertical-timeline-element-content-arrow {
+    border-right: 7px solid #1c4e8f;
+}
+
+.wifi_5 .vertical-timeline-element-icon {
+    background: #1c4e8f;
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+/* bg of Wifi 6*/
+.wifi_6 .vertical-timeline-element-content {
+    background: var(--bg3);
+}
+
+.wifi_6 .vertical-timeline-element-content-arrow {
+    border-right: 7px solid var(--bg3);
+}
+
+.wifi_6 .vertical-timeline-element-icon {
+    background: var(--bg3);
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+/* bg of Wifi 7*/
+.wifi_7 .vertical-timeline-element-content {
+    background: var(--shadow);
+}
+
+.wifi_7 .vertical-timeline-element-content-arrow {
+    border-right: 7px solid var(--shadow);
+}
+
+.wifi_7 .vertical-timeline-element-icon {
+    background: var(--shadow);
+    box-shadow: 0 0 0 4px #fff, inset 0 2px 0 rgba(0, 0, 0, .08), 0 3px 0 4px rgba(0, 0, 0, .05);
+}
+
+/* timeline responsive date colors */
+
+/* adjust color for timeline dates on a narrow screen (mobile) */
+@media only screen and (max-width: 1169px) {
+    .custom-timeline-element .vertical-timeline-element-date {
+        color: #ffffff !important;
+        opacity: 0.85;
+        /* Makes it look slightly softer, like a subtitle */
+        padding: 0.5rem 0 0 0;
+        display: block;
+    }
+}
+
+/* adjust color for timeline dates on a wide screen */
+@media only screen and (min-width: 1170px) {
+    .custom-timeline-element .vertical-timeline-element-date {
+        color: #2f3134 !important;
+        font-weight: 600;
+    }
+}
+
+/* repsonse layout */
+
+@media (max-width: 640px) {
+    body:has(.wifi_history_timeline) {
+        overflow-x: hidden;
+    }
+
+    .header {
+        padding: 0.75rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .header__titleblock {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .header__titleblock strong {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .header__subtitle {
+        display: block;
+        width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .content {
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0 0.75rem;
+        gap: 0.75rem;
+        min-width: 0;
+    }
+
+    .content__block {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .article,
+    .content__titlemeta,
+    body:has(.wifi_history_timeline) .toc {
+        padding: 1rem;
+        box-shadow: 3px 3px var(--shadow);
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .content__titlemeta h1 {
+        font-size: clamp(1.4rem, 8vw, 1.75rem);
+        line-height: 1.15;
+    }
+
+    .content__titlemeta span {
+        display: block;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .article {
+        overflow-x: hidden;
+        overflow-wrap: break-word;
+    }
+
+    .article>* {
+        max-width: 100%;
+    }
+
+    body:has(.wifi_history_timeline) .padder {
+        display: none;
+    }
+
+    .wifi_history_timeline {
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .vertical-timeline {
+        width: 100%;
+        margin: 0;
+        padding: 1.25rem 0;
+    }
+
+    .vertical-timeline-element {
+        margin: 1.5rem 0;
+    }
+
+    .vertical-timeline::before {
+        left: 12px;
+    }
+
+    .vertical-timeline-element-icon {
+        width: 30px !important;
+        height: 30px !important;
+        left: 0 !important;
+    }
+
+    .vertical-timeline-element-content {
+        max-width: calc(100% - 42px);
+        margin-left: 42px !important;
+        padding: 0.875rem !important;
+        overflow-wrap: break-word;
+    }
+
+    .vertical-timeline-element-content-arrow {
+        top: 10px;
+    }
+
+    .vertical-timeline-element-title {
+        font-size: 1.1rem;
+        line-height: 1.15;
+        overflow-wrap: normal;
+    }
+
+    .vertical-timeline-element-content p {
+        font-size: 0.9rem;
+        line-height: 1.45;
+    }
+
+    .timeline-modal {
+        width: calc(100vw - 2rem);
+        height: calc(100vh - 2rem);
+        padding: 1rem;
+        max-width: none;
+        max-height: none;
+        overflow-x: hidden;
+    }
+
+    .timeline-modal h2 {
+        font-size: clamp(1.45rem, 8vw, 2rem);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    .timeline-modal button {
+        width: 100%;
+        min-height: 44px;
+    }
+}
+
+/* everything below here is for the clickable acronym links and the popup animations */
+
+.interactive-acronym-link {
+    color: #3d6dab;
+    font-weight: 700;
+    text-decoration: underline dashed 2px #1c4e8f;
+    cursor: pointer;
+    padding: 0 2px;
+    transition: all 0.2s linear;
+}
+
+.interactive-acronym-link:hover {
+    background-color: #c7dbe4;
+    color: #002170;
+    border-radius: var(--radius);
+}
+
+.animation-submodal {
+    border: 3px solid var(--accent) !important;
+    background-color: #f5f8ff !important;
+}
+
+.animation-container-workspace {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    border: 1px dashed var(--border2);
+    border-radius: var(--radius);
+    background-color: var(--bg2);
+}
+
+.animation-tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+}
+
+.animation-tab-bar button {
+    background: #e2e2e2 !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border2) !important;
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+    border-radius: 4px !important;
+    cursor: pointer;
+}
+
+.animation-tab-bar button.active-tab {
+    background: var(--bg3) !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.anim-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.anim-description p {
+    color: var(--text) !important;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: #fdfdfd;
+    padding: 1rem;
+    border-left: 4px solid var(--accent);
+    margin: 8px 0 0 0;
+}
+
+/* styles for the WLAN popup, the router and its connected devices */
+.wlan-layout .wlan-visual {
+    position: relative;
+    height: 240px;
+    background: #0d1117;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.wlan-node {
+    position: absolute;
+    font-size: 2.2rem;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.globe-icon {
+    top: 5%;
+    left: 48%;
+    animation: rotGlobe 12s linear infinite;
+}
+
+.router-icon {
+    top: 38%;
+    left: 48%;
+    font-size: 2rem;
+}
+
+.pc-icon {
+    bottom: 8%;
+    left: 18%;
+}
+
+.laptop-icon {
+    bottom: 8%;
+    left: 48%;
+}
+
+.printer-icon {
+    bottom: 8%;
+    left: 76%;
+}
+
+.radiating-circle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #ffc107;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: radPulse 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.wlan-lines-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.pulse-line {
+    stroke: #ffc107;
+    stroke-width: 3;
+    stroke-dasharray: 6;
+    animation: dashPulse 1.2s linear infinite;
+}
+
+@keyframes rotGlobe {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes radPulse {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+        border-color: #ffc107;
+    }
+
+    100% {
+        width: 140px;
+        height: 140px;
+        opacity: 0;
+        border-color: #ffeb3b;
+    }
+}
+
+@keyframes dashPulse {
+    to {
+        stroke-dashoffset: -24;
+    }
+}
+
+/* these make each node/arrow flash one after another instead of all at once */
+.active-node-1 {
+    animation: flashHighlight 4s infinite 0s;
+}
+
+.anim-arrow-1 {
+    animation: flashHighlight 4s infinite 0.4s;
+}
+
+.active-node-2 {
+    animation: flashHighlight 4s infinite 0.8s;
+}
+
+.anim-arrow-2 {
+    animation: flashHighlight 4s infinite 1.2s;
+}
+
+.active-node-3 {
+    animation: flashHighlight 4s infinite 1.6s;
+}
+
+.anim-arrow-3 {
+    animation: flashHighlight 4s infinite 2.0s;
+}
+
+.active-node-4 {
+    animation: flashHighlight 4s infinite 2.4s;
+}
+
+.anim-arrow-4 {
+    animation: flashHighlight 4s infinite 2.8s;
+}
+
+.active-node-5 {
+    animation: flashHighlight 4s infinite 3.2s;
+}
+
+@keyframes flashHighlight {
+
+    0%,
+    20% {
+        background: #ffc107;
+        color: #002170;
+        transform: scale(1.04);
+    }
+
+    25%,
+    100% {}
+}
+
+.xor-stream-simulation {
+    background: #1e1e1e;
+    color: #fff;
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    font-family: monospace;
+    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.xor-row span {
+    color: #85b2ec;
+    width: 160px;
+    display: inline-block;
+}
+
+.xor-row .bit-stream {
+    display: inline-block;
+    letter-spacing: 6px;
+}
+
+.xor-row .bit-stream-out {
+    display: inline-block;
+    letter-spacing: 6px;
+    color: #ffc107;
+    animation: bitReveal 3s steps(6) infinite;
+}
+
+.xor-row.output {
+    border-top: 2px dashed #444;
+    padding-top: 8px;
+    margin-top: 4px;
+}
+
+@keyframes bitReveal {
+    from {
+        width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    to {
+        width: 120px;
+    }
+}
+
+.spectral-density-graph {
+    height: 180px;
+    background: #111;
+    position: relative;
+    border-radius: var(--radius);
+    border-bottom: 4px solid var(--border2);
+    border-left: 4px solid var(--border2);
+    overflow: hidden;
+}
+
+.narrowband-spike {
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 12%;
+    height: 85%;
+    background: rgba(220, 53, 69, 0.85);
+    color: white;
+    font-size: 0.75rem;
+    text-align: center;
+    padding-top: 10px;
+    font-weight: bold;
+    animation: entranceSpike 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.dsss-wideband-spread {
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    width: 90%;
+    height: 22%;
+    background: rgba(40, 167, 69, 0.8);
+    color: white;
+    font-size: 0.75rem;
+    text-align: center;
+    padding-top: 6px;
+    font-weight: bold;
+    animation: entranceSpike 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes entranceSpike {
+    from {
+        transform: scaleY(0);
+        transform-origin: bottom;
+        opacity: 0;
+    }
+
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* styles for the OFDM/FDM signal wave popup */
+
+.fdm-animation-space-svg {
+    background: #0d0f14;
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wave-channel-row {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    height: 50px;
+}
+
+.wave-row-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #85b2ec;
+    width: 80px;
+    flex-shrink: 0;
+    z-index: 5;
+}
+
+.wave-svg-canvas {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.propagating-sine-wave {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+/* the animation distance has to match the wave's actual wavelength or the loop will jump/stutter */
+.wave-amber {
+    stroke: #ffc107;
+    animation: propagateWavelength60 1.5s infinite linear;
+}
+
+.wave-teal {
+    stroke: #17a2b8;
+    animation: propagateWavelength40 1s infinite linear;
+}
+
+@keyframes propagateWavelength60 {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(60px);
+    }
+}
+
+@keyframes propagateWavelength40 {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(40px);
+    }
+}
+
+/* the little gap between channels representing the guard band */
+.wave-channel-row.guard-band-gap {
+    height: 28px;
+    background: rgba(220, 53, 69, 0.05);
+    border: 1px dashed rgba(220, 53, 69, 0.25);
+    border-left: none;
+    border-right: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.guard-band-text {
+    font-size: 0.7rem;
+    color: #dc3545;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* tab 2, comparing the two signal stacks side by side */
+.signal-canvas-container.dark-canvas {
+    background: #0d0f14;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.static-wave-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* these waves slide closer together and fade a bit, to show the channels packing in tighter with OFDM */
+.sliding-ofdm-wave-svg {
+    transform-origin: bottom;
+    opacity: 0.5;
+    animation: packingOverlap 2.5s ease-in-out 1 forwards;
+}
+
+/* only moves side to side, no fading here since the waves already start faded above */
+@keyframes packingOverlap {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(var(--slide-dist, -15px));
+    }
+}
+
+.wave-svg-b {
+    --slide-dist: -25px;
+}
+
+.wave-svg-c {
+    --slide-dist: -50px;
+}
+
+.wave-svg-d {
+    --slide-dist: -75px;
+}
+
+/* tab 3, showing how the subcarriers line up without overlapping each other */
+.ofdm-orthogonal-space-svg {
+    background: #0d0f14;
+    border-radius: var(--radius);
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.orthogonal-axis-canvas {
+    width: 100%;
+    min-width: 500px;
+    height: auto;
+}
+
+.orthogonal-marker-group {
+    opacity: 0;
+    animation: alignmentFlash 4.5s infinite linear;
+}
+
+.line-m1 {
+    animation-delay: 0s;
+}
+
+.line-m2 {
+    animation-delay: 1.5s;
+}
+
+.line-m3 {
+    animation-delay: 3s;
+}
+
+/* fades each marker in quickly, holds it visible for a while, then fades out and stays hidden for the rest of the loop */
+@keyframes alignmentFlash {
+    0% {
+        opacity: 0;
+    }
+
+    4% {
+        opacity: 1;
+    }
+
+    29% {
+        opacity: 1;
+    }
+
+    33.3% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* where the subcarrier waves cross paths at their orthogonal points */
+.ofdm-orthogonal-space {
+    background: #0f111a;
+    height: 160px;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.sine-subcarrier {
+    position: absolute;
+    bottom: 0;
+    height: 110px;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.4;
+}
+
+.sub-blue {
+    left: 10%;
+    width: 45%;
+    background: #4285f4;
+}
+
+.sub-red {
+    left: 28%;
+    width: 45%;
+    background: #ea4335;
+}
+
+.sub-yellow {
+    left: 45%;
+    width: 45%;
+    background: #fabc05;
+}
+
+.orthogonal-axis-line {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+    border-left: 2px dashed #fff;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.marker-line-1 {
+    left: 50.5%;
+    animation: fadeBlink 3s infinite ease-in-out;
+}
+
+.marker-line-2 {
+    left: 32.5%;
+    animation: fadeBlink 3s infinite ease-in-out 1.5s;
+}
+
+.orthogonal-axis-line .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.peak-red {
+    top: 32%;
+    background: #ea4335;
+    box-shadow: 0 0 8px #ea4335;
+    border: 2px solid #fff;
+}
+
+.zero-blue {
+    bottom: 0;
+    background: #000;
+    border: 2px solid #4285f4;
+}
+
+.zero-yellow {
+    bottom: 0;
+    background: #000;
+    border: 2px solid #fabc05;
+}
+
+.peak-blue {
+    top: 32%;
+    background: #4285f4;
+    box-shadow: 0 0 8px #4285f4;
+    border: 2px solid #fff;
+}
+
+.zero-red-2 {
+    bottom: 0;
+    background: #000;
+    border: 2px solid #ea4335;
+}
+
+.zero-yellow-2 {
+    bottom: 0;
+    background: #000;
+    border: 2px solid #fabc05;
+}
+
+@keyframes fadeBlink {
+
+    0%,
+    100% {
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* styles for the MIMO city scene, with vs without antennas */
+.mimo-city-workspace svg {
+    overflow: visible;
+}
+
+.mimo-dotted-flow {
+    animation: mimoDashFlow 1s linear infinite;
+}
+
+.mimo-lost-path {
+    animation: mimoLostFade 2.4s ease-in-out infinite;
+}
+
+@keyframes mimoDashFlow {
+    to {
+        stroke-dashoffset: -24;
+    }
+}
+
+@keyframes mimoLostFade {
+
+    0%,
+    100% {
+        opacity: 0.12;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* styles for the SU-MIMO vs MU-MIMO comparison animation */
+.mumimo-compare-workspace svg {
+    overflow: visible;
+}
+
+.su-cycle {
+    opacity: 0.12;
+}
+
+.su-cycle-0 {
+    animation: suRoundRobin 6s infinite;
+    animation-delay: 0s;
+}
+
+.su-cycle-1 {
+    animation: suRoundRobin 6s infinite;
+    animation-delay: 2s;
+}
+
+.su-cycle-2 {
+    animation: suRoundRobin 6s infinite;
+    animation-delay: 4s;
+}
+
+@keyframes suRoundRobin {
+    0% {
+        opacity: 1;
+    }
+
+    33% {
+        opacity: 1;
+    }
+
+    38%,
+    100% {
+        opacity: 0.12;
+    }
+}
+
+/* this whole block (mimo-visual, mumimo-visual, signal-path, directed-beam, etc) is left over from
+   an earlier version of the MIMO/MU-MIMO popups. neither popup uses these classes anymore, both
+   were rebuilt as SVG animations above, so this is just kept around in case it's needed again */
+.mimo-visual,
+.mumimo-visual {
+    background: #1a1c23;
+    color: white;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mimo-paths,
+.spatial-beams {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-grow: 1;
+    margin: 0 1.5rem;
+}
+
+.signal-path {
+    padding: 6px;
+    font-size: 0.75rem;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.signal-path.solid-line {
+    border: 2px solid #28a745;
+    background: rgba(40, 167, 69, 0.1);
+    animation: waveTravel 2s infinite linear;
+}
+
+.signal-path.dotted-line {
+    border: 2px dotted #ffc107;
+    background: rgba(255, 193, 7, 0.05);
+    animation: waveTravel 2s infinite linear reverse;
+}
+
+.directed-beam {
+    background: var(--accent);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transform: translateX(-10px);
+    opacity: 0;
+}
+
+.beam-delay-1 {
+    animation: beamDrive 2s infinite ease-out 0s;
+}
+
+.beam-delay-2 {
+    animation: beamDrive 2s infinite ease-out 0.4s;
+}
+
+.beam-delay-3 {
+    animation: beamDrive 2s infinite ease-out 0.8s;
+}
+
+@keyframes waveTravel {
+    0% {
+        background-position-x: 0px;
+    }
+
+    100% {
+        background-position-x: 40px;
+    }
+}
+
+@keyframes beamDrive {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    50% {
+        opacity: 1;
+        background: #ffc107;
+        color: #002170;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+/* styles for the OFDMA time and frequency resource grid */
+.ofdma-grid-workspace {
+    color: white;
+}
+
+.ofdma-bandwidth-label {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #8b949e;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.ofdma-body-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ofdma-axis-time {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 0.7rem;
+    color: #8b949e;
+    flex-shrink: 0;
+}
+
+.ofdma-frame-label {
+    writing-mode: vertical-rl;
+    font-size: 0.65rem;
+    color: #8b949e;
+    flex-shrink: 0;
+    border-right: 2px solid #30363d;
+    padding-right: 6px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+}
+
+.ofdma-rows {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.ofdma-row {
+    display: flex;
+    gap: 2px;
+    height: 34px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ofdma-block {
+    border-radius: 2px;
+}
+
+.ofdma-u1 {
+    background: #29c5d6;
+}
+
+.ofdma-u2 {
+    background: #f4b942;
+}
+
+.ofdma-u3 {
+    background: #e1543f;
+}
+
+.ofdma-u4 {
+    background: #6ab04c;
+}
+
+.ofdma-scan-highlight {
+    position: absolute;
+    top: 0;
+    left: -4px;
+    right: -4px;
+    height: 34px;
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 6px;
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+    animation: ofdmaScan 6s ease-in-out infinite;
+}
+
+@keyframes ofdmaScan {
+
+    0%,
+    20% {
+        transform: translateY(0px);
+    }
+
+    25%,
+    45% {
+        transform: translateY(42px);
+    }
+
+    50%,
+    70% {
+        transform: translateY(84px);
+    }
+
+    75%,
+    95% {
+        transform: translateY(126px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.ofdma-axis-freq {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #8b949e;
+    margin-top: 10px;
+}
+
+.ofdma-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: #c9d1d9;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+
+.fallback-panel {
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+}
+
+/* styles for the MLO popup, showing all 3 bands running at the same time */
+.mlo-layout .mlo-visual {
+    background: #111424;
+    color: white;
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.mlo-node {
+    background: var(--bg3);
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    z-index: 5;
+    border: 1px solid var(--accent);
+    white-space: nowrap;
+}
+
+.mlo-node.client-box {
+    background: var(--shadow);
+    border-color: #ffc107;
+}
+
+.mlo-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-grow: 1;
+    margin: 0 1.5rem;
+    position: relative;
+}
+
+.mlo-channel {
+    height: 32px;
+    position: relative;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+}
+
+.band-label {
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 2;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* each band gets its own color so they're easy to tell apart */
+.band-24 {
+    background: rgba(244, 180, 0, 0.08);
+    border: 1px dashed rgba(244, 180, 0, 0.6);
+}
+
+.band-5 {
+    background: rgba(66, 133, 244, 0.08);
+    border: 1px dashed rgba(66, 133, 244, 0.6);
+}
+
+.band-6 {
+    background: rgba(219, 68, 85, 0.08);
+    border: 1px dashed rgba(219, 68, 85, 0.6);
+}
+
+.mlo-packet {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    left: 0;
+    top: 10px;
+}
+
+/* 6 GHz moves the fastest, 2.4 GHz the slowest, just to give a rough feel for real speed differences */
+.packet-24 {
+    background: #f4b400;
+    box-shadow: 0 0 8px #f4b400;
+    animation: mloTravel 2.5s infinite linear;
+}
+
+.packet-5 {
+    background: #4285f4;
+    box-shadow: 0 0 8px #4285f4;
+    animation: mloTravel 1.6s infinite linear;
+}
+
+.packet-6 {
+    background: #db4455;
+    box-shadow: 0 0 8px #db4455;
+    animation: mloTravel 1.0s infinite linear;
+}
+
+@keyframes mloTravel {
+    0% {
+        left: 0%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 96%;
+        opacity: 0;
+    }
+}
+
+/* keep router -> channels -> client format horizontal on small screens; shrink elements */
+@media (max-width: 640px) {
+    .mlo-layout .mlo-visual {
+        padding: 1.25rem 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .mlo-node {
+        padding: 8px 6px;
+        font-size: 0.65rem;
+        white-space: normal;
+        text-align: center;
+        max-width: 4.5rem;
+    }
+
+    .mlo-channels {
+        margin: 0 0.4rem;
+        gap: 10px;
+    }
+
+    .mlo-channel {
+        height: 26px;
+        padding-left: 6px;
+    }
+
+    .band-label {
+        font-size: 0.55rem;
+    }
+}
+
+/* styles for the FHSS popup */
+
+.fhss-svg-workspace {
+    background: #0d0f14;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fhss-chart {
+    width: 100%;
+    height: auto;
+    max-width: 650px;
+}
+
+.axis-value-text {
+    fill: #6c757d;
+    font-size: 0.65rem;
+    font-family: monospace;
+}
+
+.grid-axis-label {
+    fill: #a5b4fc;
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.axis-title-text {
+    fill: #85b2ec;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.packet-internal-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    letter-spacing: 0.5px;
+}
+
+/* tab 1, the data packets scrolling across the same fixed frequency line */
+.fhss-scroll-packet {
+    opacity: 0;
+    animation: fhssConveyorScroll 4s linear infinite;
+}
+
+.fhss-scroll-packet.sp1 {
+    animation-delay: 0s;
+}
+
+.fhss-scroll-packet.sp2 {
+    animation-delay: 1s;
+}
+
+.fhss-scroll-packet.sp3 {
+    animation-delay: 2s;
+}
+
+.fhss-scroll-packet.sp4 {
+    animation-delay: 3s;
+}
+
+@keyframes fhssConveyorScroll {
+    0% {
+        transform: translateX(0px);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(450px);
+        opacity: 0;
+    }
+}
+
+/* tab 2, each hop and its arrow fade in one after another to show the frequency jumping around */
+.fhss-hop-node,
+.vector-arrow {
+    opacity: 0;
+    animation: hopReveal 8s infinite ease-in-out;
+}
+
+.fhss-hop-node.h1 {
+    animation-delay: 0s;
+}
+
+.vector-arrow.v1 {
+    animation-delay: 0.5s;
+}
+
+.fhss-hop-node.h2 {
+    animation-delay: 1.0s;
+}
+
+.vector-arrow.v2 {
+    animation-delay: 1.5s;
+}
+
+.fhss-hop-node.h3 {
+    animation-delay: 2.0s;
+}
+
+.vector-arrow.v3 {
+    animation-delay: 2.5s;
+}
+
+.fhss-hop-node.h4 {
+    animation-delay: 3.0s;
+}
+
+.vector-arrow.v4 {
+    animation-delay: 3.5s;
+}
+
+.fhss-hop-node.h5 {
+    animation-delay: 4.0s;
+}
+
+.vector-arrow.v5 {
+    animation-delay: 4.5s;
+}
+
+.fhss-hop-node.h6 {
+    animation-delay: 5.0s;
+}
+
+.vector-arrow.v6 {
+    animation-delay: 5.5s;
+}
+
+.fhss-hop-node.hn {
+    animation-delay: 6.0s;
+}
+
+@keyframes hopReveal {
+    0% {
+        opacity: 0;
+    }
+
+    5%,
+    88% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* layout for the DSSS truth table and waveform tab */
+.dsss-flex-workspace {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.xor-table-container {
+    flex: 0 0 180px;
+}
+
+.xor-truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111622;
+    border: 1px solid #232d42;
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 0.8rem;
+}
+
+.xor-truth-table th {
+    background: #182235;
+    color: #94a3b8;
+    padding: 6px;
+    font-weight: 600;
+    border-bottom: 1px solid #232d42;
+}
+
+.xor-truth-table td {
+    padding: 6px;
+    text-align: center;
+    color: #e2e8f0;
+}
+
+.active-table-row {
+    background: rgba(0, 176, 116, 0.22) !important;
+    outline: 1.5px solid #00b074;
+    font-weight: bold;
+}
+
+.active-table-row td {
+    color: #fff !important;
+}
+
+.step-readout {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-align: center;
+}
+
+/* the waveform box on the DSSS XOR tab */
+.dsss-waveform-svg {
+    background: #0d1117;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    padding: 10px;
+}
+
+/* keep everything readable on small screens */
+@media (max-width: 640px) {
+    .animation-container-workspace {
+        width: 100%;
+        min-width: 0;
+        margin: 1rem 0;
+        padding: 0.75rem;
+        overflow-x: hidden;
+    }
+
+    .animation-tab-bar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.5rem;
+    }
+
+    .animation-tab-bar button {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        overflow-wrap: anywhere;
+    }
+
+    .anim-box,
+    .ofdm-container,
+    .fhss-container {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* in the DSSS "System Pipeline", put play button below animation. */
+    .dsss-pipeline-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .dsss-pipeline-play-btn {
+        margin: 0.75rem auto 0 !important;
+    }
+
+    .anim-box h4,
+    .anim-box h5 {
+        overflow-wrap: anywhere;
+    }
+
+    .wave-row-label {
+        width: 4.25rem;
+    }
+
+    .wave-channel-row.guard-band-gap {
+        height: auto;
+        min-height: 3.5rem;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .guard-band-text {
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .dsss-flex-workspace {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .xor-table-container {
+        flex-basis: auto;
+        width: 100%;
+    }
+
+    .fhss-svg-workspace,
+    .fdm-animation-space-svg,
+    .mimo-visual,
+    .mumimo-visual {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+.wave-label {
+    fill: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.wave-bit {
+    fill: #4b5563;
+    font-size: 11px;
+    text-anchor: middle;
+    transition: fill 0.2s ease;
+}
+
+.active-bit-text {
+    fill: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.active-xor-text {
+    fill: #e1a100;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.wave-timing-caption {
+    fill: #6b7280;
+    font-size: 10px;
+}
+
+/* tab 3, the spectral shapes just fade in and stay put */
+.spectral-density-svg {
+    background: #0d1117;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    max-width: 100%;
+}
+
+.spec-shape-label {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.red-txt {
+    fill: #ef4444;
+}
+
+.blue-txt {
+    fill: #60a5fa;
+}
+
+.spectral-shape {
+    opacity: 0;
+    animation: spectralStaticFadeIn 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.narrow-signal-group {
+    animation-delay: 0.4s;
+}
+
+.wide-signal-group {
+    animation-delay: 1.4s;
+}
+
+@keyframes spectralStaticFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* stops the SVG graph from getting squeezed down to nothing on smaller screens */
+.dsss-svg-workspace.compact-mode {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+.dsss-waveform-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #0d1117;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    padding: 10px;
+}
+
+html:has(.wifi_history_timeline),
+body:has(.wifi_history_timeline) {
+    overflow-x: clip;
+}
+
+/* Keep the TOC above the page on narrow screens. */
+@media (max-width: 1099px) {
+    body:has(.wifi_history_timeline) .content {
+        flex-direction: column;
+    }
+
+    body:has(.wifi_history_timeline) .toc {
+        position: static;
+    }
+
+    body:has(.wifi_history_timeline) .padder {
+        display: none;
+    }
+}
+
+/* Keep the TOC sticky on the left in desktop view. */
+@media (min-width: 1100px) {
+    body:has(.wifi_history_timeline) .content {
+        flex-direction: row;
+    }
+
+    body:has(.wifi_history_timeline) .content>.toc:not(.padder) {
+        position: sticky;
+        top: 2rem;
+        align-self: flex-start;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+    }
+}
