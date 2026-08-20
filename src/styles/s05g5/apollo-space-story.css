@@ -1,0 +1,978 @@
+:root {
+  --space-story-night: #060914;
+  --space-story-night-2: #0b1220;
+  --space-story-hangar: #0d1119;
+  --space-story-blueprint-bg: #0a1824;
+  --space-story-launch-bg: #070a10;
+  --space-story-paper: #f1e6cf;
+  --space-story-paper-dim: #cfc3aa;
+  --space-story-paper-edge: #786e5a;
+  --space-story-ink: #121722;
+  --space-story-shadow: #4a4237;
+  --space-story-moon: #eee7d4;
+  --space-story-moon-mark: #c9bea2;
+  --space-story-blueprint: #7fd2e8;
+  --space-story-blueprint-dim: #2a6f82;
+  --space-story-gantry: #6d7985;
+  --space-story-lunar: #aaa99f;
+  --space-story-lunar-mid: #85867e;
+  --space-story-lunar-dark: #62645e;
+  --space-story-flame: #ff8a3d;
+  --space-story-flame-hot: #ffd46f;
+  --space-story-smoke: #c6c0b0;
+  --space-story-earth: #7bb8bf;
+  --space-story-earth-land: #8fbf8a;
+  --space-story-earth-cloud: #e7f1ed;
+  --space-story-bedroom-wall: #10131b;
+  --space-story-bedroom-wall-edge: #393c43;
+  --space-story-bedroom-panel: #171b24;
+  --space-story-bedroom-panel-inset: #0d1017;
+  --space-story-bedroom-curtain: #2b2932;
+  --space-story-bedroom-curtain-fold: #66606d;
+  --space-story-bedroom-frame: #8d8678;
+}
+
+.space-story {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: clamp(460px, 78svh, 780px);
+  padding: clamp(2.5rem, 7vw, 5rem) 0;
+  border-block: 1px solid color-mix(in srgb, var(--color-border) 72%, transparent);
+  background: var(--color-bg);
+  overflow: clip;
+}
+
+.space-story__figure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  width: min(var(--content-max), calc(100% - 2rem));
+  min-height: inherit;
+  margin: 0 auto;
+}
+
+.space-story__caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.space-story--full-bleed .space-story__figure {
+  width: min(1320px, calc(100% - 2rem));
+}
+
+.space-story--article .space-story__figure {
+  grid-template-columns: 1fr;
+  width: min(820px, calc(100% - 2rem));
+}
+
+.space-story--moonlit-bedroom .space-story__figure,
+.space-story--blueprints .space-story__figure,
+.space-story--saturn-v-launch .space-story__figure,
+.space-story--moon-landing .space-story__figure {
+  grid-template-columns: 1fr;
+  width: min(1000px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.space-story__svg text {
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.05em;
+}
+
+.space-story__art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--space-story-paper-edge) 58%, var(--color-border));
+  background: var(--space-story-night);
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+}
+
+.space-story__sticky {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.space-story__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--space-story-paper);
+}
+
+.space-story [data-anim] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.story-bg--night {
+  fill: var(--space-story-night);
+}
+
+.story-bg--blueprint {
+  fill: var(--space-story-blueprint-bg);
+}
+
+.story-bg--hangar {
+  fill: var(--space-story-hangar);
+}
+
+.story-bg--launch {
+  fill: var(--space-story-launch-bg);
+}
+
+.story-bg--moon {
+  fill: var(--space-story-night-2);
+}
+
+.story-moon {
+  fill: var(--space-story-moon);
+  filter: drop-shadow(0 0 22px rgba(241, 230, 207, 0.22));
+}
+
+.story-moon-mark {
+  fill: var(--space-story-moon-mark);
+  opacity: 0.52;
+}
+
+.story-star {
+  fill: var(--space-story-paper);
+}
+
+.story-star-line,
+.story-spark {
+  fill: none;
+  stroke: var(--space-story-paper);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.story-window-wall,
+.story-board {
+  fill: var(--space-story-ink);
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.story-window {
+  fill: color-mix(in srgb, var(--space-story-night) 74%, var(--space-story-blueprint-bg));
+  stroke: var(--space-story-paper);
+  stroke-width: 4;
+}
+
+.story-window-line,
+.story-silhouette-line,
+.story-astronaut-line,
+.story-flag-pole,
+.story-flag-line,
+.story-rocket-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.story-window-line {
+  color: var(--space-story-paper);
+  stroke-width: 4;
+}
+
+.story-paper,
+.story-paper-dim,
+.story-platform {
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.story-paper {
+  fill: var(--space-story-paper);
+}
+
+.story-paper-dim,
+.story-platform {
+  fill: var(--space-story-paper-dim);
+}
+
+.story-curtain {
+  opacity: 0.94;
+}
+
+.story-shadow {
+  fill: var(--space-story-shadow);
+  opacity: 0.58;
+}
+
+.story-silhouette {
+  fill: var(--space-story-ink);
+}
+
+.story-silhouette-line {
+  color: var(--space-story-ink);
+  stroke-width: 9;
+}
+
+.story-paper-edge {
+  fill: none;
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.story-blueprint-grid path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--space-story-blueprint-dim) 58%, transparent);
+  stroke-width: 1;
+}
+
+.story-blueprint-line,
+.story-drafting-line,
+.story-orbit-line {
+  fill: none;
+  stroke: var(--space-story-blueprint);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 0;
+}
+
+.story-drafting-line {
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.story-orbit-line {
+  stroke-width: 2;
+}
+
+.story-table {
+  opacity: 0.96;
+}
+
+.story-gantry {
+  fill: none;
+  stroke: var(--space-story-gantry);
+  stroke-width: 7;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.story-gantry-thin {
+  stroke-width: 3;
+}
+
+.story-rocket-white,
+.story-rocket-band,
+.story-rocket-black {
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.story-rocket-white {
+  fill: var(--space-story-paper);
+}
+
+.story-rocket-band {
+  fill: var(--space-story-moon-mark);
+}
+
+.story-rocket-black {
+  fill: var(--space-story-ink);
+}
+
+.story-spark {
+  stroke: var(--color-caution);
+  stroke-width: 4;
+}
+
+.story-launch-rocket {
+  transform-origin: center bottom;
+}
+
+.story-flame {
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+  transform-origin: center top;
+}
+
+.story-flame-outer {
+  fill: var(--space-story-flame);
+}
+
+.story-flame-inner {
+  fill: var(--space-story-flame-hot);
+}
+
+.story-smoke {
+  fill: var(--space-story-smoke);
+  opacity: 0.82;
+}
+
+.story-earth {
+  fill: var(--space-story-earth);
+  stroke: var(--space-story-paper);
+  stroke-width: 2;
+}
+
+.story-earth-land {
+  fill: var(--space-story-earth-land);
+}
+
+.story-earth-cloud {
+  fill: none;
+  stroke: var(--space-story-earth-cloud);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.story-lunar-back,
+.story-lunar-mid,
+.story-lunar-front {
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.story-lunar-back {
+  fill: var(--space-story-lunar-dark);
+}
+
+.story-lunar-mid {
+  fill: var(--space-story-lunar-mid);
+}
+
+.story-lunar-front {
+  fill: var(--space-story-lunar);
+}
+
+.story-astronaut {
+  fill: var(--space-story-paper);
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.story-astronaut-line {
+  color: var(--space-story-paper-edge);
+  stroke-width: 6;
+}
+
+.story-flag-pole {
+  color: var(--space-story-paper);
+  stroke-width: 5;
+}
+
+.story-flag {
+  fill: var(--space-story-paper);
+  stroke: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.story-flag-line {
+  color: var(--space-story-paper-edge);
+  stroke-width: 2;
+}
+
+.bedroom-sky-stop--inner {
+  stop-color: #17243a;
+}
+
+.bedroom-sky-stop--mid {
+  stop-color: #091221;
+}
+
+.bedroom-sky-stop--outer {
+  stop-color: #03050c;
+}
+
+.bedroom-moon-stop--light {
+  stop-color: #fffaf0;
+}
+
+.bedroom-moon-stop--mid {
+  stop-color: #e4dac1;
+}
+
+.bedroom-moon-stop--edge {
+  stop-color: #a89e88;
+}
+
+.bedroom-halo-stop--core {
+  stop-color: #fff9e8;
+  stop-opacity: 0.72;
+}
+
+.bedroom-halo-stop--edge {
+  stop-color: #fff9e8;
+  stop-opacity: 0;
+}
+
+.bedroom-beam-stop--top {
+  stop-color: var(--space-story-paper);
+  stop-opacity: 0.52;
+}
+
+.bedroom-beam-stop--bottom {
+  stop-color: var(--space-story-paper);
+  stop-opacity: 0;
+}
+
+.bedroom-star {
+  fill: #f4efe2;
+}
+
+.bedroom-stars--far {
+  opacity: 0.76;
+  transform-origin: center;
+}
+
+.bedroom-stars--near {
+  opacity: 0.9;
+  transform-origin: center;
+}
+
+.bedroom-star-bursts {
+  fill: none;
+  stroke: #f8f2e3;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.78;
+}
+
+.bedroom-moon-system,
+.bedroom-moon-halo,
+.bedroom-moon-relief,
+.bedroom-room-camera,
+.bedroom-vignette {
+  transform-origin: center;
+}
+
+.bedroom-moon-system {
+  opacity: 1;
+  transform: translateY(10px) scale(1.16);
+}
+
+.bedroom-moon-halo {
+  opacity: 0.25;
+  transform: scale(1.08);
+}
+
+.bedroom-moon-disc {
+  stroke: rgba(255, 250, 239, 0.72);
+  stroke-width: 1;
+}
+
+.bedroom-moon-relief ellipse {
+  fill: #8f8675;
+  opacity: 0.36;
+}
+
+.bedroom-moon-relief .bedroom-crater-light {
+  fill: #f7efdc;
+  opacity: 0.28;
+}
+
+.bedroom-moon-mare {
+  fill: #756f63;
+  opacity: 0.2;
+}
+
+.bedroom-moon-terminator {
+  fill: #3d4147;
+  opacity: 0.26;
+}
+
+.bedroom-moon-rim {
+  fill: none;
+  stroke: rgba(255, 251, 239, 0.64);
+  stroke-width: 1.5;
+}
+
+.bedroom-room-camera {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.bedroom-wall {
+  fill: var(--space-story-bedroom-wall);
+}
+
+.bedroom-moonbeam {
+  opacity: 0.32;
+  transform: translateY(0) scaleX(1);
+  transform-origin: 50% 0%;
+}
+
+.bedroom-window-panel {
+  opacity: 0.68;
+}
+
+.space-story .bedroom-window-panel--left {
+  transform: scaleX(0.12) rotate(-1.5deg);
+  transform-origin: left center;
+}
+
+.space-story .bedroom-window-panel--right {
+  transform: scaleX(0.12) rotate(1.5deg);
+  transform-origin: right center;
+}
+
+.bedroom-window-panel > rect:first-child {
+  fill: var(--space-story-bedroom-panel);
+  stroke: var(--space-story-bedroom-frame);
+  stroke-width: 3;
+}
+
+.bedroom-window-panel > rect:nth-child(2) {
+  fill: var(--space-story-bedroom-panel-inset);
+  stroke: var(--space-story-bedroom-wall-edge);
+  stroke-width: 2;
+}
+
+.bedroom-window-panel > path:not(.bedroom-panel-inset) {
+  fill: none;
+  stroke: var(--space-story-bedroom-wall-edge);
+  stroke-width: 2;
+}
+
+.bedroom-panel-inset {
+  fill: color-mix(in srgb, var(--space-story-bedroom-panel) 72%, transparent);
+  stroke: color-mix(in srgb, var(--space-story-bedroom-frame) 58%, transparent);
+  stroke-width: 1.5;
+}
+
+.bedroom-window-seam {
+  fill: none;
+  stroke: #fff7df;
+  stroke-width: 2;
+  stroke-dasharray: 70;
+  stroke-dashoffset: 0;
+  opacity: 0;
+}
+
+.bedroom-latch {
+  fill: var(--space-story-bedroom-frame);
+  stroke: #c9c0ae;
+  stroke-width: 1.5;
+}
+
+.bedroom-latch--left {
+  opacity: 0.24;
+  transform: translateX(-18px) rotate(-12deg);
+}
+
+.bedroom-latch--right {
+  opacity: 0.24;
+  transform: translateX(18px) rotate(12deg);
+}
+
+.bedroom-curtain {
+  opacity: 0.82;
+}
+
+.space-story .bedroom-curtain--left {
+  transform: translateX(-42px) scaleX(0.54);
+  transform-origin: left center;
+}
+
+.space-story .bedroom-curtain--right {
+  transform: translateX(42px) scaleX(0.54);
+  transform-origin: right center;
+}
+
+.bedroom-curtain > path:first-child {
+  fill: var(--space-story-bedroom-curtain);
+  stroke: var(--space-story-bedroom-curtain-fold);
+  stroke-width: 2;
+}
+
+.bedroom-curtain > path:not(:first-child) {
+  fill: none;
+  stroke: var(--space-story-bedroom-curtain-fold);
+  stroke-width: 2;
+  opacity: 0.72;
+}
+
+.bedroom-window-frame {
+  fill: none;
+  stroke: var(--space-story-bedroom-frame);
+  stroke-width: 11;
+  stroke-linejoin: miter;
+}
+
+.bedroom-window-frame path {
+  fill: var(--space-story-bedroom-wall);
+  stroke: var(--space-story-bedroom-frame);
+  stroke-width: 5;
+}
+
+.bedroom-window-frame .bedroom-frame-highlight {
+  fill: none;
+  stroke: rgba(241, 230, 207, 0.32);
+  stroke-width: 1.5;
+}
+
+.bedroom-dust circle {
+  fill: #fff7df;
+  opacity: 0.48;
+}
+
+.bedroom-foreground {
+  fill: #080a0f;
+  opacity: 0.9;
+}
+
+.bedroom-foreground .bedroom-floor-line {
+  fill: none;
+  stroke: rgba(141, 134, 120, 0.44);
+  stroke-width: 2;
+}
+
+.bedroom-vignette {
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.bedroom-window-panel *,
+.bedroom-latch *,
+.bedroom-curtain *,
+.bedroom-window-frame *,
+.bedroom-moon-rim {
+  vector-effect: non-scaling-stroke;
+}
+
+html[data-js='true'] .bedroom-stars--far {
+  opacity: 0.2;
+  transform: scale(0.98);
+}
+
+html[data-js='true'] .bedroom-stars--near,
+html[data-js='true'] .bedroom-star-bursts {
+  opacity: 0.04;
+  transform: scale(0.84);
+}
+
+html[data-js='true'] .bedroom-moon-system {
+  opacity: 0.58;
+  transform: translateY(34px) scale(0.74);
+}
+
+html[data-js='true'] .bedroom-moon-halo {
+  opacity: 0.04;
+  transform: scale(0.86);
+}
+
+html[data-js='true'] .bedroom-room-camera {
+  opacity: 1;
+  transform: scale(1);
+}
+
+html[data-js='true'] .bedroom-moonbeam {
+  opacity: 0;
+  transform: translateY(24px) scaleX(0.08);
+}
+
+html[data-js='true'] .bedroom-window-panel,
+html[data-js='true'] .bedroom-curtain {
+  opacity: 1;
+  transform: none;
+}
+
+html[data-js='true'] .bedroom-window-seam {
+  opacity: 0.18;
+  stroke-dashoffset: 70;
+}
+
+html[data-js='true'] .bedroom-latch {
+  opacity: 1;
+  transform: none;
+}
+
+html[data-js='true'] .bedroom-dust circle {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+html[data-js='true'] .bedroom-vignette {
+  opacity: 0.76;
+}
+
+.space-story--moonlit-bedroom.is-space-story-active .bedroom-room-camera,
+.space-story--moonlit-bedroom.is-space-story-active .bedroom-moon-system,
+.space-story--moonlit-bedroom.is-space-story-active .bedroom-moon-halo,
+.space-story--moonlit-bedroom.is-space-story-active .bedroom-window-panel,
+.space-story--moonlit-bedroom.is-space-story-active .bedroom-curtain {
+  will-change: transform, opacity;
+}
+
+.space-story--blueprints,
+.space-story--saturn-v-launch,
+.space-story--moon-landing {
+  min-height: auto;
+  padding: 0;
+}
+
+.space-story--moonlit-bedroom {
+  height: 220svh;
+  min-height: 220svh;
+  padding: 0;
+  border-block: 0;
+  background: var(--space-story-night);
+  overflow: visible;
+  isolation: isolate;
+}
+
+#space-story-moonlit-bedroom + .lead-section {
+  padding-top: clamp(2rem, 4vw, 3rem);
+}
+
+.space-story--moonlit-bedroom .space-story__figure,
+.space-story--blueprints .space-story__figure,
+.space-story--saturn-v-launch .space-story__figure,
+.space-story--moon-landing .space-story__figure {
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.space-story--moonlit-bedroom .space-story__figure {
+  position: relative;
+  display: block;
+  height: 100%;
+  min-height: inherit;
+  overflow: visible;
+}
+
+.space-story--moonlit-bedroom .space-story__art {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  aspect-ratio: auto;
+  border: 0;
+  contain: paint;
+}
+
+.space-story--moonlit-bedroom .space-story__sticky,
+.space-story--moonlit-bedroom .space-story__svg {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.space-story--blueprints .space-story__figure,
+.space-story--saturn-v-launch .space-story__figure,
+.space-story--moon-landing .space-story__figure {
+  min-height: auto;
+}
+
+.space-story--blueprints .space-story__art,
+.space-story--saturn-v-launch .space-story__art,
+.space-story--moon-landing .space-story__art {
+  border: none;
+}
+
+@media (max-width: 860px) {
+  .space-story {
+    min-height: auto;
+    padding: clamp(2rem, 8vw, 3.5rem) 0;
+  }
+
+  .space-story__figure,
+  .space-story--full-bleed .space-story__figure,
+  .space-story--article .space-story__figure {
+    grid-template-columns: 1fr;
+    width: min(100% - 1rem, 720px);
+    min-height: 0;
+  }
+
+  .space-story__sticky {
+    position: relative;
+    height: 100%;
+    min-height: unset;
+  }
+
+  .space-story__svg {
+    min-height: unset;
+    height: 100%;
+  }
+
+  .space-story--moonlit-bedroom {
+    height: 210svh;
+    min-height: 210svh;
+    padding: 0;
+  }
+
+  .space-story--moonlit-bedroom .space-story__figure {
+    width: 100%;
+    min-height: inherit;
+  }
+
+  .space-story--moonlit-bedroom .space-story__sticky {
+    height: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  #space-story-moonlit-bedroom + .lead-section {
+    padding-top: clamp(1.5rem, 6vw, 2rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .space-story__figure,
+  .space-story--full-bleed .space-story__figure,
+  .space-story--article .space-story__figure {
+    width: calc(100% - 1rem);
+  }
+
+  .space-story--moonlit-bedroom {
+    height: 200svh;
+    min-height: 200svh;
+  }
+
+  .space-story--moonlit-bedroom .space-story__figure {
+    width: 100%;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .space-story--moonlit-bedroom {
+    height: 190svh;
+    min-height: 190svh;
+  }
+}
+
+html[data-js='false'] .space-story--moonlit-bedroom {
+  height: auto;
+  min-height: auto;
+}
+
+html[data-js='false'] .space-story--moonlit-bedroom .space-story__figure {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+}
+
+html[data-js='false'] .space-story--moonlit-bedroom .space-story__art {
+  position: relative;
+  height: clamp(24rem, 76svh, 46rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .space-story [data-anim] {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .space-story:not(.space-story--moonlit-bedroom) [data-anim] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .space-story--moonlit-bedroom {
+    height: auto;
+    min-height: auto;
+  }
+
+  .space-story--moonlit-bedroom .space-story__figure {
+    height: auto;
+    min-height: 0;
+  }
+
+  .space-story--moonlit-bedroom .space-story__art {
+    position: relative;
+    height: clamp(24rem, 76svh, 46rem);
+  }
+
+  .space-story--moonlit-bedroom .bedroom-stars--far {
+    opacity: 0.76 !important;
+    transform: none !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-stars--near,
+  .space-story--moonlit-bedroom .bedroom-star-bursts {
+    opacity: 0.9 !important;
+    transform: none !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-moon-system {
+    opacity: 1 !important;
+    transform: translateY(10px) scale(1.16) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-moon-halo {
+    opacity: 0.25 !important;
+    transform: scale(1.08) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-room-camera {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-moonbeam {
+    opacity: 0.32 !important;
+    transform: none !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-window-panel--left {
+    opacity: 0.68 !important;
+    transform: scaleX(0.12) rotate(-1.5deg) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-window-panel--right {
+    opacity: 0.68 !important;
+    transform: scaleX(0.12) rotate(1.5deg) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-curtain--left {
+    opacity: 0.82 !important;
+    transform: translateX(-42px) scaleX(0.54) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-curtain--right {
+    opacity: 0.82 !important;
+    transform: translateX(42px) scaleX(0.54) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-latch--left {
+    opacity: 0.24 !important;
+    transform: translateX(-18px) rotate(-12deg) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-latch--right {
+    opacity: 0.24 !important;
+    transform: translateX(18px) rotate(12deg) !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-window-seam {
+    opacity: 0 !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-dust circle {
+    opacity: 0.48 !important;
+    transform: none !important;
+  }
+
+  .space-story--moonlit-bedroom .bedroom-vignette {
+    opacity: 0.32 !important;
+  }
+}

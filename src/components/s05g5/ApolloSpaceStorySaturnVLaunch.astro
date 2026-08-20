@@ -1,0 +1,154 @@
+<svg class="space-story__svg" viewBox="0 0 960 540" role="img" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="earth-clip-launch">
+      <circle cx="480" cy="580" r="180"></circle>
+    </clipPath>
+  </defs>
+
+  <rect class="story-bg story-bg--launch" width="960" height="540"></rect>
+
+  <!-- Technical background grids and coordinates -->
+  <g data-layer="grid" style="opacity: 0.15;">
+    <!-- Radial grid arcs from Earth -->
+    <circle
+      cx="480"
+      cy="580"
+      r="280"
+      fill="none"
+      stroke="var(--space-story-blueprint)"
+      stroke-width="1"
+      stroke-dasharray="4,8"></circle>
+    <circle
+      cx="480"
+      cy="580"
+      r="380"
+      fill="none"
+      stroke="var(--space-story-blueprint)"
+      stroke-width="1"
+      stroke-dasharray="4,8"></circle>
+    <circle
+      cx="480"
+      cy="580"
+      r="480"
+      fill="none"
+      stroke="var(--space-story-blueprint)"
+      stroke-width="1"
+      stroke-dasharray="4,8"></circle>
+
+    <!-- Angle lines from Earth center -->
+    <line
+      x1="480"
+      y1="580"
+      x2="200"
+      y2="300"
+      stroke="var(--space-story-blueprint)"
+      stroke-width="1"
+      stroke-dasharray="2,4"></line>
+    <line
+      x1="480"
+      y1="580"
+      x2="480"
+      y2="200"
+      stroke="var(--space-story-blueprint)"
+      stroke-width="1"
+      stroke-dasharray="2,4"></line>
+    <line
+      x1="480"
+      y1="580"
+      x2="760"
+      y2="300"
+      stroke="var(--space-story-blueprint)"
+      stroke-width="1"
+      stroke-dasharray="2,4"></line>
+  </g>
+
+  <!-- Earth at the bottom center -->
+  <g class="story-earth-group">
+    <circle class="story-earth" cx="480" cy="580" r="180"></circle>
+    <!-- Earth Landmasses & Clouds clipped to Earth radius -->
+    <g clip-path="url(#earth-clip-launch)">
+      <!-- Earth Landmasses - styled with story-earth-land -->
+      <path
+        class="story-earth-land"
+        d="M 360,450 C 390,440 410,460 430,450 C 450,440 470,430 480,450 C 490,470 510,480 500,500 C 490,520 450,540 430,550 Z"
+      ></path>
+      <path
+        class="story-earth-land"
+        d="M 520,460 C 540,450 560,460 580,455 C 595,465 605,480 595,500 C 585,520 560,530 535,515 C 520,500 515,480 520,460 Z"
+      ></path>
+      <!-- Earth Clouds - styled with story-earth-cloud -->
+      <path class="story-earth-cloud" d="M 330,470 Q 420,440 510,470"></path>
+      <path class="story-earth-cloud" d="M 450,510 Q 540,480 630,510"></path>
+    </g>
+    <!-- Technical label for Earth -->
+    <text
+      x="480"
+      y="425"
+      text-anchor="middle"
+      fill="var(--space-story-paper)"
+      font-family="var(--font-mono)"
+      font-size="12"
+      opacity="0.6">EARTH DEPARTURE</text
+    >
+    <text
+      x="480"
+      y="440"
+      text-anchor="middle"
+      fill="var(--color-accent)"
+      font-family="var(--font-mono)"
+      font-size="10"
+      opacity="0.8">SUB-ORBITAL INSERTION</text
+    >
+  </g>
+
+  <!-- Moon at the top right -->
+  <g class="story-moon-group">
+    <circle class="story-moon" cx="840" cy="120" r="40"></circle>
+    <circle class="story-moon-mark" cx="825" cy="105" r="5"></circle>
+    <circle class="story-moon-mark" cx="855" cy="130" r="7"></circle>
+    <circle class="story-moon-mark" cx="842" cy="98" r="3"></circle>
+    <!-- Technical label for Moon -->
+    <text
+      x="840"
+      y="180"
+      text-anchor="middle"
+      fill="var(--space-story-paper)"
+      font-family="var(--font-mono)"
+      font-size="12"
+      opacity="0.6">LUNAR DESTINATION</text
+    >
+    <text
+      x="840"
+      y="195"
+      text-anchor="middle"
+      fill="var(--color-accent)"
+      font-family="var(--font-mono)"
+      font-size="10"
+      opacity="0.8">384,400 KM</text
+    >
+  </g>
+
+  <!-- Background Orbit dashed line -->
+  <path
+    class="story-orbit-line"
+    d="M 440,405 Q 550,200 840,120"
+    stroke-dasharray="6,6"
+    style="opacity: 0.35; fill: none; stroke: var(--space-story-blueprint); stroke-width: 2;"
+  ></path>
+
+  <!-- Active Orbit trajectory line drawn on scroll -->
+  <path
+    class="story-orbit-line"
+    data-anim="arc-path"
+    d="M 440,405 Q 550,200 840,120"
+    stroke-dasharray="600"
+    stroke-dashoffset="600"
+    style="fill: none; stroke: var(--color-accent); stroke-width: 3;"></path>
+
+  <!-- Space capsule indicator moving along the trajectory -->
+  <circle
+    data-anim="green-circle"
+    r="7"
+    fill="var(--color-accent)"
+    style="filter: drop-shadow(0 0 8px var(--color-accent-glow));"></circle>
+</svg>

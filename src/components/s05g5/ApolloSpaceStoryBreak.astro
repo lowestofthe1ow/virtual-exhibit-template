@@ -1,0 +1,90 @@
+---
+import Blueprints from './ApolloSpaceStoryBlueprints.astro';
+import MoonLanding from './ApolloSpaceStoryMoonLanding.astro';
+import MoonlitBedroom from './ApolloSpaceStoryMoonlitBedroom.astro';
+import SaturnVLaunch from './ApolloSpaceStorySaturnVLaunch.astro';
+
+export type SpaceStorySceneId = 'moonlit-bedroom' | 'blueprints' | 'saturn-v-launch' | 'moon-landing';
+export type SpaceStoryAlign = 'wide' | 'article' | 'full-bleed';
+export type SpaceStoryIntensity = 'quiet' | 'medium' | 'hero';
+
+interface Props {
+  id: SpaceStorySceneId;
+  align?: SpaceStoryAlign;
+  intensity?: SpaceStoryIntensity;
+}
+
+interface SceneSettings {
+  align: SpaceStoryAlign;
+  intensity: SpaceStoryIntensity;
+  title: string;
+  description?: string;
+}
+
+const sceneComponents = {
+  'moonlit-bedroom': MoonlitBedroom,
+  blueprints: Blueprints,
+  'saturn-v-launch': SaturnVLaunch,
+  'moon-landing': MoonLanding,
+};
+
+const defaultSettings: Record<SpaceStorySceneId, SceneSettings> = {
+  'moonlit-bedroom': {
+    align: 'full-bleed',
+    intensity: 'hero',
+    title: 'The window to the Moon',
+    description:
+      'A closed bedroom window opens, moonlight crosses the floor, and the Moon fills the view.',
+  },
+  blueprints: {
+    align: 'wide',
+    intensity: 'medium',
+    title: 'The path becomes a room full of plans',
+  },
+  'saturn-v-launch': {
+    align: 'full-bleed',
+    intensity: 'hero',
+    title: 'Computation leaves the tower',
+  },
+  'moon-landing': { align: 'wide', intensity: 'quiet', title: 'The system lands quietly' },
+};
+
+const { id, align, intensity } = Astro.props;
+const SceneArtwork = sceneComponents[id];
+const settings = defaultSettings[id];
+const storyAlign = align ?? settings.align;
+const storyIntensity = intensity ?? settings.intensity;
+const sectionId = `space-story-${id}`;
+const descriptionId = settings.description ? `${sectionId}-description` : undefined;
+const className = [
+  'space-story',
+  `space-story--${id}`,
+  `space-story--${storyAlign}`,
+  `space-story--${storyIntensity}`,
+].join(' ');
+---
+
+<section
+  id={sectionId}
+  class={className}
+  data-space-story
+  data-scene={id}
+  data-intensity={storyIntensity}
+  aria-label={settings.title}
+  aria-describedby={descriptionId}
+>
+  <figure class="space-story__figure">
+    <div class="space-story__art" aria-hidden="true">
+      <div class="space-story__sticky">
+        <SceneArtwork />
+      </div>
+    </div>
+    {
+      settings.description && (
+        <figcaption id={descriptionId} class="space-story__caption">
+          {settings.description}
+        </figcaption>
+      )
+    }
+  </figure>
+</section>

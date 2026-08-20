@@ -1,0 +1,510 @@
+---
+import '../../styles/s05g5/deep-dive-apollo.css';
+import '../../styles/s05g5/apollo-space-story.css';
+
+import MemoryComparator from './ApolloMemoryComparator.tsx';
+import SpaceStoryBreak from './ApolloSpaceStoryBreak.astro';
+import TrajectoryComputer from './ApolloTrajectoryComputer.tsx';
+
+const metrics = [
+  { value: '2,048', label: 'erasable words', note: 'live state and working memory' },
+  { value: '36,864', label: 'fixed words', note: 'rope memory held the mission program' },
+  { value: '55 W', label: 'power draw', note: 'roughly a light bulb, built for flight' },
+  { value: '1201 / 1202', label: 'overload alarms', note: 'noncritical jobs were shed' },
+];
+
+const missionNav = [
+  ['system', 'System'],
+  ['memory', 'Memory'],
+  ['overload', 'Overload'],
+  ['interactives', 'Try it'],
+  ['legacy', 'Legacy'],
+];
+
+const systems = [
+  {
+    name: 'Apollo Guidance Computer',
+    detail: 'Onboard guidance, navigation, and control in the Command Module and Lunar Module. Priority scheduling kept landing-critical work alive when the machine overloaded.',
+  },
+  {
+    name: 'DSKY interface',
+    detail: 'Astronaut command surface using numeric verb-noun operations. The interface was compact because every display, key, and code had to earn its place.',
+  },
+  {
+    name: 'Mission Control RTCC',
+    detail: 'Ground computation for telemetry, tracking, and flight dynamics. Apollo was a computing ecosystem, not one isolated moon computer.',
+  },
+  {
+    name: 'Human operators',
+    detail: 'Astronauts, flight controllers, and support teams closed the loop. Judgment mattered when alarms appeared and the system had to be interpreted fast.',
+  },
+];
+
+const missionLog = [
+  {
+    date: '1961',
+    event: 'MIT Instrumentation Laboratory begins Apollo guidance work.',
+    signal: 'Navigation becomes a flight computer problem.',
+  },
+  {
+    date: 'Mid-1960s',
+    event: 'The DSKY verb-noun workflow matures with the Block II AGC.',
+    signal: 'Crew commands are compressed into codes astronauts can execute under pressure.',
+  },
+  {
+    date: 'July 20, 1969',
+    event: 'Apollo 11 continues through 1201 and 1202 alarms during powered descent.',
+    signal: 'The executive protects landing-critical tasks by dropping lower-priority work.',
+  },
+  {
+    date: '1970',
+    event: 'Apollo 13 depends on resilient procedures and independent spacecraft systems.',
+    signal: 'Reliability means recoverable operations, not perfection.',
+  },
+  {
+    date: 'Today',
+    event: 'Embedded and safety-critical systems still echo Apollo-era discipline.',
+    signal: 'Scheduling, fault recovery, and human review remain architectural decisions.',
+  },
+];
+
+const dossiers = [
+  {
+    id: 'memory',
+    signal: 'Memory was a mission constraint',
+    title: 'Software became hardware',
+    body: 'The AGC had 2,048 erasable words for working memory and 36,864 fixed words for programs. Core rope memory made software physical: changing code meant building new memory.',
+    details: [
+      'Memory allocation was an architectural decision, not an afterthought.',
+      'Fixed memory carried the flight programs; erasable memory carried live state.',
+      'Small numbers made every instruction, display code, and procedure compete for space.',
+    ],
+  },
+  {
+    id: 'overload',
+    signal: 'Overload did not mean failure',
+    title: 'Priority scheduling protected the landing',
+    body: 'During Apollo 11 descent, 1201 and 1202 alarms reported executive overload. The system kept guidance-critical tasks alive by discarding lower-priority work.',
+    details: [
+      'Interrupts and priorities gave the AGC a way to degrade gracefully.',
+      'The alarm was a status report, not a shutdown notice.',
+      'Mission Control and the crew could continue because the machine stayed honest about state.',
+    ],
+  },
+  {
+    id: 'interface',
+    signal: 'The crew needed compact control',
+    title: 'The DSKY turned codes into action',
+    body: 'Astronauts used numeric verbs and nouns instead of graphical menus. The interface was small because every key, display, and code had to earn its place.',
+    details: [
+      'Verb-noun commands made a compact vocabulary for flight operations.',
+      'Displays surfaced enough state for trained humans to act quickly.',
+      'The interface was part of the architecture, not a decorative terminal.',
+    ],
+  },
+  {
+    id: 'resilience',
+    signal: 'Apollo was a human-machine system',
+    title: 'Automation needed judgment beside it',
+    body: 'The AGC automated precision work, but astronauts, controllers, procedures, and ground computation closed the loop. Resilience came from the whole operating system.',
+    details: [
+      'Mission Control RTCC, simulation systems, and spacecraft computers shared the workload.',
+      'People interpreted alarms, procedures, and risk in real time.',
+      'Modern safety-critical systems still pair automation with review and recovery paths.',
+    ],
+  },
+];
+
+const glossary = [
+  ['AGC', 'Apollo Guidance Computer, the onboard digital computer used for guidance and control.'],
+  ['DSKY', 'Display and Keyboard, the crew command surface for verb-noun operations.'],
+  ['RTCC', 'Real-Time Computer Complex, the Mission Control computing system.'],
+  ['Erasable memory', 'Working memory that could change during flight.'],
+  ['Fixed memory', 'Read-only rope memory that held mission programs.'],
+];
+
+const legacyPoints = [
+  'Small machines need ruthless priorities.',
+  'Fault recovery is architecture, not cleanup.',
+  'Human judgment is part of the system boundary.',
+];
+---
+
+<main id="deep-dive-apollo" class="exhibit-shell">
+  <section class="hero-section" aria-labelledby="hero-title">
+    <div class="hero-visual" aria-hidden="true">
+      <svg viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice">
+        <path
+          class="orbit-line orbit-line-primary"
+          d="M-80 610 C180 455 305 315 545 328 C780 342 884 182 1280 76"></path>
+        <path
+          class="orbit-line orbit-line-secondary"
+          d="M80 695 C230 520 410 434 660 470 C852 498 1018 346 1240 244"></path>
+        <g class="dsky-bank">
+          <rect x="780" y="118" width="242" height="318"></rect>
+          <path d="M812 164 H990 M812 214 H990 M812 264 H990 M812 314 H990"></path>
+          <circle cx="836" cy="370" r="16"></circle>
+          <circle cx="890" cy="370" r="16"></circle>
+          <circle cx="944" cy="370" r="16"></circle>
+        </g>
+        <g class="mission-nodes">
+          <circle class="mission-node" cx="190" cy="548" r="8"></circle>
+          <circle class="mission-node" cx="398" cy="386" r="8"></circle>
+          <circle class="mission-node" cx="622" cy="328" r="8"></circle>
+          <circle class="mission-node" cx="874" cy="190" r="8"></circle>
+        </g>
+        <circle class="trajectory-pulse" cx="190" cy="548" r="6"></circle>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <p class="accession-line">CSARCH2 S05 / historical computing exhibit</p>
+      <h1 id="hero-title">The Apollo Guidance Computer</h1>
+      <p class="hero-subtitle">Architecture that chose the Moon</p>
+      <p class="hero-copy">
+        In the descent room, every word of memory, every watt, and every alarm mattered. This
+        dossier follows the machine that kept computing through overload, and the people trained to
+        trust what it reported.
+      </p>
+      <div class="hero-actions" aria-label="Exhibit navigation">
+        <a class="primary-action" href="#interactives">Run the constraint checks</a>
+        <a class="secondary-action" href="#system">Enter the systems room</a>
+      </div>
+    </div>
+
+    <dl class="mission-readouts" aria-label="Apollo Guidance Computer quick figures">
+      {
+        metrics.map((metric) => (
+          <div>
+            <dt>{metric.value}</dt>
+            <dd>{metric.label}</dd>
+            <dd class="readout-note">{metric.note}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <nav class="dossier-nav" aria-label="Dossier sections">
+    <span>Mission index</span>
+    <div>
+      {missionNav.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+    </div>
+  </nav>
+
+  <SpaceStoryBreak id="moonlit-bedroom" />
+
+  <section class="section-grid lead-section" id="system" aria-labelledby="system-title">
+    <div class="section-intro">
+      <p class="section-label">Systems room</p>
+      <h2 id="system-title">Apollo was an operating network</h2>
+      <p>
+        The AGC mattered because it sat inside a wider system of people, spacecraft, ground
+        computers, procedures, and interfaces. The exhibit treats the landing as a controlled
+        network, not one heroic box.
+      </p>
+    </div>
+
+    <div class="system-table" role="list">
+      {
+        systems.map((system) => (
+          <article role="listitem" class="system-row">
+            <h3>{system.name}</h3>
+            <span>{system.detail}</span>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <SpaceStoryBreak id="blueprints" />
+
+  <section class="timeline-section" aria-labelledby="timeline-title">
+    <div class="section-intro narrow">
+      <p class="section-label">Mission log</p>
+      <h2 id="timeline-title">Five moments that explain the machine</h2>
+    </div>
+
+    <ol class="mission-log-list">
+      {
+        missionLog.map(({ date, event, signal }) => (
+          <li>
+            <time>{date}</time>
+            <p>{event}</p>
+            <span>{signal}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="dossier-section" aria-labelledby="dossier-title">
+    <div class="section-intro">
+      <p class="section-label">Core dossiers</p>
+      <h2 id="dossier-title">Four constraints that shaped the AGC</h2>
+    </div>
+
+    <div class="dossier-stack">
+      {
+        dossiers.map((dossier, index) => (
+          <article class="dossier-panel" id={dossier.id}>
+            <div class="dossier-number" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </div>
+            <div>
+              <p class="dossier-signal">{dossier.signal}</p>
+              <h3>{dossier.title}</h3>
+              <span>{dossier.body}</span>
+              <details>
+                <summary>Inspect supporting evidence</summary>
+                <ul>
+                  {dossier.details.map((detail) => (
+                    <li>{detail}</li>
+                  ))}
+                </ul>
+              </details>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <aside class="glossary-panel" aria-labelledby="glossary-title">
+      <div>
+        <p class="section-label">Quick decoding</p>
+        <h3 id="glossary-title">Terms used in the room</h3>
+      </div>
+      <dl>
+        {
+          glossary.map(([term, definition]) => (
+            <div>
+              <dt>{term}</dt>
+              <dd>{definition}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </aside>
+  </section>
+
+  <SpaceStoryBreak id="saturn-v-launch" />
+
+  <section
+    class="interactive-section"
+    id="interactives"
+    aria-label="Local Apollo constraint checks"
+  >
+    <div class="interactive-suite">
+      <TrajectoryComputer client:load />
+      <MemoryComparator client:load />
+    </div>
+  </section>
+
+  <SpaceStoryBreak id="moon-landing" />
+
+  <section class="legacy-section" id="legacy" aria-labelledby="legacy-title">
+    <div class="legacy-statement">
+      <p class="section-label">Final readout</p>
+      <h2 id="legacy-title">Why the AGC still matters</h2>
+      <p>
+        The lesson is not that Apollo flew with a tiny computer. The lesson is that architecture
+        decided what could fail, what had to continue, and when people needed the truth fast.
+      </p>
+    </div>
+    <ul class="legacy-list">
+      {legacyPoints.map((point) => <li>{point}</li>)}
+    </ul>
+  </section>
+</main>
+
+<script>
+  import { initSpaceStoryAnimator } from './ApolloSpaceStoryAnimator.ts';
+  import { animate, createTimeline, stagger } from 'animejs';
+
+  initSpaceStoryAnimator();
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Soft easing details accordion toggle logic
+  function initDetailsAnimations() {
+    const detailsElements = document.querySelectorAll<HTMLDetailsElement>('.dossier-panel details');
+
+    detailsElements.forEach((details) => {
+      const summary = details.querySelector('summary')!;
+      let animation: Animation | null = null;
+      let isClosing = false;
+      let isExpanding = false;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (isClosing || !details.open) {
+          open();
+        } else if (isExpanding || details.open) {
+          shrink();
+        }
+      });
+
+      function open() {
+        const startHeight = details.offsetHeight;
+        details.open = true;
+        const endHeight = details.offsetHeight;
+
+        if (animation) {
+          animation.cancel();
+        }
+
+        details.style.overflow = 'hidden';
+        isExpanding = true;
+
+        animation = details.animate(
+          {
+            height: [`${startHeight}px`, `${endHeight}px`],
+          },
+          {
+            duration: 350,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)', // ease-out-quart
+          }
+        );
+
+        animation.onfinish = () => {
+          details.style.height = '';
+          details.style.overflow = '';
+          animation = null;
+          isExpanding = false;
+        };
+        animation.oncancel = () => {
+          isExpanding = false;
+        };
+      }
+
+      function shrink() {
+        const startHeight = details.offsetHeight;
+        details.open = false;
+        const endHeight = details.offsetHeight;
+        details.open = true;
+
+        if (animation) {
+          animation.cancel();
+        }
+
+        details.style.overflow = 'hidden';
+        isClosing = true;
+
+        animation = details.animate(
+          {
+            height: [`${startHeight}px`, `${endHeight}px`],
+          },
+          {
+            duration: 300,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)', // ease-out-quart
+          }
+        );
+
+        animation.onfinish = () => {
+          details.open = false;
+          details.style.height = '';
+          details.style.overflow = '';
+          animation = null;
+          isClosing = false;
+        };
+        animation.oncancel = () => {
+          isClosing = false;
+        };
+      }
+    });
+  }
+
+  if (!reducedMotion) {
+    initDetailsAnimations();
+
+    // Initial styles for scroll-animated elements
+    const dossierPanels = document.querySelectorAll('.dossier-panel');
+    const glossaryPanel = document.querySelector('.glossary-panel');
+    dossierPanels.forEach((el) => {
+      (el as HTMLElement).style.opacity = '0';
+      (el as HTMLElement).style.transform = 'translateY(20px)';
+    });
+    if (glossaryPanel) {
+      (glossaryPanel as HTMLElement).style.opacity = '0';
+      (glossaryPanel as HTMLElement).style.transform = 'translateY(20px)';
+    }
+
+    // Scroll observer for entrance animations
+    const dossierObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate('.dossier-panel', {
+              opacity: [0, 1],
+              translateY: [20, 0],
+              duration: 800,
+              delay: stagger(100),
+              ease: 'outExpo',
+            });
+
+            animate('.glossary-panel', {
+              opacity: [0, 1],
+              translateY: [20, 0],
+              duration: 800,
+              delay: 200,
+              ease: 'outExpo',
+            });
+
+            dossierObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const dossierSection = document.querySelector('.dossier-section');
+    if (dossierSection) {
+      dossierObserver.observe(dossierSection);
+    }
+
+    animate('.hero-content > *', {
+      opacity: [0.82, 1],
+      y: [12, 0],
+      duration: 900,
+      delay: stagger(90),
+      ease: 'outExpo',
+    });
+
+    animate('.mission-readouts > div', {
+      opacity: [0.86, 1],
+      y: [8, 0],
+      duration: 680,
+      delay: stagger(70, { start: 280 }),
+      ease: 'outExpo',
+    });
+
+    animate('.mission-node', {
+      opacity: [0.28, 0.54],
+      scale: [0.72, 1],
+      duration: 1200,
+      delay: stagger(130, { start: 360 }),
+      ease: 'outExpo',
+    });
+
+    createTimeline({
+      loop: true,
+      defaults: {
+        duration: 3600,
+        ease: 'inOutSine',
+      },
+    })
+      .add('.trajectory-pulse', {
+        translateX: [0, 684],
+        translateY: [0, -472],
+        opacity: [0.35, 1, 0.35],
+      })
+      .add(
+        '.orbit-line-primary',
+        {
+          strokeDashoffset: [420, 0],
+        },
+        0
+      );
+  }
+</script>

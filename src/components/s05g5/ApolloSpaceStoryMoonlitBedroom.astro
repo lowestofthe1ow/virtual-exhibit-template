@@ -1,0 +1,218 @@
+---
+const seededValue = (index: number, salt: number) => {
+  const value = Math.sin((index + 1) * 12.9898 + salt * 78.233) * 43758.5453;
+  return value - Math.floor(value);
+};
+
+const makeStarField = (count: number, salt: number, minRadius: number, maxRadius: number) =>
+  Array.from({ length: count }, (_, index) => ({
+    x: Number((24 + seededValue(index, salt) * 912).toFixed(2)),
+    y: Number((20 + seededValue(index, salt + 1) * 430).toFixed(2)),
+    radius: Number((minRadius + seededValue(index, salt + 2) * (maxRadius - minRadius)).toFixed(2)),
+    opacity: Number((0.34 + seededValue(index, salt + 3) * 0.56).toFixed(2)),
+  }));
+
+const farStars = makeStarField(52, 1, 0.65, 1.45);
+const nearStars = makeStarField(22, 7, 1.1, 2.25);
+
+const dustMotes = [
+  [354, 426, 1.8],
+  [397, 452, 1.2],
+  [443, 421, 1.5],
+  [486, 468, 1.1],
+  [526, 438, 1.7],
+  [571, 458, 1.3],
+  [611, 417, 1.6],
+  [329, 482, 1.1],
+  [456, 500, 1.4],
+  [548, 493, 1.2],
+  [638, 486, 1.5],
+];
+---
+
+<svg
+  class="space-story__svg bedroom-scene"
+  viewBox="0 0 960 540"
+  preserveAspectRatio="xMidYMid slice"
+  role="img"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <radialGradient id="bedroom-sky-gradient" cx="50%" cy="44%" r="74%">
+      <stop class="bedroom-sky-stop bedroom-sky-stop--inner" offset="0%"></stop>
+      <stop class="bedroom-sky-stop bedroom-sky-stop--mid" offset="58%"></stop>
+      <stop class="bedroom-sky-stop bedroom-sky-stop--outer" offset="100%"></stop>
+    </radialGradient>
+
+    <radialGradient id="bedroom-moon-gradient" cx="34%" cy="28%" r="76%">
+      <stop class="bedroom-moon-stop bedroom-moon-stop--light" offset="0%"></stop>
+      <stop class="bedroom-moon-stop bedroom-moon-stop--mid" offset="62%"></stop>
+      <stop class="bedroom-moon-stop bedroom-moon-stop--edge" offset="100%"></stop>
+    </radialGradient>
+
+    <radialGradient id="bedroom-halo-gradient" cx="50%" cy="50%" r="50%">
+      <stop class="bedroom-halo-stop bedroom-halo-stop--core" offset="0%"></stop>
+      <stop class="bedroom-halo-stop bedroom-halo-stop--edge" offset="100%"></stop>
+    </radialGradient>
+
+    <linearGradient id="bedroom-beam-gradient" x1="0" y1="0" x2="0" y2="1">
+      <stop class="bedroom-beam-stop bedroom-beam-stop--top" offset="0%"></stop>
+      <stop class="bedroom-beam-stop bedroom-beam-stop--bottom" offset="100%"></stop>
+    </linearGradient>
+
+    <radialGradient id="bedroom-vignette-gradient" cx="50%" cy="48%" r="72%">
+      <stop offset="48%" stop-color="#000000" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.92"></stop>
+    </radialGradient>
+
+    <clipPath id="bedroom-moon-clip">
+      <circle cx="480" cy="246" r="98"></circle>
+    </clipPath>
+
+    <clipPath id="bedroom-window-aperture">
+      <rect x="260" y="72" width="440" height="356"></rect>
+    </clipPath>
+
+    <filter id="bedroom-moon-softness" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="18"></feGaussianBlur>
+    </filter>
+  </defs>
+
+  <rect class="bedroom-sky" width="960" height="540" fill="url(#bedroom-sky-gradient)"></rect>
+
+  <g class="bedroom-stars bedroom-stars--far" data-anim="stars-far" data-layer="far-sky">
+    {
+      farStars.map(({ x, y, radius, opacity }) => (
+        <circle class="bedroom-star" cx={x} cy={y} r={radius} opacity={opacity} />
+      ))
+    }
+  </g>
+
+  <g class="bedroom-stars bedroom-stars--near" data-anim="stars-near" data-layer="near-sky">
+    {
+      nearStars.map(({ x, y, radius, opacity }) => (
+        <circle class="bedroom-star" cx={x} cy={y} r={radius} opacity={opacity} />
+      ))
+    }
+  </g>
+
+  <g class="bedroom-star-bursts" data-anim="star-bursts">
+    <path d="M356 164h18M365 155v18"></path>
+    <path d="M700 196h14M707 189v14"></path>
+    <path d="M237 258h12M243 252v12"></path>
+    <path d="M756 112h10M761 107v10"></path>
+  </g>
+
+  <g class="bedroom-moon-system" data-anim="moon-disc" data-layer="moon">
+    <circle
+      class="bedroom-moon-halo"
+      data-anim="moon-halo"
+      cx="480"
+      cy="246"
+      r="166"
+      fill="url(#bedroom-halo-gradient)"
+      filter="url(#bedroom-moon-softness)"></circle>
+    <circle class="bedroom-moon-disc" cx="480" cy="246" r="98" fill="url(#bedroom-moon-gradient)"
+    ></circle>
+
+    <g class="bedroom-moon-relief" data-anim="moon-relief" clip-path="url(#bedroom-moon-clip)">
+      <ellipse cx="444" cy="215" rx="24" ry="18"></ellipse>
+      <ellipse cx="520" cy="280" rx="29" ry="23"></ellipse>
+      <ellipse cx="502" cy="204" rx="12" ry="10"></ellipse>
+      <ellipse cx="426" cy="268" rx="15" ry="21"></ellipse>
+      <ellipse cx="471" cy="303" rx="20" ry="11"></ellipse>
+      <ellipse cx="536" cy="235" rx="11" ry="16"></ellipse>
+      <ellipse class="bedroom-crater-light" cx="455" cy="247" rx="9" ry="7"></ellipse>
+      <ellipse class="bedroom-crater-light" cx="506" cy="322" rx="14" ry="7"></ellipse>
+      <path
+        class="bedroom-moon-mare"
+        d="M397 226c34-34 68-43 105-30 31 11 49 4 70-9 11 19 13 43 7 69-9 36-27 60-55 73-18-19-33-33-63-34-31-1-49-23-64-69Z"
+      ></path>
+      <path
+        class="bedroom-moon-terminator"
+        data-anim="moon-terminator"
+        d="M551 169c35 30 44 80 28 124-12 31-31 48-54 57 25-39 31-73 19-105-9-25-7-50 7-76Z"></path>
+    </g>
+
+    <circle class="bedroom-moon-rim" cx="480" cy="246" r="98"></circle>
+  </g>
+
+  <g class="bedroom-room-camera" data-anim="room-camera" data-layer="room">
+    <path class="bedroom-wall" fill-rule="evenodd" d="M0 0H960V540H0Z M260 72H700V428H260Z"></path>
+
+    <path
+      class="bedroom-moonbeam"
+      data-anim="moonbeam"
+      d="M334 400H626L864 540H96Z"
+      fill="url(#bedroom-beam-gradient)"></path>
+
+    <g clip-path="url(#bedroom-window-aperture)">
+      <g class="bedroom-window-panel bedroom-window-panel--left" data-anim="sash-left">
+        <rect x="260" y="72" width="220" height="356"></rect>
+        <rect x="278" y="91" width="184" height="318"></rect>
+        <path d="M278 177H462M278 323H462M370 91V409"></path>
+        <path
+          class="bedroom-panel-inset"
+          d="M294 111H446V160H294ZM294 195H446V306H294ZM294 340H446V392H294Z"></path>
+      </g>
+
+      <g class="bedroom-window-panel bedroom-window-panel--right" data-anim="sash-right">
+        <rect x="480" y="72" width="220" height="356"></rect>
+        <rect x="498" y="91" width="184" height="318"></rect>
+        <path d="M498 177H682M498 323H682M590 91V409"></path>
+        <path
+          class="bedroom-panel-inset"
+          d="M514 111H666V160H514ZM514 195H666V306H514ZM514 340H666V392H514Z"></path>
+      </g>
+
+      <path class="bedroom-window-seam" data-anim="window-seam" d="M480 101V399"></path>
+    </g>
+
+    <g class="bedroom-latch bedroom-latch--left" data-anim="latch-left">
+      <path d="M456 248h17v20h-17"></path>
+      <circle cx="463" cy="258" r="3"></circle>
+    </g>
+    <g class="bedroom-latch bedroom-latch--right" data-anim="latch-right">
+      <path d="M504 248h-17v20h17"></path>
+      <circle cx="497" cy="258" r="3"></circle>
+    </g>
+
+    <g class="bedroom-curtain bedroom-curtain--left" data-anim="curtain-left">
+      <path d="M170 32 294 60 308 428 152 463Z"></path>
+      <path data-anim="curtain-fold-left" d="M197 44c18 88 18 283-8 407"></path>
+      <path data-anim="curtain-fold-left" d="M236 52c18 89 20 276-6 389"></path>
+      <path data-anim="curtain-fold-left" d="M274 59c13 93 13 265-2 370"></path>
+    </g>
+
+    <g class="bedroom-curtain bedroom-curtain--right" data-anim="curtain-right">
+      <path d="m790 32-124 28-14 368 156 35Z"></path>
+      <path data-anim="curtain-fold-right" d="M763 44c-18 88-18 283 8 407"></path>
+      <path data-anim="curtain-fold-right" d="M724 52c-18 89-20 276 6 389"></path>
+      <path data-anim="curtain-fold-right" d="M686 59c-13 93-13 265 2 370"></path>
+    </g>
+
+    <g class="bedroom-window-frame" data-anim="window-frame">
+      <rect x="244" y="56" width="472" height="388"></rect>
+      <path d="M244 444h472M226 444h508l-34 31H260Z"></path>
+      <path class="bedroom-frame-highlight" d="M258 70H702V430H258"></path>
+    </g>
+
+    <g class="bedroom-dust" data-anim="dust">
+      {dustMotes.map(([cx, cy, radius]) => <circle cx={cx} cy={cy} r={radius} />)}
+    </g>
+
+    <g class="bedroom-foreground" data-anim="foreground">
+      <path d="M0 487 165 459l104 19 62 62H0Z"></path>
+      <path d="m960 478-143-25-114 25-69 62h326Z"></path>
+      <path class="bedroom-floor-line" d="M0 493c196-27 341-40 480-39 139-1 284 12 480 39"></path>
+    </g>
+  </g>
+
+  <rect
+    class="bedroom-vignette"
+    data-anim="vignette"
+    width="960"
+    height="540"
+    fill="url(#bedroom-vignette-gradient)"></rect>
+</svg>

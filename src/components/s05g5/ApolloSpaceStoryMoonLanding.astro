@@ -1,0 +1,234 @@
+<svg class="space-story__svg" viewBox="0 0 960 540" role="img" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="flag-clip">
+      <path d="M684 284 C724 266 756 286 794 270 V340 C752 356 724 334 684 350 Z"></path>
+    </clipPath>
+    <clipPath id="earth-clip-moon">
+      <circle cx="720" cy="170" r="75"></circle>
+    </clipPath>
+  </defs>
+
+  <rect class="story-bg story-bg--moon" width="960" height="540"></rect>
+
+  <!-- Background stars, earth and space elements -->
+  <g data-layer="background">
+    <!-- Starfield distributed across the wider horizon -->
+    <g data-anim="star">
+      <circle class="story-star" cx="-120" cy="60" r="1.5"></circle>
+      <circle class="story-star" cx="-40" cy="180" r="2"></circle>
+      <circle class="story-star" cx="60" cy="100" r="1.5"></circle>
+      <circle class="story-star" cx="142" cy="88" r="2"></circle>
+      <circle class="story-star" cx="254" cy="132" r="2.5"></circle>
+      <circle class="story-star" cx="420" cy="70" r="1.5"></circle>
+      <circle class="story-star" cx="540" cy="110" r="2"></circle>
+      <circle class="story-star" cx="680" cy="65" r="1.5"></circle>
+      <circle class="story-star" cx="852" cy="196" r="2"></circle>
+      <circle class="story-star" cx="1020" cy="90" r="2"></circle>
+      <circle class="story-star" cx="1150" cy="140" r="1.5"></circle>
+      <path class="story-star-line" d="M612 78 l10 0 M617 73 l0 10"></path>
+    </g>
+
+    <!-- Scaled up and detailed Earth -->
+    <g data-anim="earth">
+      <circle class="story-earth" cx="720" cy="170" r="75"></circle>
+      <g clip-path="url(#earth-clip-moon)">
+        <!-- Scaled land masses -->
+        <path
+          class="story-earth-land"
+          d="M660 150 C680 120 720 110 740 120 C760 130 780 150 780 170 C760 190 710 200 680 200 C660 180 650 160 660 150 Z"
+        ></path>
+        <path
+          class="story-earth-land"
+          d="M710 210 C730 195 760 195 775 205 C780 220 765 235 745 235 C725 235 715 225 710 210 Z"
+        ></path>
+        <!-- Scaled cloud bands -->
+        <path class="story-earth-cloud" d="M650 170 C680 185 730 175 775 150"></path>
+        <path class="story-earth-cloud" d="M680 130 C710 140 750 135 785 155"></path>
+        <path class="story-earth-cloud" d="M700 220 C730 230 760 215 780 220"></path>
+      </g>
+    </g>
+  </g>
+
+  <!-- Midground with back and mid hills -->
+  <g data-layer="midground">
+    <!-- Back Hills -->
+    <g data-anim="moon-hill-back">
+      <path
+        class="story-lunar-back"
+        d="M -300 350 Q 150 280 600 320 T 1500 260 L 1500 540 L -300 540 Z"></path>
+    </g>
+
+    <!-- Mid Hills with craters for depth -->
+    <g data-anim="moon-hill-mid">
+      <path
+        class="story-lunar-mid"
+        d="M -300 410 Q 200 340 700 380 T 1500 320 L 1500 540 L -300 540 Z"></path>
+
+      <!-- Craters on Mid Hill -->
+      <g class="story-crater" transform="translate(150, 400) scale(0.5)">
+        <ellipse
+          cx="0"
+          cy="0"
+          rx="25"
+          ry="8"
+          fill="var(--space-story-lunar-dark)"
+          stroke="var(--space-story-paper-edge)"
+          stroke-width="1"></ellipse>
+        <ellipse cx="-1" cy="1" rx="20" ry="5" fill="var(--space-story-lunar-mid)"></ellipse>
+      </g>
+      <g class="story-crater" transform="translate(720, 365) scale(0.4)">
+        <ellipse
+          cx="0"
+          cy="0"
+          rx="25"
+          ry="8"
+          fill="var(--space-story-lunar-dark)"
+          stroke="var(--space-story-paper-edge)"
+          stroke-width="1"></ellipse>
+        <ellipse cx="-1" cy="1" rx="20" ry="5" fill="var(--space-story-lunar-mid)"></ellipse>
+      </g>
+    </g>
+  </g>
+
+  <!-- Foreground with front hills, craters, rocks and flag -->
+  <g data-layer="foreground" data-anim="moon-hill-front">
+    <!-- Front Hill Path -->
+    <path
+      class="story-lunar-front"
+      d="M -300 470 Q 250 390 800 430 T 1500 380 L 1500 540 L -300 540 Z"></path>
+
+    <!-- Craters on Front Hill -->
+    <g class="story-crater" transform="translate(220, 460) scale(0.7)">
+      <ellipse
+        cx="0"
+        cy="0"
+        rx="30"
+        ry="10"
+        fill="var(--space-story-lunar-dark)"
+        stroke="var(--space-story-paper-edge)"
+        stroke-width="1"></ellipse>
+      <ellipse cx="-2" cy="1" rx="25" ry="7" fill="var(--space-story-lunar-mid)"></ellipse>
+    </g>
+    <g class="story-crater" transform="translate(540, 490) scale(1.0)">
+      <ellipse
+        cx="0"
+        cy="0"
+        rx="40"
+        ry="12"
+        fill="var(--space-story-lunar-dark)"
+        stroke="var(--space-story-paper-edge)"
+        stroke-width="1.5"></ellipse>
+      <ellipse cx="-3" cy="2" rx="34" ry="8" fill="var(--space-story-lunar-mid)"></ellipse>
+    </g>
+    <g class="story-crater" transform="translate(880, 455) scale(0.6)">
+      <ellipse
+        cx="0"
+        cy="0"
+        rx="25"
+        ry="8"
+        fill="var(--space-story-lunar-dark)"
+        stroke="var(--space-story-paper-edge)"
+        stroke-width="1"></ellipse>
+      <ellipse cx="-1" cy="1" rx="20" ry="5" fill="var(--space-story-lunar-mid)"></ellipse>
+    </g>
+
+    <!-- Stylized Rocks/Boulders -->
+    <circle
+      cx="120"
+      cy="485"
+      r="6"
+      fill="var(--space-story-lunar-mid)"
+      stroke="var(--space-story-paper-edge)"
+      stroke-width="1.5"></circle>
+    <path
+      d="M 410 495 L 420 490 L 426 496 L 416 500 Z"
+      fill="var(--space-story-lunar-dark)"
+      stroke="var(--space-story-paper-edge)"
+      stroke-width="1.5"></path>
+    <circle
+      cx="940"
+      cy="445"
+      r="5"
+      fill="var(--space-story-lunar-mid)"
+      stroke="var(--space-story-paper-edge)"
+      stroke-width="1.5"></circle>
+
+    <!-- Flag Planted on Front Hill -->
+    <g data-anim="flag">
+      <ellipse class="story-shadow" cx="684" cy="442" rx="18" ry="3"></ellipse>
+      <path class="story-flag-pole" d="M684 280 V442"></path>
+
+      <!-- Flag Base (White/Paper background) -->
+      <path class="story-flag" d="M684 284 C724 266 756 286 794 270 V340 C752 356 724 334 684 350 Z"
+      ></path>
+
+      <!-- Clipped stripes and canton to fit the wavy border -->
+      <g clip-path="url(#flag-clip)">
+        <!-- Red/Flame Stripes -->
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 284 C724 266 756 286 794 270 V 275 C756 291 724 271 684 289 Z"></path>
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 294 C724 276 756 296 794 280 V 286 C756 302 724 281 684 299 Z"></path>
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 304 C724 286 756 307 794 291 V 297 C756 313 724 292 684 310 Z"></path>
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 314 C724 296 756 318 794 302 V 308 C756 324 724 302 684 320 Z"></path>
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 324 C724 306 756 329 794 313 V 319 C756 335 724 312 684 330 Z"></path>
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 334 C724 316 756 340 794 324 V 329 C756 345 724 322 684 340 Z"></path>
+        <path
+          fill="var(--space-story-flame)"
+          d="M684 344 C724 326 756 350 794 334 V 340 C756 356 724 332 684 350 Z"></path>
+
+        <!-- Canton (Blue Field) -->
+        <path
+          fill="var(--space-story-blueprint-dim)"
+          d="M684 284 C704 275 720 280 732 277.8 V 314.5 C720 316.5 704 311.5 684 322 Z"></path>
+
+        <!-- Stars (Dots) in Canton -->
+        <g fill="var(--space-story-paper)">
+          <!-- Row 1 -->
+          <circle cx="690" cy="289" r="0.8"></circle>
+          <circle cx="698" cy="288" r="0.8"></circle>
+          <circle cx="706" cy="289" r="0.8"></circle>
+          <circle cx="714" cy="288" r="0.8"></circle>
+          <circle cx="722" cy="287" r="0.8"></circle>
+          <!-- Row 2 -->
+          <circle cx="694" cy="295" r="0.8"></circle>
+          <circle cx="702" cy="294" r="0.8"></circle>
+          <circle cx="710" cy="295" r="0.8"></circle>
+          <circle cx="718" cy="294" r="0.8"></circle>
+          <!-- Row 3 -->
+          <circle cx="690" cy="301" r="0.8"></circle>
+          <circle cx="698" cy="300" r="0.8"></circle>
+          <circle cx="706" cy="301" r="0.8"></circle>
+          <circle cx="714" cy="300" r="0.8"></circle>
+          <circle cx="722" cy="300" r="0.8"></circle>
+          <!-- Row 4 -->
+          <circle cx="694" cy="307" r="0.8"></circle>
+          <circle cx="702" cy="306" r="0.8"></circle>
+          <circle cx="710" cy="307" r="0.8"></circle>
+          <circle cx="718" cy="306" r="0.8"></circle>
+          <!-- Row 5 -->
+          <circle cx="690" cy="313" r="0.8"></circle>
+          <circle cx="698" cy="312" r="0.8"></circle>
+          <circle cx="706" cy="313" r="0.8"></circle>
+          <circle cx="714" cy="312" r="0.8"></circle>
+          <circle cx="722" cy="311" r="0.8"></circle>
+        </g>
+      </g>
+
+      <!-- Flag wrinkles/fold outlines on top -->
+      <path
+        class="story-flag-line"
+        d="M702 300 C730 294 752 304 778 296 M702 326 C730 320 752 330 778 322"></path>
+    </g>
+  </g>
+</svg>
