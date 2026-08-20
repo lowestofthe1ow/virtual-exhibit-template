@@ -1,0 +1,16 @@
+---
+const { icon, title, era } = Astro.props;
+---
+
+<article class="device-card">
+  <div class="device-card__header">
+    <div class="device-card__icon" aria-hidden="true">{icon}</div>
+    <div class="device-card__title-area">
+      <p class="device-card__era">{era}</p>
+      <h3>{title}</h3>
+    </div>
+  </div>
+  <div class="device-card__body">
+    <slot />
+  </div>
+</article>

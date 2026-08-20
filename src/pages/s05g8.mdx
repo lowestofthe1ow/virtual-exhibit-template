@@ -1,0 +1,83 @@
+---
+layout: "../layouts/ExhibitLayout.astro"
+title: "Bytes of the Past: The Evolution of Storage Devices"
+author: "Abdulrahman, Bilanes, Nicolas, Serra, Valle"
+readingTime: "8 minute read"
+---
+
+import "../styles/s05g8/storage-exhibit.css";
+import StorageTimeline from "../components/s05g8/StorageTimeline.jsx";
+import StorageDeviceCard from "../components/s05g8/StorageDeviceCard.astro";
+import ExhibitHero from "../components/s05g8/ExhibitHero.astro";
+import ThenNowSplit from "../components/s05g8/ThenNowSplit.astro";
+import DeviceGrid from "../components/s05g8/DeviceGrid.astro";
+import StorageComparisonTable from "../components/s05g8/StorageComparisonTable.astro";
+import ExhibitConclusion from "../components/s05g8/ExhibitConclusion.astro";
+
+# Bytes of the Past: The Evolution of Storage Devices
+
+<ExhibitHero />
+
+## Introduction: Why Storage Matters
+
+<ThenNowSplit />
+
+<StorageTimeline client:load />
+
+## Storage Device Deep Dive
+
+<DeviceGrid>
+  <StorageDeviceCard icon="▦" title="Punch Cards & Paper Tape" era="1800s–1970s">
+    Early computers and tabulating machines used punched holes to represent data and instructions. They were simple, but bulky and slow.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="◉" title="Magnetic Tape" era="1950s–present">
+    Magnetic tape stored more data in less space and became useful for backup and archival storage, although it relies on sequential access.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="◌" title="Hard Disk Drives" era="1956–present">
+    HDDs introduced random access using spinning magnetic platters, making large-capacity everyday computer storage practical.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="▣" title="Floppy Disks" era="1970s–2000s">
+    Floppy disks made files and software portable for personal computers, but their capacity was very limited.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="◎" title="Optical Discs" era="1980s–present">
+    CDs, DVDs, and Blu-ray discs used lasers to read data and became common for software, music, movies, and games.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="▤" title="Flash Memory & Memory Cards" era="1990s–present">
+    Flash storage removed moving parts and made compact, reusable storage practical for cameras, phones, and embedded devices.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="▰" title="USB Flash Drives" era="2000s–present">
+    USB drives packaged flash memory into a small plug-and-play device, replacing floppies for quick file transfer.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="▧" title="Solid-State Drives" era="2000s–present">
+    SSDs use flash memory and controllers to deliver fast, silent, durable storage for modern computers.
+  </StorageDeviceCard>
+
+  <StorageDeviceCard icon="☁" title="Cloud Storage" era="2000s–present">
+    Cloud storage stores files on remote servers, making data accessible across devices through online services.
+  </StorageDeviceCard>
+</DeviceGrid>
+
+## Comparison Table
+
+<StorageComparisonTable />
+
+## Conclusion
+
+<ExhibitConclusion>
+  The evolution of storage devices shows a constant architectural push toward better memory systems: higher capacity, faster access, smaller physical size, easier portability, and stronger reliability. From punched cards to cloud storage, each generation solved problems from the previous one while introducing new trade-offs. Modern storage may feel invisible, but it still builds on the same core idea: computers need a dependable way to remember.
+</ExhibitConclusion>
+
+## References
+
+- Computer History Museum. (n.d.). *Memory & storage: Timeline of computer history*. [https://www.computerhistory.org/timeline/memory-storage/](https://www.computerhistory.org/timeline/memory-storage/)
+- Computer memory: Auxiliary memory. (n.d.). In *Encyclopædia Britannica*. Retrieved July 3, 2026, from [https://www.britannica.com/technology/computer-memory/Auxiliary-memory](https://www.britannica.com/technology/computer-memory/Auxiliary-memory)
+- IBM. (n.d.). *IBM 350 disk storage unit (RAMAC)*. [https://www.ibm.com/history/ramac](https://www.ibm.com/history/ramac)
+- Microsoft. (n.d.). *Describe cloud concepts*. Microsoft Learn. Retrieved July 3, 2026, from [https://learn.microsoft.com/en-us/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/](https://learn.microsoft.com/en-us/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/)
+- Sketchfab. (n.d.). *3D models of storage devices* \[3D models\]. Individual model attributions appear under each 3D preview in the interactive timeline. [https://sketchfab.com](https://sketchfab.com)
