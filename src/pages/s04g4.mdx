@@ -1,0 +1,69 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "A Deep Dive Into the Bus Arbitration System"
+author: "Go, Justin; Leung, Jillianne; Luna, Jacoba; Montaño, Rovin; Teoxon, Jat"
+hideHeader: true
+---
+
+import busImage from "../assets/s04g4/ComputerThatIsABus.svg"
+import "../styles/s04g4/exhibit-custom.css"
+
+export const base = import.meta.env.BASE_URL;
+
+<section class="landing">
+  <div class="landing__media">
+    <div class="landing__visual">
+      <img src={busImage.src ?? busImage} alt="Computer bus system illustration" class="landing__visual-image" />
+    </div>
+    <div class="landing__image-note" aria-label="image attribution">
+      <span class="landing__image-note-text">
+        Image is AI-generated using Google Gemini's Nano Banana 2 model.
+      </span>
+    </div>
+
+    <div class="landing__buttons">
+      <a class="landing__button landing__button--primary" href={`${base}/s04g4/shared-bus-problem/`}>Get Started</a>
+      <details class="landing__continue-group">
+        <summary class="landing__continue-summary">
+          <span id="continue-link" class="landing__button landing__button--secondary">Continue where you left off</span>
+          <span class="landing__menu-toggle" aria-hidden="true">▴</span>
+        </summary>
+        <div class="landing__continue-menu">
+          <a id="continue-target" class="landing__continue-item" href={`${base}/s04g4/shared-bus-problem/`}>Continue to saved page</a>
+          <a class="landing__continue-item" href={`${base}/s04g4/shared-bus-problem/`}>Shared Bus Problem</a>
+          <a class="landing__continue-item" href={`${base}/s04g4/design-tradeoffs/`}>Design Trade-offs</a>
+          <a class="landing__continue-item" href={`${base}/s04g4/arbitration-modes/`}>Arbitration Modes</a>
+          <a class="landing__continue-item" href={`${base}/s04g4/simulator/`}>Simulator</a>
+          <a class="landing__continue-item" href={`${base}/s04g4/references/`}>References</a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="landing__content">
+    <span class="slide__eyebrow">Computer Architecture Virtual Exhibit</span>
+    <h1 class="landing__hero-title">A Deep Dive Into the Bus Arbitration System</h1>
+    <p class="landing__authors">
+      Go, Justin · Leung, Jillianne · Luna, Jacoba · Montaño, Rovin · Teoxon, Jat
+    </p>
+
+    <p>
+      Modern computer systems contain multiple components that need access to a common
+      communication channel called the <strong>system bus</strong>. The CPU, memory
+      controller, DMA controller, storage devices, and peripherals may all attempt to
+      use the bus simultaneously (Stallings, 2016). Without a mechanism to control access,
+      data collisions and system instability would occur (Null &amp; Lobur, 2014).
+    </p>
+
+    <p>
+      This exhibit explains how <strong>bus arbitration</strong> decides which device
+      gets control of the bus when several devices request access at the same time.
+    </p>
+  </div>
+</section>
+
+<script is:inline>
+  document.body.classList.add("exhibit-landing");
+  const last = localStorage.getItem("bus-last-page");
+  if (last && document.getElementById("continue-target")) document.getElementById("continue-target").href = new URL(last, window.location.origin).toString();
+</script>

@@ -1,0 +1,443 @@
+.cd-container{
+    margin-top:20px;
+    padding:20px;
+    border-radius:14px;
+    background:rgba(10,16,38,.7);
+    border:1px solid #273055;
+    position:relative;
+    overflow:hidden;
+}
+
+.cd-title{
+    text-align:center;
+    color:#39ffb6;
+    margin-bottom:4px;
+    font-family:"Orbitron",sans-serif;
+    letter-spacing:2px;
+    text-shadow:
+        0 0 8px rgba(57,255,182,.65),
+        0 0 18px rgba(57,255,182,.35);
+}
+
+.cd-subtitle{
+    text-align:center;
+    color:#94a2c8;
+    font-size:.92rem;
+    margin:0 0 16px;
+}
+
+/* -------- Mode toggle -------- */
+
+.cd-toggle{
+    display:flex;
+    justify-content:center;
+    gap:.5rem;
+    margin-bottom:16px;
+}
+
+.cd-toggle__btn{
+    border:1px solid #273055;
+    background:#121a33;
+    color:#d8e9ff;
+    border-radius:10px;
+    padding:.5rem 1.15rem;
+    font-family:"Orbitron",sans-serif;
+    font-size:.82rem;
+    letter-spacing:1.5px;
+    cursor:pointer;
+    transition:border-color .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+
+.cd-toggle__btn:hover{
+    border-color:#39ffb6;
+    color:#39ffb6;
+}
+
+.cd-toggle__btn.is-active{
+    border-color:transparent;
+    background:linear-gradient(90deg,#116848 0%,#0f355f 100%);
+    color:#fff;
+    box-shadow:0 0 14px rgba(57,255,182,.4);
+}
+
+/* -------- Shuffle / priority readout -------- */
+
+.cd-controls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:.75rem 1rem;
+    margin-bottom:14px;
+}
+
+.cd-shuffle{
+    border:1px solid #50a2ff;
+    background:#121a33;
+    color:#d8e9ff;
+    border-radius:10px;
+    padding:.5rem 1.15rem;
+    font-family:"Orbitron",sans-serif;
+    font-size:.8rem;
+    letter-spacing:1.5px;
+    cursor:pointer;
+    transition:border-color .2s ease, box-shadow .2s ease, color .2s ease;
+}
+
+.cd-shuffle:hover{
+    border-color:#39ffb6;
+    color:#39ffb6;
+    box-shadow:0 0 14px rgba(80,162,255,.4);
+}
+
+.cd-priority-readout{
+    color:#a9c6ff;
+    font-size:.85rem;
+    font-family:"Orbitron",sans-serif;
+    letter-spacing:.5px;
+}
+
+/* -------- Stage / legend / steps -------- */
+
+.cd-stage{
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
+}
+
+.cd-legend{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:1.25rem;
+    margin:14px 0 4px;
+}
+
+.cd-legend__item{
+    display:inline-flex;
+    align-items:center;
+    gap:.45rem;
+    color:#94a2c8;
+    font-size:.82rem;
+}
+
+.cd-legend__swatch{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.cd-legend__swatch--req{
+    background:#7fa8ff;
+    box-shadow:0 0 6px #7fa8ff;
+}
+
+.cd-legend__swatch--grant{
+    background:#39ffb6;
+    box-shadow:0 0 6px #39ffb6;
+}
+
+.cd-steps{
+    margin:14px auto 0;
+    max-width:640px;
+    padding-left:1.25rem;
+    color:#cfe2ff;
+}
+
+.cd-step{
+    margin:.35rem 0;
+    font-size:.92rem;
+    line-height:1.5;
+}
+
+/* ========================= */
+
+.centralized,
+.distributed{
+    position:relative;
+    width:100%;
+}
+
+.diagram{
+    width:100%;
+    height:auto;
+    display:block;
+}
+
+/* ========================= */
+
+.wire{
+    stroke:#7fa8ff;
+    stroke-width:2;
+    opacity:.35;
+}
+
+.grant{
+    stroke:#39ffb6;
+    stroke-width:2;
+    opacity:.35;
+}
+
+.wire-label{
+    font-size:11px;
+    font-family:"Orbitron",sans-serif;
+    letter-spacing:1px;
+    pointer-events:none;
+}
+
+.wire-label--br{
+    fill:#7fa8ff;
+}
+
+.wire-label--bg{
+    fill:#39ffb6;
+}
+
+/* ========================= */
+
+.packet{
+    fill:#7fa8ff;
+    filter:drop-shadow(0 0 6px #7fa8ff);
+}
+
+.grantPacket{
+    fill:#39ffb6;
+    filter:drop-shadow(0 0 6px #39ffb6);
+}
+
+/* ========================= */
+/* Devices / nodes — now SVG <rect>/<text>, positioned by the JSX to share
+   the exact same coordinate space as the wires (no more px/viewBox mismatch) */
+
+.device-box,
+.node-box{
+    fill:#121a33;
+    stroke:#273055;
+    stroke-width:2;
+    transition:stroke .3s ease;
+}
+
+.device-label,
+.node-label{
+    fill:#d8e9ff;
+    font-size:14px;
+    font-family:inherit;
+    pointer-events:none;
+}
+
+.device-sub{
+    fill:#a9c6ff;
+    font-size:10px;
+    font-family:inherit;
+    pointer-events:none;
+}
+
+.device-crown{
+    fill:#39ffb6;
+    font-size:11px;
+    font-family:"Orbitron",sans-serif;
+    letter-spacing:1px;
+    font-weight:700;
+    pointer-events:none;
+    text-shadow:0 0 8px rgba(57,255,182,.6);
+}
+
+/* Idle devices (not requesting this cycle) are dimmed the whole time */
+.device--idle .device-box{
+    opacity:.4;
+}
+
+.device--idle .device-label,
+.device--idle .device-sub{
+    opacity:.5;
+}
+
+/* -------- ARBITER -------- */
+
+.arbiter-box{
+    fill:#161d38;
+    stroke:#50a2ff;
+    stroke-width:2;
+    animation:arbiterGlow 2.5s infinite;
+    transform-origin:470px 130px;
+}
+
+.arbiter-label{
+    fill:#d8e9ff;
+    font-size:14px;
+    font-family:inherit;
+    pointer-events:none;
+}
+
+.arbiter-sub{
+    fill:#94a2c8;
+    font-size:10px;
+    font-family:inherit;
+    pointer-events:none;
+}
+
+/* -------- Distributed diagram -------- */
+
+.cd-bus-label{
+    fill:#94a2c8;
+    font-size:13px;
+    font-family:inherit;
+}
+
+.cd-bus{
+    stroke:#7fa8ff;
+    stroke-width:4;
+    opacity:.5;
+    stroke-linecap:round;
+}
+
+.cd-bus-glow{
+    stroke:#39ffb6;
+    stroke-width:4;
+    stroke-linecap:round;
+    opacity:0;
+    filter:drop-shadow(0 0 6px #39ffb6);
+}
+
+.cd-connector{
+    stroke:#7fa8ff;
+    stroke-width:2;
+    opacity:.9;
+}
+
+.cd-connector--win{
+    stroke:#39ffb6;
+    stroke-width:3;
+    filter:drop-shadow(0 0 5px #39ffb6);
+}
+
+.cd-connector--idle{
+    opacity:.18;
+}
+
+.req-packet{
+    fill:#7fa8ff;
+    filter:drop-shadow(0 0 6px #7fa8ff);
+}
+
+.cd-own-packet{
+    fill:#39ffb6;
+    filter:drop-shadow(0 0 6px #39ffb6);
+}
+
+.node-sub{
+    fill:#a9c6ff;
+    font-size:11px;
+    font-family:inherit;
+    pointer-events:none;
+}
+
+.node-logic{
+    fill:#6f80a8;
+    font-size:9px;
+    font-family:inherit;
+    font-style:italic;
+    pointer-events:none;
+}
+
+.dist-node.active .node-box{
+    animation:winnerGlow 3s infinite;
+}
+
+.dist-status{
+    font-size:11px;
+    font-family:"Orbitron",sans-serif;
+    letter-spacing:1px;
+    pointer-events:none;
+}
+
+.dist-status--win{
+    fill:#39ffb6;
+    font-weight:700;
+}
+
+.dist-status--out{
+    fill:#ff8fa3;
+}
+
+.dist-status--idle{
+    fill:#6f80a8;
+}
+
+/* Idle nodes (not requesting this cycle) stay dimmed */
+.dist-node--idle .node-box{
+    opacity:.4;
+}
+
+.dist-node--idle .node-label,
+.dist-node--idle .node-sub,
+.dist-node--idle .node-logic{
+    opacity:.5;
+}
+
+/* ========================= */
+/* Winning device glow — animates stroke + filter since box-shadow
+   has no effect on SVG shapes */
+
+.device.active .device-box{
+    animation:winnerGlow 3s infinite;
+}
+
+/* ========================= */
+
+.caption{
+    margin-top:10px;
+    text-align:center;
+    color:#94a2c8;
+    font-size:.9rem;
+}
+
+/* ========================= */
+
+@keyframes arbiterGlow{
+    0%{
+        filter:drop-shadow(0 0 4px #50a2ff);
+    }
+    50%{
+        filter:drop-shadow(0 0 10px #50a2ff) drop-shadow(0 0 18px #50a2ff);
+    }
+    100%{
+        filter:drop-shadow(0 0 4px #50a2ff);
+    }
+}
+
+@keyframes winnerGlow{
+    0%{
+        stroke:#7fa8ff;
+        filter:none;
+    }
+    50%{
+        stroke:#39ffb6;
+        filter:drop-shadow(0 0 8px #39ffb6) drop-shadow(0 0 16px #39ffb6);
+    }
+    100%{
+        stroke:#7fa8ff;
+        filter:none;
+    }
+}
+
+/* ========================= */
+
+@media(max-width:768px){
+    .device-label,
+    .node-label,
+    .arbiter-label{
+        font-size:12px;
+    }
+
+    .node-sub{ font-size:10px; }
+    .node-logic{ font-size:8px; }
+    .cd-bus-label{ font-size:11px; }
+    .dist-status{ font-size:10px; }
+
+    .cd-toggle__btn{
+        padding:.45rem .85rem;
+        font-size:.75rem;
+    }
+}

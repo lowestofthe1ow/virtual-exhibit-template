@@ -1,0 +1,48 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "Simulator"
+author: "Go, Justin; Leung, Jillianne; Luna, Jacoba; Montaño, Rovin; Teoxon, Jat"
+---
+
+import "../../styles/s04g4/exhibit-custom.css"
+import BusSimulator from "../../components/s04g4/BusSimulator.jsx"
+
+export const base = import.meta.env.BASE_URL;
+
+<div class="page-panel simulator-page">
+  <div class="simulator-page__header-row">
+    <aside class="section-aside simulator-page__nav">
+      <h3>Simulator (Section 4 of 5)</h3>
+      <p><strong>Focus:</strong> Bus Arbiter interactive demo</p>
+      <div class="section-nav-grid">
+        <a href={`${base}/s04g4/arbitration-modes/`}>Previous: Arbitration Modes</a>
+        <a href={`${base}/s04g4/references/`}>Next: References</a>
+      </div>
+    </aside>
+
+    <div class="simulator-page__intro">
+      <span class="slide__eyebrow">Simulator</span>
+      <h1>Bus Arbiter Simulator</h1>
+      <p>
+        Use the interactive simulator below to request bus access from the CPU, DMA
+        controller, and Disk I/O, then run arbitration using Fixed Priority, Round Robin,
+        or Daisy Chain.
+      </p>
+    </div>
+  </div>
+
+  <div class="simulator-page__body">
+    <div class="card simulator-page__steps">
+      <h3>Steps</h3>
+      <ol>
+        <li>Select an arbitration mode (dropdown).</li>
+        <li>Click Request Bus on CPU and/or DMA/Disk to queue requests.</li>
+        <li>Click Arbitrate to let the arbiter pick a winner.</li>
+        <li>Watch device status colors update and check the transaction log.</li>
+        <li>After 2 seconds, the granted device releases the bus automatically.</li>
+      </ol>
+    </div>
+
+    <BusSimulator client:load />
+  </div>
+</div>

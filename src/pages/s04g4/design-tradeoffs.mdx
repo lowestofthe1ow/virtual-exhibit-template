@@ -1,0 +1,76 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "Design Trade-offs"
+author: "Go, Justin; Leung, Jillianne; Luna, Jacoba; Montaño, Rovin; Teoxon, Jat"
+---
+
+import "../../styles/s04g4/exhibit-custom.css"
+import CentralizedDistributedAnimation from "../../components/s04g4/CentralizedDistributedAnimation.jsx";
+
+export const base = import.meta.env.BASE_URL;
+
+<div class="page-panel simulator-page">
+  <div class="simulator-page__header-row">
+    <aside class="section-aside simulator-page__nav">
+      <h3>Design Trade-offs (Section 2 of 5)</h3>
+      <p><strong>Focus:</strong> Key design considerations</p>
+      <div class="section-nav-grid">
+        <a href={`${base}/s04g4/shared-bus-problem/`}>Previous: Shared Bus Problem</a>
+        <a href={`${base}/s04g4/arbitration-modes/`}>Next: Arbitration Modes</a>
+      </div>
+    </aside>
+
+    <div class="simulator-page__intro">
+      <span class="slide__eyebrow">Design Trade-offs</span>
+      <h1>Design Trade-offs</h1>
+      <p>
+        Prior to examining specific hardware implementations or the interactive
+        simulator, it is essential to establish that mediating shared bus access
+        involves deeper systemic challenges. The arbitration process is governed
+        by three fundamental design considerations.
+      </p>
+    </div>
+  </div>
+
+  <div class="simulator-page__body">
+    <div class="card">
+      <h3>Fairness vs. Urgency Trade-off</h3>
+      <p>
+        System architects must balance equitable access among all devices
+        against the prioritization of critical operations. Fairness prevents
+        starvation, while prioritizing urgency guarantees responsiveness to
+        time-sensitive operations (Stallings, 2016).
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Centralized vs. Distributed Decision-Making</h3>
+      <p>
+        Arbitration logic can be implemented through a single dedicated
+        hardware unit (<strong>centralized</strong>) or dispersed across
+        multiple devices on the bus (<strong>distributed</strong>).
+        Centralized architectures simplify control logic but introduce a
+        single point of failure. Distributed architectures improve fault
+        tolerance but require more complex coordination protocols
+        (Null &amp; Lobur, 2014).
+      </p>
+      <p>
+        Use the toggle below to compare both approaches. Watch how requests
+        flow, how the winner is chosen, and follow the numbered steps beneath
+        each diagram.
+      </p>
+
+      <CentralizedDistributedAnimation client:load />
+    </div>
+
+    <div class="card">
+      <h3>The Hidden Cost: Arbitration Overhead</h3>
+      <p>
+        The arbitration process consumes system clock cycles: devices assert
+        request lines, the arbiter evaluates priorities, and grant signals
+        propagate back. During this evaluation phase, the bus remains idle.
+        This delay is arbitration latency (Patterson &amp; Hennessy, 2013).
+      </p>
+    </div>
+  </div>
+</div>

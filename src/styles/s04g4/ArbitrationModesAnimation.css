@@ -1,0 +1,139 @@
+/* --------Fixed priorkty------- */
+.signal-diagram-svg {
+	max-width: 500px;
+	margin: 1.5rem auto;
+	display: block;
+}
+
+@keyframes fp-cpu-flash {
+	0%, 40%   { opacity: 1; }
+	50%, 100% { opacity: 0.3; }
+}
+
+@keyframes fp-others-flash {
+	0%, 40%   { opacity: 0.3; }
+	50%, 60%  { opacity: 0.15; }
+	70%, 100% { opacity: 0.3; }
+}
+
+.fp-cpu {
+	animation: fp-cpu-flash 3s infinite;
+}
+
+.fp-dma,
+.fp-disk {
+	animation: fp-others-flash 3s infinite;
+}
+
+/* --------Daisy chain------- */
+
+@keyframes chain-ripple {
+	0%, 10%   { opacity: 0.25; }
+	20%, 30%  { opacity: 1; }
+	40%, 100% { opacity: 0.25; }
+}
+
+.chain-1 {
+	animation: chain-ripple 3s infinite;
+}
+
+.chain-2 {
+	animation: chain-ripple 3s infinite;
+	animation-delay: 0.4s;
+}
+
+.chain-3 {
+	animation: chain-ripple 3s infinite;
+	animation-delay: 0.8s;
+}
+
+/* -------- Arbitration modes explorer (dropdown-driven) -------- */
+
+.arb-explorer {
+	--arb-border: #273055;
+	--arb-panel-alt: #121a33;
+	--arb-text: #d8e9ff;
+	--arb-muted: #94a2c8;
+	--arb-accent: #39ffb6;
+
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	flex: 1;
+	min-height: 0;
+}
+
+.simulator-page__body .arb-explorer {
+	width: 100%;
+}
+
+.arb-explorer__controls {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.arb-explorer__label {
+	font-family: "Orbitron", sans-serif;
+	font-size: 0.8rem;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--arb-muted);
+}
+
+.arb-explorer__select {
+	padding: 0.55rem 0.8rem;
+	border-radius: 10px;
+	border: 1px solid var(--arb-border);
+	background: var(--arb-panel-alt);
+	color: var(--arb-text);
+	font-family: "Orbitron", sans-serif;
+	font-size: 0.9rem;
+	letter-spacing: 1px;
+	cursor: pointer;
+	min-width: 200px;
+}
+
+.arb-explorer__select:focus {
+	outline: none;
+	border-color: var(--arb-accent);
+}
+
+.arb-explorer__panel {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem;
+	align-items: center;
+	flex: 1;
+	min-height: 0;
+}
+
+.arb-explorer__text h3 {
+	margin-top: 0;
+	color: var(--arb-accent);
+	font-family: "Orbitron", sans-serif;
+	letter-spacing: 2px;
+}
+
+.arb-explorer__diagram {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 0;
+}
+
+.arb-explorer__diagram .signal-diagram-svg {
+	width: 100%;
+	max-width: 880px;
+	height: auto;
+	margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+	.arb-explorer__panel {
+		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+		gap: 2.5rem;
+	}
+}

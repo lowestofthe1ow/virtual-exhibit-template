@@ -1,0 +1,136 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "Shared Bus Problem"
+author: "Go, Justin; Leung, Jillianne; Luna, Jacoba; Montaño, Rovin; Teoxon, Jat"
+---
+
+import "../../styles/s04g4/exhibit-custom.css"
+
+export const base = import.meta.env.BASE_URL;
+
+
+
+<div class="page-panel">
+  <div class="section-layout">
+    <aside class="section-aside">
+      <h3>Shared Bus Problem (Section 1 of 5)</h3>
+      <p><strong>Focus:</strong> Purpose of a bus arbiter</p>
+      <p><strong>Core signals:</strong> BR, BG, BBSY</p>
+      <div class="section-nav-grid">
+        <a href={`${base}/s04g4/`}>Title page</a>
+        <a href={`${base}/s04g4/design-tradeoffs/`}>Next: Design Trade-offs</a>
+      </div>
+
+    </aside>
+
+    <div class="section-main">
+      <span class="slide__eyebrow">Shared Bus Problem</span>
+      <h1>Purpose of a Bus Arbiter</h1>
+
+      <p>
+        A computer bus is a communication channel carrying data, addresses, and control
+        signals between different components (Tanenbaum &amp; Austin, 2012). The bus is
+        shared between multiple devices, and only one device can drive it at a time. If two
+        devices try to transmit simultaneously, their signals corrupt each other, creating
+        what is known as a <strong>bus conflict</strong> (Patterson &amp; Hennessy, 2013).
+      </p>
+
+
+
+
+
+      <svg class="conflict-diagram" viewBox="0 0 500 180" width="100%" style="max-width:500px; margin: 1.5rem auto; display: block;">
+        <defs>
+          <marker id="arrow-conflict" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M1 1L9 5L1 9" fill="none" stroke="#7fa8ff" stroke-width="1.5"/>
+          </marker>
+        </defs>
+
+        <rect x="10" y="10" width="110" height="70" rx="8" fill="#1e3a5f" stroke="#7fa8ff" stroke-width="1.5"/>
+        <text x="65" y="49" text-anchor="middle" font-size="12" font-weight="600">Device A</text>
+
+        <rect x="380" y="10" width="110" height="70" rx="8" fill="#1e3a5f" stroke="#7fa8ff" stroke-width="1.5"/>
+        <text x="435" y="49" text-anchor="middle" font-size="12" font-weight="600">Device B</text>
+
+        <line x1="65" y1="80" x2="65" y2="120" stroke-width="1.5" stroke="#7fa8ff" marker-end="url(#arrow-conflict)"/>
+        <line x1="435" y1="80" x2="435" y2="120" stroke-width="1.5" stroke="#7fa8ff" marker-end="url(#arrow-conflict)"/>
+
+        <line x1="20" y1="130" x2="180" y2="130" stroke-width="2.5" class="bus-line" opacity="0.6"/>
+        <line x1="320" y1="130" x2="480" y2="130" stroke-width="2.5" class="bus-line" opacity="0.6"/>
+        <line x1="180" y1="130" x2="320" y2="130" stroke-width="2.5" class="conflict-zone"/>
+
+
+        <text x="250" y="113" text-anchor="middle" font-size="10" fill="#ff8a89" font-weight="600">SIGNAL COLLISION</text>
+
+        <text x="250" y="160" text-anchor="middle" font-size="11" fill="#a8a5c9" font-weight="600">SHARED BUS</text>
+      </svg>
+
+
+
+
+
+      <p>
+        A bus arbiter is a hardware unit that works towards preventing these bus conflicts
+        from happening. Devices signal to the bus arbiter that they would like to use the
+        bus by sending a Bus Request (<strong>BR</strong>) line, and the arbiter responds
+        with a Bus Grant (<strong>BG</strong>) line to one device at a time (Stallings,
+        2016). The device that receives the BG will then assert Bus Busy (<strong>BBSY</strong>)
+        to signal that the bus is in use. When the device is finished transferring data, it
+        lifts the BBSY.
+      </p>
+
+
+
+
+      <svg class="signal-diagram" viewBox="0 0 600 100" width="100%" style="max-width:600px; margin: 1.5rem auto; display: block;">
+        <defs>
+          <marker id="arrow-br" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M1 1L9 5L1 9" fill="none" stroke="#7fa8ff" stroke-width="1.5"/>
+          </marker>
+          <marker id="arrow-bg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M1 1L9 5L1 9" fill="none" stroke="#8fd6a0" stroke-width="1.5"/>
+          </marker>
+          <marker id="arrow-bbsy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M1 1L9 5L1 9" fill="none" stroke="#c99bf0" stroke-width="1.5"/>
+          </marker>
+        </defs>
+
+        <rect x="10" y="10" width="110" height="70" rx="8" fill="#1e3a5f" stroke="#7fa8ff" stroke-width="1.5"/>
+        <text x="65" y="49" text-anchor="middle" font-size="12" font-weight="600">Device</text>
+
+        <rect x="245" y="10" width="110" height="70" rx="8" fill="#4a3a1f" stroke="#e0b86b" stroke-width="1.5"/>
+        <text x="300" y="49" text-anchor="middle" font-size="12" font-weight="600">Arbiter</text>
+
+        <rect x="480" y="10" width="110" height="70" rx="8" fill="#1e3a5f" stroke="#7fa8ff" stroke-width="1.5"/>
+        <text x="535" y="49" text-anchor="middle" font-size="12" font-weight="600">Device B</text>
+
+        <line class="sig-br" x1="128" y1="28" x2="237" y2="28" stroke-width="1.5"
+          stroke="#7fa8ff" marker-end="url(#arrow-br)"/>
+        <text x="182" y="21" text-anchor="middle" font-size="10" fill="#a9c6ff" font-weight="600">BR</text>
+
+        <line class="sig-bg" x1="237" y1="48" x2="128" y2="48" stroke-width="1.5"
+          stroke="#8fd6a0" marker-end="url(#arrow-bg)"/>
+        <text x="182" y="41" text-anchor="middle" font-size="10" fill="#a9e6b8" font-weight="600">BG</text>
+
+        <line class="sig-bbsy" x1="128" y1="68" x2="237" y2="68" stroke-width="1.5"
+          stroke="#c99bf0" marker-end="url(#arrow-bbsy)"/>
+        <text x="182" y="61" text-anchor="middle" font-size="10" fill="#d9bdf5" font-weight="600">BBSY</text>
+
+        <line class="sig-br2" x1="472" y1="45" x2="363" y2="45" stroke-width="1.5"
+          stroke="#7fa8ff" marker-end="url(#arrow-br)"/>
+        <text x="418" y="38" text-anchor="middle" font-size="10" fill="#a9c6ff" font-weight="600">BR</text>
+      </svg>
+
+
+
+
+      <div class="card">
+        <h3>Why this matters</h3>
+        <p>
+          This method not only ensures that bus conflicts will not occur, but also that
+          the bus is used in an orderly manner and all requests are handled systematically.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
