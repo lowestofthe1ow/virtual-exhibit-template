@@ -1,0 +1,238 @@
+/* Fullscreen Panorama Styling */
+
+.panorama-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.panorama-viewer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.panorama-viewer__sphere {
+  position: absolute;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.panorama-viewer__hotspots {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.panorama-hotspot-wrapper {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  z-index: 51;
+}
+
+.panorama-hotspot {
+  position: relative;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(80, 118, 167, 0.85);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08);
+  transition: all var(--transition-fast);
+}
+
+.panorama-hotspot:hover {
+  background: rgba(80, 118, 167, 1);
+  box-shadow: 0 0 16px rgba(80, 118, 167, 0.6), 0 0 0 8px rgba(80, 118, 167, 0.2);
+  transform: scale(1.1);
+}
+
+.panorama-hotspot__label {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.36rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(10, 10, 14, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform 120ms ease;
+  z-index: 100;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+.panorama-hotspot-wrapper:hover .panorama-hotspot__label {
+  opacity: 1;
+}
+
+.panorama-viewer__topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  background: linear-gradient(180deg, rgba(10, 10, 14, 0.8), transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.panorama-viewer__room-name {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.92rem;
+}
+
+.tour-nav-controls {
+  position: fixed;
+  top: 50%;
+  left: var(--spacing-lg);
+  right: var(--spacing-lg);
+  z-index: 60;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.tour-nav-arrow {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: var(--color-bg-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.tour-nav-arrow:hover {
+  background: var(--accent-primary-light);
+  color: white;
+  transform: scale(1.1);
+}
+
+.tour-nav-arrow:active {
+  transform: scale(0.95);
+}
+
+.tour-info-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: min(360px, 92vw);
+  height: 100%;
+  padding: var(--spacing-lg);
+  background: var(--glass-bg-dark);
+  border: 1px solid var(--glass-border);
+  border-right: none;
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  animation: slideInFromRight var(--transition-base);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow-y: auto;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.3);
+}
+
+.tour-info-panel__close {
+  align-self: flex-end;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tour-info-panel__close:hover {
+  color: var(--text-primary);
+}
+
+.tour-info-panel__image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+}
+
+.tour-info-panel h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.tour-info-panel p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.tour-info-panel__action {
+  background: rgba(80, 118, 167, 0.2);
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary-light);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  margin-top: auto;
+}
+
+.tour-info-panel__action:hover {
+  background: rgba(80, 118, 167, 0.3);
+  box-shadow: 0 0 12px rgba(80, 118, 167, 0.3);
+}
+
+.room-viewer--transitioning {
+  opacity: 0.7;
+  filter: blur(2px);
+  transition: all var(--transition-slow);
+}

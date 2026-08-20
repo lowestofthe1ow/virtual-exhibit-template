@@ -1,0 +1,62 @@
+/* Navigation styles for src/components/Navigation.tsx */
+
+.museum-navigation {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  /* ensure it sits above panorama overlays if needed */
+  z-index: 140;
+}
+
+.museum-navigation .nav-btn {
+  background: #111111;
+  color: #f5f5f5;
+  border: 2px solid rgba(18, 18, 18, 0.95);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-family: var(--font-mono, "Courier Prime"), monospace;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+  box-shadow: 0 2px 6px rgba(18, 18, 18, 0.06);
+}
+
+.museum-navigation .nav-btn:hover {
+  transform: translateY(-2px);
+  background: #171717;
+  color: #f5f5f5;
+  box-shadow: 0 8px 18px rgba(18, 18, 18, 0.18);
+}
+
+.museum-navigation .nav-btn:active {
+  transform: translateY(0);
+}
+
+.museum-navigation .nav-btn.active {
+  background: #0d0d0d;
+  color: #f5f5f5;
+  border-color: #0d0d0d;
+  box-shadow: 0 8px 18px rgba(18, 18, 18, 0.2);
+}
+
+/* Focus styles for accessibility */
+.museum-navigation .nav-btn:focus-visible {
+  outline: 3px solid var(--accent-primary, #5076a7);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Responsive - collapse to vertical on very small screens */
+@media (max-width: 520px) {
+  .museum-navigation {
+    gap: 0.35rem;
+    padding: 0.4rem;
+  }
+
+  .museum-navigation .nav-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}

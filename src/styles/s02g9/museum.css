@@ -1,0 +1,126 @@
+.museum-map-page {
+  padding: 2rem 1.5rem 3rem;
+  background: #f7f7f2;
+  border-radius: 12px;
+}
+
+.museum-map-page__intro {
+  max-width: 860px;
+  margin: 0 auto 1.6rem;
+  text-align: left;
+  color: #1a1a1a;
+}
+
+.museum-map-page__eyebrow {
+  margin-bottom: 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #6d6d6d;
+}
+
+.museum-map-page__intro p {
+  line-height: 1.7;
+  color: #4a4a4a;
+}
+
+.panel-shell__content .museum-map-page .section-title,
+.panel-shell__content .museum-map-page .section-description {
+  color: #1a1a1a !important;
+}
+
+.museum-map-shell {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 0.75rem 0 1.5rem;
+  scroll-behavior: smooth;
+}
+
+.museum-floorplan {
+  position: relative;
+  width: 1320px;
+  min-width: 1320px;
+  height: 260px;
+  border-radius: 18px;
+  background: #fdfdfb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid #d4d4d4;
+  overflow: hidden;
+}
+
+.museum-floorplan::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(80, 118, 167, 0.06) 0%, rgba(245, 245, 245, 0.6) 100%);
+  pointer-events: none;
+}
+
+.museum-hallway {
+  display: none;
+}
+
+.museum-room {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem;
+  border: 2px solid #d4d4d4;
+  border-radius: 12px;
+  background: white;
+  color: #1a1a1a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.museum-room:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: #5076a7;
+  box-shadow: 0 0 0 3px rgba(80, 118, 167, 0.16), 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.museum-room:focus-visible {
+  outline: 3px solid #5076a7;
+  outline-offset: 3px;
+}
+
+.museum-room__title {
+  line-height: 1.2;
+}
+
+@media (max-width: 900px) {
+  .museum-map-page {
+    padding-inline: 1rem;
+  }
+
+  .museum-floorplan {
+    width: 1100px;
+    min-width: 1100px;
+    height: 650px;
+  }
+}
+
+@media (max-width: 640px) {
+  .museum-floorplan {
+    width: 980px;
+    min-width: 980px;
+    height: 560px;
+  }
+
+  .museum-room {
+    font-size: 0.9rem;
+    border-radius: 14px;
+  }
+}

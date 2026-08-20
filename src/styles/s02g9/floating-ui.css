@@ -1,0 +1,287 @@
+/* Floating UI Components */
+
+.floating-ui {
+  position: fixed;
+  z-index: 100;
+  pointer-events: auto;
+  animation: fadeIn var(--transition-base);
+}
+
+.floating-ui.fade-out {
+  animation: fadeOut var(--transition-base);
+}
+
+/* Floating header */
+.floating-header {
+  top: var(--spacing-lg);
+  left: var(--spacing-lg);
+  max-width: 340px;
+  padding: 1rem 1rem 1.1rem;
+}
+
+.header-logo {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--spacing-md);
+  background: rgba(80, 118, 167, 0.15);
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.floating-header:hover .header-logo {
+  background: rgba(80, 118, 167, 0.25);
+  box-shadow: 0 0 12px rgba(80, 118, 167, 0.2);
+}
+
+.header-logo svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-primary-light);
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.room-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+.room-description {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 32ch;
+}
+
+/* Floating navigation */
+.floating-nav {
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  align-items: center;
+}
+
+.floating-nav button {
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+
+.floating-nav button:hover {
+  background: var(--glass-bg-medium);
+  border-color: var(--glass-border-light);
+  box-shadow: 0 0 12px rgba(80, 118, 167, 0.2);
+  transform: translateY(-2px);
+}
+
+.floating-nav button:active {
+  transform: translateY(0);
+}
+
+.room-counter {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-left: 1px solid var(--glass-border);
+  border-right: 1px solid var(--glass-border);
+  margin: 0 var(--spacing-xs);
+}
+
+/* Floating floor plan */
+.floating-floorplan {
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  width: 280px;
+  max-height: 500px;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.floating-floorplan > button:first-child {
+  align-self: flex-start;
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.floating-floorplan > button:first-child:hover {
+  background: var(--glass-bg-medium);
+  border-color: var(--glass-border-light);
+}
+
+.floorplan-content {
+  animation: fadeIn var(--transition-base);
+}
+
+.floorplan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+
+.floorplan-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.floorplan-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.floorplan-grid::-webkit-scrollbar-thumb {
+  background: var(--glass-border-light);
+  border-radius: var(--radius-full);
+}
+
+.floorplan-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--glass-border);
+}
+
+.room-tile {
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.room-tile:hover {
+  background: var(--glass-bg-medium);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary-light);
+  box-shadow: 0 0 8px rgba(80, 118, 167, 0.2);
+}
+
+.room-tile.active {
+  background: rgba(80, 118, 167, 0.2);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary-light);
+  box-shadow: 0 0 12px rgba(80, 118, 167, 0.3);
+}
+
+/* Loading screen */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-dark);
+  border: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.loading-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.loading-content h1 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.loading-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.6;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border: 3px solid var(--glass-border);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 4px;
+  margin: 0 auto;
+  background: var(--glass-bg-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-primary-light));
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.loading-screen.fade-out {
+  animation: fadeOut 0.4s ease-in forwards;
+}
+
+/* Accessibility */
+.floating-ui button:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.room-tile:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
