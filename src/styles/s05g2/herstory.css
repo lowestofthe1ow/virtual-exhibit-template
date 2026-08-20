@@ -1,0 +1,48 @@
+/* Technical Components Breakdown table */
+
+.discoveries-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.discoveries-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  background: var(--bg2);
+}
+
+.discoveries-table th,
+.discoveries-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.discoveries-table th:last-child,
+.discoveries-table td:last-child {
+  border-right: 0;
+}
+
+.discoveries-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.discoveries-table th {
+  background: var(--accent);
+  color: white;
+  font-family: "Lora Variable";
+}
+
+.discoveries-table tbody tr:nth-child(even) {
+  background: rgba(247, 209, 221, 0.4);
+}
+
+.discoveries-table tbody tr:hover {
+  background: var(--bg1);
+}

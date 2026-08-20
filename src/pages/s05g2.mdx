@@ -1,0 +1,184 @@
+---
+layout: ../components/s05g2/Layout.astro
+title: "HerStory: Woven in Memory"
+description: "Exploring how the hidden women pioneers of computing physically shaped machine memory, instruction execution, and early storage architecture."
+author: "De Gracia, Kaleela Ysabel; Guiller, Gerylyn; Manaligod, Lei Ann; Ross, Isabella Althea"
+readingTime: "12 minutes"
+---
+
+import TextWithImage from "../components/s05g2/TextWithImage.astro"
+
+import CoreRopeVisualizer from '../components/s05g2/CoreRopeVisualizer.jsx';
+import adaLovelace from '../assets/s05g2/ada_lovelace.webp';
+import graceHopper from '../assets/s05g2/grace_Hopper.webp';
+import katherineJohnson from '../assets/s05g2/katherine_Johnson.webp';
+import margaretHamilton from '../assets/s05g2/Margaret_Hamilton.webp';
+import '../styles/s05g2/herstory.css';
+
+# HerStory: Woven in Memory
+**CSARCH2 Virtual Exhibit | Section S05**
+
+---
+
+## The Physical Evolution of Instruction Storage
+
+Rather than just listing historic names and dates, this exhibit digs deep into the structural building blocks of computing
+architecture. We explore how early storage technology physically changed over time—evolving from mechanical punch cards to
+electromagnetic core memory—and how these early methods directly governed how a processor read and carried out instructions. 
+
+---
+
+## 1. The Timeline of Hidden Pioneers
+
+### Ada Lovelace (1840s) — The Logic of Physical Mediums
+  <TextWithImage
+  body="Ada Lovelace pioneered the concept of translating abstract mathematical ideas into a sequence of physical instructions that
+    a machine could execute. While working on Charles Babbage's proposed Analytical Engine, she expanded her 1843 translation
+    of Luigi Menabrea's article with notes that were three times longer than the original. Within these notes, she described
+    what is widely regarded as the first published algorithm specifically intended to be processed by a machine, earning her
+    recognition as the world's first computer programmer."
+  imageSrc={adaLovelace.src}
+  imageAlt="Image of Ada Lovelace"
+  imageCaption="Ada Lovelace"
+  />
+
+  <p> Lovelace also recognized that a computing machine could manipulate
+    symbols as well as numbers, allowing it to perform tasks beyond arithmetic—such as composing music or processing other
+    forms of information—provided it was given the appropriate instructions. She further argued that while machines could
+    faithfully execute programmed commands, they could not independently generate original ideas, foreshadowing modern
+    discussions surrounding artificial intelligence. Through her use of punched cards as a method for encoding sequential
+    instructions, Lovelace demonstrated that software could exist independently of the machine itself, laying the conceptual
+    foundation for programmable, general-purpose computing. </p>
+
+* **Architectural Impact:** Lovelace's work established the fundamental computing paradigm in which software instruction
+streams are separated from the underlying execution hardware, a principle that remains central to modern computer
+architecture.
+
+### Katherine Johnson (1950s - 1960s) — Human Reference Architectures
+  <TextWithImage
+  body="Katherine Johnson transformed complex mathematical theory into precise computational procedures that enabled the safe
+    execution of early space missions. As one of NASA's renowned &quot;human computers,&quot; she manually calculated and verified
+    orbital trajectories, launch windows, and reentry paths for Project Mercury and the Apollo program. Even after NASA
+    introduced electronic computers, astronaut John Glenn requested that Johnson personally verify the computer-generated
+    calculations before his historic 1962 orbital mission, demonstrating the critical role of human validation in
+    computational systems."
+  imageSrc={katherineJohnson.src}
+  imageAlt="Image of Katherine Johnson"
+  imageCaption="Katherine Johnson"
+  />
+  
+  <p> Beyond performing calculations, Johnson developed and refined mathematical methods for
+    trajectory analysis, proving that computational accuracy depended not only on machines but also on rigorous
+    algorithmic reasoning and verification. Her work established mathematical correctness as a fundamental requirement
+    for mission-critical computing and demonstrated the importance of integrating human expertise with automated
+    computation, principles that continue to guide the design of reliable and safety-critical computer systems today. </p>
+
+* **Architectural Impact:** When NASA programmed its early IBM mainframes, Johnson's hand-calculated tables were
+directly used to verify and audit the integrity of the computer’s memory and CPU arithmetic logic units (ALU).
+Additionally, it inspired modern practices such as algorithm verification, fault tolerance, and human oversight
+in safety-critical computing.
+
+### Grace Hopper (1950s) — Abstracting the Binary Layer
+  <TextWithImage
+  body="Grace Hopper revolutionized computer programming by transforming it from a process of writing machine-specific
+    instructions into one based on human-readable programming languages. While working on the Harvard Mark I and later
+    the UNIVAC, she recognized that programmers should be able to write instructions using English-like commands rather
+    than numerical machine code. In 1952, Hopper developed one of the first computer compilers, a program that
+    automatically translated high-level instructions into machine language. This innovation became the foundation for
+    FLOW-MATIC and later influenced the development of COBOL, one of the first standardized, machine-independent
+    programming languages."
+  imageSrc={graceHopper.src}
+  imageAlt="Image of Grace Hopper"
+  imageCaption="Grace Hopper"
+  />
+
+  <p> By separating programming logic from the underlying hardware, Hopper made software
+    development more efficient, portable, and accessible to a broader range of users. Her work fundamentally changed
+    the way software was designed and established many of the principles that continue to underpin modern programming
+    languages and compiler technology. </p>
+
+* **Architectural Impact:** Hopper's work introduced the abstraction layer between software and hardware through
+compilers and high-level programming languages, enabling hardware-independent software development and establishing
+a core principle of modern computer architecture.
+
+### Margaret Hamilton (Late 1960s) — Core Rope Memory & Hardwired Logic
+  <TextWithImage
+  body=" Margaret Hamilton transformed software from a supporting component into a critical engineering discipline through
+    her leadership in developing the onboard flight software for NASA's Apollo Guidance Computer. As director of the
+    Software Engineering Division at MIT's Instrumentation Laboratory, she led the team responsible for the software
+    that guided astronauts during the Apollo missions. Working under severe memory and processing constraints, Hamilton
+    designed software that prioritized essential tasks and could recover gracefully from unexpected conditions. During
+    the Apollo 11 lunar landing, these fault-tolerant mechanisms enabled the Guidance Computer to ignore lower-priority
+    tasks and continue executing critical landing operations despite receiving overload alarms, allowing the mission
+    to proceed safely."
+  imageSrc={margaretHamilton.src}
+  imageAlt="Image of Margaret Hamilton"
+  imageCaption="Margaret Hamilton"
+  />
+
+  <p> Hamilton also helped popularize the term software engineering, emphasizing that software
+    development should follow the same rigorous principles as other engineering disciplines. Her innovations in
+    priority scheduling, asynchronous processing, error recovery, and software reliability laid the foundation for
+    modern real-time and mission-critical computing, influencing the design of operating systems and safety-critical
+    software that continue to power aerospace, medical, and industrial systems today. </p>
+
+* **Architectural Impact:** Hamilton's work established the principles of fault-tolerant software, priority-based
+task scheduling, and real-time system reliability, demonstrating that robust software architecture is essential
+for the safe operation of mission-critical computer systems.
+
+---
+
+## 2. Technical Component Breakdown
+
+<div class="discoveries-table-wrap">
+  <table class="discoveries-table">
+    <thead>
+      <tr>
+        <th>Inventor Name</th>
+        <th>Discovery</th>
+        <th>Contribution</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ada Lovelace</td>
+        <td>Machine-readable algorithms using punched cards</td>
+        <td>Established the early foundation for programming through sequenced machine instructions.</td>
+      </tr>
+      <tr>
+        <td>Katherine Johnson</td>
+        <td>Mathematical trajectory computation and verification</td>
+        <td>Showed the value of precise algorithms and validation in mission-critical computing.</td>
+      </tr>
+      <tr>
+        <td>Grace Hopper</td>
+        <td>Compiler and high-level programming languages</td>
+        <td>Enabled human-readable instructions to be translated into machine code.</td>
+      </tr>
+      <tr>
+        <td>Margaret Hamilton</td>
+        <td>Apollo guidance software and core rope memory</td>
+        <td>Advanced reliable, fault-tolerant real-time software for space missions.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## 3. Interactive Exhibit: The Memory Visualizer
+
+Use the interactive simulation below to experience how instructions were physically hardcoded into memory arrays. Use the mode
+switch to contrast Ada Lovelace's mechanical logic against Margaret Hamilton's electromagnetic wire-weaving arrays.
+
+<CoreRopeVisualizer client:load />
+
+## 4. References
+* American Philosophical Society. (2021, August 26). Grace Brewster Murray Hopper: Mathematician, computer science pioneer. https://www.amphilsoc.org/blog/grace-brewster-murray-hopper-mathematician-computer-science-pioneer
+* Encyclopædia Britannica. (n.d.). Ada Lovelace: The first computer programmer. https://www.britannica.com/story/ada-lovelace-the-first-computer-programmer
+* Encyclopædia Britannica. (n.d.). Grace Hopper. https://www.britannica.com/biography/Grace-Hopper
+* Howell, E. (2016). Margaret H. Hamilton: Apollo computer programmer. Space.com. https://www.space.com/34851-margaret-hamilton-biography.html
+* Math is FigureOutAble. (2026). Katherine Johnson: The human computer who reached the moon. https://www.mathisfigureoutable.com/blog/katherine-johnson-human-computer-nasa-mathematician
+* NASA. (2017, May 25). Katherine G. Johnson. https://www.nasa.gov/people-of-nasa/katherine-g-johnson/
+* NASA. (2024). Margaret Hamilton. https://science.nasa.gov/people/margaret-hamilton/
+* University of Waterloo. (n.d.). Katherine Johnson: Human computer. https://uwaterloo.ca/math/news/katherine-johnson-human-computer
+* We Hack the Moon. (n.d.). Margaret Hamilton. https://wehackthemoon.com/bios/margaret-hamilton
+* Zwolak, J. (2023, March 22). Ada Lovelace: The world's first computer programmer who predicted artificial intelligence. National Institute of Standards and Technology. https://www.nist.gov/blogs/taking-measure/ada-lovelace-worlds-first-computer-programmer-who-predicted-artificial
