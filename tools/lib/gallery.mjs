@@ -1,7 +1,9 @@
 export function buildGallery(exhibits, rankings = [], { topCount = 15 } = {}) {
-  const live = exhibits.filter((e) => e.status === 'live');
+  // 'external' exhibits (statically embedded, not source-merged) are shown
+  // on the gallery the same as 'live' ones; only 'pending' is hidden.
+  const visible = exhibits.filter((e) => e.status === 'live' || e.status === 'external');
 
-  const inOrder = [...live].sort(
+  const inOrder = [...visible].sort(
     (a, b) => a.section.localeCompare(b.section) || a.group - b.group,
   );
 

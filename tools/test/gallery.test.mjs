@@ -28,6 +28,13 @@ test('pending exhibits never appear anywhere', () => {
   assert.deepEqual(shown, ['s01g1']);
 });
 
+test('external exhibits appear alongside live ones', () => {
+  const exhibits = [make('s01g1', 'S01', 1), make('s02g7', 'S02', 7, 'external')];
+  const { top, sections } = buildGallery(exhibits, [], { topCount: 15 });
+  const shown = [...top, ...sections.flatMap((s) => s.exhibits)].map((e) => e.slug);
+  assert.ok(shown.includes('s02g7'), `expected s02g7 to appear, got: ${shown.join(', ')}`);
+});
+
 test('with no rankings the top row falls back to section then group order', () => {
   const exhibits = [make('s02g1', 'S02', 1), make('s01g2', 'S01', 2), make('s01g1', 'S01', 1)];
   const { top } = buildGallery(exhibits, [], { topCount: 2 });

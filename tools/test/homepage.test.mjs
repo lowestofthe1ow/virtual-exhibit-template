@@ -39,14 +39,19 @@ test('homepage was built and is up to date', () => {
   assertFresh();
 });
 
-test('homepage shows a card for every live exhibit and none for pending ones', () => {
+test('homepage shows a card for every live or external exhibit and none for pending ones', () => {
   assertFresh();
   const html = readFileSync(DIST, 'utf8');
   // Derived from the data, so this test stays correct as exhibits go live.
+  // 'external' exhibits (statically embedded, e.g. s02g7) get a gallery card
+  // just like 'live' ones — only 'pending' is hidden.
   for (const e of loadExhibits()) {
     const card = new RegExp(`id="${e.slug}"`);
-    if (e.status === 'live') assert.match(html, card, `${e.slug} is live but has no card`);
-    else assert.doesNotMatch(html, card, `${e.slug} is ${e.status} but rendered a card`);
+    if (e.status === 'live' || e.status === 'external') {
+      assert.match(html, card, `${e.slug} is ${e.status} but has no card`);
+    } else {
+      assert.doesNotMatch(html, card, `${e.slug} is ${e.status} but rendered a card`);
+    }
   }
 });
 

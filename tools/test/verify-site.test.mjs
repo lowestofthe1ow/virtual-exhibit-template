@@ -30,3 +30,15 @@ test('a pending exhibit is not required to have a route', () => {
   const { ok } = verifySite(dist([]), [{ slug: 's02g9', status: 'pending' }]);
   assert.ok(ok);
 });
+
+test('an external exhibit with embedded output passes', () => {
+  const { ok, errors } = verifySite(dist(['s02g7']), [{ slug: 's02g7', status: 'external' }]);
+  assert.deepEqual(errors, []);
+  assert.ok(ok);
+});
+
+test('an external exhibit with no embedded output fails', () => {
+  const { ok, errors } = verifySite(dist([]), [{ slug: 's02g7', status: 'external' }]);
+  assert.equal(ok, false);
+  assert.ok(errors[0].includes('s02g7'));
+});
