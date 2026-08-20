@@ -1,0 +1,9 @@
+.article {
+  background: url('../../assets/s03g5/stable_earth/stable_earth.webp') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.crew-title {
+  display: block !important;
+}

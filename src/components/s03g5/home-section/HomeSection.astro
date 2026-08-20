@@ -1,0 +1,35 @@
+---
+import Navbar from "../navbar/Navbar.astro";
+import GlobeCarousel from "../globe-carousel/GlobeCarousel.astro";
+import Y2k38Info from "../y2k38-info/Y2k38Info.astro";
+---
+
+<section class="home-section">
+    <Navbar />
+    <div class="home-section__content">
+        <GlobeCarousel />
+        <Y2k38Info />
+        <slot />
+    </div>
+</section>
+
+<style>
+    .home-section {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .home-section__content {
+        box-sizing: border-box;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 640px) {
+        .home-section__content {
+            padding: 1rem 0.75rem 1.5rem;
+        }
+    }
+</style>

@@ -1,0 +1,63 @@
+.content {
+  display: block !important;
+  max-width: 100% !important;
+  padding-inline: clamp(1rem, 2.25vw, 2rem);
+}
+
+.content__block {
+  width: min(100%, 1440px);
+  min-width: 0;
+  margin-inline: auto;
+  gap: 1rem;
+}
+
+.article {
+  min-width: 0;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.padder {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .header {
+    padding: 0.75rem !important;
+  }
+
+  .header__titleblock {
+    gap: 0.75rem;
+    min-width: 0;
+    padding: 0.65rem 0.75rem !important;
+  }
+
+  .header__titleblock strong {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  .header__subtitle,
+  .content__titlemeta {
+    display: none;
+  }
+
+  .header .button {
+    box-sizing: border-box;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0.5rem;
+  }
+
+  .content {
+    box-sizing: border-box;
+    width: 100%;
+    margin-inline: 0;
+    padding-inline: 0.75rem !important;
+  }
+
+  .content__block {
+    width: 100%;
+  }
+}

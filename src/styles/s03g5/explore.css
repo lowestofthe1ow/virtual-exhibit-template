@@ -1,0 +1,10 @@
+.content__block {
+  gap: 1rem;
+}
+
+.article .explore h1,
+.article .explore h2 {
+  display: block;
+  border: 0;
+  font-family: inherit;
+}

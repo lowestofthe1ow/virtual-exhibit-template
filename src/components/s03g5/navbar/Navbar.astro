@@ -1,0 +1,149 @@
+---
+import logo from "../../../assets/s03g5/exhibit-assets/y2k38_logo.webp";
+
+interface Link {
+    label: string;
+    href: string;
+}
+
+interface Props {
+    logoSrc?: string;
+    logoAlt?: string;
+    links?: Link[];
+}
+
+const baseUrl = import.meta.env.BASE_URL;
+
+const {
+    logoSrc = logo.src,
+    logoAlt = "Y2K38 Timeline",
+    links = [
+        { label: "Home", href: `${baseUrl}/s03g5/` },
+        { label: "About", href: `${baseUrl}/s03g5/about/` },
+        { label: "Explore", href: `${baseUrl}/s03g5/explore/` },
+        { label: "Contact", href: `${baseUrl}/s03g5/contact/` },
+    ],
+} = Astro.props;
+---
+
+<nav class="navbar">
+    <a href={`${baseUrl}/s03g5/`} class="navbar__logo-link">
+        <img src={logoSrc} alt={logoAlt} class="navbar__logo" />
+    </a>
+    <ul class="navbar__links">
+        {
+            links.map((link) => (
+                <li class="navbar__item">
+                    <a href={link.href} class="navbar__link">
+                        {link.label}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+    <div class="navbar__spacer"></div>
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const navLinks = document.querySelectorAll(".navbar__link");
+        const currentPath = window.location.pathname;
+
+        navLinks.forEach((link) => {
+            const href = link.getAttribute("href") || "";
+            const linkPath = new URL(href, window.location.origin).pathname;
+            link.classList.toggle(
+                "navbar__link--active",
+                currentPath === linkPath,
+            );
+        });
+    });
+</script>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap");
+
+    .navbar {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        width: 100%;
+        padding: 1.5rem 3rem;
+        background-color: transparent;
+        box-sizing: border-box;
+    }
+
+    .navbar__logo-link {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar__logo {
+        height: 60px;
+        width: auto;
+        image-rendering: pixelated;
+    }
+
+    .navbar__links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar__spacer {
+        width: 60px;
+    }
+
+    .navbar__link {
+        font-family: "Pixelify Sans", monospace;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-decoration: none;
+        text-transform: lowercase;
+        letter-spacing: 0.05em;
+        transition: color 0.15s ease;
+    }
+
+    .navbar__link:hover {
+        color: #ffd94a;
+    }
+
+    .navbar__link--active {
+        color: #ffd94a;
+    }
+
+    @media (max-width: 640px) {
+        .navbar {
+            grid-template-columns: 1fr;
+            justify-items: center;
+            gap: 0.75rem;
+            padding: 1rem 0.75rem;
+        }
+
+        .navbar__logo {
+            height: 52px;
+        }
+
+        .navbar__links {
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .navbar__spacer {
+            display: none;
+        }
+
+        .navbar__link {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+            padding: 0 0.45rem;
+            font-size: 1rem;
+        }
+    }
+</style>

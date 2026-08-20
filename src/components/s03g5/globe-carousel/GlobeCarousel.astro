@@ -1,0 +1,201 @@
+---
+import globeImg from "../../../assets/s03g5/exhibit-assets/globe.webp";
+import eventImg from "../../../assets/s03g5/exhibit-assets/event.webp";
+import prevImg from "../../../assets/s03g5/exhibit-assets/move_backward.webp";
+import nextImg from "../../../assets/s03g5/exhibit-assets/fast_forward.webp";
+
+import "./globe-carousel.css";
+
+const events = [
+  { name: "Event 1", description: "Placeholder event description" },
+  { name: "Event 2", description: "Placeholder event description" },
+  { name: "Event 3", description: "Placeholder event description" },
+  { name: "Event 4", description: "Placeholder event description" },
+  { name: "Event 5", description: "Placeholder event description" },
+];
+---
+
+<div class="globe-carousel globe-carousel--no-selection" data-event-count={events.length}>
+  <!-- Progress dots -->
+  <div class="globe-carousel__progress">
+    {events.map((_, i) => (
+      <div
+        class="globe-carousel__dot"
+        data-index={i}
+      />
+    ))}
+  </div>
+
+  <!-- Event name -->
+  <div class="globe-carousel__label"></div>
+
+  <!-- Stage: Globe + Orbiting Events -->
+  <div class="globe-carousel__stage">
+    <!-- Globe center -->
+    <img
+      class="globe-carousel__globe"
+      src={globeImg.src}
+      alt="Globe"
+    />
+
+    <!-- Overflow text overlay -->
+    <div class="globe-carousel__overflow-text">
+      <span class="globe-carousel__overflow-default">INTEGER OVERFLOW<br />DETECTED</span>
+    </div>
+
+    <!-- Orbit ring with events inside -->
+    <div class="globe-carousel__orbit">
+      {events.map((event, i) => (
+        <div
+          class="globe-carousel__event"
+          style={`--i: ${i}; --event-count: ${events.length};`}
+          data-index={i}
+        >
+          <img src={eventImg.src} alt={event.name} />
+        </div>
+      ))}
+    </div>
+
+    <!-- Navigation arrows -->
+    <button class="globe-carousel__nav globe-carousel__nav--prev" aria-label="Previous event">
+      <img src={prevImg.src} alt="Previous" />
+    </button>
+    <button class="globe-carousel__nav globe-carousel__nav--next" aria-label="Next event">
+      <img src={nextImg.src} alt="Next" />
+    </button>
+  </div>
+
+  <!-- Event description -->
+  <div class="globe-carousel__description"></div>
+</div>
+
+<script>
+  (function () {
+    const carousel = document.querySelector('.globe-carousel') as HTMLElement;
+    if (!carousel) return;
+
+    const eventCount = parseInt(carousel.dataset.eventCount || '5', 10);
+    let currentIndex = -1;
+
+    const dots = carousel.querySelectorAll('.globe-carousel__dot');
+    const label = carousel.querySelector('.globe-carousel__label') as HTMLElement;
+    const description = carousel.querySelector('.globe-carousel__description') as HTMLElement;
+    const events = carousel.querySelectorAll('.globe-carousel__event');
+    const prevBtn = carousel.querySelector('.globe-carousel__nav--prev') as HTMLButtonElement;
+    const nextBtn = carousel.querySelector('.globe-carousel__nav--next') as HTMLButtonElement;
+
+    // Placeholder event data — swap in real content later
+    const eventData = [
+      { name: "Event 1", description: "Placeholder event description" },
+      { name: "Event 2", description: "Placeholder event description" },
+      { name: "Event 3", description: "Placeholder event description" },
+      { name: "Event 4", description: "Placeholder event description" },
+      { name: "Event 5", description: "Placeholder event description" },
+    ];
+
+    function updateCarousel(newIndex: number) {
+      currentIndex = newIndex;
+
+      // Toggle no-selection class on container
+      carousel.classList.toggle('globe-carousel--no-selection', currentIndex === -1);
+
+      // Update dots
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+
+      // Update label + description
+      if (currentIndex === -1) {
+        label.textContent = '';
+        description.textContent = '';
+      } else {
+        label.textContent = eventData[currentIndex]?.name || '';
+        description.textContent = eventData[currentIndex]?.description || '';
+      }
+
+      // Highlight active orbiting event
+      events.forEach((evt, i) => {
+        evt.classList.toggle('active', i === currentIndex);
+      });
+    }
+
+    function next() {
+      updateCarousel((currentIndex + 1) % eventCount);
+    }
+
+    function prev() {
+      updateCarousel((currentIndex - 1 + eventCount) % eventCount);
+    }
+
+    // Button handlers
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    // Dot click handlers
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const index = parseInt(dot.getAttribute('data-index') || '0', 10);
+        updateCarousel(index);
+      });
+    });
+
+    // Event click handlers — click orbiting event to navigate to it (toggle if already active)
+    events.forEach((evt) => {
+      evt.addEventListener('click', () => {
+        const index = parseInt(evt.getAttribute('data-index') || '0', 10);
+        if (index === currentIndex) {
+          updateCarousel(-1);
+        } else {
+          updateCarousel(index);
+        }
+      });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'Escape') updateCarousel(-1);
+    });
+
+    // Click on stage (empty area) to deselect
+    const stage = carousel.querySelector('.globe-carousel__stage') as HTMLElement;
+    stage.addEventListener('click', (e) => {
+      if (e.target === stage || e.target === carousel.querySelector('.globe-carousel__globe')) {
+        updateCarousel(-1);
+      }
+    });
+
+    // Glitch sync with Y2k38Info
+    document.addEventListener('y2k38-teaser', () => {
+      carousel.classList.add('globe-carousel--teaser');
+      setTimeout(() => {
+        carousel.classList.remove('globe-carousel--teaser');
+      }, 150);
+    });
+
+    document.addEventListener('y2k38-glitch-start', () => {
+      carousel.classList.add('globe-carousel--glitch');
+    });
+
+    document.addEventListener('y2k38-glitch-end', () => {
+      carousel.classList.remove('globe-carousel--glitch');
+    });
+
+    document.addEventListener('y2k38-overflow-start', () => {
+      carousel.classList.add('globe-carousel--overflow');
+    });
+
+    document.addEventListener('y2k38-overflow-end', () => {
+      carousel.classList.remove('globe-carousel--overflow');
+    });
+
+    document.addEventListener('y2k38-negative-start', () => {
+      carousel.classList.add('globe-carousel--negative');
+    });
+
+    document.addEventListener('y2k38-negative-end', () => {
+      carousel.classList.remove('globe-carousel--negative');
+    });
+  })();
+</script>

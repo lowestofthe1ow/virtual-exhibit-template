@@ -1,0 +1,555 @@
+---
+import earthSheet from "../../../assets/s03g5/earthspin-sheet.png";
+import hourglassStable from "../../../assets/s03g5/stable_earth/timeglass_icon_stable.webp";
+import hourglassCorrupted from "../../../assets/s03g5/corrupted_earth/timeglass_icon_corrupted.png";
+import skull from "../../../assets/s03g5/corrupted_earth/Skull.png";
+import glitch from "../../../assets/s03g5/corrupted_earth/glitch.webp";
+import monitorCorrupted from "../../../assets/s03g5/corrupted_earth/monitor_corrupted.webp";
+
+import moonIcon from "../../../assets/s03g5/stable_earth/event-icons/moon.webp";
+import calendarIcon from "../../../assets/s03g5/stable_earth/event-icons/calendar.webp";
+import processorIcon from "../../../assets/s03g5/stable_earth/event-icons/processor.png";
+import wwwIcon from "../../../assets/s03g5/stable_earth/event-icons/www.webp";
+import internetIcon from "../../../assets/s03g5/stable_earth/event-icons/internet.webp";
+import webIcon from "../../../assets/s03g5/stable_earth/event-icons/web.webp";
+import windowsIcon from "../../../assets/s03g5/stable_earth/event-icons/windows.webp";
+import usIcon from "../../../assets/s03g5/stable_earth/event-icons/us.webp";
+import y2kCouncilIcon from "../../../assets/s03g5/stable_earth/event-icons/y2k-council.webp";
+import y2kActIcon from "../../../assets/s03g5/stable_earth/event-icons/y2k-act.webp";
+import y2kCoopIcon from "../../../assets/s03g5/stable_earth/event-icons/y2k-coop.webp";
+import gpsIcon from "../../../assets/s03g5/stable_earth/event-icons/gps.png";
+import warningIcon from "../../../assets/s03g5/stable_earth/event-icons/warning.webp";
+import y2kPassIcon from "../../../assets/s03g5/stable_earth/event-icons/y2k-pass.webp";
+import satelliteIcon from "../../../assets/s03g5/stable_earth/event-icons/satellite.webp";
+import weatherIcon from "../../../assets/s03g5/stable_earth/event-icons/weather.webp";
+import japanIcon from "../../../assets/s03g5/stable_earth/event-icons/japan.webp";
+import iphoneIcon from "../../../assets/s03g5/stable_earth/event-icons/iphone.webp";
+import bitcoinIcon from "../../../assets/s03g5/stable_earth/event-icons/bitcoin.webp";
+import virusIcon from "../../../assets/s03g5/stable_earth/event-icons/virus.webp";
+import bit64Icon from "../../../assets/s03g5/stable_earth/event-icons/64-bit.webp";
+
+const iconMap: Record<string, string> = {
+  moon: moonIcon.src,
+  calendar: calendarIcon.src,
+  processor: processorIcon.src,
+  www: wwwIcon.src,
+  internet: internetIcon.src,
+  web: webIcon.src,
+  windows: windowsIcon.src,
+  us: usIcon.src,
+  "y2k-council": y2kCouncilIcon.src,
+  "y2k-act": y2kActIcon.src,
+  "y2k-coop": y2kCoopIcon.src,
+  gps: gpsIcon.src,
+  warning: warningIcon.src,
+  "y2k-pass": y2kPassIcon.src,
+  satellite: satelliteIcon.src,
+  weather: weatherIcon.src,
+  japan: japanIcon.src,
+  iphone: iphoneIcon.src,
+  bitcoin: bitcoinIcon.src,
+  virus: virusIcon.src,
+  "64-bit": bit64Icon.src,
+  skull: skull.src,
+};
+
+import { exploreEvents } from "../../../data/s03g5/explore-events.ts";
+import Navbar from "../navbar/Navbar.astro";
+
+const markerSlots = ["north", "north-east", "east", "south-east", "south-west", "west", "center"];
+---
+
+<main
+  class="explore"
+  id="explore-app"
+  data-corrupted="false"
+  data-selected="false"
+  data-playing="false"
+  data-navigation-flash="false"
+  data-earth-sheet={earthSheet.src}
+  data-events={JSON.stringify(exploreEvents)}
+  data-icon-map={JSON.stringify(iconMap)}
+>
+  <a class="skip-link" href="#timeline-controls">Skip to timeline controls</a>
+
+  <Navbar />
+
+  <div class="explore__grid">
+    <section class="pixel-panel event-panel" aria-labelledby="event-heading">
+      <header class="pixel-panel__header">
+        <h2 class="pixel-panel__title" id="event-heading" data-event-title>Event information</h2>
+        <span class="pixel-panel__rule" aria-hidden="true"></span>
+        <button class="icon-button event-panel__close" type="button" aria-label="Close event details" disabled>
+          <span aria-hidden="true"></span>
+        </button>
+      </header>
+
+      <div class="event-panel__body">
+        <div class="event-panel__summary">
+          <img class="event-panel__icon" src={moonIcon.src} alt="" width="84" height="72" />
+          <dl class="event-panel__facts">
+            <div><dt>Event date:</dt><dd data-event-date>Choose a marker</dd></div>
+            <div><dt>Years before timeline corruption:</dt><dd data-event-years>—</dd></div>
+          </dl>
+        </div>
+
+        <div class="event-panel__copy">
+          <h2>Description:</h2>
+          <p data-event-description>
+            Select an envelope around Earth or press Play to travel through the events that shaped our timestamp-dependent world.
+          </p>
+        </div>
+
+        <p class="event-panel__source">
+          <strong>Source:</strong>
+          <a data-event-source aria-disabled="true">Select an event to view its source</a>
+        </p>
+
+        <div class="event-panel__navigation" aria-label="Event detail navigation">
+          <button type="button" data-previous-event aria-label="Show previous event" aria-keyshortcuts="ArrowLeft">◀ <span>Previous event</span></button>
+          <button type="button" data-next-event aria-label="Show next event" aria-keyshortcuts="ArrowRight"><span>Next event</span> ▶</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="pixel-panel watch-panel" aria-labelledby="watch-heading">
+      <header class="pixel-panel__header pixel-panel__header--small">
+        <h2 class="pixel-panel__title" id="watch-heading">Y2K timeline watch</h2>
+        <span class="pixel-panel__rule" aria-hidden="true"></span>
+      </header>
+      <div class="watch-panel__body">
+        <picture class="watch-panel__art" aria-hidden="true">
+          <img class="watch-panel__stable" src={hourglassStable.src} alt="" width="88" height="148" />
+          <img class="watch-panel__corrupted" src={hourglassCorrupted.src} alt="" width="88" height="148" />
+        </picture>
+        <dl class="watch-panel__readout" aria-live="polite">
+          <div><dt>UTC time:</dt><dd data-utc-time>Sun, 20 Jul 1969 20:17:40 UTC</dd></div>
+          <div><dt>PST time:</dt><dd data-pst-time>Sun, 20 Jul 1969 13:17:40 PDT</dd></div>
+          <div><dt>Unix timestamp:</dt><dd data-unix-time>-14182940</dd></div>
+          <div><dt>32-bit binary:</dt><dd data-binary>11111111001001111000101101101100</dd></div>
+          <div class="watch-panel__overflow-date" hidden><dt>Clock resolves to:</dt><dd>December 13, 1901</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="globe-section" aria-label="Interactive event globe">
+      <div class="globe-stage">
+        <div class="globe-stage__drift">
+          <div
+            class="earth-sprite"
+            role="img"
+            aria-label="Rotating pixel-art Earth"
+            data-frame="0"
+            style={`background-image: url(${earthSheet.src});`}
+          ></div>
+        </div>
+        <span class="globe-stage__frame" aria-hidden="true"></span>
+        <div class="marker-layer" aria-label="Visible timeline events">
+          {markerSlots.map((slot, index) => (
+            <button
+              class={`event-marker event-marker--${slot}`}
+              type="button"
+              data-marker-slot={index}
+              aria-label={`Open timeline event ${index + 1}`}
+            >
+              <img src={moonIcon.src} alt="" width="84" height="72" />
+            </button>
+          ))}
+        </div>
+        <div class="selected-envelope-notice" aria-hidden="true">
+          <img src={moonIcon.src} alt="" width="84" height="72" />
+        </div>
+        <img class="corruption-art corruption-art--glitch" src={glitch.src} alt="" aria-hidden="true" />
+        <img class="corruption-art corruption-art--skull" src={skull.src} alt="" aria-hidden="true" />
+        <img class="corruption-art corruption-art--monitor" src={monitorCorrupted.src} alt="" aria-hidden="true" />
+      </div>
+    </section>
+
+    <section class="timeline-controls" id="timeline-controls" aria-labelledby="epoch-status">
+      <p class="epoch-status" id="epoch-status" aria-live="polite">
+        Epoch - status: <strong data-epoch-status>stable</strong>
+      </p>
+      <div class="timeline-controls__row">
+        <button class="transport-button" type="button" data-transport aria-label="Play timeline" aria-keyshortcuts="Space">
+          <span aria-hidden="true" data-transport-icon>▶</span>
+          <span data-transport-label>Play</span>
+        </button>
+        <div class="speed-controls" aria-label="Playback speed">
+          {[1, 2, 4, 8].map((speed) => (
+            <button type="button" data-speed={speed} aria-pressed={speed === 1 ? "true" : "false"}>{speed}×</button>
+          ))}
+        </div>
+      </div>
+      <label class="timeline-slider">
+        <span class="sr-only">Timeline event</span>
+        <input type="range" min="0" max={exploreEvents.length - 1} value="0" step="1" data-timeline-slider />
+      </label>
+      <p class="timeline-position" data-timeline-position>Event 1 of {exploreEvents.length}</p>
+    </section>
+  </div>
+</main>
+
+<script>
+  interface TimelineEvent {
+    name: string;
+    date: string;
+    iso: string;
+    yearsBefore: string;
+    description: string;
+    source: string;
+    sourceLabel: string;
+    icon: string;
+  }
+
+  const app = document.querySelector<HTMLElement>("#explore-app");
+
+  if (app) {
+    const events: TimelineEvent[] = JSON.parse(app.dataset.events ?? "[]");
+    const iconMap: Record<string, string> = JSON.parse(app.dataset.iconMap ?? "{}");
+    const markers = [...app.querySelectorAll<HTMLButtonElement>("[data-marker-slot]")];
+    const title = app.querySelector<HTMLElement>("[data-event-title]");
+    const eventDate = app.querySelector<HTMLElement>("[data-event-date]");
+    const eventYears = app.querySelector<HTMLElement>("[data-event-years]");
+    const description = app.querySelector<HTMLElement>("[data-event-description]");
+    const source = app.querySelector<HTMLAnchorElement>("[data-event-source]");
+    const eventIcon = app.querySelector<HTMLImageElement>(".event-panel__icon");
+    const selectedIcon = app.querySelector<HTMLImageElement>(".selected-envelope-notice img");
+    const closeButton = app.querySelector<HTMLButtonElement>(".event-panel__close");
+    const previousButton = app.querySelector<HTMLButtonElement>("[data-previous-event]");
+    const nextButton = app.querySelector<HTMLButtonElement>("[data-next-event]");
+    const utcTime = app.querySelector<HTMLElement>("[data-utc-time]");
+    const pstTime = app.querySelector<HTMLElement>("[data-pst-time]");
+    const unixTime = app.querySelector<HTMLElement>("[data-unix-time]");
+    const binary = app.querySelector<HTMLElement>("[data-binary]");
+    const overflowDate = app.querySelector<HTMLElement>(".watch-panel__overflow-date");
+    const slider = app.querySelector<HTMLInputElement>("[data-timeline-slider]");
+    const position = app.querySelector<HTMLElement>("[data-timeline-position]");
+    const status = app.querySelector<HTMLElement>("[data-epoch-status]");
+    const transport = app.querySelector<HTMLButtonElement>("[data-transport]");
+    const transportIcon = app.querySelector<HTMLElement>("[data-transport-icon]");
+    const transportLabel = app.querySelector<HTMLElement>("[data-transport-label]");
+    const speedButtons = [...app.querySelectorAll<HTMLButtonElement>("[data-speed]")];
+    const earth = app.querySelector<HTMLElement>(".earth-sprite");
+
+    let currentIndex = 0;
+    let selectedIndex: number | null = null;
+    let playing = false;
+    let playbackSpeed = 1;
+    let playbackTimer: number | undefined;
+    let navigationFlashTimer: number | undefined;
+    let navigationFlashFrame: number | undefined;
+
+    const toSigned32 = (value: number) => {
+      if (value > 2_147_483_647) return value - 4_294_967_296;
+      if (value < -2_147_483_648) return value + 4_294_967_296;
+      return value;
+    };
+
+    const toBinary32 = (value: number) =>
+      BigInt.asUintN(32, BigInt(value)).toString(2).padStart(32, "0");
+
+    const formatPacific = (date: Date) =>
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: "America/Los_Angeles",
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+        timeZoneName: "short",
+      }).format(date);
+
+    function updateDetails() {
+      const hasSelection = selectedIndex !== null;
+      app.dataset.selected = String(hasSelection);
+      if (closeButton) closeButton.disabled = !hasSelection;
+
+      if (!hasSelection) {
+        if (title) title.textContent = "Event information";
+        if (eventDate) eventDate.textContent = "Choose a marker";
+        if (eventYears) eventYears.textContent = "—";
+        if (description) {
+          description.textContent = "Select an icon around Earth or press Play to travel through the events that shaped our timestamp-dependent world.";
+        }
+        if (source) {
+          source.textContent = "Select an event to view its source";
+          source.removeAttribute("href");
+          source.removeAttribute("target");
+          source.removeAttribute("rel");
+          source.setAttribute("aria-disabled", "true");
+        }
+        if (eventIcon) eventIcon.src = events.length > 0 ? iconMap[events[0].icon] ?? eventIcon.src : eventIcon.src;
+         if (selectedIcon) selectedIcon.src = events.length > 0 ? iconMap[events[0].icon] ?? selectedIcon.src : selectedIcon.src;
+      } else {
+        const event = events[selectedIndex];
+        if (title) title.textContent = event.name;
+        if (eventDate) eventDate.textContent = event.date;
+        if (eventYears) eventYears.textContent = event.yearsBefore;
+        if (description) description.textContent = event.description;
+        if (source) {
+          source.textContent = event.sourceLabel;
+          source.href = event.source;
+          source.target = "_blank";
+          source.rel = "noreferrer";
+          source.removeAttribute("aria-disabled");
+        }
+        if (eventIcon) eventIcon.src = iconMap[event.icon] ?? eventIcon.src;
+        if (selectedIcon) selectedIcon.src = iconMap[event.icon] ?? selectedIcon.src;
+      }
+
+      if (title) title.dataset.long = String((title.textContent?.length ?? 0) > 34);
+      if (previousButton) previousButton.disabled = currentIndex === 0;
+      if (nextButton) nextButton.disabled = currentIndex === events.length - 1;
+    }
+
+    function updateMarkers() {
+      const windowSize = Math.min(markers.length, events.length);
+      const start = Math.max(0, Math.min(currentIndex - Math.floor(windowSize / 2), events.length - windowSize));
+      const visibleIndices = Array.from({ length: windowSize }, (_, offset) => start + offset);
+
+      markers.forEach((marker, slot) => {
+        const index = visibleIndices[slot];
+        const event = events[index];
+        marker.hidden = !event;
+        if (!event) return;
+        marker.dataset.eventIndex = String(index);
+        marker.classList.toggle("event-marker--active", index === currentIndex);
+        marker.setAttribute("aria-pressed", String(index === currentIndex));
+        marker.setAttribute("aria-label", `${event.name}, ${event.date}`);
+        const img = marker.querySelector("img");
+        if (img) img.src = iconMap[event.icon] ?? img.src;
+      });
+    }
+
+    function updateWatch(event: TimelineEvent, corrupted: boolean) {
+      const date = new Date(event.iso);
+      const actualTimestamp = Math.floor(date.getTime() / 1000);
+      const signedTimestamp = toSigned32(actualTimestamp);
+      if (utcTime) utcTime.textContent = date.toUTCString().replace("GMT", "UTC");
+      if (pstTime) pstTime.textContent = formatPacific(date);
+      if (unixTime) unixTime.textContent = String(signedTimestamp);
+      if (binary) binary.textContent = toBinary32(signedTimestamp);
+      if (overflowDate) overflowDate.hidden = !corrupted;
+    }
+
+    function setCurrent(index: number, revealDetails = false) {
+      currentIndex = Math.max(0, Math.min(events.length - 1, index));
+      if (revealDetails) selectedIndex = currentIndex;
+      const event = events[currentIndex];
+      const corrupted = currentIndex === events.length - 1;
+
+      app.dataset.currentIndex = String(currentIndex);
+      app.dataset.corrupted = String(corrupted);
+      if (slider) slider.value = String(currentIndex);
+      if (position) position.textContent = `Event ${currentIndex + 1} of ${events.length}`;
+      if (status) status.textContent = corrupted ? "corrupted" : "stable";
+
+      if (corrupted) {
+        playing = false;
+        window.clearTimeout(playbackTimer);
+      }
+
+      updateMarkers();
+      updateWatch(event, corrupted);
+      updateDetails();
+      updateTransport();
+      app.dispatchEvent(new CustomEvent("timelinechange", { detail: { currentIndex, corrupted } }));
+    }
+
+    function updateTransport() {
+      const atEnd = currentIndex === events.length - 1;
+      app.dataset.playing = String(playing);
+      if (transportLabel) transportLabel.textContent = atEnd ? "Rewind" : playing ? "Pause" : "Play";
+      if (transportIcon) transportIcon.textContent = atEnd ? "◀" : playing ? "Ⅱ" : "▶";
+      if (transport) {
+        transport.setAttribute("aria-label", atEnd ? "Rewind timeline" : playing ? "Pause timeline" : "Play timeline");
+      }
+    }
+
+    function stopPlayback() {
+      playing = false;
+      window.clearTimeout(playbackTimer);
+      updateTransport();
+    }
+
+    function clearNavigationFlash() {
+      window.clearTimeout(navigationFlashTimer);
+      window.cancelAnimationFrame(navigationFlashFrame);
+      app.dataset.navigationFlash = "false";
+    }
+
+    function flashNavigation() {
+      if (playing || app.dataset.corrupted === "true") return;
+      clearNavigationFlash();
+      navigationFlashFrame = window.requestAnimationFrame(() => {
+        app.dataset.navigationFlash = "true";
+        navigationFlashTimer = window.setTimeout(() => {
+          app.dataset.navigationFlash = "false";
+        }, 760);
+      });
+    }
+
+    function stepTimeline(delta: number) {
+      const nextIndex = Math.max(0, Math.min(events.length - 1, currentIndex + delta));
+      if (nextIndex === currentIndex) return;
+      setCurrent(nextIndex, true);
+      flashNavigation();
+    }
+
+    function scheduleNextEvent() {
+      window.clearTimeout(playbackTimer);
+      if (!playing || currentIndex >= events.length - 1) return;
+      playbackTimer = window.setTimeout(() => {
+        setCurrent(currentIndex + 1, true);
+        if (playing) scheduleNextEvent();
+      }, Math.max(220, 1800 / playbackSpeed));
+    }
+
+    function startPlayback() {
+      if (currentIndex === events.length - 1) {
+        stopPlayback();
+        setCurrent(0, true);
+        return;
+      }
+      selectedIndex = currentIndex;
+      updateDetails();
+      clearNavigationFlash();
+      playing = true;
+      updateTransport();
+      scheduleNextEvent();
+    }
+
+    function togglePlayback() {
+      if (currentIndex === events.length - 1) {
+        startPlayback();
+      } else if (playing) {
+        stopPlayback();
+      } else {
+        startPlayback();
+      }
+    }
+
+    markers.forEach((marker) => {
+      marker.addEventListener("click", () => {
+        const index = Number(marker.dataset.eventIndex);
+        if (!Number.isNaN(index)) setCurrent(index, true);
+      });
+    });
+
+    closeButton?.addEventListener("click", () => {
+      selectedIndex = null;
+      updateMarkers();
+      updateDetails();
+    });
+
+    previousButton?.addEventListener("click", () => stepTimeline(-1));
+    nextButton?.addEventListener("click", () => stepTimeline(1));
+
+    transport?.addEventListener("click", togglePlayback);
+
+    speedButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        playbackSpeed = Number(button.dataset.speed) || 1;
+        speedButtons.forEach((candidate) => {
+          candidate.setAttribute("aria-pressed", String(candidate === button));
+        });
+        if (playing) scheduleNextEvent();
+      });
+    });
+
+    slider?.addEventListener("input", () => {
+      stopPlayback();
+      setCurrent(Number(slider.value), true);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const target = event.target;
+      if (
+        target instanceof Element
+        && target.closest("input, textarea, select, button, a, [contenteditable='true']")
+      ) return;
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepTimeline(-1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        stepTimeline(1);
+      }
+      if ((event.key === " " || event.code === "Space") && !event.repeat) {
+        event.preventDefault();
+        togglePlayback();
+      }
+      if (event.key === "Escape" && selectedIndex !== null) {
+        selectedIndex = null;
+        updateMarkers();
+        updateDetails();
+      }
+    });
+
+    if (earth) {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const corruptSteps = [
+        { delta: 0, delay: 280 },
+        { delta: 0, delay: 190 },
+        { delta: 6, delay: 70 },
+        { delta: 1, delay: 95 },
+        { delta: -4, delay: 145 },
+        { delta: 0, delay: 250 },
+        { delta: 9, delay: 65 },
+        { delta: -3, delay: 90 },
+        { delta: 2, delay: 110 },
+      ];
+      let earthFrame = 0;
+      let corruptStep = 0;
+      let lastFrameAt = performance.now();
+      let wasCorrupted = false;
+
+      const renderFrame = (frame: number) => {
+        earthFrame = Math.max(0, Math.min(93, frame));
+        const column = earthFrame % 10;
+        const row = Math.floor(earthFrame / 10);
+        earth.style.backgroundPosition = `${(column * 100) / 9}% ${(row * 100) / 9}%`;
+        earth.dataset.frame = String(earthFrame);
+      };
+
+      const animateEarth = (now: number) => {
+        const corrupted = app.dataset.corrupted === "true";
+        if (reducedMotion.matches) {
+          renderFrame(corrupted ? 90 : 0);
+          requestAnimationFrame(animateEarth);
+          return;
+        }
+
+        if (corrupted !== wasCorrupted) {
+          lastFrameAt = now;
+          corruptStep = 0;
+          wasCorrupted = corrupted;
+        }
+
+        if (corrupted) {
+          const step = corruptSteps[corruptStep];
+          if (now - lastFrameAt >= step.delay) {
+            renderFrame((earthFrame + step.delta + 94) % 94);
+            corruptStep = (corruptStep + 1) % corruptSteps.length;
+            lastFrameAt = now;
+          }
+        } else if (now - lastFrameAt >= 92) {
+          renderFrame((earthFrame + 1) % 94);
+          lastFrameAt = now;
+        }
+
+        requestAnimationFrame(animateEarth);
+      };
+
+      renderFrame(0);
+      requestAnimationFrame(animateEarth);
+    }
+
+    setCurrent(0);
+  }
+</script>

@@ -1,0 +1,10 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.article {
+  background: url('../../assets/s03g5/exhibit-assets/about_bg.webp') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  padding: 0 !important;
+}

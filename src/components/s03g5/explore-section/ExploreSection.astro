@@ -1,0 +1,22 @@
+---
+import Navbar from "../navbar/Navbar.astro";
+
+interface Props {
+  content?: string;
+}
+
+const { content = "Coming soon..." } = Astro.props;
+---
+
+<div class="explore-section">
+    <Navbar />
+    <h2>Explore</h2>
+    <p>{content}</p>
+    <slot />
+</div>
+
+<style>
+    .explore-section {
+        padding: 2rem;
+    }
+</style>

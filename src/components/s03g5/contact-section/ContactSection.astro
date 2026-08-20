@@ -1,0 +1,121 @@
+---
+import logo from "../../../assets/s03g5/exhibit-assets/y2k38_logo.webp";
+import Navbar from "../navbar/Navbar.astro";
+import bg from "../../../assets/s03g5/stable_earth/stable_earth.webp";
+---
+
+<div class="contact-section" style={`background-image: url(${bg.src});`}>
+    <Navbar />
+    <section class="contact__content">
+        <img src={logo.src} alt="Y2K38 Timeline" class="contact__logo" />
+        <div>
+            <h1 class="crew-title">WDA Space Crew</h1>
+
+            <ul class="members">
+                <li class="member">
+                    <span class="member-name">Bantillo, Airon Matthew</span>
+                    <a class="member-email" href="mailto:airon_bantillo@dlsu.edu.ph">airon_bantillo@dlsu.edu.ph</a>
+                </li>
+                <li class="member">
+                    <span class="member-name">Chavez, Max Benedict</span>
+                    <a class="member-email" href="mailto:max_chavez@dlsu.edu.ph">max_chavez@dlsu.edu.ph</a>
+                </li>
+                <li class="member">
+                    <span class="member-name">Chiu, Kristopher Lance</span>
+                    <a class="member-email" href="mailto:kristopher_chiu@dlsu.edu.ph">kristopher_chiu@dlsu.edu.ph</a>
+                </li>
+                <li class="member">
+                    <span class="member-name">Ponce, Jean Rondel R.</span>
+                    <a class="member-email" href="mailto:jean_ponce@dlsu.edu.ph">jean_ponce@dlsu.edu.ph</a>
+                </li>
+                <li class="member">
+                    <span class="member-name">Santiago, Juan Ramon</span>
+                    <a class="member-email" href="mailto:juan_ramon_santiago@dlsu.edu.ph">juan_ramon_santiago@dlsu.edu.ph</a>
+                </li>
+            </ul>
+        </div>
+
+    </section>
+</div>
+
+<style>
+
+    @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap");
+
+    .contact-section {
+        width: 100%;
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        background: rgba(0,0,0,0.35);
+        background-position: center top;
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding-top: 0rem;
+    }
+
+    .contact__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 2rem 1.75rem 3rem;
+        margin-top: 0.5rem;
+        font-family: 'Pixelify Sans', system-ui, sans-serif;
+    }
+
+    .contact__logo {
+        width: 400px;
+        max-width: 85%;
+        height: auto;
+        margin: 0.5rem auto 0.85rem auto;
+        image-rendering: pixelated;
+        animation: contact-logo-float 3s ease-in-out infinite;
+    }
+
+    @keyframes contact-logo-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    .crew-title {
+        display: block !important;
+        color: #FEFB62;
+        font-size: 2.4rem;
+        margin: 0.20rem 0 0.5rem 0;
+        letter-spacing: 1px;
+    }
+
+    .members {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.8rem;
+    }
+
+    .member {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .member-name {
+        color: #74d0f8;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+    .member-email {
+        color: #ffffff;
+        font-size: 0.9rem;
+        text-decoration: none;
+        opacity: 0.9;
+    }
+
+    .member-email:hover {
+        text-decoration: underline;
+    }
+
+</style>
