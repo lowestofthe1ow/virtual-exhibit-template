@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildPublicAssetMap } from '../integrate/import-exhibit.mjs';
 
 const CLI = fileURLToPath(new URL('../integrate/import-exhibit.mjs', import.meta.url));
 
@@ -242,6 +243,53 @@ test('a staged global.css that differs from the umbrella copy is kept', () => {
     existsSync(join(cwd, 'src', 'styles', 's01g1', 'global.css')),
     'a genuinely customized global.css must survive for the runbook\'s style-scoping step',
   );
+});
+
+// --- public-asset rename map sourced from optimizer results (defect: stale
+// extension survives rewriting) ---
+//
+// buildPublicAssetMap is a pure function, importable and callable directly
+// without running the CLI body (that body is gated behind an
+// import.meta.url guard specifically so this works) and without invoking
+// any real image/video/model encoder: publicResults below are hand-built
+// objects shaped like optimizeTree's own return values, not the output of
+// an actual conversion.
+test('buildPublicAssetMap sources an original -> final rename map from optimizeTree-shaped results', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'public-asset-map-'));
+  mkdirSync(join(dir, 'imgs'), { recursive: true });
+
+  // The final on-disk state, as if optimizeTree already ran: a successful
+  // conversion leaves only the new name (the original was deleted); a
+  // skipped or failed one leaves the original name in place untouched; a
+  // file the optimizer never even considers a candidate is untouched too.
+  writeFileSync(join(dir, 'Clock.webp'), 'webp-bytes');
+  writeFileSync(join(dir, 'imgs', 'tile.webp'), 'webp-bytes');
+  writeFileSync(join(dir, 'skipped.png'), 'png-bytes');
+  writeFileSync(join(dir, 'failed.png'), 'png-bytes');
+  writeFileSync(join(dir, 'model.glb'), 'glb-bytes');
+
+  const publicResults = [
+    { from: join(dir, 'Clock.png'), to: join(dir, 'Clock.webp') },
+    { from: join(dir, 'imgs', 'tile.png'), to: join(dir, 'imgs', 'tile.webp') },
+    { from: join(dir, 'skipped.png'), to: join(dir, 'skipped.png'), skipped: 'no gain' },
+    // A failed conversion still carries the never-realized planned target in
+    // `to` (optimizeTree's own catch-block behavior) — the disk still holds
+    // the ORIGINAL file, so this must not be trusted as a real rename.
+    { from: join(dir, 'failed.png'), to: join(dir, 'failed.webp'), failed: 'encoder exploded' },
+  ];
+
+  const map = buildPublicAssetMap(dir, publicResults);
+
+  assert.equal(map.get('Clock.png'), 'Clock.webp', 'a successful conversion maps original -> final');
+  assert.equal(map.has('Clock.webp'), false, 'the stale self-mapped final-name entry must not linger');
+  assert.equal(map.get('imgs/tile.png'), 'imgs/tile.webp', 'a nested successful conversion is mapped too');
+  assert.equal(map.get('skipped.png'), 'skipped.png', 'a skipped conversion maps to itself');
+  assert.equal(
+    map.get('failed.png'), 'failed.png',
+    'a failed conversion maps to itself, not to the never-realized planned target',
+  );
+  assert.equal(map.has('failed.webp'), false, 'the never-realized planned target is never a map key');
+  assert.equal(map.get('model.glb'), 'model.glb', 'a file the optimizer never touched maps to itself');
 });
 
 test('a staged global.css that differs from the umbrella copy only by CRLF line endings is treated as identical and dropped', () => {

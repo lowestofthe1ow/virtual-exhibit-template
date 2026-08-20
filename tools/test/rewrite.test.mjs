@@ -243,6 +243,64 @@ test('a sourceBase that is only a hyphen-prefix of the actual base is not splice
   assert.equal(out, src);
 });
 
+// --- publicAssets as an original -> final rename map (defect 3) ---
+//
+// The media optimizer converts-and-deletes public/ originals (Clock.png ->
+// Clock.webp) before rewriteFile ever runs. publicAssets must therefore be
+// able to carry that rename: the name to search for in source text (the
+// original) can differ from the name to write into the rewritten reference
+// (the final, on-disk name).
+
+test('a Map rename is applied to the root-absolute form: search old extension, write new', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: new Map([['Clock.png', 'Clock.webp']]),
+  });
+  assert.equal(out, '<img src="/virtual-exhibit-template/s40g1/Clock.webp">');
+});
+
+test('the same Map rename is applied to the ${base}-prefixed form without doubling the umbrella base', () => {
+  const out = rewriteFile('href={`${base}Clock.png`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: new Map([['Clock.png', 'Clock.webp']]),
+  });
+  assert.equal(out, 'href={`${base}s40g1/Clock.webp`}');
+  assert.doesNotMatch(out, /virtual-exhibit-template/);
+});
+
+test('an asset that maps to itself is re-pointed but keeps its extension', () => {
+  const out = rewriteFile('<img src="/model.glb">', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: new Map([['model.glb', 'model.glb']]),
+  });
+  assert.equal(out, '<img src="/virtual-exhibit-template/s40g1/model.glb">');
+});
+
+test('a nested (subdirectory) name is renamed correctly', () => {
+  const out = rewriteFile('<img src="/imgs/tile.png">', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: new Map([['imgs/tile.png', 'imgs/tile.webp']]),
+  });
+  assert.equal(out, '<img src="/virtual-exhibit-template/s40g1/imgs/tile.webp">');
+});
+
+test('a plain array still works exactly as before (backward-compat guard)', () => {
+  const out = rewriteFile('<img src="/Clock.png"> and href={`${base}Clock.png`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: ['Clock.png'],
+  });
+  assert.match(out, /src="\/virtual-exhibit-template\/s40g1\/Clock\.png"/);
+  assert.match(out, /\$\{base\}s40g1\/Clock\.png/);
+});
+
+test('the trailing-boundary protection still holds when publicAssets renames the extension', () => {
+  const out = rewriteFile('<img src="/logo.png.bak">', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: new Map([['logo.png', 'logo.webp']]),
+  });
+  assert.equal(out, '<img src="/logo.png.bak">');
+});
+
 test('normalizeBase strips leading and trailing slashes and treats "/" and "" as no base', () => {
   assert.equal(normalizeBase('/CSARCH2-Group-6/'), 'CSARCH2-Group-6');
   assert.equal(normalizeBase('virtual-exhibit-template'), 'virtual-exhibit-template');

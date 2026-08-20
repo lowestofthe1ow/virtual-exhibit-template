@@ -89,24 +89,40 @@ export function rewriteFile(
   }
 
   // Files served from public/ move to public/<slug>/, so both the base-relative
-  // and the root-absolute reference shapes need the slug inserted.
-  for (const asset of publicAssets) {
-    const escaped = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // and the root-absolute reference shapes need the slug inserted. The media
+  // optimizer may ALSO have renamed the file on disk before this ever runs
+  // (Clock.png -> Clock.webp, original deleted) — so the name to search for
+  // in the source text (what the exhibit's own code still says) and the name
+  // to write into the rewritten reference (what actually exists on disk) can
+  // differ. publicAssets is therefore a mapping of original name -> final
+  // name, not just a list: a Map is canonical; a plain array is also
+  // accepted for backward compatibility and treated as an identity mapping
+  // (every name maps to itself, i.e. "the optimizer left it alone"). Names
+  // may include a subdirectory ("S04_Group3_images/grass-tile.png"), which
+  // needs no special handling here since the forward slash is not a regex
+  // metacharacter.
+  const assetEntries = publicAssets instanceof Map
+    ? publicAssets
+    : publicAssets.map((name) => [name, name]);
+  for (const [original, final] of assetEntries) {
+    const escaped = original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     // Same optional-slash blind spot as routes above: ${base}/logo.png and
-    // ${base}logo.png both occur in the wild.
+    // ${base}logo.png both occur in the wild. Replaced via a function (not
+    // a "$1$2..." template) so that a `final` name containing a literal
+    // "$" can never be misread as a backreference.
     out = out.replace(
       new RegExp('(\\$\\{base[A-Za-z]*\\})(/?)(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      `$1$2${slug}/$3`,
+      (match, baseLit, slash) => `${baseLit}${slash}${slug}/${final}`,
     );
     // The root-absolute form ("/Clock.png") resolves at the browser root, so
     // it needs both the umbrella site's own base AND the slug spliced in:
-    // "/Clock.png" -> "/virtual-exhibit-template/s40g1/Clock.png". This is
+    // "/Clock.png" -> "/virtual-exhibit-template/s40g1/Clock.webp". This is
     // unlike the ${base}-prefixed form just above, whose ${base} already
     // supplies the umbrella base at runtime - adding it there too would
     // double it, so only this root-absolute branch gets umbrellaBase.
     out = out.replace(
       new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      `$1/${umbrellaBase}/${slug}/$2`,
+      (match, quote) => `${quote}/${umbrellaBase}/${slug}/${final}`,
     );
   }
 
