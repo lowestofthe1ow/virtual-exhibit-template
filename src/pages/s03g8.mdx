@@ -1,0 +1,270 @@
+---
+layout: ../layouts/ExhibitLayout.astro
+title: "The Chiplet Revolution: How AMD Solved the Cost and Scaling Problem"
+description: "How AMD's chiplet design overcame the reticle limit and defect cost crisis."
+author: "Colcol, Massimo; Dicreto, Eirnan; Ong, Kyle; Salvador, Miguel; Tanchiao, Manuel"
+readingTime: "12 minutes"
+---
+
+import '../styles/s03g8/S03_Group8_physics.css';
+import '../styles/s03g8/S03_Group8_before.css';
+import '../styles/s03g8/S03_Group8_interactive.css';
+import '../styles/s03g8/S03_Group8_metrics.css';
+import '../styles/s03g8/S03_Group8_overhaul.css';
+import '../styles/s03g8/S03_Group8_intro.css';
+
+import PhysicsWall from '../components/s03g8/S03_Group8_PhysicsWall.astro';
+import BeforeAfter from '../components/s03g8/S03_Group8_BeforeAfter.astro';
+import ChipSim from '../components/s03g8/S03_Group8_ChipSim.jsx';
+import Metrics from '../components/s03g8/S03_Group8_Metrics.astro';
+import ImageGallery from '../components/s03g8/S03_Group8_ImageGallery.jsx';
+
+export const chipletBgVideos = import.meta.glob('../assets/chiplet-matrix-bg.webm', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+export const chipletBgVideo = Object.values(chipletBgVideos)[0];
+
+export const globalBgVideos = import.meta.glob('../assets/s03g8/matrix-bg.mp4', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+export const globalBgVideo = Object.values(globalBgVideos)[0];
+
+export const dieShotPhotos = [
+  {
+    id: 'rome-delidded',
+    title: 'AMD EPYC 7702 Package',
+    tagline: 'A delidded Rome-era package shows the central I/O die surrounded by eight smaller compute dies.',
+    author: 'Fritzchens Fritz / Wikimedia Commons',
+    year: 2019,
+    img: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/AMD_Epyc_7702_delidded.jpg?width=1280',
+    url: 'https://commons.wikimedia.org/wiki/File:AMD_Epyc_7702_delidded.jpg',
+  },
+  {
+    id: 'rome-iod-close',
+    title: 'Rome I/O Die Close-Up',
+    tagline: 'The separate I/O die centralizes memory and PCIe connections instead of embedding them in every compute die.',
+    author: 'Fritzchens Fritz / Wikimedia Commons',
+    year: 2019,
+    img: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/AMD_EPYC_Rome_12nm_IO_die_shot_close-up_1.jpg?width=1280',
+    url: 'https://commons.wikimedia.org/wiki/File:AMD_EPYC_Rome_12nm_IO_die_shot_close-up_1.jpg',
+  },
+  {
+    id: 'rome-iod-metal',
+    title: 'Rome I/O Die Top Metal',
+    tagline: 'A microscope view of the I/O die reveals the dense routing layer that ties the package together.',
+    author: 'Fritzchens Fritz / Wikimedia Commons',
+    year: 2019,
+    img: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/AMD_EPYC_Rome_12nm_IO_die_shot_3.jpg?width=1280',
+    url: 'https://commons.wikimedia.org/wiki/File:AMD_EPYC_Rome_12nm_IO_die_shot_3.jpg',
+  },
+];
+
+# The Chiplet Revolution
+
+<span className="chip-rev-exhibit" hidden></span>
+
+<div className="chip-rev-global-bg" aria-hidden="true">
+  {globalBgVideo && (
+    <video
+      className="chip-rev-global-bg__video"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+    >
+      <source src={globalBgVideo} type="video/mp4" />
+    </video>
+  )}
+  <div className="chip-rev-global-bg__overlay"></div>
+</div>
+
+
+<section className="chip-rev-hero" aria-labelledby="chip-rev-hero-title">
+  {chipletBgVideo && (
+    <video
+      className="chip-rev-hero__video"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-hidden="true"
+    >
+      <source src={chipletBgVideo} type="video/webm" />
+    </video>
+  )}
+
+  <div className="chip-rev-hero__matrix" aria-hidden="true"></div>
+
+  <div className="chip-rev-hero__content">
+    <p className="chip-rev-kicker">{"CSARCH2 / Group 8 Exhibit"}</p>
+    <div id="chip-rev-hero-title" className="chip-rev-hero__title" role="heading" aria-level="1">
+      {"The Chiplet Revolution"}
+    </div>
+    <p className="chip-rev-hero__dek">
+      {"AMD stopped treating a processor as one giant slab of silicon. By breaking the design into smaller dies and reconnecting them with a fast on-package fabric, the company changed the cost curve for high-core-count CPUs."}
+    </p>
+    <div className="chip-rev-hero__telemetry" aria-label="Chiplet exhibit highlights">
+      <span><strong>64</strong> cores per Rome socket</span>
+      <span><strong>8</strong> compute chiplets</span>
+      <span><strong>1</strong> central I/O die</span>
+    </div>
+  </div>
+</section>
+
+<p className="chip-rev-lede">
+  {"This exhibit follows the economic problem that made giant monolithic dies harder to scale, then tracks how AMD's Zen and EPYC designs used chiplets, Infinity Fabric, and a separate I/O die to keep adding cores without betting the whole processor on one perfect rectangle of silicon."}
+</p>
+
+## The Problem: The Physics Wall
+
+The bigger a die becomes, the more surface area it exposes to random manufacturing defects. A defect that lands on a single monolithic CPU die can scrap the entire part, so high-performance processors eventually run into a cost wall as much as a physics wall.
+
+<PhysicsWall />
+
+## The Solution: Before vs. After
+
+Chiplets change the unit of failure. A flawed small die can be discarded while the known-good dies from the same wafer still have value, which lets designers compose a large processor from parts that are easier to manufacture.
+
+<BeforeAfter />
+
+## Infinity Fabric: The Highway Between Chiplets
+
+AMD's chiplet strategy only works if the smaller dies can talk like one processor. Infinity Fabric is the on-package and system-level interconnect that carries coherent traffic between CPU cores, chiplets, memory controllers, PCIe, and sockets. In the first EPYC generation, AMD described Infinity Fabric as the coherent interconnect for two EPYC CPUs in a dual-socket system. In Rome, NASA's HECC overview describes Infinity Fabric connecting cores, CCXs, CCDs, the I/O die, main memory, PCIe, and the second socket.
+
+Infinity Fabric operates at speeds tied to the memory clock, delivering low-latency, high-bandwidth communication between components. In Rome, each CCD connects to the central I/O die through dedicated Infinity Fabric links, giving the package a star topology rather than the more distributed layout of Naples. This architecture reduced worst-case core-to-memory latency and simplified NUMA balancing for operating systems.
+
+<div className="chip-rev-fabric-grid">
+  <article className="chip-rev-glass-panel">
+    <span className="chip-rev-panel-label">DATA PATH</span>
+    <h3>Compute dies stay small</h3>
+    <p>
+      {"The CPU cores live in Core Complex Dies, or CCDs. These dies can use the leading-edge process where density and power matter most, while the interconnect lets AMD add more CCDs for bigger products."}
+    </p>
+  </article>
+  <article className="chip-rev-glass-panel">
+    <span className="chip-rev-panel-label">CONTROL HUB</span>
+    <h3>The I/O die centralizes the package</h3>
+    <p>
+      {"Rome moved memory controllers and PCIe into a common I/O die. That split reduced duplication and made latency more consistent than placing separate memory controllers beside every compute die."}
+    </p>
+  </article>
+  <article className="chip-rev-glass-panel">
+    <span className="chip-rev-panel-label">SYSTEM SCALE</span>
+    <h3>The fabric extends beyond one die</h3>
+    <p>
+      {"The same architectural idea scales from communication inside a socket to links between sockets, letting chiplet-based CPUs behave like complete server processors instead of loose collections of parts."}
+    </p>
+  </article>
+</div>
+
+## Naples to Rome: The Architectural Break
+
+First-generation EPYC, code-named Naples, already pushed server CPUs with a 32-core SoC design, eight memory channels, 128 lanes of PCIe 3.0, and Infinity Fabric for dual-socket coherence. It proved AMD could compete in servers, but it still carried more I/O and memory-controller duplication across its multi-die arrangement.
+
+Rome, the second-generation EPYC 7002 platform, made the bigger break. AMD moved to Zen 2 cores, up to 64 cores and 128 threads, 128 lanes of PCIe 4.0, and a hybrid multi-die structure: eight 7 nm CCDs around one larger I/O die. AMD's own Zen architecture page frames chiplets as the scalable alternative to building larger monolithic dies.
+
+<div className="chip-rev-timeline" aria-label="Naples to Rome comparison">
+  <article>
+    <span>2017 / EPYC 7001</span>
+    <h3>Naples</h3>
+    <p>{"Up to 32 Zen cores, eight memory channels, 128 PCIe 3.0 lanes, and Infinity Fabric linking EPYC CPUs in dual-socket systems."}</p>
+  </article>
+  <article>
+    <span>2019 / EPYC 7002</span>
+    <h3>Rome</h3>
+    <p>{"Up to 64 Zen 2 cores, PCIe 4.0, eight CCDs, one centralized I/O die, and a clearer separation between compute silicon and platform I/O."}</p>
+  </article>
+</div>
+
+## Try It Yourself: The Simulator
+
+Use the same wafer model under both architectures. As core count and defect density rise, the monolithic die becomes larger and wastes more wafer value when yield falls. The chiplet model keeps the simulated die smaller, so the wasted capital grows more slowly.
+
+<ChipSim client:load />
+
+## Metrics Dashboard
+
+<Metrics />
+
+These three numbers describe the same shift from different angles. By splitting designs into chiplets manufactured at high yield, AMD reduced estimated per-processor manufacturing costs by over 40% compared to a hypothetical monolithic die of equivalent core count. Yield Improvement Rate captures how many more usable chips can come out of a wafer once the design is divided into chiplets instead of staying one giant die. Die Cost Reduction follows directly from that: smaller dies are cheaper to fabricate at high yield, so the cost per functional core drops even as total core count goes up.
+
+Scalability Factor is what all of that buys AMD in practice. Because chiplets are stitched together with high-speed interconnects rather than fused into one continuous die, AMD is no longer limited by the economics of one ever-larger die. Instead of trying to make one enormous die reliable, AMD links smaller, reliably manufactured ones and lets core counts climb.
+
+## Die Shot Gallery
+
+The package photos make the architecture visible. Rome's physical layout separates the large I/O die from the smaller compute chiplets, matching the hierarchy described in NASA's Rome processor overview: CCDs connect to memory, I/O, and each other through the centralized I/O die.
+
+<ImageGallery photos={dieShotPhotos} variant="silicon" client:load />
+
+## Key Terms
+
+<dl className="chip-rev-terms">
+  <div>
+    <dt>Chiplet</dt>
+    <dd>A small functional die designed to be combined with other dies in the same processor package.</dd>
+  </div>
+  <div>
+    <dt>CCD</dt>
+    <dd>Core Complex Die. In Rome, each CCD contains CPU core complexes and connects back to the I/O die.</dd>
+  </div>
+  <div>
+    <dt>IOD</dt>
+    <dd>I/O die. The centralized die that carries memory controllers, PCIe connectivity, and package-level routing.</dd>
+  </div>
+  <div>
+    <dt>Infinity Fabric</dt>
+    <dd>AMD's coherent interconnect for moving data among cores, chiplets, memory, I/O, and sockets.</dd>
+  </div>
+  <div>
+    <dt>Reticle limit</dt>
+    <dd>The maximum area a lithography exposure can print at once, creating a practical ceiling for single-die scaling.</dd>
+  </div>
+  <div>
+    <dt>Known-good die</dt>
+    <dd>A manufactured die that passes testing and can be used in a package instead of being scrapped.</dd>
+  </div>
+  <div>
+    <dt>CCX (Core Complex)</dt>
+    <dd>A cluster of CPU cores sharing an L3 cache. Multiple CCXs make up a CCD in AMD's Zen architecture.</dd>
+  </div>
+  <div>
+    <dt>Defect Density</dt>
+    <dd>The average number of fatal manufacturing defects per unit area on a wafer, typically measured in defects per cm².</dd>
+  </div>
+  <div>
+    <dt>Yield</dt>
+    <dd>The percentage of manufactured dies that pass testing and are functional. Higher yield means less wasted silicon and lower cost per working chip.</dd>
+  </div>
+</dl>
+
+## References
+
+1. Guru3D. (2019). *Tech preview: AMD Ryzen 3000 - 7nm Zen 2 (Page 3)*. https://www.guru3d.com/review/tech-preview-amd-ryzen-with-ryzen-3950x/page-3/
+
+2. The Register. (2024). *AMD credits ditching monolithic DC chips for Epyc GHG cuts*. https://www.theregister.com/2024/04/23/amd_chiplets_ghg/
+
+3. TokenRing AI. (2026). *The Chiplet Revolution: How Heterogeneous Integration is Scaling AI Beyond Monolithic Limits*. Wedbush Investor. https://investor.wedbush.com/wedbush/article/tokenring-2026-1-2-the-chiplet-revolution-how-heterogeneous-integration-is-scaling-ai-beyond-monolithic-limits
+
+4. Broekhuijsen, N. (2021). *AMD Patents Chiplet Design To Build Colossal GPUs*. Tom's Hardware. https://www.tomshardware.com/news/amd-gpu-chiplet-patent
+
+5. OC3D. (2018). *AMD Reveals Transformative "Chiplet" Design for Zen 2 EPYC Processors*. Overclock3D. https://overclock3d.net/news/cpu_mainboard/amd-reveals-transformative-chiplet-design-for-zen-2-epyc-processors/
+
+6. AMD. (n.d.). *AMD "Zen" Core Architecture*. https://www.amd.com/en/technologies/zen-core.html
+
+7. AMD. (n.d.). *AMD EPYC™ 7002 Series Processors*. https://www.amd.com/en/products/processors/server/epyc/7002-series.html
+
+8. Advanced Micro Devices, Inc. (2019, August 7). *2nd Gen AMD EPYC™ Processors Set New Standard for the Modern Datacenter with Record-Breaking Performance and Significant TCO Savings*. https://ir.amd.com/news-events/press-releases/detail/904/2nd-gen-amd-epyc-processors-set-new-standard-for-the-modern-datacenter-with-record-breaking-performance-and-significant-tco-savings
+
+9. Advanced Micro Devices, Inc. (2017, May 16). *AMD Raises Expectations for Server Performance, Unveils EPYC Processor Brand for the Datacenter*. https://ir.amd.com/news-events/press-releases/detail/766/amd-raises-expectations-for-server-performance-unveils-epyc-processor-brand-for-the-datacenter
+
+10. NASA HECC. (n.d.). *AMD Rome Processors – HECC Knowledge Base*. https://www.nas.nasa.gov/hecc/support/kb/entry/658
+
+11. Wikimedia Commons. (2019, November 23). *File:AMD EPYC Rome 12nm IO die shot close-up 1.jpg*. https://commons.wikimedia.org/wiki/File:AMD_EPYC_Rome_12nm_IO_die_shot_close-up_1.jpg

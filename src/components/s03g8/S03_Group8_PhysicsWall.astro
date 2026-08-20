@@ -1,0 +1,112 @@
+---
+import "../../styles/s03g8/S03_Group8_physics.css";
+---
+
+<section class="physics-wall-section" aria-labelledby="physics-wall-title">
+    <!-- MAIN: THE PHYSICS WALL CARD -->
+    <div class="physics-wall-card">
+        <div class="physics-wall-card-header">
+            <h2 id="physics-wall-title" class="physics-wall-title">
+                THE PHYSICS WALL
+            </h2>
+        </div>
+
+        <div class="physics-wall-content">
+            <!-- LEFT: EXPLANATION TEXT -->
+            <article class="physics-wall-copy">
+                <span class="physics-wall-alert">CRITICAL LIMIT REACHED</span>
+
+                <h3 class="physics-wall-topic">
+                    800mm² Reticle Limit &amp; Defect Density
+                </h3>
+
+                <p class="physics-wall-description">
+                    Moore's Law demanded more transistors, but the lithography
+                    machines hit a hard physical ceiling: the 800mm² reticle
+                    limit. Lenses could only project light onto an area so
+                    large. As monolithic dies grew to fill this entire printable
+                    space, they encountered a devastating statistical reality:
+                    defect density.
+                </p>
+
+                <p class="physics-wall-description">
+                    In a cleanroom, a single microscopic speck of dust is
+                    catastrophic. When your entire chip relies on one massive
+                    piece of silicon, one defect destroys the entire unit,
+                    destroying yield rates and rendering the manufacturing
+                    process unprofitable. Today's most advanced nodes push
+                    this even further: public estimates place a leading-edge
+                    300mm wafer at about $17,000, meaning a failed
+                    near-reticle-class chip can waste far more than the
+                    $10,000+ figures seen on older process nodes.
+                </p>
+
+                <p class="physics-wall-description">
+                    The 800mm² ceiling comes from the projection optics in
+                    ASML's lithography systems. The lens can only expose a fixed
+                    field size onto the wafer in a single pass, roughly 26 ×
+                    33mm. Any die that exceeds this reticle area cannot be
+                    printed without stitching multiple exposures, a process so
+                    costly and error-prone that it is impractical for volume
+                    production.
+                </p>
+
+                <p class="physics-wall-description">
+                    The financial stakes were already enormous back in 2015.
+                    At the 16nm node, a single 300mm wafer cost approximately
+                    $8,000 to process. A monolithic die approaching the
+                    reticle limit yielded so few good parts that each
+                    scrapped die wasted thousands of dollars in silicon, fab
+                    time, and lost revenue, and as the paragraph above
+                    shows, that problem has only gotten more expensive on
+                    newer nodes.
+                </p>
+
+                <cite class="physics-wall-cite">
+                    Sources: ASML lithography field-size specifications;
+                    industry 300mm wafer cost estimates (2019–2023).
+                </cite>
+
+                <p class="physics-wall-transition">
+                    These constraints drove AMD to abandon the monolithic
+                    approach entirely, the solution was to stop building one
+                    large die and start composing many small ones.
+                </p>
+            </article>
+
+            <!-- RIGHT: MONOLITHIC FAILURE VISUAL -->
+            <figure class="physics-wall-monitor">
+                <div class="physics-wall-monitor-header">
+                    <span class="physics-wall-monitor-code">
+                        SIM: MONOLITHIC_FAILURE
+                    </span>
+                    <span class="physics-wall-monitor-status">
+                        STATUS: CRITICAL
+                    </span>
+                </div>
+
+                <!-- Reticle wrapper: outer = 800mm² limit, inner = actual die -->
+                <div class="physics-wall-reticle">
+                    <span class="physics-wall-reticle-label"
+                        >800mm² RETICLE LIMIT</span
+                    >
+
+                    <div class="physics-wall-die">
+                        <span class="physics-wall-defect-dot"></span>
+                        <span class="physics-wall-defect-text">DEFECT</span>
+                    </div>
+                </div>
+
+                <figcaption class="physics-wall-monitor-footer">
+                    <span class="physics-wall-yield">YIELD: 0%</span>
+                    <span class="physics-wall-cost-note"
+                        >2015: $8,000 WAFER → $0 RETURNED</span
+                    >
+                    <span class="physics-wall-failure-note">
+                        1 PARTICLE = 1 DEAD DIE
+                    </span>
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+</section>

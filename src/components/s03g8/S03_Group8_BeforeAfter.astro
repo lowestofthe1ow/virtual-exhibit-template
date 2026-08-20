@@ -1,0 +1,186 @@
+<section class="before-after-section">
+    <!-- HISTORICAL CONTEXT: WHY 2015 -->
+    <div class="historical-note">
+        <span class="year-badge">⚠️ 2015</span>
+        <p>
+            At 14nm, the cost per mm² of a monolithic die skyrocketed. TSMC's
+            16nm FinFET wafers cost ~$8,000; a single defect on an 800mm² die
+            meant throwing away a <strong>$10,000+</strong> chip. The industry was
+            bleeding money, and Moore's Law was hitting a brick wall.
+        </p>
+    </div>
+
+    <!-- TWO-COLUMN COMPARISON -->
+    <div class="before-after-grid">
+        <!-- LEFT: BEFORE MONOLITHIC -->
+        <div class="panel panel-before">
+            <div class="panel-header">
+                <span class="panel-label">BEFORE: MONOLITHIC</span>
+                <span class="badge badge--risk">⚠️ High Risk</span>
+            </div>
+
+            <div class="die-visual">
+                <span class="die-x">✕</span>
+                <span class="die-dot"></span>
+                <span class="die-label">800mm²</span>
+            </div>
+
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-key">Silicon Area</span>
+                    <span class="stat-value">800mm²</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-key">Defects</span>
+                    <span class="stat-value stat-value--danger">1 Particle</span
+                    >
+                </div>
+                <div class="stat-row">
+                    <span class="stat-key">Net Functional Yield</span>
+                    <span class="stat-value stat-value--danger">0% (Scrap)</span
+                    >
+                </div>
+                <div class="stat-row cost-row">
+                    <span class="stat-key">Cost per Good Die</span>
+                    <span class="stat-value stat-value--danger">~$12,500</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: AFTER CHIPLETS -->
+        <div class="panel panel-after">
+            <div class="panel-header">
+                <span class="panel-label">AFTER: CHIPLETS</span>
+                <span class="badge badge--yield">✅ High Yield</span>
+            </div>
+
+            <div class="chiplet-grid">
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip chip--defective"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+                <div class="chip"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-key">Silicon Area</span>
+                    <span class="stat-value">16 × 50mm²</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-key">Defects</span>
+                    <span class="stat-value stat-value--danger">1 Particle</span
+                    >
+                </div>
+                <div class="stat-row">
+                    <span class="stat-key">Net Functional Yield</span>
+                    <span class="stat-value stat-value--success"
+                        >93.75% (15/16 Kept)</span
+                    >
+                </div>
+                <div class="stat-row cost-row">
+                    <span class="stat-key">Cost per Good Die</span>
+                    <span class="stat-value stat-value--success">~$3,200</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- COST COMPARISON CALLOUT -->
+    <div class="cost-comparison">
+        <div class="cost-item">
+            <span class="cost-label">Monolithic Cost per Good Die</span>
+            <span class="cost-value danger">~$12,500</span>
+        </div>
+        <div class="cost-arrow">→</div>
+        <div class="cost-item">
+            <span class="cost-label">Chiplet Cost per Good Die</span>
+            <span class="cost-value success">~$3,200</span>
+        </div>
+        <span class="cost-savings">74% savings</span>
+    </div>
+
+    <!-- YIELD FORMULA -->
+    <div class="formula-box">
+        <span class="formula-label"
+            >Yield = (1 + (Defects × Area) / α)<sup>−α</sup></span
+        >
+        <span class="formula-explanation"
+            >As die area increases, yield drops exponentially</span
+        >
+    </div>
+
+    <!-- AMD CHIPLET TIMELINE -->
+    <div class="chiplet-timeline">
+        <span class="timeline-title">AMD's Chiplet Evolution</span>
+        <div class="timeline-item">
+            <span class="timeline-year">2017</span>
+            <span class="timeline-event">Zen 1 EPYC</span>
+            <span class="timeline-detail">4 chiplets • 14nm</span>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-year">2019</span>
+            <span class="timeline-event">Zen 2 Rome</span>
+            <span class="timeline-detail">8 chiplets • 7nm + 14nm I/O</span>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-year">2021</span>
+            <span class="timeline-event">Zen 3 Milan</span>
+            <span class="timeline-detail"
+                >8 chiplets • 7nm + unified L3 cache</span
+            >
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-year">2023</span>
+            <span class="timeline-event">Zen 4 Genoa</span>
+            <span class="timeline-detail">12 chiplets • 5nm + 6nm I/O</span>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-year">2025</span>
+            <span class="timeline-event">MI400 APU</span>
+            <span class="timeline-detail"
+                >CPU + GPU chiplets • 3D packaging</span
+            >
+        </div>
+    </div>
+
+    <!-- EXPANDED EXPLANATION -->
+    <div class="explanation">
+        <p>
+            The numbers above tell the whole story. A single 800mm² monolithic
+            die has nowhere to hide a defect; one particle anywhere on the
+            silicon scraps the entire chip, dropping yield to 0%. In 2015, with
+            TSMC's 16nm wafers costing roughly $8,000 each, that meant a  <strong
+                >$10,000+</strong
+            > processor was reduced to scrap by a single microscopic speck of dust.
+        </p>
+        <p>
+            Chiplets change the math entirely. By splitting the same functional
+            area into 16 smaller, independently fabricated dies (each ~50mm²), a
+            single defect only takes out the one chiplet it lands on. The other
+            15 are still perfectly usable, pushing the net functional yield up
+            to 93.75%. This is why AMD's EPYC processors could scale to 64 cores
+            while Intel's monolithic Xeons were stuck at 28 cores in the same
+            generation; the cost structure simply didn't allow larger dies.
+        </p>
+        <p>
+            This is the core economic insight behind AMD's chiplet strategy.
+            Smaller dies are dramatically cheaper to manufacture at high yield
+            because defect probability scales with area; cutting the area by
+            16x, and you cut your exposure to random particles by the same
+            factor. By 2023, AMD had refined this approach further with 5nm
+            chiplets and a 6nm I/O die, achieving up to 128 cores per socket
+            while maintaining industry-leading yield rates.
+        </p>
+    </div>
+</section>

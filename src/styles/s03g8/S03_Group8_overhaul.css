@@ -1,0 +1,524 @@
+html:has(.chip-rev-exhibit) {
+  background: #020402;
+}
+
+body:has(.chip-rev-exhibit) {
+  --chip-bg: #020402;
+  --chip-bg-soft: #070b08;
+  --chip-panel: rgba(10, 15, 12, 0.82);
+  --chip-panel-strong: rgba(14, 22, 17, 0.94);
+  --chip-border: rgba(57, 255, 20, 0.18);
+  --chip-border-soft: rgba(185, 204, 175, 0.16);
+  --chip-accent: #39ff14;
+  --chip-accent-soft: rgba(57, 255, 20, 0.12);
+  --chip-copy: #b9ccaf;
+  --chip-copy-muted: rgba(185, 204, 175, 0.7);
+  --chip-heading: #eaffde;
+  --chip-danger: #f08080;
+  --chip-amber: #ffc76b;
+
+  color: var(--chip-copy);
+  background:
+    linear-gradient(180deg, rgba(2, 4, 2, 0.5), rgba(7, 11, 8, 0.4)),
+    repeating-linear-gradient(90deg, rgba(57, 255, 20, 0.035) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(0deg, rgba(185, 204, 175, 0.026) 0 1px, transparent 1px 96px);
+}
+
+body:has(.chip-rev-exhibit) * {
+  box-sizing: border-box;
+}
+
+body:has(.chip-rev-exhibit) .header {
+  color: var(--chip-copy);
+  padding: 1rem 1.5rem 0.5rem;
+}
+
+body:has(.chip-rev-exhibit) .header__titleblock,
+body:has(.chip-rev-exhibit) .toc,
+body:has(.chip-rev-exhibit) .article,
+body:has(.chip-rev-exhibit) .content__titlemeta {
+  background: var(--chip-panel);
+  border: 1px solid var(--chip-border);
+  box-shadow: 0 0 24px rgba(57, 255, 20, 0.08);
+}
+
+body:has(.chip-rev-exhibit) .header__titleblock {
+  color: var(--chip-heading);
+  border-radius: 6px;
+  backdrop-filter: blur(14px);
+}
+
+body:has(.chip-rev-exhibit) .header__subtitle {
+  color: var(--chip-copy-muted);
+}
+
+body:has(.chip-rev-exhibit) .button {
+  color: var(--chip-accent);
+  background: rgba(4, 8, 5, 0.88);
+  border-color: rgba(57, 255, 20, 0.32);
+  box-shadow: inset 0 0 16px rgba(57, 255, 20, 0.06);
+}
+
+body:has(.chip-rev-exhibit) .button:hover {
+  color: var(--chip-heading);
+  border-color: var(--chip-accent);
+}
+
+body:has(.chip-rev-exhibit) .content {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem 0;
+  gap: 1.25rem;
+}
+
+body:has(.chip-rev-exhibit) .content__block {
+  min-width: 0;
+}
+
+body:has(.chip-rev-exhibit) .content__titlemeta {
+  display: none;
+}
+
+body:has(.chip-rev-exhibit) .article {
+  max-width: 100%;
+  padding: 0;
+  color: var(--chip-copy);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body:has(.chip-rev-exhibit) .article h2,
+body:has(.chip-rev-exhibit) .article h3,
+body:has(.chip-rev-exhibit) .article h4,
+body:has(.chip-rev-exhibit) .article h5,
+body:has(.chip-rev-exhibit) .article h6 {
+  color: var(--chip-heading);
+  font-family: "Courier New", Courier, monospace;
+  border-bottom: 1px solid var(--chip-border);
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+body:has(.chip-rev-exhibit) .article h2 {
+  margin: 4rem 0 1rem;
+  padding-bottom: 0.7rem;
+  font-size: 2.1rem;
+}
+
+body:has(.chip-rev-exhibit) .article h3 {
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: 0;
+  font-size: 1.15rem;
+}
+
+body:has(.chip-rev-exhibit) .article p,
+body:has(.chip-rev-exhibit) .article li,
+body:has(.chip-rev-exhibit) .article dd {
+  color: var(--chip-copy);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+body:has(.chip-rev-exhibit) .article a {
+  color: var(--chip-accent);
+  text-decoration-color: rgba(57, 255, 20, 0.45);
+  text-underline-offset: 0.18em;
+}
+
+body:has(.chip-rev-exhibit) .toc {
+  color: var(--chip-copy);
+  border-radius: 6px;
+  backdrop-filter: blur(16px);
+}
+
+body:has(.chip-rev-exhibit) .toc h2 {
+  color: var(--chip-heading);
+  font-family: "Courier New", Courier, monospace;
+  border-bottom-color: var(--chip-border);
+  letter-spacing: 0;
+}
+
+body:has(.chip-rev-exhibit) .toc__item {
+  color: var(--chip-copy-muted);
+  margin-bottom: 0.45rem;
+}
+
+body:has(.chip-rev-exhibit) .toc__item a {
+  color: var(--chip-copy);
+}
+
+body:has(.chip-rev-exhibit) .toc__item a:hover {
+  color: var(--chip-accent);
+}
+
+body:has(.chip-rev-exhibit) .toc.padder {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+body:has(.chip-rev-exhibit) footer {
+  color: var(--chip-copy-muted);
+  background: #020402;
+  border-top: 1px solid var(--chip-border);
+}
+
+body:has(.chip-rev-exhibit) .article * {
+  letter-spacing: 0 !important;
+}
+
+.chip-rev-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 620px;
+  margin: 0 0 1.25rem;
+  padding: 2rem;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(57, 255, 20, 0.24);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, rgba(3, 8, 5, 0.94), rgba(9, 14, 11, 0.88)),
+    repeating-linear-gradient(90deg, rgba(57, 255, 20, 0.08) 0 1px, transparent 1px 82px),
+    repeating-linear-gradient(0deg, rgba(185, 204, 175, 0.045) 0 1px, transparent 1px 82px);
+  box-shadow:
+    0 0 34px rgba(57, 255, 20, 0.09),
+    inset 0 0 48px rgba(57, 255, 20, 0.035);
+}
+
+.chip-rev-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.58;
+  z-index: -2;
+}
+
+.chip-rev-hero__matrix {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(2, 4, 2, 0.78), rgba(2, 4, 2, 0.18) 45%, rgba(2, 4, 2, 0.72)),
+    repeating-linear-gradient(90deg, rgba(57, 255, 20, 0.08) 0 1px, transparent 1px 58px),
+    repeating-linear-gradient(0deg, rgba(57, 255, 20, 0.045) 0 1px, transparent 1px 58px);
+}
+
+.chip-rev-hero__content {
+  width: min(100%, 820px);
+  padding: 1.35rem;
+  background: rgba(3, 8, 5, 0.74);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 6px;
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 0 28px rgba(57, 255, 20, 0.1),
+    inset 0 0 22px rgba(255, 255, 255, 0.02);
+}
+
+.chip-rev-kicker,
+.chip-rev-panel-label,
+.chip-rev-timeline span {
+  display: inline-flex;
+  margin: 0 0 0.65rem;
+  color: var(--chip-accent);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.chip-rev-hero__title {
+  color: var(--chip-accent);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 3.1rem;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-shadow:
+    0 0 12px rgba(57, 255, 20, 0.45),
+    0 0 28px rgba(57, 255, 20, 0.2);
+}
+
+.chip-rev-hero__dek {
+  max-width: 66ch;
+  margin: 1rem 0 1.3rem;
+  color: var(--chip-copy);
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.chip-rev-hero__telemetry {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.chip-rev-hero__telemetry span {
+  min-width: 0;
+  padding: 0.75rem;
+  color: var(--chip-copy-muted);
+  background: rgba(57, 255, 20, 0.055);
+  border: 1px solid rgba(57, 255, 20, 0.16);
+  border-radius: 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.chip-rev-hero__telemetry strong {
+  display: block;
+  color: var(--chip-heading);
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.chip-rev-lede {
+  margin: 0 0 2.5rem;
+  padding: 1.25rem 1.35rem;
+  color: var(--chip-copy);
+  background: var(--chip-panel);
+  border: 1px solid var(--chip-border);
+  border-radius: 6px;
+  box-shadow: inset 0 0 22px rgba(57, 255, 20, 0.035);
+}
+
+.chip-rev-fabric-grid,
+.chip-rev-timeline,
+.chip-rev-terms {
+  display: grid;
+  gap: 1rem;
+  margin: 1.35rem 0 2rem;
+}
+
+.chip-rev-fabric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.chip-rev-glass-panel,
+.chip-rev-timeline article,
+.chip-rev-terms div {
+  min-width: 0;
+  padding: 1.25rem;
+  background: var(--chip-panel);
+  border: 1px solid var(--chip-border);
+  border-radius: 6px;
+  box-shadow:
+    0 0 22px rgba(57, 255, 20, 0.06),
+    inset 0 0 24px rgba(255, 255, 255, 0.018);
+}
+
+.chip-rev-glass-panel p,
+.chip-rev-timeline p {
+  margin-bottom: 0;
+}
+
+.chip-rev-timeline {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chip-rev-timeline article:first-child {
+  border-color: rgba(255, 199, 107, 0.26);
+}
+
+.chip-rev-timeline article:first-child span {
+  color: var(--chip-amber);
+}
+
+.chip-rev-terms {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0;
+}
+
+.chip-rev-terms dt {
+  color: var(--chip-accent);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.chip-rev-terms dd {
+  margin: 0.4rem 0 0;
+}
+
+body:has(.chip-rev-exhibit) .physics-wall-section,
+body:has(.chip-rev-exhibit) .metrics-section {
+  background:
+    linear-gradient(135deg, rgba(10, 15, 12, 0.94), rgba(4, 7, 5, 0.97)),
+    repeating-linear-gradient(90deg, rgba(57, 255, 20, 0.045) 0 1px, transparent 1px 72px);
+  border-color: var(--chip-border);
+  border-radius: 6px;
+  box-shadow: 0 0 24px rgba(57, 255, 20, 0.07);
+}
+
+body:has(.chip-rev-exhibit) .physics-wall-title,
+body:has(.chip-rev-exhibit) .metrics-title,
+body:has(.chip-rev-exhibit) .revolution-heading {
+  color: var(--chip-accent);
+  text-shadow: 0 0 16px rgba(57, 255, 20, 0.2);
+}
+
+body:has(.chip-rev-exhibit) .physics-wall-card,
+body:has(.chip-rev-exhibit) .before-after-grid,
+body:has(.chip-rev-exhibit) .metrics-section .kpi-card,
+body:has(.chip-rev-exhibit) .revolution-card {
+  background: var(--chip-panel-strong);
+  border-color: var(--chip-border);
+  border-radius: 6px;
+  box-shadow:
+    0 0 22px rgba(57, 255, 20, 0.06),
+    inset 0 0 22px rgba(255, 255, 255, 0.018);
+}
+
+body:has(.chip-rev-exhibit) .panel,
+body:has(.chip-rev-exhibit) .sim-stat-box,
+body:has(.chip-rev-exhibit) .die-visual,
+body:has(.chip-rev-exhibit) .die-package {
+  background-color: rgba(10, 15, 12, 0.88);
+  border-color: var(--chip-border);
+}
+
+body:has(.chip-rev-exhibit) .panel:first-child {
+  border-right-color: var(--chip-border);
+}
+
+body:has(.chip-rev-exhibit) .section-intro,
+body:has(.chip-rev-exhibit) .panel-label,
+body:has(.chip-rev-exhibit) .stat-key,
+body:has(.chip-rev-exhibit) .kpi-label,
+body:has(.chip-rev-exhibit) .kpi-caption,
+body:has(.chip-rev-exhibit) .physics-wall-description,
+body:has(.chip-rev-exhibit) .revolution-text,
+body:has(.chip-rev-exhibit) .explanation p {
+  color: var(--chip-copy);
+}
+
+body:has(.chip-rev-exhibit) .explanation {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  background: rgba(10, 15, 12, 0.72);
+  border: 1px solid var(--chip-border-soft);
+  border-radius: 6px;
+}
+
+body:has(.chip-rev-exhibit) .explanation strong {
+  color: var(--chip-heading);
+}
+
+body:has(.chip-rev-exhibit) .chip {
+  background-color: rgba(57, 255, 20, 0.16);
+  border-color: rgba(57, 255, 20, 0.36);
+}
+
+body:has(.chip-rev-exhibit) .chip--defective {
+  background-color: rgba(240, 128, 128, 0.16);
+  border-color: rgba(240, 128, 128, 0.42);
+}
+
+body:has(.chip-rev-exhibit) .article ol,
+body:has(.chip-rev-exhibit) .article ul {
+  padding-left: 1.4rem;
+}
+
+body:has(.chip-rev-exhibit) .article li::marker {
+  color: var(--chip-accent);
+}
+
+@media (min-width: 700px) {
+  .chip-rev-hero__title {
+    font-size: 4.6rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  body:has(.chip-rev-exhibit) .content {
+    align-items: flex-start;
+  }
+
+  body:has(.chip-rev-exhibit) .content__block {
+    flex: 1 1 980px;
+  }
+
+  body:has(.chip-rev-exhibit) .toc {
+    flex: 0 0 250px;
+    max-height: calc(100vh - 4rem);
+    overflow: auto;
+  }
+
+  .chip-rev-hero {
+    min-height: calc(100svh - 190px);
+  }
+
+  .chip-rev-hero__title {
+    font-size: 5.6rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .chip-rev-fabric-grid,
+  .chip-rev-timeline,
+  .chip-rev-terms {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body:has(.chip-rev-exhibit) .header {
+    padding: 0.75rem 0.75rem 0.35rem;
+  }
+
+  body:has(.chip-rev-exhibit) .header__titleblock {
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  body:has(.chip-rev-exhibit) .content {
+    padding: 0.5rem 0.75rem 0;
+  }
+
+  body:has(.chip-rev-exhibit) .toc {
+    padding: 1.1rem;
+  }
+
+  body:has(.chip-rev-exhibit) .article h2 {
+    margin-top: 3rem;
+    font-size: 1.55rem;
+  }
+
+  .chip-rev-hero {
+    min-height: 560px;
+    padding: 1rem;
+  }
+
+  .chip-rev-hero__content {
+    padding: 1rem;
+  }
+
+  .chip-rev-hero__title {
+    font-size: 2.6rem;
+  }
+
+  .chip-rev-hero__dek {
+    font-size: 0.98rem;
+  }
+
+  .chip-rev-hero__telemetry {
+    grid-template-columns: 1fr;
+  }
+
+  .chip-rev-glass-panel,
+  .chip-rev-timeline article,
+  .chip-rev-terms div {
+    padding: 1rem;
+  }
+}

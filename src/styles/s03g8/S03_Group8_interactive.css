@@ -1,0 +1,460 @@
+/* ChipSim.jsx */
+
+/* Container Layout */
+.chip-sim-root .sim-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 640px;
+  margin: 40px auto;
+  background:
+    linear-gradient(135deg, rgba(16, 24, 18, 0.96), rgba(5, 8, 6, 0.98)),
+    #111111;
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 6px;  
+  overflow: hidden;
+  font-family: "Courier New", Courier, monospace;  
+  box-shadow:
+    0 0 36px rgba(57, 255, 20, 0.08),
+    inset 0 0 34px rgba(255, 255, 255, 0.018);
+}
+
+/* Sidebar */
+.chip-sim-root .sim-sidebar {
+  width: 350px;
+  background-color: rgba(5, 8, 6, 0.92);
+  border-right: 1px solid rgba(57, 255, 20, 0.16);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.chip-sim-root .sim-header {
+  background-color: rgba(57, 255, 20, 0.1);
+  color: #39ff14;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 2px;
+  width: max-content;
+  margin-left: -24px;
+  margin-top: -8px;
+  margin-bottom: 24px;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0;
+  border: 1px solid rgba(57, 255, 20, 0.18);
+}
+
+/* Toggle Buttons */
+.chip-sim-root .sim-toggle-group {
+  display: flex;
+  background-color: rgba(18, 26, 20, 0.9);
+  border-radius: 4px;
+  padding: 4px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(57, 255, 20, 0.16);
+}
+
+.chip-sim-root .sim-toggle {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: rgba(185, 204, 175, 0.7);
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0;
+}
+
+.chip-sim-root .sim-toggle.active {
+  background-color: rgba(57, 255, 20, 0.12);
+  color: #39ff14;  
+  border: 1px solid rgba(57, 255, 20, 0.34);
+  box-shadow: 0 0 18px rgba(57, 255, 20, 0.12);
+}
+
+/* Sliders */
+.chip-sim-root .sim-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.chip-sim-root .sim-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip-sim-root .sim-label {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(185, 204, 175, 0.68);
+  font-size: 14px;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0;
+}
+
+.chip-sim-root .sim-value {
+  color: #eaffde;
+}
+
+.chip-sim-root input[type="range"] {
+  width: 100%;
+  appearance: none;
+  background: rgba(185, 204, 175, 0.16);
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+}
+
+.chip-sim-root input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #39ff14; 
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #2d7a3a;
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.45);
+}
+
+.chip-sim-root input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #39ff14;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #2d7a3a;
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.45);
+}
+
+.chip-sim-root .sim-model-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 24px;
+  padding: 10px 12px;
+  background: rgba(57, 255, 20, 0.06);
+  border: 1px solid rgba(57, 255, 20, 0.14);
+  border-radius: 4px;
+  color: rgba(185, 204, 175, 0.72);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0;
+}
+
+.chip-sim-root .sim-model-note strong {
+  color: #eaffde;
+  font-size: 0.72rem;
+  text-align: right;
+}
+
+/* Telemetry Dashboard */
+.chip-sim-root .sim-telemetry {
+  margin-top: 24px;
+  border-top: 1px solid rgba(57, 255, 20, 0.14);
+  padding-top: 22px;
+}
+
+.chip-sim-root .sim-telemetry-title {
+  color: rgba(185, 204, 175, 0.7);
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  letter-spacing: 0;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.chip-sim-root .sim-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.chip-sim-root .sim-stat-box {
+  background-color: rgba(18, 26, 20, 0.8);
+  padding: 12px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(57, 255, 20, 0.14);
+  min-width: 0;
+}
+
+.chip-sim-root .sim-stat-box--wide {
+  grid-column: span 2;
+}
+
+.chip-sim-root .stat-label {
+  color: rgba(185, 204, 175, 0.62);
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.chip-sim-root .stat-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.chip-sim-root .sim-stat-box--wide .stat-value {
+  font-size: 1.45rem;
+}
+
+.chip-sim-root .stat-value.danger {
+  color: #f08080; 
+  text-shadow: 0 0 15px rgba(240, 128, 128, 0.4);
+}
+
+.chip-sim-root .stat-value.safe {
+  color: #39ff14; 
+  text-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+}
+
+.chip-sim-root .text-white {
+  color: #eaffde;
+}
+
+.chip-sim-root .sim-grade-box {
+  background-color: rgba(5, 8, 6, 0.9);
+  border: 1px solid rgba(57, 255, 20, 0.16);
+  padding: 12px 24px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chip-sim-root .grade-value {
+  color: #39ff14;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+}
+
+/* Right Visualizer */
+.chip-sim-root .sim-visualizer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(57, 255, 20, 0.055), rgba(5, 8, 6, 0.12) 45%, rgba(5, 8, 6, 0.92)),
+    #050806;
+}
+
+.chip-sim-root .wafer-container {
+  width: 450px;
+  height: 450px;
+  background-color: #121a14;
+  border-radius: 50%;
+  border: 6px solid rgba(185, 204, 175, 0.2);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.9),
+    0 0 30px rgba(0,0,0,0.5),
+    0 0 28px rgba(57, 255, 20, 0.12);
+}
+
+.chip-sim-root .wafer-grid {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(57, 255, 20, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.1) 1px, transparent 1px);
+  transition: background-size 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chip-sim-root .wafer-grid.monolithic {
+  background-size: 225px 225px;
+}
+
+.chip-sim-root .wafer-grid.chiplet {
+  background-size: 45px 45px;
+}
+
+.chip-sim-root .defect-dot {
+  position: absolute;
+  width: 7px; 
+  height: 7px;
+  background-color: #f08080; 
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px 3px rgba(240, 128, 128, 0.6);
+}
+
+/* Explanation box */
+.chip-sim-root .explanation {
+  margin-top: 20px;
+  padding: 1.25rem 1.5rem;
+  background: rgba(10, 15, 12, 0.72);
+  border: 1px solid rgba(57, 255, 20, 0.14);
+  border-radius: 6px;
+  font-family: "Noto Sans Variable", sans-serif;
+}
+
+.chip-sim-root .explanation p {
+  color: #b9ccaf;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  margin: 0 0 0.8rem;
+}
+
+.chip-sim-root .explanation p:last-child {
+  margin-bottom: 0;
+}
+
+.chip-sim-root .explanation strong {
+  color: #eaffde;
+}
+
+.chip-sim-root .explanation code {
+  background: rgba(57, 255, 20, 0.08);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  font-size: 0.82rem;
+  color: #eaffde;
+  font-family: "Courier New", Courier, monospace;
+}
+
+/* Grade legend */
+.chip-sim-root .grade-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 1rem;
+}
+
+.chip-sim-root .grade-legend li {
+  color: #b9ccaf;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.08);
+}
+
+.chip-sim-root .grade-legend li:last-child {
+  border-bottom: none;
+}
+
+.chip-sim-root .grade-legend li strong {
+  color: #eaffde;
+}
+
+/* Grade danger */
+.chip-sim-root .grade-value.danger {
+  color: #f08080;
+  text-shadow: 0 0 18px rgba(240, 128, 128, 0.5);
+}
+
+/* Warning banner */
+.chip-sim-root .sim-warning-banner {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  background: rgba(240, 128, 128, 0.1);
+  border: 1px solid rgba(240, 128, 128, 0.35);
+  border-radius: 4px;
+  color: #f08080;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(240, 128, 128, 0.3);
+}
+
+/* Hint callout */
+.chip-sim-root .sim-hint {
+  margin-top: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  background: rgba(57, 255, 20, 0.06);
+  border: 1px solid rgba(57, 255, 20, 0.16);
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 860px) {
+  .chip-sim-root .sim-wrapper {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .chip-sim-root .sim-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(57, 255, 20, 0.16);
+  }
+
+  .chip-sim-root .sim-visualizer {
+    min-height: 360px;
+    padding: 28px 16px;
+  }
+
+  .chip-sim-root .wafer-container {
+    width: min(72vw, 410px);
+    height: min(72vw, 410px);
+  }
+}
+
+@media (max-width: 520px) {
+  .chip-sim-root .sim-wrapper {
+    margin: 28px auto;
+  }
+
+  .chip-sim-root .sim-sidebar {
+    padding: 20px;
+  }
+
+  .chip-sim-root .sim-header {
+    margin-left: -20px;
+  }
+
+  .chip-sim-root .sim-toggle {
+    font-size: 0.68rem;
+  }
+
+  .chip-sim-root .sim-label,
+  .chip-sim-root .sim-model-note {
+    font-size: 0.62rem;
+  }
+
+  .chip-sim-root .sim-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chip-sim-root .stat-value,
+  .chip-sim-root .sim-stat-box--wide .stat-value {
+    font-size: 1.35rem;
+  }
+
+  .chip-sim-root .sim-stat-box--wide {
+    grid-column: auto;
+  }
+
+  .chip-sim-root .sim-visualizer {
+    min-height: 300px;
+  }
+
+  .chip-sim-root .wafer-container {
+    width: min(78vw, 300px);
+    height: min(78vw, 300px);
+    border-width: 5px;
+  }
+}

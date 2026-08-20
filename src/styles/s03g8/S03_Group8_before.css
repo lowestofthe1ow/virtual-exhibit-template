@@ -1,0 +1,523 @@
+/* ============================================
+   BeforeAfter.astro — Full CSS
+   ============================================ */
+
+.before-after-section {
+    margin: 2rem 0;
+    font-family: "Noto Sans Variable", "Inter", system-ui, sans-serif;
+}
+
+/* ---------- Section Intro ---------- */
+.section-intro-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.section-intro {
+    font-size: 0.7rem;
+    font-family: "Courier New", Courier, monospace;
+    color: #888;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: block;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--chip-heading, #eaffde);
+    margin: 0.25rem 0 0.1rem;
+    background: linear-gradient(135deg, #39ff14, #9dff7a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-subtitle {
+    font-size: 0.9rem;
+    color: var(--chip-copy-muted, rgba(185, 204, 175, 0.7));
+    margin: 0;
+}
+
+/* ---------- Historical Note ---------- */
+.historical-note {
+    background: rgba(240, 128, 128, 0.06);
+    border-left: 3px solid #f08080;
+    padding: 0.6rem 1rem;
+    margin: 0 0 1.25rem 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.historical-note .year-badge {
+    font-family: "Courier New", monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    color: #f08080;
+    background: rgba(240, 128, 128, 0.12);
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.historical-note p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--chip-copy, #b9ccaf);
+    line-height: 1.5;
+}
+
+.historical-note p strong {
+    color: var(--chip-danger, #f08080);
+}
+
+/* ---------- Two-Column Grid ---------- */
+.before-after-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid #2e2e2e;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.panel {
+    background-color: #111111;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: space-between;
+}
+
+.panel.panel-before {
+    border-right: 1px solid #2e2e2e;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-label {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #888;
+    text-transform: uppercase;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 2px 10px;
+    border-radius: 3px;
+}
+
+.badge--risk {
+    color: #f08080;
+    background-color: rgba(240, 128, 128, 0.1);
+    border: 1px solid rgba(240, 128, 128, 0.25);
+}
+
+.badge--yield {
+    color: #39ff14;
+    background-color: rgba(57, 255, 20, 0.08);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+}
+
+/* ---------- Monolithic Die Visual ---------- */
+.die-visual {
+    background-color: #1e1a1a;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
+    width: 75%;
+    min-height: 150px;
+    max-height: 240px;
+    aspect-ratio: 1/1;
+}
+
+.die-x {
+    font-size: 2.8rem;
+    color: #f08080;
+    opacity: 0.85;
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.die-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: var(--chip-danger, #f08080);
+    border-radius: 50%;
+    bottom: 25%;
+    right: 28%;
+    box-shadow: 0 0 12px rgba(240, 128, 128, 0.5);
+    z-index: 1;
+}
+
+.die-label {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.75rem;
+    font-family: "Courier New", monospace;
+    font-size: 0.55rem;
+    color: #555;
+    letter-spacing: 0.05em;
+}
+
+/* ---------- Chiplet Grid ---------- */
+.chiplet-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    margin: 0 auto;
+    width: 95%;
+    max-width: 280px;
+}
+
+.chip {
+    aspect-ratio: 1;
+    background-color: #1e4d2b;
+    border: 1px solid #2d7a3a;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.chip:hover {
+    transform: scale(1.05);
+    border-color: #39ff14;
+}
+
+.chip--defective {
+    background-color: #2e1a1a;
+    border-color: #5a3333;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chip--defective::after {
+    content: "✕";
+    font-size: 0.6rem;
+    color: #f08080;
+    opacity: 0.9;
+}
+
+.chip--defective:hover {
+    border-color: #f08080;
+    transform: scale(1.05);
+}
+
+/* ---------- Stats ---------- */
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-top: 1px solid #2e2e2e;
+    padding-top: 0.6rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.6rem;
+    gap: 1rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.stat-key {
+    color: #777;
+}
+
+.stat-value {
+    color: #ccc;
+}
+
+.stat-value--danger {
+    color: #f08080;
+}
+
+.stat-value--success {
+    color: #39ff14;
+}
+
+.cost-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 0.3rem;
+    margin-top: 0.2rem;
+}
+
+.cost-row .stat-key {
+    color: #999;
+    font-weight: 600;
+}
+
+.cost-row .stat-value {
+    font-weight: 700;
+    font-size: 0.7rem;
+}
+
+/* ---------- Cost Comparison Callout ---------- */
+.cost-comparison {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background: var(--chip-panel, rgba(10, 15, 12, 0.82));
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--chip-border, rgba(57, 255, 20, 0.18));
+    margin: 1rem 0 0.75rem;
+    flex-wrap: wrap;
+}
+
+.cost-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cost-label {
+    font-size: 0.55rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.cost-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: "Courier New", monospace;
+}
+
+.cost-value.danger {
+    color: #f08080;
+}
+
+.cost-value.success {
+    color: #39ff14;
+}
+
+.cost-arrow {
+    color: #555;
+    font-size: 1.2rem;
+}
+
+.cost-savings {
+    font-family: "Courier New", monospace;
+    font-size: 0.65rem;
+    color: #39ff14;
+    background: rgba(57, 255, 20, 0.08);
+    padding: 0.1rem 0.6rem;
+    border-radius: 12px;
+    border: 1px solid rgba(57, 255, 20, 0.15);
+}
+
+/* ---------- Yield Formula ---------- */
+.formula-box {
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    background: var(--chip-panel, rgba(10, 15, 12, 0.82));
+    border: 1px solid var(--chip-border, rgba(57, 255, 20, 0.18));
+    border-radius: 6px;
+    margin: 0.75rem 0;
+}
+
+.formula-label {
+    font-family: "Courier New", monospace;
+    font-size: 0.85rem;
+    color: var(--chip-accent, #39ff14);
+}
+
+.formula-explanation {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--chip-copy-muted, rgba(185, 204, 175, 0.7));
+    margin-top: 0.1rem;
+}
+
+/* ---------- AMD Timeline ---------- */
+.chiplet-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0.75rem 0 1.25rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--chip-panel, rgba(10, 15, 12, 0.82));
+    border-radius: 6px;
+    border: 1px solid var(--chip-border, rgba(57, 255, 20, 0.18));
+}
+
+.timeline-title {
+    font-family: "Courier New", monospace;
+    font-size: 0.6rem;
+    color: var(--chip-copy-muted, rgba(185, 204, 175, 0.7));
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: "Courier New", monospace;
+    font-size: 0.65rem;
+    padding: 0.15rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.timeline-item:last-child {
+    border-bottom: none;
+}
+
+.timeline-year {
+    color: #39ff14;
+    font-weight: 700;
+    min-width: 45px;
+}
+
+.timeline-event {
+    color: var(--chip-heading, #eaffde);
+    font-weight: 600;
+    min-width: 110px;
+}
+
+.timeline-detail {
+    color: var(--chip-copy-muted, rgba(185, 204, 175, 0.7));
+    font-size: 0.6rem;
+}
+
+/* ---------- Explanation ---------- */
+.explanation {
+    margin-top: 1.25rem;
+    padding: 0 0.25rem;
+}
+
+.explanation p {
+    font-family: "Noto Sans Variable", "Inter", system-ui, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 0.75rem;
+}
+
+.explanation p:last-child {
+    margin-bottom: 0;
+}
+
+.explanation p strong {
+    font-weight: 700;
+    color: #d63031;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .historical-note {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .historical-note .year-badge {
+        align-self: flex-start;
+    }
+
+    .before-after-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel.panel-before {
+        border-right: none;
+        border-bottom: 1px solid #2e2e2e;
+    }
+
+    .die-visual {
+        width: 60%;
+        min-height: 120px;
+    }
+
+    .chiplet-grid {
+        width: 75%;
+    }
+
+    .cost-comparison {
+        gap: 0.75rem;
+        padding: 0.6rem 1rem;
+    }
+
+    .cost-value {
+        font-size: 0.95rem;
+    }
+
+    .cost-savings {
+        font-size: 0.55rem;
+    }
+
+    .explanation p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.3rem;
+    }
+
+    .die-visual {
+        width: 70%;
+        min-height: 100px;
+    }
+
+    .die-x {
+        font-size: 2rem;
+    }
+
+    .chiplet-grid {
+        width: 95%;
+        gap: 3px;
+    }
+
+    .timeline-item {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .timeline-event {
+        min-width: 80px;
+    }
+
+    .cost-comparison {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .cost-arrow {
+        transform: rotate(90deg);
+    }
+}

@@ -1,0 +1,167 @@
+/* ============================================================
+   S03_Group8_intro.css
+   Global video background, vignette overlay, and TOC stepper
+   ============================================================ */
+
+.chip-rev-global-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -2;
+}
+
+.chip-rev-global-bg__video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.chip-rev-global-bg__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center,
+      rgba(2, 4, 2, 0.25) 0%,
+      rgba(2, 4, 2, 0.7) 50%,
+      rgba(2, 4, 2, 0.95) 100%);
+}
+
+/* -- Mobile -- */
+@media (max-width: 640px) {
+  .chip-rev-global-bg__video {
+    opacity: 0.18;
+  }
+
+  .chip-rev-global-bg__overlay {
+    background: radial-gradient(ellipse at center,
+        rgba(2, 4, 2, 0.55) 0%,
+        rgba(2, 4, 2, 0.85) 60%,
+        rgba(2, 4, 2, 0.96) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-rev-global-bg__video {
+    display: none;
+  }
+}
+/* Only apply when the chip-rev exhibit page is active */
+@media (min-width: 1100px) {
+  body:has(.chip-rev-exhibit) .toc:not(.padder) {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: auto;
+    max-width: 48px;
+    padding: 1rem 0.6rem;
+    border-radius: 0 6px 6px 0;
+    background: rgba(4, 8, 5, 0.92);
+    border: 1px solid rgba(57, 255, 20, 0.22);
+    border-left: none;
+    backdrop-filter: blur(16px);
+    box-shadow: 4px 0 24px rgba(57, 255, 20, 0.08);
+    overflow: visible;
+  }
+
+  body:has(.chip-rev-exhibit) .toc:not(.padder) h2 {
+    display: none;
+  }
+
+  body:has(.chip-rev-exhibit) .toc:not(.padder) .toc__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    counter-reset: toc-step;
+    position: relative;
+  }
+
+  /* Vertical connecting line */
+  body:has(.chip-rev-exhibit) .toc:not(.padder) .toc__list::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(57, 255, 20, 0.18);
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+
+  body:has(.chip-rev-exhibit) .toc:not(.padder) .toc__item {
+    counter-increment: toc-step;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+  }
+
+  body:has(.chip-rev-exhibit) .toc:not(.padder) .toc__item a {
+    display: block;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0;
+    color: transparent;
+    text-decoration: none;
+    padding: 0.4rem 0.2rem;
+    line-height: 1;
+  }
+
+  /* Step counter numbers (01, 02, ...) */
+  body:has(.chip-rev-exhibit) .toc:not(.padder) .toc__item a::before {
+    content: counter(toc-step, decimal-leading-zero);
+    font-size: 0.6rem;
+    color: rgba(57, 255, 20, 0.7);
+    letter-spacing: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+    background: rgba(57, 255, 20, 0.08);
+    border: 1px solid rgba(57, 255, 20, 0.25);
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+
+  body:has(.chip-rev-exhibit) .toc:not(.padder) .toc__item a:hover::before {
+    color: #39ff14;
+    background: rgba(57, 255, 20, 0.18);
+    border-color: rgba(57, 255, 20, 0.55);
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.25);
+  }
+}
+
+/* Hide the padder TOC duplicate */
+body:has(.chip-rev-exhibit) .toc.padder {
+  display: none;
+}
+
+/* Hide TOC stepper on tablet/mobile — not enough room */
+@media (max-width: 1099px) {
+  body:has(.chip-rev-exhibit) .toc:not(.padder) {
+    display: none;
+  }
+}

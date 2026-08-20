@@ -1,0 +1,104 @@
+---
+import "../../styles/s03g8/S03_Group8_metrics.css";
+
+const kpis = [
+    {
+        label: "YIELD_IMPROVEMENT_RATE",
+        value: "+82%",
+        caption: "VS MONOLITHIC BASELINE",
+    },
+    {
+        label: "DIE_COST_REDUCTION",
+        value: "-41%",
+        caption: "EST. PER 8-CORE COMPLEX",
+    },
+    {
+        label: "SCALABILITY_FACTOR",
+        value: "64+",
+        caption: "CORES PER SOCKET ACHIEVED",
+    },
+];
+
+const dieBlocks = [
+    { id: "CCX_0", variant: "ccx" },
+    { id: "CCX_1", variant: "ccx" },
+    { id: "IOD_0", variant: "io" },
+    { id: "CCX_2", variant: "ccx" },
+];
+---
+
+<section class="metrics-section" aria-labelledby="metrics-title">
+    <div class="metrics-eyebrow-row">
+        <svg
+            class="metrics-icon"
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <rect x="1" y="9" width="3" height="6" />
+            <rect x="6.5" y="5" width="3" height="10" />
+            <rect x="12" y="1" width="3" height="14" />
+        </svg>
+        <h2 id="metrics-title" class="metrics-title">Impact Metrics</h2>
+    </div>
+
+    <div class="metrics-kpi-row">
+        {
+            kpis.map((k) => (
+                <div class="kpi-card">
+                    <span class="kpi-label">{k.label}</span>
+                    <span class="kpi-value">{k.value}</span>
+                    <span class="kpi-caption">{k.caption}</span>
+                </div>
+            ))
+        }
+    </div>
+
+    <div class="revolution-card">
+        <div class="revolution-copy">
+            <span class="revolution-badge">PHASE 04_EXECUTE</span>
+
+            <h3 class="revolution-heading">The Revolution</h3>
+
+            <p class="revolution-text">
+                The monolithic era fractured under its own weight. AMD's
+                pivot to chiplet architecture didn't just solve a scaling
+                problem; it redefined semiconductor economics. Yields
+                skyrocketed. The silicon didn't stop; it just learned how to
+                work in teams.
+            </p>
+
+            <div class="revolution-note">
+                <span class="note-icon" aria-hidden="true">
+                    ⓘ
+                </span>
+                <span class="note-text">
+                    Real EPYC Rome packages use 8 compute chiplets (CCDs)
+                    around 1 central I/O die. This diagram is simplified to
+                    show the CCX-around-IOD layout pattern.
+                </span>
+            </div>
+        </div>
+
+        <div class="revolution-visual">
+            <div class="die-package">
+                <span class="die-package-label">SoC Package</span>
+                {
+                    dieBlocks.map((d) => (
+                        <div class={`die-block die-block--${d.variant}`}>
+                            {d.id}
+                        </div>
+                    ))
+                }
+                <div class="die-package-legend">
+                    <span class="legend-item">
+                        <span class="legend-dot ccx-dot" /> Compute (CCX)
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-dot io-dot" /> I/O Die (IOD)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
