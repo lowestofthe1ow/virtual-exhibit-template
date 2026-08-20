@@ -1,0 +1,946 @@
+---
+/**
+ * S04_Group5_CachingVisualizer.astro
+ *
+ * A fully custom layout for the Caching Visualizer exhibit.
+ * Completely unique design — does NOT reuse ExhibitLayout.
+ *
+ * Features:
+ *  - Immersive full-bleed hero with animated gradient mesh
+ *  - Horizontal sticky navigation auto-generated from headings
+ *  - Clean dark reading surface with strong typographic hierarchy
+ *  - Circuit-inspired decorative accents
+ *  - Fully responsive (mobile → desktop)
+ */
+
+const { title, author, readingTime } = Astro.props.frontmatter ?? Astro.props;
+const { headings } = Astro.props;
+
+import 'normalize.css';
+import '@fontsource-variable/lora';
+import '@fontsource-variable/noto-sans';
+import '@fontsource/jetbrains-mono';
+
+import { Icon } from 'astro-icon/components';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Parse semicolon-separated author names into an array
+const authorNames = author ? author.split(';').map((name: string) => name.trim()).filter(Boolean) : [];
+
+const navItems = headings?.filter((h: { depth: number }) => h.depth >= 2 && h.depth <= 3) ?? [];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — CSARCH2 Virtual Exhibit</title>
+    <meta name="description" content="An interactive virtual exhibit on CPU Cache Memory Mechanisms" />
+  </head>
+
+  <body class="cv-root">
+    <!-- ─── MATRIX RAIN BACKGROUND ─────────────────────────────── -->
+    <canvas id="cv-matrix-canvas" class="cv-matrix-canvas" aria-hidden="true"></canvas>
+    <div class="cv-matrix-vignette" aria-hidden="true"></div>
+    <!-- ─── HERO ──────────────────────────────────────────────── -->
+    <header class="cv-hero">
+      <div class="cv-hero__mesh" aria-hidden="true"></div>
+      <div class="cv-hero__grid" aria-hidden="true"></div>
+      <div class="cv-hero__glow cv-hero__glow--cyan" aria-hidden="true"></div>
+      <div class="cv-hero__glow cv-hero__glow--indigo" aria-hidden="true"></div>
+
+      <div class="cv-hero__content">
+        <div class="cv-hero__topbar">
+          <a href={baseUrl} class="cv-hero__back">
+            <Icon name="ic:round-home" width="18" height="18" />
+            <span>Exhibit Hub</span>
+          </a>
+
+          {readingTime && (
+            <span class="cv-hero__reading-time">
+              <Icon name="ic:round-schedule" width="14" height="14" />
+              Reading Time: {readingTime}
+            </span>
+          )}
+        </div>
+
+        <p class="cv-hero__eyebrow">
+          <span class="cv-hero__eyebrow-dot"></span>
+          CSARCH2 — Virtual Exhibit
+        </p>
+
+        <h1 class="cv-hero__title">
+          <span class="cv-hero__title-main" set:html={title} />
+        </h1>
+
+        <div class="cv-hero__authors">
+          <span class="cv-hero__authors-label">
+            <Icon name="ic:round-group" width="16" height="16" />
+            Group Members
+          </span>
+          <div class="cv-hero__authors-list">
+            {authorNames.map((name: string) => (
+              <span class="cv-hero__author-chip">
+                <Icon name="ic:round-person" width="13" height="13" />
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ─── STICKY NAV ────────────────────────────────────────── -->
+    {navItems.length > 0 && (
+      <nav class="cv-nav" id="cv-nav" aria-label="Page sections">
+        <div class="cv-nav__rail">
+          {navItems.map((h: { slug: string; text: string; depth: number }) => (
+            <a
+              href={`#${h.slug}`}
+              class:list={['cv-nav__link', { 'cv-nav__link--sub': h.depth === 3 }]}
+            >
+              {h.text}
+            </a>
+          ))}
+        </div>
+      </nav>
+    )}
+
+    <!-- ─── MAIN CONTENT ──────────────────────────────────────── -->
+    <main class="cv-main">
+      <article class="cv-article">
+        <slot />
+      </article>
+    </main>
+
+    <!-- ─── FOOTER ────────────────────────────────────────────── -->
+    <footer class="cv-footer">
+      <div class="cv-footer__rule" aria-hidden="true"></div>
+      <div class="cv-footer__inner">
+        <div class="cv-footer__brand">
+          <span class="cv-footer__logo">Ca-Ching!</span>
+          <span class="cv-footer__sep">·</span>
+          <span>CSARCH2 Virtual Exhibit</span>
+        </div>
+        <p class="cv-footer__tagline">Computer Architecture is Forever</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<!-- ─── STYLES ────────────────────────────────────────────────── -->
+<style>
+  /* ================================================================
+     DESIGN TOKENS
+     ================================================================ */
+  :root {
+    --cv-bg-deep:    #06080f;
+    --cv-bg-surface: #0c1021;
+    --cv-bg-card:    #111630;
+    --cv-border:     rgba(99, 102, 241, 0.18);
+    --cv-text:       #e2e8f0;
+    --cv-text-dim:   #94a3b8;
+    --cv-text-faint: #475569;
+    --cv-accent-cyan:    #22d3ee;
+    --cv-accent-indigo:  #818cf8;
+    --cv-accent-emerald: #34d399;
+    --cv-accent-amber:   #fbbf24;
+    --cv-glow-cyan:   rgba(34, 211, 238, 0.15);
+    --cv-glow-indigo: rgba(129, 140, 248, 0.15);
+    --cv-radius: 0.75rem;
+    --cv-font-body: 'Noto Sans Variable', system-ui, sans-serif;
+    --cv-font-heading: 'Lora Variable', Georgia, serif;
+    --cv-font-mono: 'JetBrains Mono', Consolas, monospace;
+  }
+
+  /* ================================================================
+     RESET / BASE
+     ================================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .cv-root {
+    font-family: var(--cv-font-body);
+    color: var(--cv-text);
+    background: var(--cv-bg-deep);
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    position: relative;
+  }
+
+  /* ================================================================
+     MATRIX RAIN BACKGROUND
+     ================================================================ */
+  .cv-matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.30;
+  }
+
+  .cv-matrix-vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 85% 75% at 50% 50%,
+      transparent 40%,
+      rgba(6, 8, 15, 0.70) 100%
+    );
+  }
+
+  /* ================================================================
+     HERO
+     ================================================================ */
+.cv-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    min-height: auto;
+    padding: 2rem 2.5rem 1.75rem;
+    background: var(--cv-bg-deep);
+    z-index: 1;
+  }
+
+  /* Animated gradient mesh background */
+  .cv-hero__mesh {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 50%, rgba(34,211,238,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 85% 30%, rgba(129,140,248,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 50% 90%, rgba(52,211,153,0.08) 0%, transparent 60%);
+    animation: cv-mesh-drift 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes cv-mesh-drift {
+    0%   { opacity: 0.8; transform: scale(1) translate(0, 0); }
+    50%  { opacity: 1;   transform: scale(1.05) translate(-2%, 1%); }
+    100% { opacity: 0.9; transform: scale(1) translate(1%, -1%); }
+  }
+
+  /* Subtle grid overlay */
+  .cv-hero__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 60%, black 20%, transparent 80%);
+  }
+
+  /* Glow orbs */
+  .cv-hero__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+  .cv-hero__glow--cyan {
+    width: 700px; height: 700px;
+    top: -15%; left: 5%;
+    background: var(--cv-glow-cyan);
+    animation: cv-glow-pulse 8s ease-in-out infinite;
+  }
+  .cv-hero__glow--indigo {
+    width: 600px; height: 600px;
+    bottom: -20%; right: 0%;
+    background: var(--cv-glow-indigo);
+    animation: cv-glow-pulse 10s ease-in-out infinite reverse;
+  }
+
+  @keyframes cv-glow-pulse {
+    0%, 100% { opacity: 0.6; transform: translate(0, 0) scale(1); }
+    50%      { opacity: 1;   transform: translate(2%, -3%) scale(1.1); }
+  }
+
+  .cv-hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 80rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Back link */
+  .cv-hero__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--cv-font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cv-text-dim);
+    text-decoration: none;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid rgba(148,163,184,0.2);
+    border-radius: 9999px;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .cv-hero__back:hover {
+    color: var(--cv-accent-cyan);
+    border-color: rgba(34,211,238,0.4);
+    background: rgba(34,211,238,0.06);
+  }
+
+  /* Eyebrow */
+  .cv-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--cv-font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cv-accent-cyan);
+    margin-bottom: 0.5rem;
+  }
+
+  .cv-hero__eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cv-accent-cyan);
+    box-shadow: 0 0 10px var(--cv-accent-cyan);
+    animation: cv-dot-blink 2.5s ease-in-out infinite;
+  }
+
+  @keyframes cv-dot-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* Title */
+  .cv-hero__title {
+    font-family: var(--cv-font-heading);
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+
+  .cv-hero__title-main {
+    background: linear-gradient(135deg, #f8fafc 30%, var(--cv-accent-cyan) 65%, var(--cv-accent-indigo) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cv-title-shimmer 8s ease infinite;
+  }
+
+  @keyframes cv-title-shimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Topbar — home button + reading time side by side */
+  .cv-hero__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Reading time badge */
+  .cv-hero__reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--cv-font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--cv-accent-emerald);
+    padding: 0.3rem 0.75rem;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 9999px;
+    background: rgba(52, 211, 153, 0.08);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .cv-hero__reading-time:hover {
+    border-color: rgba(52, 211, 153, 0.5);
+    background: rgba(52, 211, 153, 0.12);
+  }
+
+  /* Authors section */
+  .cv-hero__authors {
+    margin-top: 1rem;
+  }
+
+  .cv-hero__authors-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--cv-font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cv-text-faint);
+    margin-bottom: 0.5rem;
+  }
+
+  .cv-hero__authors-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .cv-hero__author-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 9999px;
+    background: rgba(148, 163, 184, 0.06);
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .cv-hero__author-chip:hover {
+    color: #e2e8f0;
+    border-color: rgba(129, 140, 248, 0.4);
+    background: rgba(129, 140, 248, 0.08);
+  }
+
+  /* ================================================================
+     STICKY NAV
+     ================================================================ */
+  .cv-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 14, 30, 0.95);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .cv-nav__rail {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0.6rem 2rem;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cv-nav__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cv-nav__link {
+    flex-shrink: 0;
+    font-family: var(--cv-font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #e2e8f0;
+    text-decoration: none;
+    padding: 0.5rem 1.15rem;
+    border-radius: 8px;
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    background: rgba(99, 102, 241, 0.1);
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+
+  .cv-nav__link:visited {
+    color: #e2e8f0;
+    text-decoration: none;
+  }
+
+  .cv-nav__link:hover {
+    color: #ffffff;
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(129, 140, 248, 0.6);
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .cv-nav__link:active {
+    transform: translateY(0);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.2);
+  }
+
+  .cv-nav__link--sub {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.9rem;
+    border-color: rgba(148, 163, 184, 0.2);
+    background: rgba(148, 163, 184, 0.06);
+    color: #94a3b8;
+  }
+  .cv-nav__link--sub:hover {
+    color: #e2e8f0;
+    background: rgba(148, 163, 184, 0.12);
+    border-color: rgba(148, 163, 184, 0.35);
+    box-shadow: 0 0 12px rgba(148, 163, 184, 0.15);
+  }
+  .cv-nav__link--sub:visited {
+    color: #94a3b8;
+    text-decoration: none;
+  }
+
+  /* ================================================================
+     MAIN CONTENT
+     ================================================================ */
+  .cv-main {
+    flex: 1;
+    width: 100%;
+    padding: 3rem 4rem 5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cv-article {
+    background: var(--cv-bg-surface);
+    border: 1px solid var(--cv-border);
+    border-radius: calc(var(--cv-radius) * 1.5);
+    padding: 4rem 5rem;
+    box-shadow:
+      0 0 120px rgba(34,211,238,0.04),
+      0 0 60px rgba(99,102,241,0.04),
+      0 32px 64px rgba(0,0,0,0.4);
+  }
+
+  /* ── Typography overrides inside article ── */
+  .cv-article :global(h1) {
+    display: none; /* Title is in hero; hide the MDX h1 */
+  }
+
+  .cv-article :global(h2) {
+    font-family: var(--cv-font-heading);
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 4rem 0 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(99,102,241,0.15);
+    line-height: 1.3;
+  }
+  .cv-article :global(h2:first-of-type) {
+    margin-top: 0;
+  }
+
+  .cv-article :global(h3) {
+    font-family: var(--cv-font-heading);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 3rem 0 1.25rem;
+    line-height: 1.35;
+  }
+
+  .cv-article :global(h4),
+  .cv-article :global(h5),
+  .cv-article :global(h6) {
+    font-family: var(--cv-font-heading);
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .cv-article :global(p) {
+    color: var(--cv-text);
+    margin: 1rem 0;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .cv-article :global(a) {
+    color: var(--cv-accent-cyan);
+    text-decoration-color: rgba(34,211,238,0.35);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s;
+  }
+  .cv-article :global(a:hover) {
+    text-decoration-color: var(--cv-accent-cyan);
+  }
+
+  .cv-article :global(ul),
+  .cv-article :global(ol) {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+    color: var(--cv-text);
+  }
+  .cv-article :global(ul) { list-style: disc; }
+  .cv-article :global(ol) { list-style: decimal; }
+  .cv-article :global(li) { margin: 0.35rem 0; }
+
+  .cv-article :global(strong) {
+    color: #f1f5f9;
+    font-weight: 700;
+  }
+
+  .cv-article :global(code) {
+    font-family: var(--cv-font-mono);
+    font-size: 0.875em;
+    background: rgba(34,211,238,0.08);
+    color: var(--cv-accent-cyan);
+    padding: 0.15em 0.45em;
+    border-radius: 4px;
+    border: 1px solid rgba(34,211,238,0.15);
+  }
+
+  .cv-article :global(pre) {
+    background: var(--cv-bg-deep) !important;
+    border: 1px solid var(--cv-border);
+    border-radius: var(--cv-radius);
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .cv-article :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  .cv-article :global(blockquote) {
+    border-left: 3px solid var(--cv-accent-indigo);
+    background: rgba(129,140,248,0.06);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--cv-radius) var(--cv-radius) 0;
+    color: var(--cv-text-dim);
+  }
+
+  .cv-article :global(hr) {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(99,102,241,0.25) 25%,
+      rgba(34,211,238,0.25) 75%,
+      transparent
+    );
+    margin: 3rem 0;
+  }
+
+  .cv-article :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .cv-article :global(th),
+  .cv-article :global(td) {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--cv-border);
+    text-align: left;
+  }
+
+  .cv-article :global(th) {
+    background: rgba(99,102,241,0.08);
+    font-weight: 600;
+    color: #e2e8f0;
+    font-family: var(--cv-font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  .cv-article :global(td) {
+    color: var(--cv-text);
+  }
+
+  /* ================================================================
+     FOOTER
+     ================================================================ */
+  .cv-footer {
+    padding: 0 4rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cv-footer__rule {
+    max-width: 100%;
+    margin: 0 auto 2.5rem;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(99,102,241,0.3) 20%,
+      rgba(34,211,238,0.3) 50%,
+      rgba(99,102,241,0.3) 80%,
+      transparent
+    );
+  }
+
+  .cv-footer__inner {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .cv-footer__brand {
+    font-family: var(--cv-font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--cv-text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .cv-footer__logo {
+    font-family: var(--cv-font-heading);
+    font-weight: 800;
+    font-size: 1.05rem;
+    background: linear-gradient(135deg, var(--cv-accent-cyan), var(--cv-accent-indigo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cv-footer__sep {
+    opacity: 0.3;
+  }
+
+  .cv-footer__tagline {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    color: var(--cv-text-faint);
+    font-style: italic;
+  }
+
+  /* ================================================================
+     RESPONSIVE — TABLET
+     ================================================================ */
+  @media (max-width: 1024px) {
+    .cv-main {
+      padding: 2rem 2rem 4rem;
+    }
+
+    .cv-article {
+      padding: 2.5rem 2.5rem;
+    }
+
+    .cv-nav__rail {
+      padding: 0.5rem 1.5rem;
+      gap: 0.4rem;
+    }
+
+    .cv-footer {
+      padding: 0 2rem 2.5rem;
+    }
+  }
+
+  /* ================================================================
+     RESPONSIVE — MOBILE
+     ================================================================ */
+  @media (max-width: 768px) {
+    .cv-hero {
+      padding: 1.25rem 1.25rem 1rem;
+    }
+
+    .cv-hero__topbar {
+      flex-wrap: wrap;
+    }
+
+    .cv-hero__title {
+      font-size: clamp(1.6rem, 7vw, 2.2rem);
+    }
+
+    .cv-hero__author-chip {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.55rem;
+    }
+
+    .cv-nav__rail {
+      padding: 0.45rem 1rem;
+      gap: 0.35rem;
+    }
+
+    .cv-nav__link {
+      font-size: 0.68rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .cv-main {
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .cv-article {
+      padding: 1.75rem 1.5rem;
+      border-radius: 0.75rem;
+    }
+
+    .cv-article :global(h2) {
+      font-size: 1.4rem;
+      margin: 3rem 0 1.25rem;
+    }
+
+    .cv-article :global(h3) {
+      font-size: 1.15rem;
+    }
+
+    .cv-article :global(p) {
+      font-size: 1rem;
+    }
+
+    .cv-article :global(table) {
+      display: block;
+      overflow-x: auto;
+    }
+
+    .cv-footer {
+      padding: 0 1.25rem 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cv-hero {
+      padding: 1rem 1rem 0.75rem;
+    }
+
+    .cv-hero__title {
+      font-size: 1.5rem;
+    }
+
+    .cv-hero__authors-list {
+      gap: 0.3rem;
+    }
+
+    .cv-hero__author-chip {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+    }
+
+    .cv-main {
+      padding: 1rem 0.75rem 2.5rem;
+    }
+
+    .cv-article {
+      padding: 1.25rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .cv-nav__rail {
+      padding: 0.4rem 0.75rem;
+    }
+
+    .cv-footer {
+      padding: 0 1rem 1.5rem;
+    }
+
+    .cv-footer__brand {
+      font-size: 0.68rem;
+    }
+  }
+</style>
+
+<!-- ─── MATRIX RAIN ANIMATION ──────────────────────────────────── -->
+<script>
+  (function () {
+    const canvas = document.getElementById('cv-matrix-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // Character set: half-width katakana + digits + select Latin
+    const chars =
+      'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン' +
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+      '0123456789' +
+      '(){}[]<>@#$%&*+=';
+
+    const fontSize = 14;
+    let columns;
+    let drops;
+    let speeds;
+
+    function initMatrix() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      columns = Math.floor(canvas.width / fontSize);
+      drops = new Array(columns).fill(0).map(() => Math.random() * -100);
+      speeds = new Array(columns).fill(0).map(() => 0.3 + Math.random() * 0.7);
+    }
+
+    initMatrix();
+
+    let resizeTimeout;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(initMatrix, 150);
+    });
+
+    function draw() {
+      // Semi-transparent dark overlay creates the trailing fade
+      ctx.fillStyle = 'rgba(6, 8, 15, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < columns; i++) {
+        const charIndex = Math.floor(Math.random() * chars.length);
+        const char = chars[charIndex];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        // Leading character: bright white-cyan flash
+        if (Math.random() > 0.90) {
+          ctx.fillStyle = 'rgba(200, 240, 255, 0.95)';
+        } else if (i % 3 === 0) {
+          // Every 3rd column uses indigo for color variety
+          const intensity = 0.45 + Math.random() * 0.55;
+          ctx.fillStyle = `rgba(129, 140, 248, ${intensity})`;
+        } else {
+          // Primary cyan rain matching --cv-accent-cyan
+          const intensity = 0.45 + Math.random() * 0.55;
+          ctx.fillStyle = `rgba(34, 211, 238, ${intensity})`;
+        }
+
+        ctx.fillText(char, x, y);
+
+        // Reset column when it goes past the bottom, with some randomness
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = Math.random() * -20;
+          speeds[i] = 0.3 + Math.random() * 0.7;
+        }
+
+        drops[i] += speeds[i];
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    // Slight delay so the page paints first
+    setTimeout(draw, 100);
+  })();
+</script>
