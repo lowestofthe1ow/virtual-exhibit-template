@@ -1,0 +1,343 @@
+---
+layout: '../components/s04g2/S04_Group2_ExhibitLayout.astro'
+title: "Virtual Memory: How It Works"
+author: "Matthew Drew Fabregas, Hannah Lee, Justin Lance Te Lim, Alec Marx Gabriel Belen Nono, Mariel Mendoza Yasumuro"
+readingTime: "10 min read"
+---
+
+import ConceptCard from '../components/s04g2/ConceptCard.astro';
+import TakeawayCard from '../components/s04g2/TakeawayCard.astro';
+import RetroOsSimulator from '../components/s04g2/RetroOsSimulator.jsx';
+import SecurityVisualizer from '../components/s04g2/SecurityVisualizer.jsx';
+import SwapVisualizer from '../components/s04g2/SwapVisualizer.jsx';
+import SharedLibraryVisualizer from '../components/s04g2/SharedLibraryVisualizer.jsx';
+import VirtualMemoryQuiz from '../components/s04g2/VirtualMemoryQuiz.jsx';
+import VMKnowledgeQuiz from '../components/s04g2/VMKnowledgeQuiz.jsx';
+import AddressSignalPipeline from '../components/s04g2/AddressSignalPipeline.jsx';
+import TlbSimulator from '../components/s04g2/TlbSimulator.jsx';
+import ContextSwitchVisualizer from '../components/s04g2/ContextSwitchVisualizer.jsx';
+import PageFrame3DVisualizer from '../components/s04g2/PageFrame3DVisualizer.jsx';
+import PageTableEntryVisualizer from '../components/s04g2/PageTableEntryVisualizer.jsx';
+import TeamRoster from '../components/s04g2/TeamRoster.astro';
+
+{/* Import CSS theme at MDX page level to avoid esbuild conflicts in layout */}
+import '../styles/s04g2/exhibit-theme.css';
+
+{/* Decorative background elements */}
+<div class="ml-gem-shape ml-gem-shape--1" aria-hidden="true"></div>
+<div class="ml-gem-shape ml-gem-shape--2" aria-hidden="true"></div>
+<div class="ml-gem-shape ml-gem-shape--3" aria-hidden="true"></div>
+<div class="ml-gem-shape ml-gem-shape--4" aria-hidden="true"></div>
+
+<nav class="ml-nav ml-nav--quick animate-fade-in in-view" aria-label="Section navigation">
+  <ul class="ml-nav__links">
+    <li><a href="#concepts" class="ml-nav__link">Concepts</a></li>
+    <li><a href="#simulator" class="ml-nav__link">Mini Game</a></li>
+    <li><a href="#deep-dive" class="ml-nav__link">Direct Access Problems</a></li>
+    <li><a href="#how-it-works" class="ml-nav__link">Deep Dive</a></li>
+    <li><a href="#takeaways" class="ml-nav__link">Summary</a></li>
+    <li><a href="#knowledge-quiz" class="ml-nav__link">Quiz</a></li>
+    <li><a href="#team-roster" class="ml-nav__link">Team</a></li>
+  </ul>
+</nav>
+
+{/* 1. HERO SECTION */}
+<section class="ml-hero animate-fade-up in-view" id="top">
+  <div class="ml-hero__badge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; display: inline-block; vertical-align: -2px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    CSARCH2 Virtual Exhibit
+  </div>
+  <h1 class="ml-hero__title">Virtual Memory:<br/>The Ultimate Illusion</h1>
+  <p class="ml-hero__subtitle">
+    How your computer fakes having infinite, perfectly organized memory, even when physical RAM is a complete mess.
+  </p>
+  <div class="ml-hero__intro">
+    Have you ever wondered how your computer runs massive games and dozens of browser tabs at the same time without crashing? The secret is <strong>Virtual Memory</strong>. It tricks programs into thinking they have their own private, continuous memory space, while secretly scattering their data into tiny available holes across the physical hardware.
+  </div>
+</section>
+
+<hr class="ml-divider" />
+
+{/* 2. CONCEPT CARDS */}
+<section class="ml-section animate-fade-up" id="concepts">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Key Concepts</span>
+    <h2 class="ml-section-title">The Four Pillars</h2>
+    <p class="ml-section-subtitle">
+      Before we play the game, here is the cheat sheet of what you need to know.
+    </p>
+  </div>
+
+  <div class="ml-grid-4">
+    <ConceptCard
+      icon="fragmentation"
+      title="Fragmentation"
+      description="RAM gets messy. When programs open and close, they leave scattered empty 'holes'. If a new program needs a big continuous space, it can't fit."
+      accent="#f87171"
+    />
+    <ConceptCard
+      icon="paging"
+      title="Paging"
+      description="The solution! Instead of keeping programs in one big block, the OS chops them up into tiny chunks called Pages."
+      accent="#38bdf8"
+    />
+    <ConceptCard
+      icon="page-table"
+      title="Page Table"
+      description="The directory. It remembers where every tiny chopped-up Page was placed in physical RAM."
+      accent="#a78bfa"
+    />
+    <ConceptCard
+      icon="virtual-memory"
+      title="Virtual Memory"
+      description="The magic trick. Programs think they are whole, but they are actually scattered everywhere. The OS handles the translation instantly."
+      accent="#22d3ee"
+    />
+  </div>
+</section>
+
+<hr class="ml-divider" />
+
+{/* 3. INTERACTIVE SIMULATOR */}
+<section class="ml-section ml-section--wide animate-fade-up" id="simulator">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Mini Game</span>
+    <h2 class="ml-section-title">Retro OS Simulator</h2>
+    <p class="ml-section-subtitle">
+      Try opening apps to see what happens when your PC only has Direct Memory Access and no Virtual Memory. Try not to crash your PC!
+    </p>
+  </div>
+
+  <RetroOsSimulator client:load />
+</section>
+
+<hr class="ml-divider" />
+
+{/* 4. EXPLANATION / DEEP DIVE */}
+<section class="ml-section animate-fade-up" id="deep-dive">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Problems elaborated</span>
+    <h2 class="ml-section-title">Why Direct Access Failed</h2>
+    <p class="ml-section-subtitle">
+      Early operating systems let programs directly access physical RAM. This caused three massive problems.
+    </p>
+  </div>
+
+  <div class="ml-prose">
+    <h3>Problem 1: The Wild West (Security)</h3>
+    <p>
+      In early operating systems, there was no memory protection. Some programs could accidentally (or maliciously) write data into another program's memory space. This would instantly cause your computer to crash with a Blue Screen of Death. 
+    </p>
+    <p>
+      <strong>The Fix:</strong> Virtual Memory gives each program its own isolated "Virtual Space." The OS divides this virtual space into fixed-size chunks called <strong>Pages</strong>, and divides Physical RAM into matching chunks called <strong>Frames</strong>. The OS's job is to securely map these Virtual Pages into any available Physical Frames. Because the OS handles this translation behind the scenes, a program literally has no way to even guess the physical address of another program, completely fixing the security hole!
+    </p>
+    <SecurityVisualizer client:load />
+    
+    <br/>
+    <h3>Problem 2: Insufficient Memory (Demand Paging & Swap)</h3>
+    <p>
+      Modern computers need a lot of memory. If you only have 8GB of RAM but try to open 10GB worth of programs, an old OS would simply throw an "Out of Memory" error.
+    </p>
+    <p>
+      <strong>The Fix:</strong> The OS uses a <strong>Swap File</strong> on your Hard Disk. When RAM is completely full, the OS takes idle programs and "swaps" them to the disk. When you need them again, it swaps them back into RAM. This is called <em>Demand Paging</em>. It makes your memory feel infinite (though it costs some speed).
+    </p>
+    <SwapVisualizer client:load />
+
+    <br/>
+    <h3>Problem 3: Wasted Memory (Shared Pages)</h3>
+    <p>
+      Imagine you have 4 programs running, and they all need to use the Standard C Library (libc) to do basic math. In an old OS, that library gets loaded into RAM 4 separate times, wasting huge amounts of space.
+    </p>
+    <p>
+      <strong>The Fix:</strong> Because the OS translates Virtual addresses to Physical ones, it can point the virtual memory of all 4 programs to the <em>exact same physical copy</em> of the library in RAM. We call this <strong>Shared Pages</strong>.
+    </p>
+    <SharedLibraryVisualizer client:load />
+
+  </div>
+</section>
+
+<hr class="ml-divider" />
+
+{/* 5. DEEP DIVE: HOW IT WORKS */}
+<section class="ml-section animate-fade-up" id="how-it-works">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Deep Dive</span>
+    <h2 class="ml-section-title">How It All Works Under the Hood</h2>
+    <p class="ml-section-subtitle">
+      A breakdown of the hardware and software mechanisms that make virtual memory possible.
+    </p>
+  </div>
+
+  <div class="ml-prose">
+    
+    <h3>1. The Core Concept: Pages & Frames</h3>
+    <p>
+      As we saw earlier, virtual memory solves <strong>External Fragmentation</strong> by breaking the virtual address space into uniform chunks called <strong>Pages</strong>, and physical RAM into matching chunks called <strong>Frames</strong> (typically 4 KB each). 
+      Because they are exactly the same size, any virtual page can fit into any available physical frame, no matter how scattered the free space in RAM gets.
+    </p>
+
+    <h3>2. The Directory: Page Tables</h3>
+    <p>
+      The OS keeps track of these mappings using a data structure called a <strong>Page Table</strong>. You can think of a Page Table like a massive "library of old phonebooks." Every single running process gets its own personal phonebook. Whenever the OS switches from one program to another (a Context Switch), it updates a hardware pointer called the <strong>Page Table Base Register (PTBR)</strong> to point to the current program's phonebook.
+    </p>
+    <p>
+      These tables don't just hold physical frame numbers. Each entry is packed with extra data:
+    </p>
+    <ul>
+      <li><strong>Protection Bits:</strong> Define permissions like <em>Read-Only</em>, <em>User/Supervisor</em> (restricting access to the OS), and <em>No Execute</em> to stop malicious software from running injected code.</li>
+      <li><strong>Status Bits:</strong> Let the hardware know the state of the page. The <em>Valid</em> bit tells us if the frame is actually in RAM. The <em>Dirty/Modified</em> bit tracks if the data has been changed and needs saving to the disk later. The <em>Accessed</em> bit tracks recent usage, and the <em>Global</em> bit marks pages shared across all processes (like the OS kernel).</li>
+    </ul>
+    <div class="ml-analogy">
+      <strong>The Two-Access Problem:</strong> Page tables are so huge they have to be stored in physical RAM. If the CPU has to read the page table from RAM <em>every single time</em> it wants to access memory, it doubles the access time! We need a hardware solution.
+    </div>
+    
+    <br/>
+    <ContextSwitchVisualizer client:load />
+    <br/>
+    <br/>
+    <PageTableEntryVisualizer client:load />
+
+    <h3>3. The Hardware Hero: The MMU</h3>
+    <p>
+      Enter the <strong>Memory Management Unit (MMU)</strong>. Integrated directly into the processor chip, the MMU acts as the "Sheriff in Town." It manages all memory requests, translates addresses instantly, and strictly enforces those protection bits to catch malicious processes trying to interfere with others.
+    </p>
+    <p>
+      When the CPU asks for data, the MMU splits the virtual address into two parts: a <strong>Virtual Page Number</strong> and a <strong>Page Offset</strong>. For a standard 4KB page, the last 12 bits of the address are the Offset. The MMU only translates the Page Number into a Frame Number; the Offset (the exact location of the byte within the page) stays exactly the same!
+    </p>
+
+    <AddressSignalPipeline client:load />
+    <br/>
+    <br/>
+
+    <h3>4. The VIP Fast-Pass: The TLB</h3>
+    <p>
+      To solve the slow Two-Access Problem, the MMU contains a tiny, ultra-fast hardware cache called the <strong>Translation Lookaside Buffer (TLB)</strong>. If the Page Table in RAM is a massive city library of phonebooks, the TLB is like a small coffee shop next door that only remembers the numbers of the people you call the most. Modern systems actually use two: an <em>Instruction TLB</em> and a <em>Data TLB</em>.
+    </p>
+    <p>
+      To keep things fast during a Context Switch, the TLB uses an <strong>Address Space Identifier (ASID)</strong>. This acts like a nametag for each translation, allowing the TLB to store entries for multiple programs at the same time without needing to be flushed and repopulated every time you switch apps!
+    </p>
+
+    <h3>5. Interactive TLB Simulator</h3>
+    <p>
+      Try acting as the MMU yourself! Select a virtual page to request below. See if you get a fast <strong>TLB Hit</strong>, a slower <strong>TLB Miss</strong> (where the MMU has to walk to the Page Table in RAM), or a <strong>Page Fault</strong>. Watch how the TLB automatically evicts old entries to make room for new ones.
+    </p>
+
+    <TlbSimulator client:load />
+    <br/>
+    <br/>
+
+    <h3>6. The Emergency: Page Faults & Traps</h3>
+    <p>
+      What happens if the MMU checks the Page Table and the "Valid" bit says the page isn't even in RAM? The MMU throws a hardware exception called a <strong>Trap</strong> (specifically a Page Fault). 
+    </p>
+    <p>
+      The OS immediately takes over and checks for a <strong>Segmentation Fault</strong> (did the program try to access memory it never even owned?). If it was a valid request but the page was just swapped to the hard disk, the OS pauses the program, finds a free frame, loads the missing page from the disk, updates the page table, and copies the entry into the TLB using an eviction policy like <em>Least Recently Used (LRU)</em> or <em>Round Robin</em>. Then, the program resumes!
+    </p>
+
+    <h3>7. The Big Picture: Real-Time Memory Mapping</h3>
+    <p>
+      Now that you understand Pages, Frames, the MMU, and swapping, you can visualize how all these pieces fit together. The 3D matrix below represents a physical RAM cube, showing how Code pages, Heap frames, Shared Libraries, and swapped Disk sectors all co-exist in non-contiguous hardware blocks simultaneously.
+    </p>
+
+    <PageFrame3DVisualizer client:load />
+    <br/>
+
+  </div>
+</section>
+
+<hr class="ml-divider" />
+
+{/* 5. TAKEAWAYS */}
+<section class="ml-section animate-fade-up" id="takeaways">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Summary</span>
+    <h2 class="ml-section-title">The 3 Big Takeaways</h2>
+  </div>
+
+  <div class="ml-grid-3">
+    <TakeawayCard
+      number={1}
+      headline="Security & Isolation"
+      description="Every program gets a private playground. It can't break other apps or crash the whole OS."
+      accent="#38bdf8"
+    />
+    <TakeawayCard
+      number={2}
+      headline="Infinite Memory Illusion"
+      description="By swapping idle pages to the hard disk, the computer fakes having unlimited RAM."
+      accent="#a78bfa"
+    />
+    <TakeawayCard
+      number={3}
+      headline="Efficient Sharing"
+      description="Multiple apps can seamlessly share the same physical files (like libraries) without knowing it."
+      accent="#22d3ee"
+    />
+  </div>
+</section>
+
+<hr class="ml-divider" />
+
+{/* 6. KNOWLEDGE QUIZ */}
+<section class="ml-section ml-section--narrow animate-fade-up" id="knowledge-quiz">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Test Your Knowledge</span>
+    <h2 class="ml-section-title">Virtual Memory Checkpoint</h2>
+    <p class="ml-section-subtitle">
+      Before we wrap up, let's see how much you've learned about Virtual Memory!
+    </p>
+  </div>
+  <VMKnowledgeQuiz client:load />
+</section>
+
+<hr class="ml-divider" />
+
+{/* 7. PERSONALITY QUIZ SECTION */}
+<section class="ml-section ml-section--narrow animate-fade-up" id="personality-quiz">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Just for Fun</span>
+    <h2 class="ml-section-title">Which Replacement Algorithm Are You?</h2>
+    <p class="ml-section-subtitle">
+      When RAM gets completely full, the OS has to kick someone out (eviction). Take this personality test to see how you would handle it!
+    </p>
+  </div>
+
+  <VirtualMemoryQuiz client:load />
+</section>
+
+<hr class="ml-divider" />
+
+<section class="ml-section ml-section--narrow animate-fade-up" id="team-roster">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Contributors</span>
+    <h2 class="ml-section-title">The Development Team</h2>
+  </div>
+  <TeamRoster 
+    groupNumber={2} 
+    members={[
+      { name: "Matthew Drew Fabregas" },
+      { name: "Hannah Lee" },
+      { name: "Justin Lance Te Lim" },
+      { name: "Alec Marx Gabriel Belen Nono" },
+      { name: "Mariel Mendoza Yasumuro" }
+    ]} 
+  />
+</section>
+
+<hr class="ml-divider" />
+
+{/* 8. REFERENCES */}
+<section class="ml-section ml-section--narrow animate-fade-up" id="references">
+  <div class="ml-section-header">
+    <span class="ml-section-label">Sources</span>
+    <h2 class="ml-section-title">References</h2>
+  </div>
+
+  <div class="references-card">
+    <ul class="ml-references">
+      <li>Patterson, D. A., &amp; Hennessy, J. L. (2020). <em>Computer Organization and Design MIPS Edition</em>.</li>
+      <li>Silberschatz, A., Galvin, P. B., &amp; Gagne, G. (2018). <em>Operating System Concepts</em>.</li>
+      <li>Tanenbaum, A. S., &amp; Bos, H. (2014). <em>Modern Operating Systems</em>.</li>
+    </ul>
+  </div>
+</section>
