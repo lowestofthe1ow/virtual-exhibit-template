@@ -1,0 +1,39 @@
+/* usb-exhibit.css
+   Fixes page-width growth caused by the exhibit layout's flex container.
+
+   Root cause: in global.css, .content is `display: flex` (row, on wide
+   screens) and .content__block is `flex: 3` with no min-width set. Flex
+   items default to `min-width: auto`, meaning a flex item is never
+   allowed to shrink below its content's intrinsic width -- so if
+   anything inside .article (e.g. a long unbroken line of quiz/gallery
+   text) is wider than .content__block's flex-basis share, the browser
+   grows .content__block (and therefore .content, body, and the whole
+   page) to fit it, instead of wrapping/clipping.
+
+   We can't edit global.css directly, so we override just the one
+   property that's missing, scoped to the containers that matter.
+*/
+
+.content__block,
+.article {
+    min-width: 0;
+}
+
+/* Belt-and-suspenders: nothing inside our own components should be
+   able to force an ancestor wider either. */
+.usb-exhibit-wrap {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.usb-exhibit-wrap * {
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.usb-exhibit-wrap img {
+    max-width: 100%;
+    height: auto;
+}

@@ -1,0 +1,200 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "USB-C"
+author: "Domingo, Stefan; Escano, Ewan; Gamilla, Martin; Garcia, Frederick; Gutierrez, Hans"
+readingTime: "67 minutes"
+---
+
+ {/* We import various Astro and React components */}
+
+import TextWithImage from "../components/s40g6/TextWithImage.astro"
+import UsbCModel from "../components/s40g6/UsbCModel.jsx"
+import pinDiagram from "../assets/s40g6/usbc-pin-diagram.webp"
+import UsbCPinDiagram from "../components/s40g6/UsbCPinDiagram.jsx"
+import ImageGallery from '../components/ImageGallery.jsx';
+import PinQuiz from "../components/s40g6/PinQuiz.jsx";
+import DistroQuiz from "../components/DistroQuiz.jsx"
+import UsbDragQuiz from "../components/s40g6/UsbDragQuiz.jsx"
+import UsbTrueOrFalseQuiz from "../components/s40g6/UsbTrueOrFalseQuiz.jsx"
+import UsbTypeGallery from "../components/s40g6/UsbTypeGallery.jsx"
+import UsbMultipleChoiceQuiz from "../components/s40g6/UsbMultipleChoiceQuiz.jsx"
+
+
+{/* Images have to be imported manually */}
+
+import cachyos from "../assets/CachyOS.png"
+import debian from "../assets/Debian.png"
+import endeavour from "../assets/Endeavour.png"
+import fedora from "../assets/Fedora.png"
+import manjaro from "../assets/Manjaro.png"
+import mint from "../assets/Mint.png"
+import mxlinux from "../assets/MX-Linux.png"
+import popos from "../assets/PopOS.png"
+import ubuntu from "../assets/Ubuntu.png"
+import zorin from "../assets/Zorin.png"
+import tux from "../assets/Tux.png"
+
+import usbA from "../assets/s40g6/usbA.webp"
+import usbB from "../assets/s40g6/usbB.webp"
+import usbC from "../assets/s40g6/usbC.webp"
+import microUsb from "../assets/s40g6/microUsb.webp"
+
+{/* Used for the ImageGallery component */}
+
+export const photos = [
+  {
+    id: 1,
+    title: "Debian",
+    tagline: "The universal operating system",
+    author: "Ian Murdock",
+    year: 1993,
+    img: debian.src,
+    url: "https://www.debian.org",
+  },
+  {
+    id: 2,
+    title: "Fedora",
+    tagline: "Freedom. Friends. Features. First.",
+    author: "Fedora Project (Red Hat)",
+    year: 2003,
+    img: fedora.src,
+    url: "https://fedoraproject.org",
+  },
+  {
+    id: 3,
+    title: "Ubuntu",
+    tagline: "Linux for human beings",
+    author: "Canonical Ltd.",
+    year: 2004,
+    img: ubuntu.src,
+    url: "https://ubuntu.com",
+  },
+  {
+    id: 4,
+    title: "Linux Mint",
+    tagline: "From freedom came elegance",
+    author: "Clément Lefèbvre",
+    year: 2006,
+    img: mint.src,
+    url: "https://linuxmint.com",
+  },
+  {
+    id: 5,
+    title: "Zorin OS",
+    tagline: "Make your computer better",
+    author: "Artyom & Kyrill Zorin",
+    year: 2009,
+    img: zorin.src,
+    url: "https://zorin.com/os/",
+  },
+  {
+    id: 6,
+    title: "Manjaro",
+    tagline: "Enjoy the simplicity",
+    author: "Manjaro GmbH & Co. KG",
+    year: 2011,
+    img: manjaro.src,
+    url: "https://manjaro.org",
+  },
+  {
+    id: 7,
+    title: "MX Linux",
+    tagline: "Simple, stable, and lightweight",
+    author: "antiX & former MEPIS communities",
+    year: 2014,
+    img: mxlinux.src,
+    url: "https://mxlinux.org",
+  },
+  {
+    id: 8,
+    title: "Pop!_OS",
+    tagline: "You're in Control",
+    author: "System76",
+    year: 2017,
+    img: popos.src,
+    url: "https://pop.system76.com",
+  },
+  {
+    id: 9,
+    title: "EndeavourOS",
+    tagline: "Start your Endeavour",
+    author: "EndeavourOS Team",
+    year: 2019,
+    img: endeavour.src,
+    url: "https://endeavouros.com",
+  },
+  {
+    id: 10,
+    title: "CachyOS",
+    tagline: "Performance-First Linux",
+    author: "Peter Jung",
+    year: 2021,
+    img: cachyos.src,
+    url: "https://cachyos.org",
+  },
+];
+
+{/* Actual content */}
+
+# A USB (C)omplete guide and deep dive
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
+  <UsbCModel modelSrc={`${import.meta.env.BASE_URL}/s40g6/usb_type-c.glb`} client:load />
+  
+  <div>
+    <h3 style="margin: 0 0 12px 0;">How it works</h3>
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/2gTxzAh7f1M"
+      style="width: 100%; height: 400px; border-radius: 12px; border: none;"
+      allowfullscreen
+    />
+  </div>
+</div>
+
+## USB-C Pin Diagram
+<UsbCPinDiagram imageSrc={pinDiagram.src} client:load />
+## USB Types
+<UsbTypeGallery images={{ usbA, usbB, usbC, microUsb }} client:load />
+
+Get ready to test your knowledge with our various quizzes
+## USB-C Knowledge Check
+
+<UsbMultipleChoiceQuiz client:load />
+## USB True or False Quiz
+
+Test to see if you can determine the real or fake information about USB-C's. Click either true or false for each question!
+
+<UsbTrueOrFalseQuiz images={{}} client:load />
+
+## Pin Quiz
+<PinQuiz client:load />
+
+## USB Type Quiz
+
+Think you know your USB connectors? Drag each description to the correct USB type!
+
+<UsbDragQuiz images={{ usbA, usbB, usbC, microUsb }} client:load />
+
+
+
+
+
+## References
+
+### Images
+- USB-A cable image — [Cable Matters via TiendaMia](https://tiendamia.com.ar/p/amz/b00hss9lei/cable-matters-5gbps-long-usb-3-0-cable-15ft-male)
+- USB-B cable image — [Engine DJ Community](https://community.enginedj.com/t/can-i-use-a-printer-cable-to-connect-prime-4-to-a-device/20844)
+- USB-C cable image — [RS Online Philippines](https://ph.rs-online.com/web/p/usb-cables/2873441)
+- Micro USB cable image — [Walmart Canada via Proxicast](https://www.walmart.ca/en/ip/Proxicast-Premium-8mm-Extra-Long-Tip-USB-2-0-Micro-USB-Male-to-USB-A-Male-Cable-6-ft-Length-Heavy-22-AWG-Gauge/1698M2VUIBYY)
+- USB-C pin diagram — [Electronics Stack Exchange](https://electronics.stackexchange.com/questions/291413/usb-c-to-usb-a-pinout)
+
+### Video
+- "Explained: What Is USB-C?" — [PCMag via YouTube](https://www.youtube.com/watch?v=2gTxzAh7f1M)
+
+### USB Specifications & Characteristics
+- USB-A, USB-B, USB-C, and Micro USB specifications — [USB Implementers Forum (USB-IF)](https://www.usb.org/documents)
+- USB Power Delivery 3.1 (240W) — [USB-IF USB PD Specification](https://www.usb.org/usb-charger-pd)
+- USB4 and Thunderbolt 4 speeds — [USB-IF USB4 Specification](https://www.usb.org/usb4)
+- EU USB-C mandate (2022) — [European Parliament Press Release](https://www.europarl.europa.eu/news/en/press-room/20220930IPR41928/long-awaited-common-charger-for-mobile-devices-will-be-a-reality-in-2024)
+- USB-C pin assignments and CC pin behavior — [Electronics Stack Exchange](https://electronics.stackexchange.com/questions/291413/usb-c-to-usb-a-pinout)
+- USB-C Alt Mode (DisplayPort, HDMI) — [VESA DisplayPort Alt Mode Standard](https://www.displayport.org/displayport-over-usb-c/)
+- Micro USB history and specification — [USB Implementers Forum (USB-IF)](https://www.usb.org/documents)
