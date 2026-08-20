@@ -1,0 +1,82 @@
+---
+layout: ../layouts/ExhibitLayout.astro
+title: "Alice Through the Snooping Bus"
+description: "Cache Coherence (MESI Protocol). Our exhibit will explore how multi-core processors communicate to maintain data consistency, using American McGee’s Alice and Alice: Madness Returns video games as a guiding metaphor."
+author: "Adriano, Mark Luis; Besa, April Denise; Guerrero, Laura Mae; Malapitan, Ryan James; Pallarca, Cedric"
+readingTime: "15 minute read"
+---
+
+import '../styles/s40g1/alice.css';
+import AliceSimulator from '../components/s40g1/AliceSimulator.jsx';
+
+# Alice ThrOugh the SnOOping Bus: a Wonderland of Cache Coherence
+
+## Our Journey Begins
+
+Welcome to our virtual exhibit! Explore how multi-core processors maintain data consistency through the **Snooping Bus** and **MESI Protocol** that's visualized through the fractured psyche of American McGee's **Alice**.
+
+In this interactive simulation, we are presented with two CPU cores: Classic Alice (Core 0) and Hysteria Alice (Core 1). They share a single block of main memory, in this case we call it the **Rabbit Hole** which serves as the brain of the two personalities. Each core has its own private cache (a *Memory Pocket*) where it stores copies of data from main memory.
+
+### The Metaphor
+
+| Alice Concept | Hardware Concept |
+| :--- | :--- |
+| Classic Alice (Core 0) | CPU Core 0 Cache |
+| Hysteria Alice (Core 1) | CPU Core 1 Cache |
+| Memories (Teacup, Knife, Clock, Top Hat, Key) | Cache Lines (Data) |
+| Looking-Glass | Snooping Bus (Broadcast Medium) |
+| Alice's Brain / Rabbit Hole | Main Memory (RAM) |
+| Remember | Read (PrRd) |
+| Corrupt | Write (BusRdX) |
+| Embrace Sanity | Writeback (WB) |
+
+
+### MESI Protocol States
+We chose to present the MESI protocol because it is the industry standard in modern CPUs such as Intel.
+
+| State | Color | Meaning |
+| :--- | :--- | :--- |
+| **M**odified | Purple | Data has been changed locally and is now "dirty." Only the core that modified the data holds this state. |
+| **E**xclusive | White | Only one core has a copy of the data. It matches Main Memory. |
+| **S**hared | Gold | Multiple cores have copies of the data. All copies match Main Memory. |
+| **I**nvalid | Grey | One core has modified the data so now other cores with the same data must be discarded. |
+
+Beyond the protocol, we also demonstrate two critical cache policies:
+
+*Write-Invalidate* — When a core writes to a cache line in the Shared (S) state, it broadcasts a request on the Snooping Bus. All other cores that hold a copy of that line must invalidate their copies (transition to Invalid/I), ensuring only one core has the latest version. This prevents the "lost update" problem where two cores might independently modify stale data.
+
+*Write-Back* — When a core modifies data in its cache (entering the Modified/M state), it does not immediately write that change back to main memory. Instead, the data stays "dirty" in the cache until explicitly written back. This improves performance by reducing slow memory traffic, but requires careful coherence management. In our exhibit, you must click "Embrace Sanity" to trigger a Writeback operation, flushing the modified data from cache back to RAM.
+
+### How the Simulator Works
+
+1. **Select a data** in the **Rabbit Hole (RAM)**. 
+2. **Select a memory slot** in either **Classic Alice (Core 0)** or **Hysteria Alice (Core 1)**. Each slot represents a cache line stored in that core's cache.
+3. Click **"Remember"** to perform a **read operation (PrRd)**. If the selected data is not already in the cache, the core retrieves it from **Main Memory** through the Snooping Bus, updating its MESI state accordingly.
+4. Click **"Corrupt"** to perform a **write operation (BusRdX)**. This grants the selected core ownership of the cache line while forcing the other core to **invalidate** its copy, maintaining cache coherence.
+5. Click **"Embrace Sanity"** to perform a **writeback (WB)**. Any modified ("dirty") data is written back to **Main Memory**, allowing both memory and the cache to become synchronized again.
+
+Observe the **Looking-Glass Bus**, the **Explanation Panel**, and the **MESI state indicators** to see how each operation affects both cores and Main Memory in real time.
+
+
+### Try It Yourself!
+
+<AliceSimulator client:load />
+
+
+### References
+
+1. Alice: Madness Returns (2011). Spicy Horse.
+2. American McGee's Alice (2000). Rogue Entertainment.
+3. Hennessy, J. L., & Patterson, D. A. (2017). *Computer Architecture: A Quantitative Approach* (6th ed.). Morgan Kaufmann.
+4. Neso Academy. (2021, September 30). *Snooping-based Cache Coherency Protocol* [Video]. YouTube. https://youtu.be/YNpaELJZm2c
+5. The MESI protocol. (n.d.). https://people.cs.pitt.edu/~melhem/courses/2410p/ch5-4.pdf
+
+
+
+### Team Members
+
+- Adriano, Mark Luis B.
+- Besa, April Denise B.
+- Guerrero, Laura Mae D.
+- Malapitan, Ryan James C.
+- Pallarca, Cedric S.
