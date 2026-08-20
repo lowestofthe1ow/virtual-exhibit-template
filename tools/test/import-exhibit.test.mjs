@@ -326,3 +326,88 @@ test('a staged global.css that differs from the umbrella copy only by CRLF line 
     'a CRLF-only difference must still be treated as identical',
   );
 });
+
+// --- index-squatter entry handling (defect: --entry index.mdx always
+// crashed because the template-leftover cleanup step deleted pages/index.mdx
+// unconditionally, before the entry-copy step could read it; separately, the
+// entry-copy step always wrote src/pages/<slug>.mdx regardless of the
+// entry's own extension, so an --entry index.astro silently produced an
+// Astro component saved with an .mdx extension) ---
+
+// A fixture repo whose entry page lives under whatever filename the caller
+// chooses — index.mdx or index.astro for the index-squatter pattern the
+// runbook documents, or a differently-named .mdx page as a regression check
+// — instead of always entry.mdx the way fixtureRepo() above does.
+function fixtureRepoWithEntryNamed(entryFile, content = '# Entry\n') {
+  const dir = mkdtempSync(join(tmpdir(), 'import-exhibit-src-'));
+  mkdirSync(join(dir, 'src', 'pages'), { recursive: true });
+  // optimizeTree assumes src/assets/ exists; every fixture needs it present.
+  mkdirSync(join(dir, 'src', 'assets'), { recursive: true });
+  writeFileSync(join(dir, 'src', 'pages', entryFile), content);
+  return dir;
+}
+
+test('--entry index.mdx survives the leftover-cleanup step and lands at src/pages/<slug>.mdx', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepoWithEntryNamed('index.mdx', '# Index-squatter entry\n');
+  const result = runCli(
+    ['--slug', 's50g1', '--src', repo, '--entry', 'index.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.ok(
+    existsSync(join(cwd, '.integration-src', 's50g1-stage', 'pages', 'index.mdx')),
+    'the staged index.mdx must survive the leftover-cleanup step when it is the --entry',
+  );
+  assert.ok(
+    existsSync(join(cwd, 'src', 'pages', 's50g1.mdx')),
+    'the index.mdx entry should have been copied to src/pages/<slug>.mdx',
+  );
+});
+
+test('a staged index.mdx that is NOT the entry is still deleted as a leftover (regression guard)', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepo();
+  writeFileSync(join(repo, 'src', 'pages', 'index.mdx'), '# Stock template homepage\n');
+  const result = runCli(
+    ['--slug', 's50g2', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.ok(
+    !existsSync(join(cwd, '.integration-src', 's50g2-stage', 'pages', 'index.mdx')),
+    'a staged index.mdx that is not the entry must still be dropped as template leftover',
+  );
+});
+
+test('--entry index.astro lands at src/pages/<slug>.astro, not .mdx', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepoWithEntryNamed('index.astro', '---\n---\n<div>Astro index-squatter</div>\n');
+  const result = runCli(
+    ['--slug', 's50g3', '--src', repo, '--entry', 'index.astro', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.ok(
+    existsSync(join(cwd, 'src', 'pages', 's50g3.astro')),
+    'an index.astro entry should be copied keeping its own .astro extension',
+  );
+  assert.ok(
+    !existsSync(join(cwd, 'src', 'pages', 's50g3.mdx')),
+    'an index.astro entry must not be silently written with a .mdx extension',
+  );
+});
+
+test('--entry named.mdx still lands at src/pages/<slug>.mdx (regression guard)', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepoWithEntryNamed('named.mdx', '# Named entry\n');
+  const result = runCli(
+    ['--slug', 's50g4', '--src', repo, '--entry', 'named.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  assert.ok(
+    existsSync(join(cwd, 'src', 'pages', 's50g4.mdx')),
+    'a plain-named .mdx entry should still land at src/pages/<slug>.mdx',
+  );
+});

@@ -146,7 +146,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       if (TEMPLATE_LEFTOVERS.includes(f)) rmSync(join(d, f), { recursive: true, force: true });
     }
   }
-  rmSync(join(stage, 'pages', 'index.mdx'), { force: true });
+  // The stock template's own homepage is template leftover and must not be
+  // merged — EXCEPT when an "index-squatter" exhibit left its actual content
+  // in this exact file and is being integrated via --entry index.mdx (the
+  // runbook documents this pattern). In that case index.mdx IS the entry
+  // this run is about to copy in step 7, not leftover, and deleting it here
+  // unconditionally destroys it before that copy can happen (ENOENT).
+  if (entry !== 'index.mdx') {
+    rmSync(join(stage, 'pages', 'index.mdx'), { force: true });
+  }
 
   // 3. Prune orphans (report only for the import.meta.glob repos).
   const orphans = findOrphans(stage);
@@ -245,7 +253,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   // 6. Routes the exhibit used to own, for ${base}/root-absolute link
   // rewriting. A Map, not a bare list: the entry page moves to
-  // src/pages/<slug>.mdx (no sub-directory), so its OLD name must map to
+  // src/pages/<slug>.{mdx,astro} (no sub-directory), so its OLD name must map to
   // the bare slug, not "<slug>/<its-old-name>" — every other page keeps the
   // "<slug>/<name>" shape the flat list always produced. A sub-page under
   // --subdir is reachable under two distinct old keys that must resolve to
@@ -285,7 +293,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const publicAssets = hasPublic ? buildPublicAssetMap(stagePublic, publicResults) : new Map();
   console.log(`public assets to re-point: ${publicAssets.size}`);
 
-  console.log(`\nentry page: ${entry} -> src/pages/${slug}.mdx`);
+  // The entry keeps its own extension rather than always landing as .mdx: an
+  // index-squatter's entry may be index.astro just as easily as index.mdx
+  // (or a named page of either kind), and src/pages/<slug>.astro routes
+  // identically to src/pages/<slug>.mdx, so there is no reason — and no safe
+  // way, short of actually transpiling — to force one format into the other.
+  const entryExt = extname(entry);
+  const entryDest = `${slug}${entryExt}`;
+  console.log(`\nentry page: ${entry} -> src/pages/${entryDest}`);
   if (subdir) console.log(`sub-pages : ${subdir}/ -> src/pages/${slug}/`);
   if (hasPublic) console.log(`public    : -> public/${slug}/`);
   for (const kind of NAMESPACED_KINDS) {
@@ -313,7 +328,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     }
   }
 
-  copyRewritten(join(stage, 'pages', entry), join(SRC, 'pages', `${slug}.mdx`), 'pages', 'pages');
+  copyRewritten(join(stage, 'pages', entry), join(SRC, 'pages', entryDest), 'pages', 'pages');
 
   if (subdir) {
     for (const file of walk(join(stage, 'pages', subdir))) {
