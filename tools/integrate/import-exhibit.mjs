@@ -243,12 +243,37 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     pathMap.set(from, [top, slug, ...rest].join('/'));
   }
 
-  // 6. Routes the exhibit used to own, for ${base} link rewriting.
-  const routes = readdirSync(join(stage, 'pages'))
-    .filter((f) => /\.(mdx|astro|md)$/.test(f))
-    .map((f) => f.replace(/\.(mdx|astro|md)$/, ''))
-    .filter((r) => r !== 'index');
-  console.log(`routes to re-point: ${routes.join(', ') || '(none)'}`);
+  // 6. Routes the exhibit used to own, for ${base}/root-absolute link
+  // rewriting. A Map, not a bare list: the entry page moves to
+  // src/pages/<slug>.mdx (no sub-directory), so its OLD name must map to
+  // the bare slug, not "<slug>/<its-old-name>" — every other page keeps the
+  // "<slug>/<name>" shape the flat list always produced. A sub-page under
+  // --subdir is reachable under two distinct old keys that must resolve to
+  // the SAME destination: its own bare name (the way a sibling sub-page
+  // links to it) and the combined "<subdir>/<name>" form (the way a page
+  // outside the sub-directory, e.g. the entry page, links to it) — because
+  // <subdir> itself does not survive the move: the copy loop below flattens
+  // src/pages/<subdir>/<name> straight into src/pages/<slug>/<name>.
+  const stripExt = (f) => f.replace(/\.(mdx|astro|md)$/, '');
+  const routes = new Map();
+  routes.set(stripExt(entry), slug);
+
+  for (const f of readdirSync(join(stage, 'pages'))) {
+    if (!/\.(mdx|astro|md)$/.test(f) || f === entry) continue;
+    const name = stripExt(f);
+    if (name === 'index') continue;
+    routes.set(name, `${slug}/${name}`);
+  }
+
+  if (subdir) {
+    for (const file of walk(join(stage, 'pages', subdir))) {
+      const rel = relative(join(stage, 'pages', subdir), file).split(/[\\/]/).join('/');
+      const name = stripExt(rel);
+      routes.set(name, `${slug}/${name}`);
+      routes.set(`${subdir}/${name}`, `${slug}/${name}`);
+    }
+  }
+  console.log(`routes to re-point: ${[...routes.keys()].join(', ') || '(none)'}`);
 
   // Public asset original -> final name map, for rewriting /foo.png and
   // ${base}foo.png references. Built AFTER optimizeTree above has already run

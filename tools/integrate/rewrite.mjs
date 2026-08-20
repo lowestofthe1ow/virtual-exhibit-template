@@ -74,18 +74,51 @@ export function rewriteFile(
     return `${quote}${remapped}${quote}`;
   });
 
-  for (const route of routes) {
-    // ${base}route/  ->  ${base}<slug>/route/
-    // ${base}/route/ -> ${base}/<slug>/route/
+  // A route may be given as a bare array of names (backward compatible: the
+  // loop below then treats each name as mapping to itself under the slug,
+  // exactly as this pass always behaved) or as a Map (canonical) of old
+  // route key -> full new route. Only a Map can express what a flat array
+  // cannot: the entry page's key must map to the bare slug rather than
+  // "<slug>/<key>" (see import-exhibit.mjs's routes map), and a sub-page is
+  // reachable under two distinct old keys — its own bare name (a sibling
+  // page links to it that way) AND the combined "<subdir>/<name>" form (a
+  // link written against the source repo's own route structure) — that must
+  // both resolve to the SAME "<slug>/<name>", since <subdir> itself does not
+  // survive the move (flattened away by the orchestrator's copy step).
+  const routeEntries = routes instanceof Map
+    ? [...routes]
+    : routes.map((name) => [name, `${slug}/${name}`]);
+
+  // Longer keys first, so "<subdir>/<name>" is tried before the bare
+  // "<name>" that is its own suffix. Each pattern below is anchored (right
+  // after "${base}"/an optional slash, or right after a quote+slash), so in
+  // practice only one key can ever match a given occurrence — but this
+  // ordering is the cheap defensive guarantee that a match is always
+  // consumed as a whole route, never leaving a stray sub-directory segment
+  // behind from a partial rewrite.
+  const sortedRoutes = [...routeEntries].sort(([a], [b]) => b.length - a.length);
+
+  for (const [key, value] of sortedRoutes) {
+    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // ${base}route/  ->  ${base}<value>/
+    // ${base}/route/ -> ${base}/<value>/
     // Student code writes both shapes (with and without a single separating
     // slash between the base template literal and the route name); the
-    // optional slash is captured and echoed back unchanged so the slug is
-    // spliced in without altering whichever shape the source used.
-    const pattern = new RegExp(
-      '(\\$\\{base[A-Za-z]*\\})(/?)(' + route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')' + TRAILING_BOUNDARY,
-      'g',
+    // optional slash is captured and echoed back unchanged. Replaced via a
+    // function (not a "$1$2..." template) for the same reason as
+    // publicAssets below: a `value` containing a literal "$" must never be
+    // misread as a backreference.
+    out = out.replace(
+      new RegExp('(\\$\\{base[A-Za-z]*\\})(/?)(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
+      (match, baseLit, slash) => `${baseLit}${slash}${value}`,
     );
-    out = out.replace(pattern, `$1$2${slug}/$3`);
+    // The root-absolute form ("/08-shader-lab") resolves at the browser
+    // root, so — like a root-absolute public-asset reference below — it
+    // needs the umbrella site's own base spliced in ahead of `value` too.
+    out = out.replace(
+      new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
+      (match, quote) => `${quote}/${umbrellaBase}/${value}`,
+    );
   }
 
   // Files served from public/ move to public/<slug>/, so both the base-relative

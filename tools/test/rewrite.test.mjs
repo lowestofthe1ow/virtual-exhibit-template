@@ -301,6 +301,68 @@ test('the trailing-boundary protection still holds when publicAssets renames the
   assert.equal(out, '<img src="/logo.png.bak">');
 });
 
+// --- routes as an old-key -> new-route map, covering the entry page and
+// sub-pages under --subdir (this fix) ---
+
+test('the entry page maps to the bare slug, not slug/<its-old-name>', () => {
+  const routeMap = new Map([['01-main', 's01g8']]);
+  const out = rewriteFile('href={`${baseUrl}/01-main`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's01g8', routes: routeMap,
+  });
+  assert.equal(out, 'href={`${baseUrl}/s01g8`}');
+  assert.doesNotMatch(out, /s01g8\/01-main/);
+});
+
+test('a sub-page\'s bare-name key rewrites the ${base}/ form to slug/name', () => {
+  const routeMap = new Map([['08-shader-lab', 's01g8/08-shader-lab']]);
+  const out = rewriteFile('href={`${base}/08-shader-lab`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's01g8', routes: routeMap,
+  });
+  assert.equal(out, 'href={`${base}/s01g8/08-shader-lab`}');
+});
+
+test('the combined subdir/name form is rewritten and the sub-directory segment is dropped', () => {
+  const routeMap = new Map([['S01_Group8_subpages/02-introduction', 's01g8/02-introduction']]);
+  const out = rewriteFile('href={`${base}/S01_Group8_subpages/02-introduction`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's01g8', routes: routeMap,
+  });
+  assert.equal(out, 'href={`${base}/s01g8/02-introduction`}');
+});
+
+test('longest key wins: the combined form is rewritten exactly once, not nested or doubled', () => {
+  const routeMap = new Map([
+    ['S01_Group8_subpages/02-introduction', 's01g8/02-introduction'],
+    ['02-introduction', 's01g8/02-introduction'],
+  ]);
+  const out = rewriteFile('href={`${base}/S01_Group8_subpages/02-introduction`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's01g8', routes: routeMap,
+  });
+  assert.equal(out, 'href={`${base}/s01g8/02-introduction`}');
+});
+
+test('a root-absolute route reference gains the umbrella base and the mapped value', () => {
+  const routeMap = new Map([['08-shader-lab', 's01g8/08-shader-lab']]);
+  const out = rewriteFile('<a href="/08-shader-lab">Lab</a>', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's01g8', routes: routeMap,
+  });
+  assert.equal(out, '<a href="/virtual-exhibit-template/s01g8/08-shader-lab">Lab</a>');
+});
+
+test('the boundary guard still holds with a route map: references does not match references-appendix', () => {
+  const routeMap = new Map([['references', 's04g4/references']]);
+  const out = rewriteFile('href={`${base}/references-appendix/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's04g4', routes: routeMap,
+  });
+  assert.equal(out, 'href={`${base}/references-appendix/`}');
+});
+
+test('a plain array of route names still behaves as before (backward-compat guard)', () => {
+  const out = rewriteFile('href={`${base}shared-bus-problem/`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's04g4', routes: ['shared-bus-problem'],
+  });
+  assert.equal(out, 'href={`${base}s04g4/shared-bus-problem/`}');
+});
+
 test('normalizeBase strips leading and trailing slashes and treats "/" and "" as no base', () => {
   assert.equal(normalizeBase('/CSARCH2-Group-6/'), 'CSARCH2-Group-6');
   assert.equal(normalizeBase('virtual-exhibit-template'), 'virtual-exhibit-template');

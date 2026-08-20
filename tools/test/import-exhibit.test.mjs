@@ -292,6 +292,25 @@ test('buildPublicAssetMap sources an original -> final rename map from optimizeT
   assert.equal(map.get('model.glb'), 'model.glb', 'a file the optimizer never touched maps to itself');
 });
 
+// --- the orchestrator's routes map: the entry page points at the bare
+// slug, not slug/<its-old-name> (see rewrite.mjs) ---
+test('the entry page\'s own name maps to the bare slug in the built routes map', () => {
+  const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
+  const repo = fixtureRepo();
+  writeFileSync(
+    join(repo, 'src', 'pages', 'entry.mdx'),
+    '# Entry\n\n<a href={`${base}/entry`}>Home</a>\n',
+  );
+  const result = runCli(
+    ['--slug', 's01g1', '--src', repo, '--entry', 'entry.mdx', '--apply'],
+    cwd,
+  );
+  assert.equal(result.status, 0);
+  const page = readFileSync(join(cwd, 'src', 'pages', 's01g1.mdx'), 'utf8');
+  assert.match(page, /href=\{`\$\{base\}\/s01g1`\}/);
+  assert.doesNotMatch(page, /s01g1\/entry/);
+});
+
 test('a staged global.css that differs from the umbrella copy only by CRLF line endings is treated as identical and dropped', () => {
   const cwd = mkdtempSync(join(tmpdir(), 'import-exhibit-cwd-'));
   withUmbrellaGlobalCss(cwd, REFERENCE_GLOBAL_CSS);
