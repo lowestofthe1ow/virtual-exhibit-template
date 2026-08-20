@@ -98,9 +98,15 @@ export function rewriteFile(
       new RegExp('(\\$\\{base[A-Za-z]*\\})(/?)(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
       `$1$2${slug}/$3`,
     );
+    // The root-absolute form ("/Clock.png") resolves at the browser root, so
+    // it needs both the umbrella site's own base AND the slug spliced in:
+    // "/Clock.png" -> "/virtual-exhibit-template/s40g1/Clock.png". This is
+    // unlike the ${base}-prefixed form just above, whose ${base} already
+    // supplies the umbrella base at runtime - adding it there too would
+    // double it, so only this root-absolute branch gets umbrellaBase.
     out = out.replace(
       new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      `$1/${slug}/$2`,
+      `$1/${umbrellaBase}/${slug}/$2`,
     );
   }
 

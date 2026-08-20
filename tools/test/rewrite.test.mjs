@@ -86,7 +86,7 @@ test('references to a public asset gain the slug in both link shapes', () => {
     fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9',
     routes: [], publicAssets: ['moon.svg'],
   });
-  assert.match(out, /src="\/s03g9\/moon\.svg"/);
+  assert.match(out, /src="\/virtual-exhibit-template\/s03g9\/moon\.svg"/);
   assert.match(out, /\$\{base\}s03g9\/moon\.svg/);
 });
 
@@ -130,7 +130,33 @@ test('the exact public asset is still rewritten when a longer filename shares it
   const out = rewriteFile('<img src="/logo.png">', {
     fromDir: 'pages', toDir: 'pages', pathMap, slug: 's03g9', routes: [], publicAssets: ['logo.png'],
   });
-  assert.match(out, /src="\/s03g9\/logo\.png"/);
+  assert.match(out, /src="\/virtual-exhibit-template\/s03g9\/logo\.png"/);
+});
+
+// --- root-absolute public-asset references gain the umbrella base (defect 2) ---
+
+test('a root-absolute public asset reference gains both the umbrella base and the slug', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: ['Clock.png'],
+  });
+  assert.equal(out, '<img src="/virtual-exhibit-template/s40g1/Clock.png">');
+});
+
+test('the ${base}-prefixed form is untouched by the umbrella-base fix - ${base} already supplies it', () => {
+  const out = rewriteFile('href={`${base}Clock.png`}', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: ['Clock.png'],
+  });
+  assert.equal(out, 'href={`${base}s40g1/Clock.png`}');
+});
+
+test('the trailing-boundary protection still holds for the root-absolute form', () => {
+  const out = rewriteFile('<img src="/logo.png.bak">', {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(), slug: 's40g1',
+    routes: [], publicAssets: ['logo.png'],
+  });
+  assert.equal(out, '<img src="/logo.png.bak">');
 });
 
 test('a route reference with no trailing slash before the closing backtick still rewrites', () => {
