@@ -1,0 +1,21 @@
+---
+// CardReveal.astro — Wires IntersectionObserver to .hb-card-reveal elements.
+// Import this component into heartbleed.mdx to enable scroll-triggered card animations.
+---
+
+<script>
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("hb-card-visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.08 }
+    );
+    document
+        .querySelectorAll(".hb-card-reveal")
+        .forEach((el) => observer.observe(el));
+</script>

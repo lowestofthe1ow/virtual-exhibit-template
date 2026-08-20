@@ -1,0 +1,605 @@
+/* heartbleed-theme.css
+ * Tailwind v4 theme tokens for the Heartbleed (CVE-2014-0160) exhibit.
+ * Imported directly from heartbleed.mdx (do not add to global.css).
+ */
+
+@import "../../styles/tailwind-scoped.css";
+
+@theme {
+    --color-s03g1-hb-bg: #170e3d;
+    --color-s03g1-hb-primary: #ff279e;
+    --color-s03g1-hb-secondary: #bd93f9;
+    --color-s03g1-hb-cyan: #76c6d7;
+    --color-s03g1-hb-red: #ff3131;
+    --color-s03g1-hb-coral: #e2a9f1;
+
+    --font-s03g1-heading: "JetBrains Mono Variable", ui-monospace, monospace;
+    --font-s03g1-body: "Space Grotesk Variable", ui-sans-serif, sans-serif;
+
+    --animate-s03g1-heartbeat: heartbeat 1.4s ease-in-out infinite;
+    --animate-s03g1-heartbeat-fast: heartbeat 0.55s ease-in-out infinite;
+    --animate-s03g1-drip: drip 2s linear infinite;
+    --animate-s03g1-flash: flash 0.6s ease-out;
+    --animate-s03g1-reveal: reveal 0.5s ease-out both;
+}
+
+@keyframes heartbeat {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    20% {
+        transform: scale(1.1);
+    }
+    35% {
+        transform: scale(0.97);
+    }
+    50% {
+        transform: scale(1.06);
+    }
+    70% {
+        transform: scale(1);
+    }
+}
+
+@keyframes drip {
+    0% {
+        transform: translate(0, -10%);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    85% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--drip-drift, 0px), 160%);
+        opacity: 0;
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.8);
+    }
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+    to {
+        width: var(--tw-final-width, 100%);
+    }
+}
+
+@keyframes blink-caret {
+    0%,
+    100% {
+        border-color: transparent;
+    }
+    50% {
+        border-color: currentColor;
+    }
+}
+
+@keyframes card-rise {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes scanline {
+    0% {
+        background-position: 0 -100%;
+    }
+    100% {
+        background-position: 0 200%;
+    }
+}
+
+@keyframes glow-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 39, 158, 0);
+    }
+    50% {
+        box-shadow: 0 0 16px 2px rgba(255, 39, 158, 0.22);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.article {
+    color: #221a3c;
+    font-family: var(--font-s03g1-body);
+    font-size: 1.04rem;
+    font-weight: 400;
+    letter-spacing: 0.012em;
+    line-height: 1.9;
+    max-width: 72ch;
+    margin: 0 auto;
+}
+
+.article :global(p) {
+    margin: 1rem 0;
+    text-wrap: pretty;
+}
+
+.article :global(p + p) {
+    margin-top: 1.15rem;
+}
+
+.article :global(p:first-of-type) {
+    color: #2b2250;
+    font-size: 1.08rem;
+    line-height: 1.85;
+}
+
+.article h2 {
+    font-family: var(--font-s03g1-heading);
+    font-weight: 800 !important;
+    font-size: clamp(1.6rem, 1.4rem + 0.9vw, 2.2rem) !important;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+    margin: 3.6rem 0 1.8rem !important;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    /* Shimmer gradient text */
+    background: linear-gradient(
+        90deg,
+        var(--color-s03g1-hb-primary) 0%,
+        var(--color-s03g1-hb-coral) 30%,
+        var(--color-s03g1-hb-cyan) 60%,
+        var(--color-s03g1-hb-primary) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+}
+
+.article > :global(h2::before) {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: linear-gradient(
+        135deg,
+        var(--color-s03g1-hb-primary),
+        var(--color-s03g1-hb-cyan)
+    );
+    box-shadow: 0 0 0 3px rgba(255, 39, 158, 0.14), 0 0 8px 2px rgba(255, 39, 158, 0.3);
+    /* dot doesn't inherit -webkit-text-fill-color */
+    -webkit-text-fill-color: initial;
+}
+
+.article > :global(h2::after) {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 39, 158, 0.44),
+        rgba(118, 198, 215, 0.2)
+    );
+    /* line doesn't inherit -webkit-text-fill-color */
+    -webkit-text-fill-color: initial;
+    box-shadow: none;
+}
+
+/* Chapter Label Storytelling */
+
+@keyframes labelGlitch {
+    0%, 96%, 100% { transform: translate(0); text-shadow: none; box-shadow: 0 0 0 transparent; }
+    97% { transform: translate(-1px, 1px); text-shadow: 2px 0 var(--color-s03g1-hb-secondary), -2px 0 var(--color-s03g1-hb-cyan); box-shadow: inset 2px 0 var(--color-s03g1-hb-secondary); }
+    98.5% { transform: translate(1px, -1px); text-shadow: -2px 0 var(--color-s03g1-hb-secondary), 2px 0 var(--color-s03g1-hb-cyan); box-shadow: inset -2px 0 var(--color-s03g1-hb-cyan); }
+}
+
+.label-story-glitch {
+    animation: labelGlitch 3.5s infinite;
+    position: relative;
+    border: 1px dashed var(--color-s03g1-hb-secondary);
+    border-radius: 8px !important;
+}
+
+@keyframes labelAlarm {
+    0%, 100% { background-color: rgba(255, 49, 49, 0.1); border-color: rgba(255, 49, 49, 0.3); color: var(--color-s03g1-hb-coral); box-shadow: 0 0 5px rgba(255, 49, 49, 0); }
+    50% { background-color: rgba(255, 49, 49, 0.4); border-color: var(--color-s03g1-hb-coral); color: #fff; box-shadow: 0 0 15px var(--color-s03g1-hb-coral), inset 0 0 10px var(--color-s03g1-hb-coral); }
+}
+
+.label-story-alarm {
+    animation: labelAlarm 1.2s infinite ease-in-out;
+    border: 1px solid transparent;
+}
+
+.label-story-archival {
+    background-color: #1e293b !important; /* stark slate */
+    color: #e2e8f0 !important;
+    border: 1px solid #475569 !important;
+    border-radius: 2px !important; /* rigid, non-pill */
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+.label-story-archival span {
+    color: #94a3b8 !important;
+}
+
+
+.article h3 {
+    color: var(--color-s03g1-hb-secondary) !important;
+    font-family: var(--font-s03g1-heading);
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+    margin: 3.2rem 0 1.6rem !important;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* H2 Heading Storytelling */
+
+/* H2 1: Stage 1 (Healthy) - RGB Shining */
+@keyframes rgbShine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.article h2:nth-of-type(1) {
+    background: linear-gradient(90deg, #ff2a2a, #ff7a2a, #e6d800, #2aff2a, #2a2aff, #c22aff, #ff2a2a);
+    background-size: 200% auto;
+    color: transparent !important;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: rgbShine 4s linear infinite;
+    text-shadow: none !important;
+}
+
+/* H2 2 & 4: Vulnerable Code / Race to Disclosure (Glitch) */
+@keyframes textGlitch {
+    0%, 96%, 100% { transform: translate(0); text-shadow: none; }
+    97% { transform: translate(-2px, 2px); text-shadow: 3px 0 var(--color-s03g1-hb-secondary), -3px 0 var(--color-s03g1-hb-cyan); }
+    98.5% { transform: translate(2px, -2px); text-shadow: -3px 0 var(--color-s03g1-hb-secondary), 3px 0 var(--color-s03g1-hb-cyan); }
+}
+.article h2:nth-of-type(2),
+.article h2:nth-of-type(4) {
+    animation: textGlitch 3.5s infinite;
+}
+
+/* H2 3: Under Attack (Alarm Strobe) */
+@keyframes textAlarm {
+    0%, 100% { color: #8b0000; text-shadow: none; }
+    50% { color: var(--color-s03g1-hb-coral); text-shadow: 0 0 8px rgba(255, 49, 49, 0.6); }
+}
+.article h2:nth-of-type(3) {
+    animation: textAlarm 1.2s infinite ease-in-out;
+}
+
+/* H2 5 & 6: Aftermath & Timeline (Archival Forensic Doc) */
+.article h2:nth-of-type(5),
+.article h2:nth-of-type(6) {
+    background-color: #130b2d !important;
+    color: #e2e8f0 !important;
+    border-left: 6px solid var(--color-s03g1-hb-secondary) !important;
+    border-bottom: none !important;
+    padding: 0.75rem 1.2rem !important;
+    font-family: var(--font-s03g1-heading) !important;
+    letter-spacing: 0.05em !important;
+    text-shadow: none !important;
+    border-radius: 4px;
+}
+
+.article > :global(h3::after) {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        rgba(85, 44, 136, 0.46),
+        rgba(255, 39, 158, 0.38)
+    );
+}
+
+.article > :global(p + h3),
+.article > :global(ul + h3),
+.article > :global(ol + h3),
+.article > :global(pre + h3),
+.article > :global(blockquote + h3),
+.article > :global(div + h3) {
+    margin-top: 2.05rem;
+}
+
+.article > :global(h2 + p),
+.article > :global(h2 + ul),
+.article > :global(h2 + ol),
+.article > :global(h2 + pre),
+.article > :global(h2 + blockquote),
+.article > :global(h2 + div) {
+    margin-top: 1.1rem;
+}
+
+.article > :global(p + h2),
+.article > :global(ul + h2),
+.article > :global(ol + h2),
+.article > :global(pre + h2),
+.article > :global(div + h2) {
+    margin-top: 2.8rem;
+}
+
+.article :global(ul),
+.article :global(ol) {
+    margin: 0.9rem 0 1.2rem;
+    padding-left: 1.35rem;
+}
+
+.article :global(li + li) {
+    margin-top: 0.52rem;
+}
+
+.article :global(li) {
+    line-height: 1.78;
+}
+
+.article :global(blockquote) {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 39, 158, 0.08),
+        rgba(118, 198, 215, 0.08)
+    );
+    border-left: 4px solid var(--color-s03g1-hb-primary);
+    border-radius: 0 1rem 1rem 0;
+    color: #302552;
+    margin: 1.1rem 0;
+    padding: 1rem 1.15rem;
+}
+
+.article :global(pre),
+.article :global(table) {
+    margin: 0.9rem 0;
+}
+
+.article :global(pre) {
+    background: #130b2d;
+    border: 1px solid rgba(189, 147, 249, 0.24);
+    border-radius: 1rem;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 0 18px rgba(118, 198, 215, 0.08);
+    color: #ece7ff;
+    overflow-x: hidden;
+    padding: 1rem 1.1rem;
+    line-height: 1.58;
+    position: relative;
+}
+
+/* Scanline sweep effect on code blocks */
+.article :global(pre)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(118, 198, 215, 0.07) 50%,
+        transparent 100%
+    );
+    background-size: 100% 40%;
+    animation: scanline 6s linear infinite;
+    opacity: 0.6;
+}
+
+.article :global(pre code) {
+    background: transparent;
+    color: inherit;
+    display: block;
+    overflow-wrap: anywhere;
+    padding: 0;
+    white-space: pre-wrap;
+}
+
+.article :global(code) {
+    background: rgba(255, 39, 158, 0.08);
+    border-radius: 0.4rem;
+    color: #4a1f71;
+    font-family: var(--font-s03g1-heading);
+    font-size: 0.95em;
+    line-height: 1.45;
+    padding: 0.12rem 0.38rem;
+}
+
+.article :global(a) {
+    color: var(--color-s03g1-hb-primary);
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 0.11em;
+}
+
+.article :global(a:hover) {
+    color: var(--color-s03g1-hb-red);
+}
+
+.article :global(strong) {
+    color: #20153f;
+    font-weight: 700;
+}
+
+.article :global(em) {
+    color: #6b3ab3;
+}
+
+.article :global(hr) {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(189, 147, 249, 0.55),
+        transparent
+    );
+    border: 0;
+    height: 1px;
+    margin: 1.6rem 0;
+}
+
+.article :global(table) {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.article :global(th),
+.article :global(td) {
+    border-bottom: 1px solid rgba(70, 33, 111, 0.16);
+    padding: 0.7rem 0.85rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.article :global(th) {
+    color: #3b1f66;
+    font-family: var(--font-s03g1-heading);
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.article :global(img),
+.article :global(video),
+.article :global(svg) {
+    border-radius: 1rem;
+}
+
+/* Chapter card scroll-reveal */
+.hb-card-reveal {
+    opacity: 0;
+    animation: none;
+    /* Use transition for hover glow — do NOT put this on animation */
+    transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.hb-card-reveal.hb-card-visible {
+    /* Explicit CSS opacity so hover never snaps it back to 0 */
+    opacity: 1;
+    animation: card-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hover: neon glow via transition, NOT by overriding animation */
+.hb-card-reveal:hover {
+    box-shadow: 0 0 20px 3px rgba(255, 39, 158, 0.18);
+}
+
+/* Text selection: override transparent fill so selected text stays readable */
+.article h2 {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+@media (min-width: 1100px) {
+    /* Override ExhibitLayout.astro squished layout constraint */
+    .content__block {
+        flex: 5 !important;
+    }
+    .padder {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* On mobile, skip the reveal animation for performance */
+    .hb-card-reveal {
+        opacity: 1;
+    }
+    .hb-card-reveal.hb-card-visible {
+        animation: none;
+    }
+
+    .article {
+        font-size: 1rem;
+        line-height: 1.85;
+    }
+
+    .article h2 {
+        margin-top: 2.2rem !important;
+        gap: 0.56rem;
+    }
+
+    .article h3 {
+        margin-top: 1.8rem !important;
+        font-size: 1.15rem !important;
+    }
+}
+
+/* --- umbrella integration: scoped preflight substitute ---
+ * The umbrella site imports Tailwind without preflight (a global element
+ * reset would leak into every other exhibit and the homepage), so this
+ * exhibit's original build — which had full Tailwind preflight — loses two
+ * resets it visibly depended on. Re-added here, scoped under .article only,
+ * NOT globally:
+ *
+ * 1. Buttons (Send Heartbeat / globe hotspot markers / popup close "x")
+ *    never set an explicit background in their resting state — only a
+ *    hover: background. Without preflight's `button{background-color:
+ *    transparent}` they show the browser's native grey button face. Every
+ *    other button property (border, border-radius, font, color) already
+ *    comes from this exhibit's own Tailwind classes and is left untouched.
+ * 2. Two <ol>/<ul> elements render with no list-style utility of their own
+ *    (the References list is plain Markdown; HeartbleedTimeline's <ol> is a
+ *    semantic wrapper, not a numbered list) and relied on preflight's
+ *    `list-style:none` + zeroed margin/padding. The :not() guards exclude
+ *    the two lists that DO carry an explicit list-disc/list-decimal
+ *    utility and must keep their markers.
+ *
+ * NOTE: this exhibit's own `.article :global(...)` rules (paragraph,
+ * blockquote, code, link, image, table, and most spacing rules) use a
+ * `:global()` pseudo-class that only has meaning inside Astro's scoped
+ * <style> blocks. This file is a plain imported stylesheet, so those
+ * selectors are invalid CSS and were already dropped by the browser in the
+ * exhibit's own original deployment (confirmed against its live built CSS
+ * bundle) — not a regression introduced by this integration, and left
+ * exactly as authored.
+ */
+.article button {
+    background-color: transparent;
+}
+
+.article ul:not(.list-disc):not(.list-decimal),
+.article ol:not(.list-disc):not(.list-decimal) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}

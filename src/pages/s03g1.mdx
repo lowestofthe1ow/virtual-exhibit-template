@@ -1,0 +1,120 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "The Heartbleed Bug (CVE-2014-0160)"
+author: "Group 1: Gutang, Quijano, Tan, Tolentino, Wong"
+readingTime: "12 min"
+---
+
+{/* Exhibit-specific theme (colors + fonts) and simulation components */}
+
+import "../S03_Group1_heartbleed/s03g1/heartbleed-theme.css";
+import CardReveal from "../S03_Group1_heartbleed/s03g1/CardReveal.astro";
+
+<CardReveal />
+
+import {
+    Stage1HealthyServerChapter,
+    AnatomyHeartbeatChapter,
+    VulnerableCodePathChapter,
+    Stage2UnderAttackChapter,
+    AttackerCouldSeeChapter,
+    RaceToDisclosureChapter,
+    Stage3AftermathChapter,
+    OpenSourceParadoxChapter,
+    LessonsLearnedChapter,
+    HistoricalTimelineChapter,
+} from "../S03_Group1_heartbleed/s03g1/HeartbleedAftermathChapters.jsx";
+
+export const timelineEvents = [
+    {
+        date: "Dec 2011",
+        title: "Heartbeat Code Lands in OpenSSL",
+        description:
+            "A well-intentioned commit introduced a missing bounds check in heartbeat processing. The flaw remained unnoticed in production for over two years.",
+        significance: "Root cause introduced",
+    },
+    {
+        date: "Early Apr 2014",
+        title: "Independent Discovery",
+        description:
+            "Security researchers at Codenomicon and Google independently identified the same memory over-read issue and coordinated disclosure with maintainers.",
+        significance: "Coordinated response begins",
+    },
+    {
+        date: "Apr 7, 2014",
+        title: "CVE-2014-0160 Publicly Disclosed",
+        description:
+            "OpenSSL released version 1.0.1g with a bounds-check fix. Internet operators rushed to patch services, rotate secrets, and revoke/reissue certificates.",
+        significance: "Global emergency patch cycle",
+    },
+    {
+        date: "Late Apr 2014",
+        title: "Core Infrastructure Initiative Formed",
+        description:
+            "Major technology organizations funded critical open-source maintenance and auditing after Heartbleed exposed systemic underinvestment.",
+        significance: "Ecosystem-level reform",
+    },
+    {
+        date: "2015 - Present",
+        title: "Security Engineering Practices Mature",
+        description:
+            "Stronger review/testing in OpenSSL, wider use of fuzzing, and momentum for memory-safe systems programming became durable outcomes.",
+        significance: "Long-term security impact",
+    },
+];
+
+# The Heartbleed Bug (CVE-2014-0160)
+
+_When the Internet's heart started bleeding secrets._
+
+On April 7, 2014, the cybersecurity world changed when CVE-2014-0160 was disclosed: a critical flaw in OpenSSL's TLS heartbeat extension that let attackers read up to 64 KB of server memory per request. Private keys, session tokens, passwords, and other sensitive data could leak without leaving clear traces in logs.
+
+Heartbleed is a canonical case study in how a single missing validation check can compromise encrypted communications at Internet scale. This exhibit walks through the vulnerable heartbeat design, shows how the attack worked, and traces the response that followed.
+
+## Stage 1: Healthy Server Heart
+
+<Stage1HealthyServerChapter client:load />
+
+### The Anatomy of a Heartbeat Request
+
+<AnatomyHeartbeatChapter client:load />
+
+## Where the Flaw Lived
+
+<VulnerableCodePathChapter client:load />
+
+## Stage 2: Under Attack
+
+<Stage2UnderAttackChapter client:load />
+
+### What an Attacker Could See
+
+<AttackerCouldSeeChapter client:load />
+
+## The Race to Disclosure
+
+<RaceToDisclosureChapter client:load />
+
+## Stage 3: The Aftermath
+
+<Stage3AftermathChapter client:load />
+
+### The Open-Source Paradox
+
+<OpenSourceParadoxChapter client:load />
+### Lessons Learned
+
+<LessonsLearnedChapter client:load />
+
+## Historical Timeline
+
+<HistoricalTimelineChapter events={timelineEvents} client:load />
+
+## References
+
+- Carroll, S. (2021, April 7). _Heartbleed, seven years later: A look back at the bug that broke the internet_. Security Intelligence. https://securityintelligence.com/posts/heartbleed-seven-years-later-bug-broke-internet/
+- Codenomicon. (2014). _The Heartbleed Bug_. https://www.heartbleed.com/
+- Goodin, D. (2014, April 7). _Heartbleed bug exposes millions of SSL/TLS connections to snooping_. Ars Technica. https://arstechnica.com/information-technology/2014/04/heartbleed-bug-exposes-millions-of-ssl-tls-connections-to-snooping/
+- National Institute of Standards and Technology. (2014). _National Vulnerability Database: CVE-2014-0160_. https://nvd.nist.gov/vuln/detail/CVE-2014-0160
+- OpenSSL. (2014, April 7). _OpenSSL Security Advisory: Heartbleed (CVE-2014-0160)_. https://www.openssl.org/news/secadv/20140407.txt
+- The Linux Foundation. (2014). _Core Infrastructure Initiative_. https://www.linuxfoundation.org/projects/core-infrastructure-initiative/
