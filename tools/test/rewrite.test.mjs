@@ -41,6 +41,31 @@ test('bare package imports are never touched', () => {
   assert.equal(out, 'react');
 });
 
+// --- Vite import-suffix handling (defect 1) ---
+
+test('a query-suffixed specifier is remapped and keeps its suffix, even across an extension change', () => {
+  const suffixMap = new Map([['assets/pattern.png', 'assets/s05g8/pattern.webp']]);
+  const out = remapSpecifier('../assets/pattern.png?url', {
+    fromDir: 'pages', toDir: 'pages', pathMap: suffixMap,
+  });
+  assert.equal(out, '../assets/s05g8/pattern.webp?url');
+});
+
+test('a multi-parameter query suffix is preserved byte-for-byte', () => {
+  const suffixMap = new Map([['assets/pattern.png', 'assets/s05g8/pattern.webp']]);
+  const out = remapSpecifier('../assets/pattern.png?w=400&format=webp', {
+    fromDir: 'pages', toDir: 'pages', pathMap: suffixMap,
+  });
+  assert.equal(out, '../assets/s05g8/pattern.webp?w=400&format=webp');
+});
+
+test('a specifier with no suffix behaves exactly as it did before suffix handling was added', () => {
+  const out = remapSpecifier('../assets/pic.png', {
+    fromDir: 'pages', toDir: 'pages', pathMap,
+  });
+  assert.equal(out, '../assets/s01g7/pic.webp');
+});
+
 test('rewriteFile updates import statements', () => {
   const src = 'import Foo from "../components/Foo.jsx";\nimport "../styles/theme.css";\n';
   const out = rewriteFile(src, { fromDir: 'pages', toDir: 'pages/s01g7', pathMap, slug: 's01g7', routes: [] });

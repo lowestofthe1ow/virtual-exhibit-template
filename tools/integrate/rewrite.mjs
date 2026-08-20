@@ -29,7 +29,16 @@ export function normalizeBase(base) {
 export function remapSpecifier(spec, { fromDir, toDir, pathMap }) {
   if (!spec.startsWith('.')) return spec;
 
-  const oldTarget = normalize(join(fromDir, spec));
+  // Vite import suffixes ('?url', '?raw', '?w=400&format=webp', ...) are not
+  // part of the filesystem path and are never keys in pathMap, so they must
+  // be split off before the lookup (and before the extensionless-import
+  // fallback below, which walks pathMap the same way) and re-attached
+  // byte-for-byte to whatever path the lookup produces.
+  const queryIndex = spec.indexOf('?');
+  const suffix = queryIndex === -1 ? '' : spec.slice(queryIndex);
+  const specPath = queryIndex === -1 ? spec : spec.slice(0, queryIndex);
+
+  const oldTarget = normalize(join(fromDir, specPath));
 
   let newTarget = pathMap.get(oldTarget);
   if (!newTarget) {
@@ -44,13 +53,13 @@ export function remapSpecifier(spec, { fromDir, toDir, pathMap }) {
   if (!newTarget) return spec;
 
   // Preserve an extensionless import style if that is how it was written.
-  if (!spec.includes(posix.extname(oldTarget)) && posix.extname(oldTarget)) {
+  if (!specPath.includes(posix.extname(oldTarget)) && posix.extname(oldTarget)) {
     newTarget = newTarget.slice(0, newTarget.lastIndexOf('.'));
   }
 
   let out = relative(toDir, newTarget);
   if (!out.startsWith('.')) out = `./${out}`;
-  return out;
+  return out + suffix;
 }
 
 export function rewriteFile(
