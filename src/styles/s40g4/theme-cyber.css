@@ -1,0 +1,203 @@
+/* TRON MAINFRAME PALETTE SHIFT */
+:root {
+    --accent: #00bafa !important;
+    --bg1: #020204 !important;
+    --bg2: #05080c !important;
+    --text: #c0f3ff !important;
+    --muted: #537a85 !important;
+    --border: #004d66 !important;
+    --radius: 4px !important;
+}
+
+html, body {
+    background: #020204 !important;
+    background-image: radial-gradient(#002b3d 0.5px, transparent 0.5px) !important;
+    background-size: 24px 24px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    overflow-x: hidden !important;
+}
+
+.content__block, .toc {
+    background: #05080c !important;
+    border: 1px solid #004d66 !important;
+    box-shadow: 0 0 15px rgba(0, 186, 250, 0.08) !important;
+    border-radius: 4px !important;
+}
+
+.header {
+    margin-top: 40px !important;
+}
+
+main > div > .content__titlemeta h1,
+header.header strong,
+.article > h1 {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    color: #00bafa !important;
+    text-shadow: 0 0 8px rgba(0, 186, 250, 0.6) !important;
+}
+
+.article > h2, .toc h2 {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 500 !important;
+    color: #febe0b !important;
+    text-shadow: 0 0 6px rgba(254, 190, 11, 0.4) !important;
+    border-bottom: 1px dashed #004d66 !important;
+    padding-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.article > p, .toc__item a, .header__subtitle {
+    font-family: 'JetBrains Mono', monospace !important;
+    color: #c0f3ff !important;
+}
+
+hr {
+    border: none !important;
+    height: 1px !important;
+    background: repeating-linear-gradient(90deg, #004d66, #004d66 4px, transparent 4px, transparent 8px) !important;
+    margin: 40px 0 !important;
+}
+
+main {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.article {
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.layout {
+    display: block !important;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 768px) {
+    .article {
+        padding: 15px !important;
+    }
+    
+    .article > h1 {
+        font-size: 1.3rem !important;
+    }
+    
+    .article > h2 {
+        font-size: 1.1rem !important;
+    }
+
+    .article > p, .toc__item a, .header__subtitle {
+        font-size: 0.85rem !important;
+    }
+
+    .header {
+        margin-top: 55px !important;
+        padding: 10px !important;
+    }
+
+    .header__titleblock {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .header__titleblock strong {
+        font-size: 0.9rem !important;
+    }
+
+    .toc {
+        display: none !important;
+    }
+
+    hr {
+        margin: 25px 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .article {
+        padding: 10px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .article > h1 {
+        font-size: 1.1rem !important;
+    }
+
+    .article > h2 {
+        font-size: 0.95rem !important;
+    }
+
+    .article > p {
+        font-size: 0.8rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .header {
+        margin-top: 50px !important;
+        padding: 8px !important;
+    }
+
+    .header__titleblock {
+        font-size: 0.8rem !important;
+    }
+
+    .header__titleblock strong {
+        font-size: 0.8rem !important;
+    }
+
+    hr {
+        margin: 15px 0 !important;
+    }
+}
+
+/* FOCUS VISIBLE STATES FOR ACCESSIBILITY */
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid #00bafa !important;
+    outline-offset: 2px !important;
+}
+
+/* SMOOTH SCROLL BEHAVIOR */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 60px;
+}
+
+/* NAVIGATION BAR STYLES */
+nav a:hover {
+    background: rgba(0, 186, 250, 0.1) !important;
+}
+
+nav a:focus-visible {
+    outline: 2px solid #febe0b !important;
+}
+
+/* SCROLLBAR STYLING */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #020204;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #004d66;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00bafa;
+}
