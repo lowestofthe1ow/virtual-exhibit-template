@@ -1,0 +1,102 @@
+---
+layout: ../layouts/ExhibitLayout.astro
+title: "ARM vs x86: Interactive Architecture Explorer"
+description: "a clickable card explorer that allows users to interactively compare the ARM and x86 architectures"
+author: "Co, Adrian Nathaniel; Hallare, Zach Benedict; Javier, David Lorenz; Lee, Tyrone Julius; Tiu, Kyle Thomas"
+readingTime: "15 minutes"
+---
+
+import LandingPage from "../components/s01g9/arm_vs_x86/LandingPage.tsx";
+import CategoryPage from "../components/s01g9/arm_vs_x86/CategoryPage.tsx";
+import "../styles/s01g9/arm_vs_x86/index.css";
+import "../styles/s01g9/refs.css";
+
+## **Introduction**
+
+<br />
+
+This interactive exhibit lets you explore and compare two dominant computer architectures — **ARM** and **x86** — through a flashcard-based interface. Click on either architecture to browse categories like **Overview**, **Performance**, **Use Cases**, **Key Devices**, **Pros and Cons**, and a side-by-side **Comparison Table**. Each card flips to reveal detailed information, animated charts, and interactive lists, making it easy to understand the differences between RISC and CISC design philosophies at your own pace.
+
+<br />
+<br />
+
+## **Landing Page**
+
+<br />
+This page introduces users to the rivalry between ARM and x86 silicon and
+features dynamic trivia regarding both of them.
+
+<div class="arm-vs-x86-page border border-white/10 rounded-2xl overflow-hidden my-8 relative z-0">
+    <LandingPage client:load />
+</div>
+
+<br />
+<br />
+
+## **Category Page - ARM**
+
+<br />
+This page highlights specialized topics tailored to ARM ecosystem dynamics
+through flashcards.
+
+<div class="arm-vs-x86-page border border-white/10 rounded-2xl overflow-hidden my-8 relative z-0">
+    <CategoryPage client:load arch="arm" />
+</div>
+<br />
+<br />
+## **Category Page - x86**
+
+<br />
+
+This page highlights specialized topics tailored to x86 performance and history through flashcards.
+
+<div class="arm-vs-x86-page border border-white/10 rounded-2xl overflow-hidden my-8 relative z-0">
+    <CategoryPage client:load arch="x86" />
+</div>
+
+<br />
+<br />
+<div class="refs">
+
+## **References**
+
+<br />
+
+**Benchmark Results for Comparison**
+
+- [ARM Architecture vs x86 Servers](https://flywp.com/blog/12522/arm-architecture-vs-x86-servers/)
+
+    <br />
+    **ARM**
+
+- Overview: [ARM Processor and Its Features](https://www.geeksforgeeks.org/computer-organization-architecture/arm-processor-and-its-features/)
+- Use Cases: [Tracking the Rise of ARM Processors](https://www.stromasys.com/resources/tracking-the-rise-of-arm-processors/)
+- Key Devices:
+    - Apple: [Apple Support](https://support.apple.com/en-ph/121031)
+    - Samsung: [Galaxy S25 Ultra Specs](https://www.samsung.com/ph/smartphones/galaxy-s25-ultra/specs/)
+    - Nvidia: [ARM Neoverse AE & NVIDIA Next-Gen Automotive](https://newsroom.arm.com/news/arm-neoverse-ae-nvidia-next-gen-automotive-technologies)
+    - Tesla: [Tesla Moves to AMD Chip in New Model Y](https://electrek.co/2021/11/26/tesla-moves-amd-chip-new-model-y-china/)
+    - Tesla: [Tesla AI4 vs NVIDIA Thor](https://electrek.co/2025/11/25/tesla-ai4-vs-nvidia-thor-reality-self-driving-computers/)
+    - AWS Graviton: [ARM & AWS re:Invent 2024](https://newsroom.arm.com/blog/arm-aws-reinvent-2024)
+    - Apple Watch: [Apple Support](https://support.apple.com/en-ph/121202)
+    - Google Pixel: [Tensor G5 Pixel 10](https://blog.google/products-and-platforms/devices/pixel/tensor-g5-pixel-10/)
+- Pros and Cons: [Advantages and Disadvantages of ARM Processor](https://www.geeksforgeeks.org/computer-organization-architecture/advantages-and-disadvantages-of-arm-processor/)
+- Comparison Table: [Difference Between ARM and x86](https://www.innoaiot.com/difference-between-arm-and-x86/)
+
+<br />
+**x86**
+
+- Overview and Use Cases: [x86 Architecture — Foundation of Modern Computing](https://newsroom.intel.com/tech101/x86-architecture-foundation-of-modern-computing)
+- Key Devices:
+    - Dell XPS 15: [Dell XPS 15 Laptop](https://www.dell.com/en-us/shop/dell-laptops/xps-15-laptop/spd/xps-15-9530-laptop)
+    - ThinkPad X1 Carbon: [Lenovo ThinkPad X1 Carbon Gen 13](https://www.lenovo.com/ph/en/p/laptops/thinkpad/thinkpadx1/thinkpad-x1-carbon-gen-13-aura-edition-14-inch-intel/len101t0108)
+    - ASUS ROG STRIX: [ROG Strix Series](https://rog.asus.com/laptops/rog-strix-series/?items=90843)
+    - HP Omen: [HP OMEN 45L](https://www.hp.com/us-en/gaming-pc/desktops/omen-45l-amd.html)
+    - Dell PowerEdge R760: [Dell PowerEdge R760](https://www.dell.com/en-us/shop/cty/pdp/spd/poweredge-r760/pe_r760_tm_vi_vp_sb)
+    - HPE ProLiant: [HPE ProLiant Compute](https://www.hpe.com/emea_europe/en/compute/hpe-proliant-compute/dl385-gen11.html)
+    - Microsoft Azure HBv4: [Azure HBv4 Series](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/high-performance-compute/hbv4-series?tabs=sizebasic)
+- Pros and Cons:
+    - [ARM vs x86](https://www.peila-international.com/blog/arm-vs-x86)
+    - [Pros and Cons of x86](https://www.ecstuff4u.com/2023/06/pros-and-cons-of-x86.html)
+
+</div>

@@ -1,0 +1,207 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap");
+@import "../../tailwind-scoped.css";
+
+@theme {
+    --color-s01g9-arch-bg: #0f1117;
+    --color-s01g9-arch-panel: #1a1f2b;
+    --color-s01g9-arm: #00c2d1;
+    --color-s01g9-x86: #ff8c42;
+    --font-s01g9-sans: Inter, system-ui, sans-serif;
+    --font-s01g9-mono: JetBrains Mono, monospace;
+}
+
+@utility bg-pcb {
+    background-color: var(--color-arch-bg);
+    background-image:
+        radial-gradient(
+            ellipse at 30% 50%,
+            rgba(0, 194, 209, 0.05) 0%,
+            transparent 60%
+        ),
+        radial-gradient(
+            ellipse at 70% 50%,
+            rgba(255, 140, 66, 0.05) 0%,
+            transparent 60%
+        ),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+@utility glass {
+    background: rgba(26, 31, 43, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@utility glow-arm {
+    box-shadow:
+        0 0 24px rgba(0, 194, 209, 0.12),
+        0 0 48px rgba(0, 194, 209, 0.04);
+}
+
+@utility glow-x86 {
+    box-shadow:
+        0 0 24px rgba(255, 140, 66, 0.12),
+        0 0 48px rgba(255, 140, 66, 0.04);
+}
+
+@keyframes circuit-flow {
+    0% {
+        stroke-dashoffset: 40;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes pulse-glow {
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@utility animate-circuit {
+    animation: circuit-flow 1.5s linear infinite;
+}
+
+@utility animate-pulse-glow {
+    animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+@utility bg-chip-grid {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 16px 16px;
+}
+
+/* ─── Skeleton / Shimmer Loading ────────────────────────────────────────────── */
+/* YouTube-style shimmer: a very faint highlight sweeping left-to-right.        */
+/* No white, no purple — strictly within the design system palette.             */
+@keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+@utility skeleton {
+    background-color: #1a1f2b;
+    background-image: linear-gradient(
+        90deg,
+        #1a1f2b 0px,
+        rgba(255, 255, 255, 0.04) 200px,
+        #1a1f2b 400px
+    );
+    background-size: 800px 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    border-radius: 0.5rem;
+}
+
+/* ─── Category Card & Detail Item Hover Animations ──────────────────────────── */
+
+/* Drives the SVG stroke-dashoffset trace sweep around ChipButton borders.      */
+@keyframes card-trace {
+    from {
+        stroke-dashoffset: 1;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Drives the indicator dot pulse on Category Card hover.                       */
+@keyframes dot-pulse {
+    0%,
+    100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+}
+
+/* Drives the icon glow burst on Pros/Cons list item hover.                     */
+@keyframes icon-pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+    60% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@utility animate-icon-pulse {
+    animation: icon-pulse 0.55s ease-out forwards;
+}
+
+/* ─── Scrollbar hiding for flashcard content ──────────────────────────────────── */
+.flashcard-content {
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.flashcard-content::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, and Opera */
+}
+
+/* --- umbrella integration: scoped preflight substitute ---
+ * The original entry imported full "tailwindcss" (theme + preflight +
+ * utilities); the umbrella imports theme + utilities only (preflight is a
+ * global element reset that would leak past this exhibit's own markup onto
+ * the shared layout chrome). Re-added here, scoped under .arm-vs-x86-page
+ * only, NOT globally, the two resets this exhibit visibly depends on:
+ *
+ * 1. The ARM/x86 chip-selector <button>s (LandingPage.tsx) set no
+ *    background or border of their own — every other visual comes from a
+ *    child <div> — so without preflight's `button{background-color:
+ *    transparent}` and the `*{border:0 solid}` reset they show the
+ *    browser's native grey button face and default border. The
+ *    :not([class*="bg-"]) / :not([class*="border"]) guards exclude the one
+ *    button that DOES set its own background/border explicitly (the "BACK
+ *    TO CATEGORIES" button, which must keep it).
+ * 2. Three <ul> elements (pros/cons and useCases lists in CategoryPage.tsx)
+ *    carry no list-style utility of their own and relied on preflight's
+ *    `list-style:none` + zeroed margin/padding to render as flush,
+ *    bulletless stacks. The :not(.list-disc):not(.list-decimal) guards
+ *    exclude any list that DOES carry an explicit list utility (none
+ *    currently do, but this keeps the rule safe if one is added later).
+ *
+ * Left alone: the <table> already sets its own `border-collapse` utility
+ * and explicit `p-4` cell padding, so it doesn't visibly depend on
+ * preflight's table/cell resets.
+ */
+.arm-vs-x86-page button:not([class*="bg-"]) {
+    background-color: transparent;
+}
+
+.arm-vs-x86-page button:not([class*="border"]) {
+    border: 0;
+}
+
+.arm-vs-x86-page ul:not(.list-disc):not(.list-decimal) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
