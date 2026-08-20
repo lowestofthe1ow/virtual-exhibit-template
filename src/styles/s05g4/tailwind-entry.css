@@ -1,0 +1,22 @@
+/* tailwind-entry.css
+ * Separate entry point for Tailwind, since global.css is marked as
+ * "Do NOT modify" by the template. This file is imported directly from
+ * Timeline.jsx so Vite picks it up and Tailwind's utility classes become
+ * available project-wide.
+ *
+ * NOTE: We deliberately import only the theme + utilities layers, NOT
+ * Tailwind's "Preflight" base reset. Preflight strips default heading
+ * styles and resets margins/box-sizing across the WHOLE site (since any
+ * CSS import here is global, not scoped to this component) -- which broke
+ * the existing chapter heading styles and layout spacing from global.css.
+ * Skipping Preflight keeps global.css's existing styles intact while still
+ * giving you Tailwind's utility classes to use anywhere.
+ *
+ * umbrella integration: this repo's own entry already independently landed
+ * on exactly the "theme + utilities, no preflight" split the umbrella site
+ * needs (same reasoning, same conclusion, before this exhibit was ever
+ * merged in). Swapped to the umbrella's shared no-preflight entry point so
+ * every exhibit's Tailwind build goes through one canonical place instead
+ * of each re-importing tailwindcss/theme.css + utilities.css separately.
+ */
+@import "../tailwind-scoped.css";
