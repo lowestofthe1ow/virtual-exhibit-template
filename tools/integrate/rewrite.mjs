@@ -179,9 +179,12 @@ export function rewriteFile(
   const normalizedSourceBase = normalizeBase(sourceBase);
   if (normalizedSourceBase) {
     const escapedBase = normalizedSourceBase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // The base may be followed by '/' (a path under it) or by the closing
+    // quote (a bare root link to the exhibit's own home). Both must rewrite;
+    // requiring the slash silently missed the bare form and shipped a 404.
     out = out.replace(
-      new RegExp('(["\'`])/' + escapedBase + '/', 'g'),
-      `$1/${umbrellaBase}/${slug}/`,
+      new RegExp('(["\'`])/' + escapedBase + '(/|(?=["\'`]))', 'g'),
+      (_m, q, tail) => `${q}/${umbrellaBase}/${slug}${tail === '/' ? '/' : ''}`,
     );
   }
 

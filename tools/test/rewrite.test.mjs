@@ -370,3 +370,27 @@ test('normalizeBase strips leading and trailing slashes and treats "/" and "" as
   assert.equal(normalizeBase(''), '');
   assert.equal(normalizeBase(undefined), '');
 });
+
+test('a bare root link to the source base is rewritten, not only paths under it', () => {
+  // Regression: the sourceBase pass required a trailing slash, so
+  // <a href="/CSARCH2-Group-7"> was silently missed and shipped a 404.
+  const opts = {
+    fromDir: 'pages', toDir: 'pages', pathMap: new Map(),
+    slug: 's05g7', routes: new Map(), publicAssets: new Map(),
+    sourceBase: 'CSARCH2-Group-7',
+  };
+  assert.equal(
+    rewriteFile('<a href="/CSARCH2-Group-7">home</a>', opts),
+    '<a href="/virtual-exhibit-template/s05g7">home</a>',
+  );
+  // paths under the base still work
+  assert.equal(
+    rewriteFile('<img src="/CSARCH2-Group-7/logo.png">', opts),
+    '<img src="/virtual-exhibit-template/s05g7/logo.png">',
+  );
+  // a longer base that merely starts with it must NOT match
+  assert.equal(
+    rewriteFile('<a href="/CSARCH2-Group-77">x</a>', opts),
+    '<a href="/CSARCH2-Group-77">x</a>',
+  );
+});
