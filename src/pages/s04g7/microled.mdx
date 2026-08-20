@@ -1,0 +1,17 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "MicroLED"
+description: "Combining the strengths of LCD and OLED"
+author: "DE LEON, SOFIA YSABELA; GALVEZ, ANOUSHEH MONICK ROBENIOL; GUILLERMO, IAIN DRAEZEN SY; LEE, ASHLEY FIONA SANTOS; TIU, AVRAM NATHANIEL PAGUNTALAN;"
+readingTime: "16.7 minutes"
+---
+
+import MicroLEDViewer from '../../components/s04g7/microled_viewer.jsx'
+import '../../styles/s04g7/global.css'
+import '../../styles/s04g7/microled.css'
+import '../../styles/s04g7/pagebg.css'
+import "@fontsource/jetbrains-mono";
+
+<div className='display-container'>
+    <MicroLEDViewer client:load />
+</div>

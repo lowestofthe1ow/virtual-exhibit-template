@@ -1,0 +1,134 @@
+/* https://uiverse.io/SelfMadeSystem/smart-termite-74 */
+/* --- Global Animated Background Pattern (From Uiverse.io by SelfMadeSystem) --- */
+/* Revised template a bit */ 
+
+.bg{
+  position: fixed;
+  inset: 0; 
+  z-index: -1; 
+  pointer-events: none; 
+
+  --c: 7px;
+  background-color: #000;
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      #0000 1.5px,
+      #000 0 var(--c),
+      #0000 var(--c)
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      #0000 1.5px,
+      #000 0 var(--c),
+      #0000 var(--c)
+    ),
+    radial-gradient(circle at 50% 50%, #f00, #f000 60%),
+    radial-gradient(circle at 50% 50%, #ff0, #ff00 60%),
+    radial-gradient(circle at 50% 50%, #0f0, #0f00 60%),
+    radial-gradient(ellipse at 50% 50%, #00f, #00f0 60%);
+  background-size:
+    12px 20.7846097px,
+    12px 20.7846097px,
+    200% 200%,
+    200% 200%,
+    200% 200%,
+    200% 20.7846097px;
+  --p: 0px 0px, 6px 10.39230485px;
+  background-position:
+    var(--p),
+    0% 0%,
+    0% 0%,
+    0% 0px;
+  animation:
+    wee 40s linear infinite,
+    filt 6s linear infinite;
+}
+
+@keyframes filt {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes wee {
+  0% {
+    background-position:
+      var(--p),
+      800% 400%,
+      1000% -400%,
+      -1200% -600%,
+      400% 41.5692194px;
+  }
+  to {
+    background-position:
+      var(--p),
+      0% 0%,
+      0% 0%,
+      0% 0%,
+      0% 0%;
+  }
+}
+
+/* END OF BG ANIMATION */
+
+/* Block 1: The inner Title block inside the Header (replaces the whole top section) */
+.custom-header .header__titleblock { 
+    background-color: #ffffff;
+    background-image: none;
+    border-radius: var(--radius, 8px);
+    padding: 10px 20px;
+}
+
+.custom-header .header__titleblock strong {
+    font-family: "JetBrains Mono", monospace;
+    color: #000000;
+}
+
+.custom-header .header__titleblock .header__subtitle {
+    font-family: "JetBrains Mono", monospace; 
+    color: #000000;
+}
+
+/* Block 2: Table of Contents Block (ignoring the empty padder container) */
+.custom-toc .toc:not(.padder) {
+    background-color: #BCD8C1;
+}
+
+.toc:not(.padder) h2 {
+    font-family: "JetBrains Mono", monospace !important;
+    color: #37371F !important;
+    border-bottom: 1px solid #37371F !important;
+}
+
+/* The clickable links inside the table of contents */
+.custom-toc .toc:not(.padder) .toc__item a {
+    font-family: "JetBrains Mono", monospace;
+    color: #37371F;
+    text-decoration-color: #37371F;
+}
+
+/* Block 3: The Main Page Title Banner Block */
+.custom-title-banner .content__titlemeta {
+    background-color: #BCD8C1;
+    border-radius: var(--radius, 8px);
+}
+
+.custom-title-banner .content__titlemeta h1 {
+    font-family: "JetBrains Mono", serif;
+    color: #37371F;
+}
+
+.custom-title-banner .content__titlemeta span {
+    font-family: "JetBrains Mono", monospace;
+    color: #37371F;
+}
+
+/* Block 4: The educational body/article card */
+.custom-article .article {
+    --custom-article-bg: #7596b6;
+    background-color: var(--custom-article-bg);
+    border-radius: var(--radius, 8px);
+}

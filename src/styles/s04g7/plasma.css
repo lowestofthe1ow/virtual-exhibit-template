@@ -1,0 +1,660 @@
+.display-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.plasma-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.info {
+    font-family: "JetBrains Mono";
+}
+
+/* --- NAVIGATION HEADER --- */
+.plasma-nav-header {
+    display: flex;
+    flex-direction: column;  
+    align-items: flex-start;   
+    gap: 1rem;                
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.back-button-container {
+    position: static;   
+    transform: none;          
+    z-index: 10;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.controls span {
+    font-weight: 600;
+    margin-right: 4px;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.btn {
+    padding: 6px 16px;
+    border-radius: 9999px;
+    border: 2px solid #ccc;
+    background: white;
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    transition: all 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+    border-color: #5076a7;
+    color: #5076a7;
+}
+
+.btn.active {
+    background: #5076a7;
+    color: white;
+    border-color: #5076a7;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* --- LEFT/RIGHT LAYOUT SPLIT --- */
+.plasma-split-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    width: 100%;
+}
+
+.plasma-top-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    align-items: flex-start;
+    flex: 1;
+    background: var(--bg2);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    font-family: "JetBrains Mono", serif;
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+
+.plasma-info-side {
+    flex: 1;
+    background: var(--bg2);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    font-family: "JetBrains Mono", serif;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.plasma-info-side h2 {
+    margin-top: 0;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+    font-family: "JetBrains Mono", serif;
+}
+
+.plasma-model-side {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.plasma-dynamic-box {
+    padding: 1rem;
+    border-left: 4px solid #5076a7;
+    background: #f4f7f9;
+
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    box-sizing: border-box;
+}
+
+.plasma-info__title {
+    margin: 0 0 0.5rem 0;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.plasma-info__desc {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.4rem;
+}
+
+.plasma-image {
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    border-radius: 8px;
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0.98;
+    transform: translateY(0);
+    margin: 1.5rem 0;
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+@keyframes scrollFadeSoft {
+    from {
+        opacity: 0.98;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0.4;
+        transform: translateY(12px);
+    }
+}
+
+.plasma-adv-lim ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.plasma-adv-lim li {
+    margin-bottom: 0.5rem;
+}
+
+/* --- CROSS-SECTION DIAGRAM --- */
+.plasma-stage {
+    width: 100%;
+    max-width: 1100px;
+    background: #1c1c1c;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-sizing: border-box;
+}
+
+.part { cursor: pointer; transition: all 0.2s; }
+.part:hover { opacity: 0.85; }
+
+/* Base fills for each layer */
+.layer-glass { fill: #c9d6e3; fill-opacity: 0.35; stroke: #cfd6de; stroke-width: 1.5; }
+.layer-electrode { fill: #3a3a3a; stroke: #cfd6de; stroke-width: 1.5; }
+.layer-mgo { fill: #8a8a72; stroke: #cfd6de; stroke-width: 1.5; }
+.layer-chamber { fill: #101010; stroke: #666; stroke-width: 1.5; }
+
+/* Interactive Selection highlights */
+.part-active .layer {
+    stroke: #5076a7 !important;
+    stroke-width: 2.5px;
+    fill: rgba(80,118,167,0.45) !important;
+}
+
+/* Single floating tag follows selected part */
+.tag-pill { fill: #1c1c1c; stroke: #5076a7; stroke-width: 1.5; }
+.tag-text { fill: #cfd6de; font-family: "JetBrains Mono", monospace; font-size: 13px; pointer-events: none; }
+
+/* Ionized gas cells glowing in subpixel color */
+.cell-glow { opacity: 0.15; }
+.cell-glow-animate {
+    animation: cell-pulse 1.6s ease-in-out infinite;
+}
+
+/* Ring that expands outward from each cell once ionized */
+.shock { fill: none; stroke-width: 2; opacity: 0; }
+.shock-animate {
+    animation: shock-ring 1.6s ease-out infinite;
+}
+
+/* Phosphor pads flashing once struck by ultraviolet light */
+.phosphor-flash { opacity: 0.55; }
+.phosphor-flash-animate {
+    animation: phosphor-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes cell-pulse {
+    0%, 35% { opacity: 0.15; }
+    55% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { opacity: 0.15; }
+}
+
+@keyframes shock-ring {
+    0%, 30% { r: 0; opacity: 0; }
+    45% { opacity: 0.8; }
+    90% { r: 50; opacity: 0; }
+    100% { r: 50; opacity: 0; }
+}
+
+@keyframes phosphor-pulse {
+    0%, 45% { opacity: 0.55; }
+    65% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0.55; }
+}
+
+/* --- Menu Tab Navigation Styling --- */
+.tabs-wrap {
+  --round: 10px;
+  --p-x: 8px;
+  --p-y: 4px;
+  --w-label: 118px;
+
+  --color-pure: #ffffff;
+  --color-primary: #e8e8e8;
+  --color-secondary: #212121;
+  --muted: #5076a7;
+
+  display: flex;
+  align-items: center;
+  padding: var(--p-y) var(--p-x);
+  position: relative;
+  background: var(--color-primary);
+  border-radius: var(--round);
+  max-width: 100%;
+  width: fit-content;
+  margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  z-index: 1;
+}
+
+.tab-label {
+  cursor: pointer;
+  outline: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  background: transparent;
+  border: none;
+  padding: 10px 8px;
+  width: var(--w-label);
+  min-width: var(--w-label);
+  flex-shrink: 0;
+  text-decoration: none;
+  user-select: none;
+  transition: color 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1.2;
+}
+
+.tab-label.active {
+  color: var(--color-pure) !important;
+}
+
+.tab-slidebar {
+  position: absolute;
+  height: calc(100% - (var(--p-y) * 2));
+  width: var(--w-label);
+  border-radius: calc(var(--round) - var(--p-y));
+  background: var(--muted);
+  transform-origin: 0 0 0;
+  z-index: 0;
+  transition: transform 0.4s cubic-bezier(0.33, 0.83, 0.99, 0.98), background-color 0.2s ease;
+  left: var(--p-x);
+  transform: translateX(calc(var(--hover-index) * 100%)) scaleX(1);
+}
+
+.tabs-wrap:has(.tab-label:hover) .tab-slidebar {
+  opacity: 0.85;
+}
+
+.tab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: absolute;
+  transform-origin: 0 0 0;
+  height: 100%;
+  width: var(--w-label);
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.33, 0.83, 0.99, 0.98);
+  left: var(--p-x);
+  transform: translateX(calc(var(--active-index) * 100%)) scaleX(1);
+}
+
+.tab-bar::before,
+.tab-bar::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  background: var(--color-secondary);
+}
+.tab-bar::before { top: 0; border-radius: 0 0 9999px 9999px; }
+.tab-bar::after { bottom: 0; border-radius: 9999px 9999px 0 0; }
+
+/* Glow Button Design */
+.btn-animate-light {
+  padding: 10px 20px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  font-family: "JetBrains Mono", monospace;
+  transition: all 0.4s ease;
+  color: #008cff;
+  background: rgba(0, 140, 255, 0.05);
+  border: 2px solid #008cff;
+  box-shadow: 0 2px 4px rgba(0, 140, 255, 0.1);
+}
+
+.btn-animate-light:hover,
+.btn-animate-light:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 2px solid #008cff;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(0, 140, 255, 0.5), 0 4px 12px rgba(0, 140, 255, 0.3);
+}
+
+.btn-animate-light.active-glow {
+  color: #ffffff;
+  background: #008cff;
+  border: 2px solid #008cff;
+  box-shadow: 0 0 8px rgba(0, 140, 255, 0.6);
+}
+
+/* Quiz result animations */
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .plasma-nav-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .back-button-container {
+        position: static;
+        transform: none;
+        align-self: flex-start;
+    }
+
+    .tabs-wrap {
+        --w-label: 100px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .tab-label {
+        font-size: 0.72rem;
+        padding: 8px 4px;
+    }
+
+    .plasma-split-layout {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    /* Moves Interactive Controls & Diagram to the top on mobile */
+    .plasma-model-side {
+        order: -1;
+        margin-bottom: 1.5rem;
+    }
+
+    .plasma-info-side {
+        order: 1;
+        width: 100%;
+    }
+
+    .display-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 0.5rem;
+        width: 100%;
+    }
+    .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    .plasma-stage {
+        padding: 16px;
+    }
+    .plasma-info-side,
+    .plasma-model-side {
+        width: 100%;
+        flex: none;
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .plasma-top-side {
+        padding: 1rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+        padding: 5px 12px;
+    }
+}
+
+/* Plasma Gas Cell Grid Container */
+.plasma-cells {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px;
+  background: #000;
+  border-radius: 7px;
+}
+
+/* Base Cell Style */
+.plasma-cells .cell {
+  width: 100%;
+  height: 50px;
+  border-radius: 2px;
+  animation: cellGlow 2.5s ease-in-out infinite alternate;
+}
+
+/* Color and Glow for Each Gas Cell */
+.plasma-cells .cell.red {
+  background: #ff3c3c;
+  box-shadow: 0 0 18px 4px rgba(255, 60, 60, 0.6);
+  animation-delay: 0s;
+}
+
+.plasma-cells .cell.green {
+  background: #3cff64;
+  box-shadow: 0 0 18px 4px rgba(60, 255, 100, 0.6);
+  animation-delay: 0.4s;
+}
+
+.plasma-cells .cell.blue {
+  background: #508cff;
+  box-shadow: 0 0 18px 4px rgba(80, 140, 255, 0.6);
+  animation-delay: 0.8s;
+}
+
+/* Glow Pulse Animation */
+@keyframes cellGlow {
+  0% {
+    opacity: 0.6;
+    box-shadow: 0 0 10px 2px currentColor;
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 25px 8px currentColor;
+  }
+}
+
+/* --- ASYMMETRICAL SPLIT LAYOUT --- */
+.plasma-intro-split {
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    align-items: center;
+    width: 100%;
+}
+
+.plasma-intro-text {
+    flex: 2;
+}
+
+.plasma-inventor-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.inventor-frame {
+    width: 200px;
+    height: 260px;
+    border-radius: 50% / 40%; /* oblong */
+    overflow: hidden;
+    border: 4px solid #5076a7;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: #000;
+    margin-bottom: 0.75rem;
+
+    /* Fade Effect */
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    opacity: 0.98;
+    transform: translateY(0);
+    margin: 1.5rem 0; 
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.inventor-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.inventor-caption {
+    font-size: 0.85rem;
+    font-family: "JetBrains Mono", monospace;
+    color: #666;
+    margin: 0;
+    text-align: center;
+}
+
+/* Mobile responsiveness adjustment */
+@media (max-width: 1024px) {
+    .plasma-intro-split {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .plasma-inventor-side {
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .crt-dynamic-box {
+        padding: 0.85rem;
+    }
+    .crt-info_desc {
+        font-size: 0.85rem;
+    }
+}
+
+.plasma-image-centered {
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+    opacity: 0.98;
+    transform: translateY(0);
+    margin: 1.5rem auto;
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.circle-image-frame {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #5076a7;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: #000;
+    margin-bottom: 0.75rem;
+    transition: transform 0.3s ease;
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.char-app-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+
+  width: 100%;
+}
+
+.char-app-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #111;
+  border: 3px solid #5076a7;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: scrollFadeSoft 1s ease-out forwards;
+  animation-timeline: view();
+  animation-range: exit 10% exit 40%;
+}

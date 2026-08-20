@@ -1,0 +1,16 @@
+---
+layout: '../../layouts/ExhibitLayout.astro'
+title: "Plasma Display Panel (PDP)"
+author: "DE LEON, SOFIA YSABELA; GALVEZ, ANOUSHEH MONICK ROBENIOL; GUILLERMO, IAIN DRAEZEN SY; LEE, ASHLEY FIONA SANTOS; TIU, AVRAM NATHANIEL PAGUNTALAN;"
+readingTime: "16.7 minutes"
+---
+
+import PlasmaViewer from '../../components/s04g7/plasma_viewer.jsx'
+import '../../styles/s04g7/global.css'
+import '../../styles/s04g7/plasma.css'
+import '../../styles/s04g7/pagebg.css'
+import "@fontsource/jetbrains-mono";
+
+<div className='display-container'>
+    <PlasmaViewer client:load />
+</div>

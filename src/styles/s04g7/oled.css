@@ -1,0 +1,581 @@
+/* General layout for display*/
+.display-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.oled-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Text formatting/styling */
+.info {
+    font-family: "JetBrains Mono";
+}
+
+.oled-nav-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.back-button-container {
+    position: static;
+    transform: none;
+    z-index: 10;
+}
+
+/* Buttons and controls */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.controls span {
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+/* Button Style*/
+.btn {
+    padding: 6px 16px;
+    border-radius: 9999px;
+    border: 2px solid #ccc;
+    background: white;
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    transition: all 0.15s ease;
+}
+
+.btn.active {
+    background: #5076a7;
+    color: white;
+    border-color: #5076a7;
+}
+
+.btn:hover:not(:disabled) {
+    border-color: #5076a7;
+    color: #5076a7;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.oled-split-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    width: 100%;
+    /* align-items: flex-start; */
+}
+
+.oled-top-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    align-items: flex-start;
+    flex: 1;
+    background: var(--bg2);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    font-family: "JetBrains Mono", serif;
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+
+.oled-info-side {
+    flex: 1;
+    background: var(--bg2);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    font-family: "JetBrains Mono", serif;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.oled-info-side h2 {
+    margin-top: 0;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+    font-family: "JetBrains Mono", serif;
+}
+
+.oled-info_title {
+    margin: 0 0 0.5rem 0;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.oled-info_desc {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.4rem;
+}
+
+.oled-dynamic-box {
+    padding: 1rem;
+    border-left: 4px solid #5076a7;
+    background: #f4f7f9;
+
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    box-sizing: border-box;
+}
+
+.oled-model-side {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0; 
+    box-sizing: border-box;
+}
+
+/* --- ASYMMETRICAL SPLIT LAYOUT --- */
+.oled-intro-split {
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    align-items: center;
+    width: 100%;
+}
+
+/* Left side (Text) gets more space */
+.oled-intro-text {
+    flex: 2;
+}
+
+/* Inventor Portrait gets less space */
+.oled-inventor-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Frame styling for the inventor image */
+.inventor-frame {
+    overflow: hidden;
+    border: 4px solid #5076a7;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: #000;
+
+    /* Fade Effect */
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    border-radius: 8px;
+    width: auto;
+    height: auto;
+    display: block;
+    opacity: 0.98;
+    transform: translateY(0);
+    margin: 1.5rem 0; 
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.circle-image-frame {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #5076a7;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: #000;
+    margin-bottom: 0.75rem;
+    transition: transform 0.3s ease;
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.inventor-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+.inventor-caption {
+    font-size: 0.85rem;
+    font-family: "JetBrains Mono", monospace;
+    color: #666;
+    margin: 0;
+    text-align: center;
+}
+
+/* 3D model container */
+.oled-stage {
+    width: 100%;
+    max-width: 820px;
+    background: #1c1c1c;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-sizing: border-box;
+}
+
+.oled-image {
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    border-radius: 8px;
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0.98;
+    transform: translateY(0);
+    margin: 1.5rem 0; 
+    animation: scrollFadeSoft 1s ease-out forwards;
+    animation-timeline: view();
+    animation-range: exit 10% exit 40%;
+}
+
+/* Text formatting/styling */
+@keyframes scrollFadeSoft {
+    from {
+        opacity: 0.98;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0.4;
+        transform: translateY(12px);
+    }
+}
+
+/* Quiz result animations*/
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* layout for smaller screens*/
+@media (max-width: 1024px) {
+    .oled-split-layout {
+        flex-direction: column-reverse;
+        gap: 1.5rem;
+        padding: 0;
+    }
+
+    .oled-info-side,
+    .oled-model-side {
+        width: 100%;
+        flex: none;
+        padding: 1.25rem;
+    }
+
+    .oled-stage {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .oled-top-side {
+        padding: 1rem;
+    }
+
+    .oled-info_desc {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1.4rem;
+    }
+
+    .btn {
+        font-size: 0.8rem;
+        padding: 5px 12px;
+    }
+}
+
+/* OLED Pixel Grid Container */
+.oled-pixels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  max-width: 280px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #000;
+  border-radius: 12px;
+}
+
+/* Base Pixel Style */
+.oled-pixels .pixel {
+  width: 100%;
+  height: 70px;
+  border-radius: 4px;
+  animation: pixelGlow 2.5s ease-in-out infinite alternate;
+}
+
+/* Color abd Glow for Each Subpixel */
+.oled-pixels .pixel.red {
+  background: #ff3c3c;
+  box-shadow: 0 0 18px 4px rgba(255, 60, 60, 0.6);
+  animation-delay: 0s;
+}
+
+.oled-pixels .pixel.green {
+  background: #3cff64;
+  box-shadow: 0 0 18px 4px rgba(60, 255, 100, 0.6);
+  animation-delay: 0.4s;
+}
+
+.oled-pixels .pixel.blue {
+  background: #508cff;
+  box-shadow: 0 0 18px 4px rgba(80, 140, 255, 0.6);
+  animation-delay: 0.8s;
+}
+
+/* Glow Pulse Animation */
+@keyframes pixelGlow {
+  0% {
+    opacity: 0.6;
+    box-shadow: 0 0 10px 2px currentColor;
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 25px 8px currentColor;
+  }
+}
+
+/* --- Menu Tab Navigation Styling --- */
+.tabs-wrap {
+  --round: 10px;
+  --p-x: 8px;
+  --p-y: 4px;
+  --w-label: 135px;
+  
+  /* Palette Variables mapped to your dark layout or custom choices */
+  --color-pure: #ffffff;
+  --color-primary: #e8e8e8;
+  --color-secondary: #212121;
+  --muted: #5076a7;
+
+  display: flex;
+  align-items: center;
+  padding: var(--p-y) var(--p-x);
+  position: relative;
+  background: var(--color-primary);
+  border-radius: var(--round);
+  max-width: 100%;
+  width: fit-content;
+  margin: 0 auto; /* Centers the tab menu bar */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  z-index: 1;
+}
+
+/* Hide defaults for our custom pseudo-buttons */
+.tab-label {
+  cursor: pointer;
+  outline: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  background: transparent;
+  border: none;
+  padding: 10px 8px;
+  width: var(--w-label);
+  min-width: var(--w-label);
+  text-decoration: none;
+  user-select: none;
+  transition: color 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1.2;
+}
+
+/* Replaces input:checked + label styling seamlessly with your React state */
+.tab-label.active {
+  color: var(--color-pure) !important;
+}
+
+/* Sliding Background indicator card */
+/* Update the sliding background to follow the hover index, falling back to active index */
+.tab-slidebar {
+  position: absolute;
+  height: calc(100% - (var(--p-y) * 2));
+  width: var(--w-label);
+  border-radius: calc(var(--round) - var(--p-y));
+  background: var(--muted);
+  transform-origin: 0 0 0;
+  z-index: 0;
+  transition: transform 0.4s cubic-bezier(0.33, 0.83, 0.99, 0.98), background-color 0.2s ease;
+  left: var(--p-x);
+  
+  /* Slides smoothly when hovering OR when active tab changes */
+  transform: translateX(calc(var(--hover-index) * 100%)) scaleX(1);
+}
+
+/* Subtle visual feedback change on hover */
+.tabs-wrap:has(.tab-label:hover) .tab-slidebar {
+  opacity: 0.85; /* Makes it slightly translucent or lighter when hovering around */
+}
+
+/* The top/bottom border bar accents still stick strictly to the real selected active tab */
+.tab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: absolute;
+  transform-origin: 0 0 0;
+  height: 100%;
+  width: var(--w-label);
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.33, 0.83, 0.99, 0.98);
+  left: var(--p-x);
+  
+  transform: translateX(calc(var(--active-index) * 100%)) scaleX(1);
+}
+
+.tab-bar::before,
+.tab-bar::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  background: var(--color-secondary);
+}
+.tab-bar::before { top: 0; border-radius: 0 0 9999px 9999px; }
+.tab-bar::after { bottom: 0; border-radius: 9999px 9999px 0 0; }
+
+/* Glow Button Design - Initialized State Visible */
+.btn-animate-light {
+  padding: 10px 20px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  font-family: "JetBrains Mono", monospace;
+  transition: all 0.4s ease;
+
+  /* Visible by default (Blue border, subtle background tint, and soft glow) */
+  color: #008cff;
+  background: rgba(0, 140, 255, 0.05);
+  border: 2px solid #008cff;
+  box-shadow: 0 2px 4px rgba(0, 140, 255, 0.1);
+}
+
+/* Hover State - Crank up the intensity */
+.btn-animate-light:hover,
+.btn-animate-light:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 2px solid #008cff;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(0, 140, 255, 0.5), 0 4px 12px rgba(0, 140, 255, 0.3);
+}
+
+/* Active State - When "STOP LIGHT" is running (Keeps the strong neon look) */
+.btn-animate-light.active-glow {
+  color: #ffffff;
+  background: #008cff;
+  border: 2px solid #008cff;
+  box-shadow: 0 0 8px rgba(0, 140, 255, 0.6);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 1024px) {
+    .oled-nav-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .back-button-container {
+        position: static;
+        transform: none;
+        align-self: flex-start;
+    }
+
+    .oled-split-layout {
+        flex-direction: column;
+    }
+
+    /* Moves Interactive Controls & Diagram to the top on mobile */
+    .oled-model-side {
+        order: -1;
+        padding-right: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .oled-info-side {
+        order: 1;
+        width: 100%;
+    }
+
+    .display-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 0.5rem;
+        width: 100%;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .oled-stage {
+        padding: 10px;
+    }
+
+    .tabs-wrap {
+        --w-label: 100px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .tab-label {
+        font-size: 0.72rem;
+        padding: 8px 4px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .crt-dynamic-box {
+        padding: 0.85rem;
+    }
+    .crt-info_desc {
+        font-size: 0.85rem;
+    }
+}
