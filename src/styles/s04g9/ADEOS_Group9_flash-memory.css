@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Scope this page theme so it does not restyle the template homepage. */
+body:has(.adeos-g9-flash-memory-page) {
+    min-width: 0;
+    overflow-x: clip;
+}
+
+body:has(.adeos-g9-flash-memory-page) .header,
+body:has(.adeos-g9-flash-memory-page) .header__titleblock,
+body:has(.adeos-g9-flash-memory-page) .content,
+body:has(.adeos-g9-flash-memory-page) .content__block,
+body:has(.adeos-g9-flash-memory-page) .content__titlemeta,
+body:has(.adeos-g9-flash-memory-page) .article,
+body:has(.adeos-g9-flash-memory-page) .toc {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+}
+
+body:has(.adeos-g9-flash-memory-page) .header,
+body:has(.adeos-g9-flash-memory-page) .content {
+    width: 100%;
+}
+
+body:has(.adeos-g9-flash-memory-page) .header__titleblock {
+    flex-wrap: wrap;
+}
+
+body:has(.adeos-g9-flash-memory-page) .header__titleblock strong,
+body:has(.adeos-g9-flash-memory-page) .header__subtitle {
+    overflow-wrap: anywhere;
+}
+
+body:has(.adeos-g9-flash-memory-page) .content {
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+body:has(.adeos-g9-flash-memory-page) .content__block {
+    width: 100%;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article,
+body:has(.adeos-g9-flash-memory-page) .content__titlemeta,
+body:has(.adeos-g9-flash-memory-page) .toc {
+    background-color: #0b0d22;
+    border: none;
+    color: #ffff;
+    box-shadow: #1a1a21 5px 5px;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article h2, 
+body:has(.adeos-g9-flash-memory-page) .article h3,
+body:has(.adeos-g9-flash-memory-page) .article h4,
+body:has(.adeos-g9-flash-memory-page) .content__titlemeta h1,
+body:has(.adeos-g9-flash-memory-page) .content__titlemeta span,
+body:has(.adeos-g9-flash-memory-page) .toc h2 {
+    font-family: "Tomorrow", sans-serif;
+    text-shadow: #468f96 0 0 6px;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article h2,
+body:has(.adeos-g9-flash-memory-page) .toc h2 {
+    font-size: 1.8rem;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article h2,
+body:has(.adeos-g9-flash-memory-page) .article h3 {
+    border-bottom: 1px solid rgba(101, 250, 255, 0.2);
+}
+
+body:has(.adeos-g9-flash-memory-page) .article h3 {
+    font-size: 1.5rem;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article h4 {
+    border-bottom: none;
+}
+
+body:has(.adeos-g9-flash-memory-page) .content__titlemeta h1 {
+    font-size: 2.2rem;
+}
+
+body:has(.adeos-g9-flash-memory-page) .toc a,
+body:has(.adeos-g9-flash-memory-page) .article a {
+    font-family: "Geist Mono", monospace;
+    color: #4dd2fae5;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+body:has(.adeos-g9-flash-memory-page) .toc li {
+    font-size: 1rem;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article p,
+body:has(.adeos-g9-flash-memory-page) .content__titlemeta span {
+    font-family: "Space Mono", monospace;
+    font-size: 1.05rem;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article li,
+body:has(.adeos-g9-flash-memory-page) .article code span {
+    font-family: "Space Mono", monospace;
+    font-size: 1rem;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article pre {
+    background-color: #131533 !important;
+    padding: 2%;
+    border-radius: 8px;
+}
+
+body:has(.adeos-g9-flash-memory-page) .article code span {
+    margin-left: 1%;
+    color: #e0abf2;
+}
+
+body:has(.adeos-g9-flash-memory-page) .adeos-g9-component {
+    --cyan: #65fbff;
+    --blue: #4c94ff;
+    --green: #00ffc8;
+    --panel: rgba(5, 10, 28, 0.58);
+    --text: #ffffff;
+    --muted: #b8d6e8;
+    --line: rgba(255, 255, 255, 0.92);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(101, 251, 255, 0.18);
+    border-radius: 8px;
+    background: #0b0d22;
+    color: var(--text);
+    box-shadow: 0 0 24px rgba(101, 251, 255, 0.12), inset 0 0 46px rgba(21, 103, 146, 0.12);
+    font-family: "Space Mono", "Noto Sans Variable", monospace;
+    isolation: isolate;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    aspect-ratio: 16 / 9;
+    content-visibility: auto;
+    contain-intrinsic-size: 560px;
+    container-type: inline-size;
+    container-name: adeos-g9-component;
+}
+
+body:has(.adeos-g9-flash-memory-page) .adeos-g9-component__bg {
+    position: absolute;
+    z-index: 0;
+    width: auto;
+    height: 100%;
+    justify-self:center;
+    display: block;
+    object-fit: fill;
+    opacity: 0.96;
+    pointer-events: none;
+    user-select: none;
+}
+
+@media (min-width: 1100px) {
+    body:has(.adeos-g9-flash-memory-page) .content {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .content > .toc:not(.padder) {
+        flex: 0 1 clamp(230px, 18vw, 300px);
+        max-width: 300px;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .content__block {
+        flex: 3 1 0;
+        width: auto;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .toc.padder {
+        display: block;
+        flex: 0 1 clamp(230px, 18vw, 300px);
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 1099px) {
+    body:has(.adeos-g9-flash-memory-page) .content {
+        flex-direction: column;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .toc {
+        position: static;
+        width: 100%;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .toc.padder {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    body:has(.adeos-g9-flash-memory-page) .header {
+        padding: 0.75rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .header__titleblock {
+        gap: 0.65rem;
+        padding: 0.75rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .header__subtitle {
+        flex-basis: 100%;
+        padding-left: 3.15rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .content {
+        gap: 0.75rem;
+        padding: 0 0.75rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .article,
+    body:has(.adeos-g9-flash-memory-page) .content__titlemeta,
+    body:has(.adeos-g9-flash-memory-page) .toc {
+        padding: 1rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .article h2,
+    body:has(.adeos-g9-flash-memory-page) .toc h2 {
+        font-size: 1.5rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .article h3 {
+        font-size: 1.25rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .content__titlemeta h1 {
+        font-size: 1.75rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .toc li {
+        font-size: 0.9rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .article p,
+    body:has(.adeos-g9-flash-memory-page) .content__titlemeta span {
+        font-size: 1rem;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .article li,
+    body:has(.adeos-g9-flash-memory-page) .article code span {
+        font-size: 0.95rem;
+        margin-left: 0;
+    }
+
+    body:has(.adeos-g9-flash-memory-page) .adeos-g9-component {
+        width: 100%;
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,235 @@
+---
+// ADEOS_Group9_TLC.astro
+import "../../styles/s04g9/ADEOS_Group9_interactables.css";
+
+const charges = Array.from({ length: 7 });
+const NUM_CELLS = 8;
+
+const cells = Array.from({ length: NUM_CELLS }, (_, i) => {
+  const index = i + 1;
+
+  return {
+    gate: `adeos-g9-tlc-gate-${index}`,
+    store: `adeos-g9-tlc-store-${index}`,
+    bank: `adeos-g9-tlc-bank-${index}`,
+    display: `adeos-g9-tlc-display-${index}`,
+    label:
+      index === 1
+      ? `Cell ${index} (MS)`
+      : index === NUM_CELLS
+      ? `Cell ${index} (LS)`
+      : `Cell ${index}`,
+    chargeClass: `adeos-g9-tlc-charge-${index}`,
+  };
+});
+---
+
+<section class="adeos-g9-flash-demo adeos-g9-flash-demo--tlc" aria-label="Triple-Level Cell demo">
+  <div class="adeos-g9-flash-demo__cells">
+    {cells.map((cell, cellIndex) => (
+      <div class="adeos-g9-flash-demo__cell">
+        <button id={cell.gate} class="adeos-g9-flash-demo__layer adeos-g9-flash-demo__gate" type="button" data-tooltip="The word line applies voltages to the control gate during program and read operations.\n In this simplified demo, clicking adds one charge marker and advances the displayed cell to the next modeled threshold-voltage range.">{cell.label}'s control gate</button>
+        <div class="adeos-g9-flash-demo__layer adeos-g9-flash-demo__oxide" data-tooltip="The insulating oxide surrounds the charge-storage region and helps retain electrons when power is removed." tabindex={cellIndex === 0 ? 0 : undefined}>Insulator Layer</div>
+        <div class="adeos-g9-flash-demo__layer adeos-g9-flash-demo__floating" data-tooltip="The floating gate stores electrons. Different amounts of stored charge create the eight threshold-voltage ranges modeled by this TLC demo." tabindex={cellIndex === 0 ? 0 : undefined}>
+          Floating Gate
+          <div id={cell.store} class="adeos-g9-flash-demo__charge-well"></div>
+        </div>
+        <div class="adeos-g9-flash-demo__layer adeos-g9-flash-demo__oxide" data-tooltip="The insulating oxide separates the charge-storage region from the transistor channel.">Insulator Layer</div>
+        <div class="adeos-g9-flash-demo__layer adeos-g9-flash-demo__substrate" data-tooltip="In this simplified planar cell, the substrate is the silicon body where a transistor channel can form between source and drain. Stored charge changes the gate voltage needed to make that channel conduct." tabindex={cellIndex === 0 ? 0 : undefined}>
+          <div class="adeos-g9-substrate-box adeos-g9-substrate-box--source" data-tooltip="The source is one end of the transistor channel. Together with the drain, it forms the current path used to read the selected cell." tabindex={cellIndex === 0 ? 0 : undefined}>source</div>
+          <span class="adeos-g9-flash-demo__substrate-label">Substrate</span>
+          <div class="adeos-g9-substrate-box adeos-g9-substrate-box--drain" data-tooltip="The drain is the other end of the transistor channel. Read circuitry senses the current through this path to determine the cell's threshold-voltage range." tabindex={cellIndex === 0 ? 0 : undefined}>drain</div>
+          <div id={cell.bank} class="adeos-g9-flash-demo__charge-bank" data-tooltip="These movable markers are a visual model of stored charge, not a physical electron reservoir inside an SSD." tabindex={cellIndex === 0 ? 0 : undefined}>
+            {charges.map((_, i) => (
+              <div class={`adeos-g9-flash-demo__charge adeos-g9-flash-demo__charge--tlc ${cell.chargeClass}`} data-id={i}></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+    <div class="adeos-g9-bitline adeos-g9-bitline--top" data-tooltip="The bit line connects a NAND string to program and sensing circuitry. During a read, a sense amplifier detects the string current to determine the selected cell's range." tabindex="0"><span>Bit Line 2</span></div>
+    <div class="adeos-g9-bitline adeos-g9-bitline--bottom" data-tooltip="The bit line connects a NAND string to program and sensing circuitry. During a read, a sense amplifier detects the string current to determine the selected cell's range."><span>Bit Line 2</span></div>
+  </div>
+
+  <aside class="adeos-g9-flash-demo__panel">
+    <p>Click a control gate to move one marker and advance a displayed TLC cell through eight modeled threshold-voltage ranges.</p>
+    <p>Each TLC cell stores 3 bits. This demo counts from <code>111</code> to <code>000</code>; the physical range-to-bit mapping varies by NAND design.</p>
+
+    <div class="adeos-g9-flash-demo__display" aria-label="Current TLC stored values">
+      {cells.map((cell) => (
+        <div class="adeos-g9-flash-demo__value">
+          <span>{cell.label.replace("Control Gate ", "")}</span>
+          <strong id={cell.display}></strong>
+        </div>
+      ))}
+      <div class="adeos-g9-flash-demo__value adeos-g9-flash-demo__value--wide">
+        <span>Total bits</span>
+        <strong id="adeos-g9-tlc-total-bits"></strong>
+      </div>
+      <div class="adeos-g9-flash-demo__value">
+        <span>Hex</span>
+        <strong id="adeos-g9-tlc-hex-value"></strong>
+      </div>
+    </div>
+
+    <button class="adeos-g9-flash-demo__erase" id="adeos-g9-tlc-erase" type="button" data-tooltip="This resets every displayed cell to the lowest-threshold erased state, shown here as 111. In real NAND, an erase operation resets an entire block of pages.">Erase cells</button>
+  </aside>
+
+  <div class="adeos-g9-flash-demo__tooltip" id="adeos-g9-tlc-tooltip" role="tooltip" aria-live="polite" hidden></div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const NUM_CELLS = 8;
+    const demo = document.querySelector(".adeos-g9-flash-demo--tlc");
+
+    if (!demo) return;
+
+    const erase = demo.querySelector("#adeos-g9-tlc-erase");
+
+    const cells = Array.from({ length: NUM_CELLS }, (_, i) => {
+      const index = i + 1;
+
+      return {
+        circles: demo.querySelectorAll(`.adeos-g9-tlc-charge-${index}`),
+        r: demo.querySelector(`#adeos-g9-tlc-store-${index}`),
+        l: demo.querySelector(`#adeos-g9-tlc-bank-${index}`),
+        w: demo.querySelector(`#adeos-g9-tlc-gate-${index}`),
+        d: demo.querySelector(`#adeos-g9-tlc-display-${index}`),
+        state: 7,
+      };
+    });
+
+    cells.forEach((cell) => {
+      cell.element = cell.w.closest(".adeos-g9-flash-demo__cell");
+    });
+
+    const totalBits = demo.querySelector("#adeos-g9-tlc-total-bits");
+    const hexValue = demo.querySelector("#adeos-g9-tlc-hex-value");
+    const tooltip = demo.querySelector(".adeos-g9-flash-demo__tooltip");
+    const tooltipTargets = demo.querySelectorAll("[data-tooltip]");
+    let describedTarget = null;
+    let pinnedTarget = null;
+    const coarsePointer = window.matchMedia("(hover: none)").matches;
+
+    function bits(value) {
+      return value.toString(2).padStart(3, "0");
+    }
+
+    function updateDisplay() {
+      let total = "";
+
+      cells.forEach((cell) => {
+        const b = bits(cell.state);
+        const isFull = cell.state === 0;
+
+        cell.d.textContent = b;
+        cell.element.classList.toggle("adeos-g9-is-full", isFull);
+        cell.w.disabled = isFull;
+        cell.w.setAttribute("aria-disabled", String(isFull));
+        total += b;
+      });
+
+      totalBits.textContent = total;
+      hexValue.textContent = parseInt(total, 2).toString(16).toUpperCase();
+    }
+
+    updateDisplay();
+
+    erase.addEventListener("click", () => {
+      cells.forEach((cell) => {
+        cell.state = 7;
+        cell.circles.forEach((circle) => cell.l.appendChild(circle));
+      });
+      updateDisplay();
+    });
+
+    cells.forEach((cell) => {
+      cell.w.addEventListener("click", () => {
+        if (cell.state > 0) {
+          cell.r.appendChild(cell.circles[cell.state - 1]);
+          cell.state--;
+          updateDisplay();
+        }
+      });
+    });
+
+    function positionTooltip(target, event) {
+      if (coarsePointer) {
+        tooltip.style.removeProperty("left");
+        tooltip.style.removeProperty("top");
+        return;
+      }
+
+      const targetRect = target.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+      const requestedX = event?.clientX ?? targetRect.right;
+      const requestedY = event?.clientY ?? targetRect.top;
+      const left = Math.min(Math.max(12, requestedX + 14), window.innerWidth - tooltipRect.width - 12);
+      const top = Math.min(Math.max(12, requestedY + 14), window.innerHeight - tooltipRect.height - 12);
+
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    }
+
+    function showTooltip(target, event, pinned = false) {
+      if (describedTarget && describedTarget !== target) {
+        describedTarget.removeAttribute("aria-describedby");
+      }
+
+      describedTarget = target;
+      pinnedTarget = pinned ? target : null;
+      tooltip.textContent = target.dataset.tooltip.replace(/\\n/g, "\n").trim();
+      tooltip.hidden = false;
+      tooltip.classList.add("adeos-g9-is-visible");
+      target.setAttribute("aria-describedby", tooltip.id);
+      positionTooltip(target, event);
+    }
+
+    function hideTooltip(force = false) {
+      if (pinnedTarget && !force) return;
+
+      describedTarget?.removeAttribute("aria-describedby");
+      describedTarget = null;
+      pinnedTarget = null;
+      tooltip.classList.remove("adeos-g9-is-visible");
+      tooltip.hidden = true;
+    }
+
+    tooltipTargets.forEach((target) => {
+      target.addEventListener("mouseenter", (event) => {
+        if (!pinnedTarget) showTooltip(target, event);
+      });
+      target.addEventListener("mousemove", (event) => {
+        if (!pinnedTarget && !tooltip.hidden) positionTooltip(target, event);
+      });
+      target.addEventListener("mouseleave", () => hideTooltip());
+      target.addEventListener("focus", (event) => showTooltip(target, event));
+      target.addEventListener("blur", () => hideTooltip());
+    });
+
+demo.addEventListener("click", (event) => {
+  const gate = event.target.closest(".adeos-g9-flash-demo__gate");
+  if (gate && demo.contains(gate)) {
+    hideTooltip(true);
+    return;
+  }
+  const target = event.target.closest("[data-tooltip]");
+  if (!target || !demo.contains(target)) {
+    hideTooltip(true);
+  } else if (pinnedTarget === target) {
+    hideTooltip(true);
+  } else {
+    showTooltip(target, event, true);
+  }
+});
+
+    demo.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") hideTooltip(true);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!demo.contains(event.target)) hideTooltip(true);
+    });
+  });
+</script>

@@ -1,0 +1,30 @@
+<svg width="224" height="187" viewBox="0 0 224 187" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_1_147" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="1" width="224" height="184">
+<path d="M0.541748 1H223.542V185H0.541748V1Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_1_147)">
+<mask id="mask1_1_147" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-1040" y="-555" width="2304" height="1296">
+<path d="M1264 -555H-1040V741H1264V-555Z" fill="black" fill-opacity="0.1"/>
+</mask>
+<g mask="url(#mask1_1_147)">
+<mask id="mask2_1_147" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="1" width="224" height="184">
+<path d="M224 1H0V185H224V1Z" fill="white"/>
+</mask>
+<g mask="url(#mask2_1_147)">
+<path d="M207.193 169.896L212.635 164.573V103.292L221.969 94.1615V12.7031L215.266 6.14583H127.125L122.469 1.59375H13.4219L5.36979 9.47917V15.1615L10.151 19.8438V76.8125L5.36979 81.4948V95.5938L2.01562 98.875V161.344L25.8802 184.396H102.51L117.214 169.896H207.193Z" fill="#92D9FF"/>
+</g>
+</g>
+</g>
+<mask id="mask3_1_147" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="224" height="187">
+<path d="M0.541748 0.057251H223.542V186.057H0.541748V0.057251Z" fill="white"/>
+</mask>
+<g mask="url(#mask3_1_147)">
+<path d="M207.797 171.375L214.115 165.198V103.917L223.448 94.7864V12.0781L215.87 4.66665H127.729L123.073 0.114563H12.8283L3.9012 8.85415V94.9739L0.552246 98.25V161.974L25.2814 185.87H103.115L117.818 171.375H207.797ZM102.511 184.396H25.8804L2.01579 161.344V98.875L5.36995 95.5937V81.4948L10.1512 76.8125V19.8437L5.36995 15.1614V9.46873L13.422 1.58331H122.469L127.125 6.1354H215.266L221.969 12.6927V94.1562L212.636 103.286V164.573L207.193 169.896H117.214L102.511 184.396Z" fill="#92D9FF"/>
+</g>
+<mask id="mask4_1_147" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="106" y="98" width="117" height="89">
+<path d="M106.667 98.3333H222.667V186.057H106.667V98.3333Z" fill="white"/>
+</mask>
+<g mask="url(#mask4_1_147)">
+<path d="M107.406 185.13L210.865 185.474L222.667 173.917V99.1146L216.359 105.292V167.177L209.703 173.693H119.099L107.406 185.13Z" fill="#92D9FF"/>
+</g>
+</svg>

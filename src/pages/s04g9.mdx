@@ -1,0 +1,181 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Flash Memory: How SSDs Store Data"
+description: "A virtual exhibit explaining how SSDs use NAND flash memory cells to store binary data."
+author: "Abenojar, Fredrikzen; Dollentas, Raine Anne; Encisco, Gabriel Jeremy; Obregon, Sian Ysabelle; Singson, Keith Railey"
+readingTime: "8 minutes"
+---
+
+import NandHierarchy from "../components/s04g9/ADEOS_Group9_NandHierarchy.jsx";
+import Introduction from "../components/s04g9/ADEOS_Group9_Introduction.jsx";
+import SSD_Diagram from "../components/s04g9/ADEOS_Group9_SSDDiagram.jsx";
+import SLCvsTLC from "../components/s04g9/ADEOS_Group9_SLCvsTLC.jsx";
+import TLC from "../components/s04g9/ADEOS_Group9_TLC.astro";
+import SLC from "../components/s04g9/ADEOS_Group9_SLC.astro";
+import WearLevel from "../components/s04g9/ADEOS_Group9_WearLevel.jsx";
+import GarbageCollection from "../components/s04g9/ADEOS_Group9_GarbageCollection.jsx";
+import "../styles/s04g9/ADEOS_Group9_flash-memory.css";
+
+<span className="adeos-g9-flash-memory-page" hidden aria-hidden="true"></span>
+
+<Introduction />
+
+## Learning Goal
+
+By the end of the exhibit, visitors should understand how SSDs store data using NAND flash memory, how NAND flash is organized, and how memory cells represent binary data through different threshold-voltage states.
+
+The exhibit begins with the SSD as a complete storage device, then zooms inward toward the NAND flash chip, its internal organization, and finally the memory cell. An interactive hierarchy diagram helps visitors explore the structure before they use the simplified SLC and TLC programming demos.
+
+## What is an SSD?
+
+<SSD_Diagram client:load />
+An SSD is a storage device that keeps data even when power is removed. This makes it different from temporary working memory such as RAM, which loses its stored data when the device turns off.
+
+SSDs are commonly used as the main storage device in modern computers because they can access data without waiting for mechanical parts to move. Instead of rotating disks, an SSD uses flash memory chips and a controller that manages logical addresses, data placement, reads, programming, erasing, and error correction.
+
+In this exhibit, the SSD is the starting point. From there, the focus moves into the NAND flash chips where the data is physically stored.
+
+## What is NAND Flash Memory?
+
+NAND flash is a type of non-volatile memory, meaning it can retain data even without power. This is why an SSD still remembers files after the computer shuts down.
+
+NAND flash stores information using memory cells. A simplified NAND flash cell includes a control gate, an insulating layer, a transistor channel, and a charge-storage region such as a floating gate or charge-trap layer. Stored electrons change the cell's threshold voltage. During a read, sensing circuitry determines the cell's state by checking whether current flows at selected read voltages.
+
+This exhibit uses a simplified charge-marker model so visitors can focus on the main concept: SSDs store data by programming and sensing the threshold-voltage states of flash memory cells.
+
+## Interactive NAND Hierarchy
+
+The diagram below connects the storage hierarchy to a visual NAND structure. Each selectable layer represents one level of organization: `Chip`, `Die`, `Planes`, `Blocks`, `Pages`, and `Cell`.
+
+<NandHierarchy client:load />
+
+This hierarchy interaction is separate from the SLC/TLC demos. The hierarchy diagram explains where NAND parts are located, while the demos focus on how memory cells change state.
+
+## Pages and Blocks
+
+A page is a group of NAND flash memory cells. NAND is commonly read and programmed in page-sized units.
+
+A block contains many pages, and erase operations happen at the block level. NAND cannot directly overwrite an already programmed page. Instead, the controller writes updated data to a free page and marks the old page as invalid. Later, garbage collection moves any still-valid pages elsewhere so the old block can be erased and reused.
+
+### From a Write Request to NAND
+
+When a computer sends data to an SSD, it uses logical addresses rather than choosing physical NAND cells. The SSD controller's Flash Translation Layer (FTL) maps those logical addresses to physical pages. The controller programs data and error-correction information into available pages, then uses that information to detect and correct errors during later reads.
+
+As pages become invalid, garbage collection consolidates valid data and frees blocks for erasure. Wear leveling spreads program/erase cycles across blocks because NAND cells have limited endurance. These controller tasks allow the SSD to hide NAND's erase-before-write restriction from the computer.
+
+For this exhibit, the most important idea is:
+
+```text
+Pages are read and programmed.
+Blocks are erased.
+```
+
+## What is a Flash Memory Cell?
+
+A flash memory cell is a transistor whose threshold voltage changes when electrons are added to or removed from its charge-storage region. In an SLC cell, the lower-threshold erased state is conventionally represented as `1`, while the higher-threshold programmed state is represented as `0`.
+
+Real NAND flash is more complex than a charged-or-uncharged switch. Sensing circuitry distinguishes threshold-voltage ranges, and multi-bit cells use several ranges rather than one charge level for each individual bit. The exact mapping between those ranges and bit patterns varies by NAND design.
+
+The demos use this simplified model:
+
+```text
+Lowest threshold-voltage range = erased state
+Programming adds stored charge and raises the threshold voltage
+SLC maps the erased range to 1 and the programmed range to 0
+TLC uses eight ranges; the exact bit-pattern order is device-dependent
+```
+
+## SLC vs TLC
+
+<SLCvsTLC />
+
+NAND flash can store different amounts of data per cell.
+
+### SLC: Single-Level Cell
+
+SLC stores 1 bit per cell. Since 1 bit has two possible values, an SLC cell uses two threshold-voltage ranges to represent `0` and `1`.
+
+Because it only needs to distinguish between two ranges, SLC is generally faster to program and read and has higher endurance than multi-bit NAND. The tradeoff is lower storage density and a higher cost per gigabyte.
+
+### TLC: Triple-Level Cell
+
+TLC stores 3 bits per cell. Since 3 bits can represent 8 possible binary values, TLC must distinguish among 8 threshold-voltage ranges.
+
+This increases storage density, but the narrower separation between ranges requires more precise programming and sensing and generally reduces performance and endurance compared with SLC. TLC is widely used where capacity and cost are priorities.
+
+Possible TLC bit patterns, shown without assigning them to a particular voltage order:
+
+```text
+000
+001
+010
+011
+100
+101
+110
+111
+```
+
+## SLC/TLC Demo Preview
+
+The demos below visualize threshold-voltage states with movable charge markers. Clicking a control gate adds one marker to a displayed cell and advances its simplified programmed state. The erase button returns all displayed cells to the erased state, shown as all `1`s. Real NAND programs pages and erases complete blocks rather than independently programming and erasing one cell at a time.
+
+### SLC Demo
+
+<SLC />
+
+### TLC Demo
+
+<TLC />
+
+In SLC mode, each displayed cell has two possible states. In TLC mode, each displayed cell steps through eight modeled threshold-voltage ranges, demonstrating how 3 bits can be represented by one cell. The demo counts from `111` to `000` for clarity; actual NAND may assign bit patterns to voltage ranges differently.
+
+### Wear Leveling
+
+Wear leveling is a technique used in flash memory and solid-state drives (SSDs) to extend lifespan by evenly distributing write and erase operations across all memory blocks.
+<WearLevel client:load />
+Types of Wear Leveling
+
+Dynamic Wear Leveling - writes new data to the flash memory blocks with the lowest number of erase cycles. It only manages blocks that are being actively written to and does not move existing data unless necessary.
+
+Static Wear Leveling - moves both new and existing data between blocks to ensure that rarely modified data does not remain stored on blocks that have experienced little wear. This allows all blocks in the SSD to age more evenly.
+
+Global Wear Leveling - manages wear across the entire storage device by considering all available flash memory blocks. It distributes write operations throughout the whole SSD rather than limiting the process to a specific section of memory.
+
+### Garbage Collection in SSD
+Garbage collection in SSDs is a storage management process that improves SSD performance by identifying data pages that are no longer valid, moving the valid data to new locations, and erasing the blocks containing invalid data so they can be reused. Since flash memory cannot overwrite existing data directly, garbage collection helps create free space for future write operations.
+<GarbageCollection client:visible />
+
+## Summary and Key Takeaways
+
+### Summary
+Solid-State Drives (SSDs) commonly provide non-volatile storage in modern computers. They preserve data without power by using NAND flash memory instead of moving mechanical components. NAND is organized as packages or **chips** containing **dies**, which contain **planes**, **blocks**, **pages**, and individual memory **cells**.
+
+NAND is commonly read and programmed in page-sized units but erased in block-sized units. The SSD controller uses an FTL to map logical addresses to physical pages, while garbage collection, wear leveling, and error correction help manage performance, endurance, and data reliability.
+
+Data storage relies on adjusting and sensing threshold-voltage ranges in flash memory cells. The demonstrations visualize this with charge markers: the lowest-threshold erased state is shown as `1`, while programming adds markers and raises the modeled threshold voltage. TLC uses eight modeled ranges, and its exact physical state-to-bit mapping depends on the NAND design.
+
+The efficiency and density of this storage depend on the cell technology used: 
+- Single-Level Cell (SLC): 1 bit per cell using 2 threshold-voltage ranges; generally faster and more durable, but less dense.
+- Triple-Level Cell (TLC): 3 bits per cell using 8 threshold-voltage ranges; denser and less expensive per gigabyte, but generally slower and less durable than SLC.
+
+### Key Takeaways
+- SSDs store data using NAND flash memory instead of spinning mechanical disks.
+- NAND flash is non-volatile, so it can retain stored data without power.
+- NAND flash is organized into chips, dies, planes, blocks, pages, and cells.
+- Pages are commonly read and programmed, while complete blocks are erased.
+- The SSD controller maps logical addresses to physical NAND pages and manages garbage collection, wear leveling, and error correction.
+- Flash memory cells represent data through threshold-voltage ranges affected by stored charge.
+- SLC stores 1 bit per cell using 2 ranges, while TLC stores 3 bits per cell using 8 ranges.
+
+## References
+
+- Kingston Technology. "2D vs 3D NAND: Differences Between SLC, MLC, TLC and QLC Flash Storage." https://www.kingston.com/en/blog/pc-performance/difference-between-slc-mlc-tlc-3d-nand
+- TechTarget. "What is NAND flash memory?" https://www.techtarget.com/searchstorage/definition/NAND-flash-memory
+- ATP Electronics. "NAND Die Stacking Explained." https://www.atpinc.com/blog/what-is-nand-die-stacking
+- Prasad, A. "Flash Memory Explained: NAND vs NOR, Architecture, and Memory Organization." DEV Community. https://dev.to/amanprasad/flash-memory-explained-nand-vs-nor-architecture-and-memory-organization-3abf
+- KIOXIA Corporation. "What is NAND Flash Memory?" https://www.kioxia.com/en-jp/rd/technology/nand-flash.html
+- KIOXIA Corporation. "What is Multi-level Cell Technology?" https://www.kioxia.com/en-jp/rd/technology/multi-level-cell.html
+- Samsung Semiconductor. "A Brief History of Data Placement Technologies." https://semiconductor.samsung.com/news-events/tech-blog/a-brief-history-of-data-placement-technologies/
+- TechTarget. "What is solid-state storage garbage collection?" https://www.techtarget.com/searchstorage/definition/solid-state-storage-SSS-garbage-collection 
+- TechTarget. "What is wear leveling? | definition" https://www.techtarget.com/searchstorage/definition/wear-leveling 
