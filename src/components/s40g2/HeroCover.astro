@@ -1,0 +1,102 @@
+---
+// HeroCover.astro - Minimal version
+---
+
+<div style="margin-bottom: 3rem;">
+  <slot />
+</div>
+
+<script>
+  // Smooth LERP parallax scroll handler
+  function initParallax() {
+    const bgLayer = document.getElementById("parallax-bg-layer");
+    const container = document.getElementById("clock-parallax-container");
+    if (!bgLayer || !container) return;
+
+    const elBg = bgLayer;
+    const elContainer = container;
+
+    let targetY = 0;
+    let currentY = 0;
+    let animId: number | null = null;
+
+    function updateTarget() {
+      const rect = elContainer.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        const scrollProgress =
+          (windowHeight - rect.top) / (windowHeight + rect.height);
+        targetY = (scrollProgress - 0.5) * 90; // 90px motion depth
+      }
+    }
+
+    function animate() {
+      // Smooth linear interpolation (LERP) for fluid 60fps movement
+      currentY += (targetY - currentY) * 0.08;
+      elBg.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0) scale(1.12)`;
+      animId = requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("scroll", updateTarget, { passive: true });
+    window.addEventListener("resize", updateTarget, { passive: true });
+
+    updateTarget();
+    animate();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initParallax);
+  } else {
+    initParallax();
+  }
+</script>
+
+<style>
+  .clock-parallax-container {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #1a2540;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    background-color: #0a0e17;
+  }
+
+  .parallax-bg-layer {
+    position: absolute;
+    top: -60px;
+    left: 0;
+    right: 0;
+    bottom: -60px;
+    background-image: url("/virtual-exhibit-template/s40g2/clock_oscillator_bg.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    opacity: 0.75;
+    will-change: transform;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at center,
+      rgba(10, 14, 23, 0.2) 0%,
+      rgba(10, 14, 23, 0.65) 100%
+    );
+  }
+
+  .clock-content-layer {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem;
+    background: rgba(10, 14, 23, 0.35);
+    backdrop-filter: blur(2px);
+  }
+</style>

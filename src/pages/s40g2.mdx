@@ -1,0 +1,112 @@
+---
+layout: ../layouts/ExhibitLayout.astro
+title: "Pipeline Simulator"
+description: "Interactive 5-stage pipeline simulator with clock speed control"
+author: "Alonto, Azzam; Choa, Bryan; Chua, Keion; Laborada, Nathan"
+readingTime: "5 minutes"
+---
+
+import '../styles/s40g2/global.css';
+
+import PipelineSimulatorWrapper from '../components/s40g2/PipelineSimulatorWrapper.jsx';
+
+{/* This now includes HeroCover wrapper */}
+<PipelineSimulatorWrapper client:load />
+
+<hr style={{ border: '0', height: '1px', background: '#1a2540', margin: '3rem 0' }} />
+
+<div style={{ color: '#8892b0' }}>
+  <h2 style={{ color: '#e8edf2', fontSize: '1.5rem', marginBottom: '1rem' }}>About This Simulation</h2>
+
+  This interactive simulator demonstrates how a 5-stage RISC pipeline (IF, ID, EX, MEM, WB) processes instructions <sup><a href="#ref-hennessy2018" style={{ color: '#00ffc8', textDecoration: 'none' }}>[1]</a></sup><sup><a href="#ref-hennessy2021" style={{ color: '#00ffc8', textDecoration: 'none' }}>[2]</a></sup>. Use the slider above to control the clock speed and observe:
+
+  <ul style={{ listStyleType: 'square', paddingLeft: '1.5rem', margin: '1rem 0', lineHeight: '1.7' }}>
+    <li><strong style={{ color: '#00ffc8' }}>Oscilloscope:</strong> Visual representation of clock cycles</li>
+    <li><strong style={{ color: '#00ffc8' }}>Square Wave:</strong> Frequency visualization matching the clock speed</li>
+    <li><strong style={{ color: '#00ffc8' }}>Instruction Pipeline:</strong> See instructions move through stages in real-time</li>
+    <li><strong style={{ color: '#00ffc8' }}>Gantt Chart:</strong> Track multiple instructions as they flow through the pipeline</li>
+  </ul>
+
+  <h3 style={{ color: '#e8edf2', fontSize: '1.2rem', marginTop: '2rem', marginBottom: '0.5rem' }}>Key Concepts</h3>
+  
+  <ul style={{ listStyleType: 'square', paddingLeft: '1.5rem', lineHeight: '1.7' }}>
+    <li><strong>Clock Speed:</strong> Controls how fast instructions are processed <sup><a href="#ref-mano2013" style={{ color: '#00ffc8', textDecoration: 'none' }}>[3]</a></sup></li>
+    <li><strong>Pipeline Stages:</strong> IF (Instruction Fetch), ID (Instruction Decode), EX (Execute), MEM (Memory Access), WB (Write Back) <sup><a href="#ref-hennessy2018" style={{ color: '#00ffc8', textDecoration: 'none' }}>[1]</a></sup></li>
+    <li><strong>Hazards:</strong> Stalls and dependencies that affect performance <sup><a href="#ref-hennessy2021" style={{ color: '#00ffc8', textDecoration: 'none' }}>[2]</a></sup></li>
+    <li><strong>Throughput:</strong> Instructions completed per cycle <sup><a href="#ref-hamacher2012" style={{ color: '#00ffc8', textDecoration: 'none' }}>[4]</a></sup></li>
+  </ul>
+
+  <h3 style={{ color: '#e8edf2', fontSize: '1.2rem', marginTop: '2rem', marginBottom: '0.5rem' }}>The CPU Clock (Hardware)</h3>
+  <p style={{ lineHeight: '1.7', marginBottom: '1rem' }}>
+    While the simulator above visualizes the logic of a clock cycle, the actual physical clock in most traditional computers is driven by a <strong>crystal oscillator</strong> <sup><a href="#ref-mano2013" style={{ color: '#00ffc8', textDecoration: 'none' }}>[3]</a></sup><sup><a href="#ref-hamacher2012" style={{ color: '#00ffc8', textDecoration: 'none' }}>[4]</a></sup>. 
+  </p>
+  <ul style={{ listStyleType: 'square', paddingLeft: '1.5rem', lineHeight: '1.7', marginBottom: '2rem' }}>
+    <li><strong>Quartz Crystal:</strong> The physical heart of the timing system. When an electrical voltage is applied to a precisely cut piece of quartz, it mechanically vibrates at a constant, unyielding frequency—a phenomenon known as the piezoelectric effect <sup><a href="#ref-mano2013" style={{ color: '#00ffc8', textDecoration: 'none' }}>[3]</a></sup>.</li>
+    <li><strong>Clock Generator:</strong> An oscillator circuit converts these physical vibrations into a continuous stream of alternating high and low electrical voltages (a square wave) <sup><a href="#ref-hamacher2012" style={{ color: '#00ffc8', textDecoration: 'none' }}>[4]</a></sup>. In digital logic design, the rising edge of this wave is what triggers the pipeline registers to latch data and transition to the next stage <sup><a href="#ref-hennessy2018" style={{ color: '#00ffc8', textDecoration: 'none' }}>[1]</a></sup>.</li>
+    <li><strong>Clock Speed & Multipliers:</strong> A base quartz crystal typically vibrates in the Megahertz (MHz) range. Modern CPUs use internal phase-locked loops (PLLs) as frequency multipliers to step this base rhythm up to the Gigahertz (GHz) speeds required for high-performance instruction throughput <sup><a href="#ref-hennessy2021" style={{ color: '#00ffc8', textDecoration: 'none' }}>[2]</a></sup><sup><a href="#ref-hamacher2012" style={{ color: '#00ffc8', textDecoration: 'none' }}>[4]</a></sup>.</li>
+  </ul>
+
+  <h3 style={{ color: '#e8edf2', fontSize: '1.2rem', marginTop: '2rem', marginBottom: '0.5rem' }}>References & Further Reading</h3>
+  <ul style={{ listStyleType: 'square', paddingLeft: '1.5rem', lineHeight: '1.7' }}>
+    <li id="ref-hennessy2018">
+      <a 
+        href="https://www.elsevier.com/books/computer-architecture/hennessy/978-0-12-812275-4" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ color: '#00ffc8', textDecoration: 'none' }}
+      >
+        [1] Hennessy, J. L., & Patterson, D. A. (2018). Computer organization and design: A hardware/software approach (RISC-V ed.). Morgan Kaufmann/Elsevier.
+      </a>
+    </li>
+    <li id="ref-hennessy2021">
+      <a 
+        href="https://shop.elsevier.com/books/computer-organization-and-design-risc-v-edition/patterson/978-0-12-820331-6" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ color: '#00ffc8', textDecoration: 'none' }}
+      >
+        [2] Hennessy, J. L., & Patterson, D. A. (2021). Computer organization and design: A hardware/software approach (RISC-V ed., 2nd ed.). Elsevier/Morgan Kaufmann.
+      </a>
+    </li>
+    <li id="ref-mano2013">
+      <a 
+        href="https://www.amazon.com/Digital-Design-Introduction-Verilog-HDL/dp/0132774208" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ color: '#00ffc8', textDecoration: 'none' }}
+      >
+        [3] Mano, M. M., & Ciletti, M. D. (2013). Digital design: With an introduction to the Verilog HDL (5th ed.). Pearson Education.
+      </a>
+    </li>
+    <li id="ref-hamacher2012">
+      <a 
+        href="https://www.mheducation.com/highered/product/computer-organization-and-embedded-systems-hamacher.html" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ color: '#00ffc8', textDecoration: 'none' }}
+      >
+        [4] Hamacher, V. C., Vranesic, Z. G., & Manjikian, N. (2012). Computer organization and embedded systems (6th ed.). McGraw-Hill.
+      </a>
+    </li>
+    <li>
+      <a 
+        href="https://en.wikipedia.org/wiki/Crystal_oscillator" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ color: '#00ffc8', textDecoration: 'none' }}
+      >
+        Wikipedia: Crystal Oscillator & The Piezoelectric Effect
+      </a>
+    </li>
+    <li>
+      <a 
+        href="https://www.geeksforgeeks.org/computer-organization-architecture/clock-speed/" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ color: '#00ffc8', textDecoration: 'none' }}
+      >
+        GeeksforGeeks: CPU Clock Speed and Architecture
+      </a>
+    </li>
+  </ul>
+</div>
