@@ -1,0 +1,453 @@
+---
+layout: '../layouts/ExhibitLayout.astro'
+title: "Cloud Vault: The Architecture Behind Cloud Storage"
+author: "Co, Caitlyn Hope; de la Calzada, Wanda Jude; Li, Bowen; Rodrigo, Betina Heart; Rogacion, Rob Nigel"
+
+readingTime: "120 minutes"
+---
+
+<style>{`
+  .exhibit-figure img {
+    max-width: 100%;
+  }
+`}</style>
+
+import img01 from "../assets/s40g5/01-cloud-vs-local.webp"
+import img02 from "../assets/s40g5/02-cloud-computing-diagram.webp"
+import img03 from "../assets/s40g5/03-dropbox-interface.webp"
+import img04 from "../assets/s40g5/04-gdrive-upload.webp"
+import img05 from "../assets/s40g5/05-file-split-into-packets.webp"
+import img06 from "../assets/s40g5/06-internet-to-cloud.webp"
+import img07 from "../assets/s40g5/07-cloud-server-processing.webp"
+import img08 from "../assets/s40g5/08-upload-complete.webp"
+import img09 from "../assets/s40g5/09-data-center.webp"
+import img10 from "../assets/s40g5/10-rack-mounted-server.webp"
+import img11 from "../assets/s40g5/11-hdd-ssd.webp"
+import img12 from "../assets/s40g5/12-data-center-network-diagram.webp"
+import img13 from "../assets/s40g5/13-hvac.webp"
+import img14 from "../assets/s40g5/14-server-rack-with-labels.webp"
+import img15 from "../assets/s40g5/15-distributed-storage.webp"
+import img16 from "../assets/s40g5/16-storage-virtualization.webp"
+import img17 from "../assets/s40g5/17-replication.webp"
+import img18 from "../assets/s40g5/18-broken-server.webp"
+import img19 from "../assets/s40g5/19-how-replication-works.webp"
+import img20 from "../assets/s40g5/20-redundancy.webp"
+import img21 from "../assets/s40g5/21-fault-tolerance-and-high-availability.webp"
+import img22 from "../assets/s40g5/22-encryption.webp"
+import img23 from "../assets/s40g5/23-in-transit.webp"
+import img24 from "../assets/s40g5/24-at-rest.webp"
+import img25 from "../assets/s40g5/25-mfa.webp"
+import img26 from "../assets/s40g5/26-icloud-upload.webp"
+import img27 from "../assets/s40g5/27-team-colab.webp"
+import img28 from "../assets/s40g5/28-gdrive-educ.webp"
+import img29 from "../assets/s40g5/29-large-scale.webp"
+import img30 from "../assets/s40g5/30-conclu.webp"
+
+import CloudJourneySimulator from '../components/s40g5/CloudJourneySimulator.jsx';
+import CloudQuiz from '../components/s40g5/CloudQuiz.jsx';
+import styles from '../styles/s40g5/Layout.module.css';
+
+# Cloud Vault: The Architecture Behind Cloud Storage
+
+Cloud storage services such as Google Drive, Dropbox, OneDrive, and iCloud allow users to access files from almost anywhere with an Internet connection. Although uploading a file may look simple from the user's perspective, cloud storage depends on a large-scale architecture made up of client devices, networks, cloud servers, data centers, storage systems, replication mechanisms, and security controls.
+
+This exhibit follows the journey of a file from a user's device to the cloud and explains the architecture that makes modern cloud storage reliable, scalable, and secure.
+
+---
+
+## What is Cloud Storage?
+
+<h3 className={styles.subheading}>Definition</h3>
+
+Cloud storage is a method of storing digital data on remote servers that are owned, managed, and maintained by a cloud service provider. Instead of saving files only on a personal device, users upload their files through the Internet to cloud infrastructure that can be accessed from different devices.
+
+In contrast, local storage keeps files directly on a computer, USB drive, or external hard disk. Cloud storage is often preferred because it can provide better scalability, reliability, accessibility, and cost efficiency.
+
+<figure className="exhibit-figure">
+  <img src={img01.src} alt="Comparison between local storage and cloud storage showing files stored on a personal computer versus files stored on remote cloud servers." />
+  <figcaption><strong>Figure 1.</strong> Comparison of local storage and cloud storage. Local storage keeps files on one physical device, while cloud storage keeps files on remote servers that can be accessed through the Internet.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Local Storage vs Cloud Storage</h3>
+
+
+Traditionally, files are stored locally on a computer's hard drive, a USB flash drive, or an external hard disk. Local storage generally provides fast access because files are stored directly on the device and do not require an Internet connection. However, if the device is damaged, lost, or stolen, the data may become inaccessible unless a separate backup exists.
+
+For larger organizations, relying only on local storage can become expensive and difficult to maintain because it requires purchasing, upgrading, securing, and managing physical storage infrastructure.
+
+Cloud storage reduces these limitations. Users can access their files from more than one device as long as they have an Internet connection. Files can also be synchronized across devices, reducing the risk of losing access to data when one device fails. For organizations, cloud storage is practical because the storage infrastructure is maintained by the provider.
+
+<h3 className={styles.subheading}>Cloud Storage as a Cloud Computing Service</h3>
+
+Cloud storage is part of cloud computing. More specifically, it is commonly described as Storage as a Service, or StaaS. This means storage resources are delivered over the Internet in a service model similar to utilities such as electricity or water.
+
+Instead of purchasing and maintaining their own storage infrastructure, users rent storage capacity from a cloud service provider and usually pay based on the amount of storage or bandwidth they use. A simple analogy is renting an apartment instead of building and maintaining an entire house.
+
+<figure className="exhibit-figure">
+  <img src={img02.src} alt="Diagram showing cloud computing service models, including infrastructure, platform, software, and storage services." />
+  <figcaption><strong>Figure 2.</strong> Cloud storage is one service within the larger cloud computing model, alongside infrastructure, platform, and software services.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>How Cloud Storage Appears to Users</h3>
+
+From the user's perspective, files appear to exist in a single folder or storage space, such as Google Drive, Dropbox, or iCloud. In reality, the files may be distributed across multiple servers or even multiple data centers. The cloud provider manages the physical storage locations automatically, so users do not need to know where their files are actually stored.
+
+<figure className="exhibit-figure">
+  <img src={img03.src} alt="Cloud storage interface showing files organized inside an online folder similar to Dropbox or Google Drive." />
+  <figcaption><strong>Figure 3.</strong> User-facing cloud storage interfaces hide the complexity of the underlying infrastructure and present files as simple folders.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Key Characteristics</h3>
+
+Cloud storage has several characteristics that distinguish it from traditional local storage:
+
+- **Accessibility** – Files can be accessed from anywhere with an Internet connection.
+- **Scalability** – Storage capacity can be increased or decreased as needed.
+- **Elasticity** – Resources can be allocated dynamically without requiring users to install additional hardware.
+- **Reliability** – Cloud providers maintain storage infrastructure designed for continuous operation.
+- **Cost Efficiency** – Users typically pay only for the storage resources they use instead of purchasing physical storage devices.
+
+<h3 className={styles.subheading}>Common Examples</h3>
+
+Some widely known cloud storage services include:
+
+- Google Drive
+- Microsoft OneDrive
+- Dropbox
+- Apple iCloud
+- Amazon S3
+
+These services have different interfaces and features, but they all rely on the same basic principle: storing user data on remote servers that can be securely accessed over the Internet.
+
+---
+
+## Upload Process
+
+<h3 className={styles.subheading}>Overview</h3>
+
+Uploading a file to the cloud may seem as simple as clicking an upload button, but several processes occur before the file is successfully stored. The file travels from the user's device through the Internet, where it is securely transmitted to the cloud provider's servers for processing and storage.
+
+<h3 className={styles.subheading}>Step 1 – User Initiates the Upload</h3>
+
+The upload process begins when a user selects a file and clicks the upload button in a cloud storage application such as Google Drive, Dropbox, or iCloud. The cloud application first verifies that the user is signed in and has permission to upload files to the storage account.
+
+<figure className="exhibit-figure">
+  <img src={img04.src} alt="Google Drive style upload interface showing a user selecting a file to upload to cloud storage." />
+  <figcaption><strong>Figure 4.</strong> The upload process begins when a user selects a file and sends it to the cloud storage service.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Step 2 – File Preparation</h3>
+
+Before the file leaves the user's device, the cloud application prepares it for transmission. Important information about the file, called metadata, is generated. Metadata can include the file name, file size, file type, owner, upload time, and permissions.
+
+For large files, the data may also be divided into smaller data packets before being sent over the Internet. Sending smaller packets is more practical and reliable than sending one large block of data.
+
+<figure className="exhibit-figure">
+  <img src={img05.src} alt="Diagram showing one file being divided into smaller data packets before traveling through a network." />
+  <figcaption><strong>Figure 5.</strong> Files can be divided into smaller data packets before being transmitted through the Internet.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Step 3 – Transmission Through the Internet</h3>
+
+Once the file has been prepared, the data packets travel across the Internet to the cloud provider. Packets may pass through different network paths before reaching the destination. Modern cloud services use secure communication protocols such as HTTPS and TLS to help protect data while it is being transferred.
+
+<figure className="exhibit-figure">
+  <img src={img06.src} alt="Network diagram showing data packets traveling from a user's laptop through the Internet to cloud storage servers." />
+  <figcaption><strong>Figure 6.</strong> Data travels from the user's device through the Internet before reaching the cloud provider's servers.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Step 4 – Cloud Server Processing</h3>
+
+When the packets reach the cloud provider, cloud servers receive the upload request. The server checks the user's identity and permissions, verifies that the uploaded data arrived correctly, reads the file metadata, and determines where the file should be stored within the cloud infrastructure.
+
+<figure className="exhibit-figure">
+  <img src={img07.src} alt="Infographic showing a cloud server authenticating the user, verifying data integrity, reading metadata, and allocating storage for an uploaded file." />
+  <figcaption><strong>Figure 7.</strong> Cloud server processing prepares an uploaded file for storage by authenticating the user, verifying the file, reading metadata, and assigning storage resources.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Step 5 – File Successfully Uploaded</h3>
+
+After processing is complete, the cloud provider confirms that the upload was successful. The file appears in the user's cloud storage folder and can be accessed from connected devices using the same account.
+
+<figure className="exhibit-figure">
+  <img src={img08.src} alt="Cloud storage folder showing an uploaded file becoming available across a laptop, tablet, and phone." />
+  <figcaption><strong>Figure 8.</strong> Once the upload is complete, the file becomes available through the user's cloud storage account.</figcaption>
+</figure>
+
+---
+
+## Data Centers
+
+<h3 className={styles.subheading}>What is a Data Center?</h3>
+
+After a file is uploaded, it is sent to a data center. A data center is a large physical facility that houses servers, storage devices, networking equipment, power systems, cooling systems, and security controls. Data centers are the physical backbone of cloud storage because they store and manage the data that users access through cloud services.
+
+<figure className="exhibit-figure">
+  <img src={img09.src} alt="Interior of a modern data center with rows of server racks used to store and process cloud data." />
+  <figcaption><strong>Figure 9.</strong> Data centers contain the physical infrastructure that supports cloud storage services.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Components of a Data Center</h3>
+
+A data center contains many hardware components that work together to provide cloud storage services.
+
+<h4 className={styles.smallHeading}>Servers</h4>
+
+Servers are powerful computers that receive requests from users, process uploaded files, and manage communication between users and the storage system. Unlike personal computers, servers are designed to operate continuously and support many users at the same time.
+
+<figure className="exhibit-figure">
+  <img src={img10.src} alt="Rack-mounted server used in a data center to process requests and support cloud services." />
+  <figcaption><strong>Figure 10.</strong> Rack-mounted servers process requests and help manage cloud storage operations.</figcaption>
+</figure>
+
+<h4 className={styles.smallHeading}>Storage Devices</h4>
+
+The actual data is stored on storage devices inside servers or storage arrays. Cloud providers may use both hard disk drives and solid state drives. HDDs provide large storage capacity at a lower cost, while SSDs provide faster read and write speeds for data that needs quicker access.
+
+<figure className="exhibit-figure">
+  <img src={img11.src} alt="Comparison of hard disk drives and solid state drives used for storing data in cloud systems." />
+  <figcaption><strong>Figure 11.</strong> HDDs and SSDs are common storage devices used in cloud infrastructure, each offering different cost and performance benefits.</figcaption>
+</figure>
+
+<h4 className={styles.smallHeading}>Networking Equipment</h4>
+
+Data centers contain high-speed networking equipment such as switches and routers. These devices allow servers to communicate with one another and connect users to cloud services over the Internet.
+
+<figure className="exhibit-figure">
+  <img src={img12.src} alt="Data center network diagram showing switches, routers, servers, and connections between cloud infrastructure components." />
+  <figcaption><strong>Figure 12.</strong> Networking equipment connects servers, storage systems, and users across the cloud infrastructure.</figcaption>
+</figure>
+
+<h4 className={styles.smallHeading}>Power and Cooling Systems</h4>
+
+Because thousands of servers operate continuously, data centers require reliable power and cooling systems. These may include uninterruptible power supplies, backup generators, air conditioning, liquid cooling, and fire suppression systems. These systems help keep cloud storage services running even during power or environmental problems.
+
+<figure className="exhibit-figure">
+  <img src={img13.src} alt="Diagram of cooling and power systems in a data center, including airflow, cooling units, and backup power." />
+  <figcaption><strong>Figure 13.</strong> Data centers use specialized power and cooling systems to keep servers operating safely and continuously.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Server Racks and Storage Clusters</h3>
+
+Servers are organized into server racks, where multiple servers are mounted vertically to maximize space and simplify maintenance. Thousands of servers can be connected together to form storage clusters, allowing them to function as one large storage system rather than many separate computers.
+
+<figure className="exhibit-figure">
+  <img src={img14.src} alt="Labeled server rack showing individual servers, storage arrays, network equipment, and backup power components inside a data center rack." />
+  <figcaption><strong>Figure 14.</strong> Server racks organize many individual servers and storage components into compact, maintainable units.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Distributed Storage</h3>
+
+Cloud storage does not rely on a single server. Instead, files are stored across many interconnected storage servers in a distributed storage system. From the user's perspective, files appear in one cloud folder. Behind the scenes, however, different files or portions of the same file may be stored on different servers depending on available capacity and system performance.
+
+<figure className="exhibit-figure">
+  <img src={img15.src} alt="Diagram showing a cloud storage folder connected to multiple storage servers as part of a distributed storage system." />
+  <figcaption><strong>Figure 15.</strong> Distributed storage spreads data across multiple storage nodes instead of depending on a single server.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Storage Virtualization</h3>
+
+Although files are physically stored across many servers, users see only one storage space. This is made possible through storage virtualization, which combines multiple physical storage devices into a single logical storage system.
+
+Storage virtualization hides the complexity of the underlying hardware, allowing cloud providers to move, organize, and manage data without affecting the user's experience. Users simply interact with services like Google Drive or Dropbox without knowing where their files are physically located.
+
+<figure className="exhibit-figure">
+  <img src={img16.src} alt="Illustration showing many physical servers being combined through storage virtualization into one cloud drive visible to the user." />
+  <figcaption><strong>Figure 16.</strong> Storage virtualization combines many physical storage devices into one logical storage space for users.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Why Data Centers Are Important</h3>
+
+Data centers provide the physical infrastructure that makes cloud storage possible. They combine computing power, storage capacity, networking, power management, cooling, and security to deliver reliable cloud services around the clock.
+
+---
+
+## Replication
+
+<h3 className={styles.subheading}>What is Replication?</h3>
+
+Replication is the process of creating multiple copies of the same file and storing them on different storage servers or in different data centers. Instead of keeping only one copy of a file, cloud providers automatically duplicate the data so it remains available even if a server, storage device, or data center experiences a failure.
+
+<figure className="exhibit-figure">
+  <img src={img17.src} alt="Diagram showing one uploaded file being copied to three different cloud storage servers for redundancy." />
+  <figcaption><strong>Figure 17.</strong> Replication creates multiple copies of a file and stores them across different servers.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Why is Replication Necessary?</h3>
+
+If cloud providers stored only one copy of a file, hardware failure could make that file unavailable or even result in data loss. Storage devices can fail because of hardware defects, power issues, natural disasters, or other unexpected events.
+
+By maintaining multiple copies of data across different servers and locations, cloud providers improve reliability and availability.
+
+<figure className="exhibit-figure">
+  <img src={img18.src} alt="Diagram showing a broken server becoming unavailable while another server continues to provide access to the same file." />
+  <figcaption><strong>Figure 18.</strong> If one server fails, another server with a copy of the file can continue providing access.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>How Replication Works</h3>
+
+After a file is uploaded, the cloud provider stores an original copy on a storage server. The system then creates additional replicas and stores them on other servers. These copies may be placed in different racks, storage clusters, or geographic regions depending on the provider's architecture.
+
+<figure className="exhibit-figure">
+  <img src={img19.src} alt="Flow diagram showing an original file becoming Replica 1, Replica 2, and Replica 3 across different cloud servers." />
+  <figcaption><strong>Figure 19.</strong> Replication can follow a flow where an original file is copied into multiple replicas across separate servers.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Redundancy</h3>
+
+Replication creates redundancy. Redundancy means keeping extra copies of data to reduce the risk of losing information. It removes a single point of failure by ensuring that the system does not depend on just one storage device.
+
+<figure className="exhibit-figure">
+  <img src={img20.src} alt="Comparison diagram showing the risk of storing one copy of a file versus the protection provided by multiple redundant copies." />
+  <figcaption><strong>Figure 20.</strong> Multiple redundant copies protect files from becoming unavailable when one server fails.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Fault Tolerance and High Availability</h3>
+
+Because multiple copies of a file exist, cloud storage systems can continue operating when hardware failures occur. This is called fault tolerance. Closely related is high availability, which means cloud services remain accessible with little or no interruption.
+
+<figure className="exhibit-figure">
+  <img src={img21.src} alt="Diagram explaining fault tolerance and high availability using multiple servers that continue operating after a failure." />
+  <figcaption><strong>Figure 21.</strong> Fault tolerance and high availability allow cloud storage systems to continue functioning even during hardware failures.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Replication vs Backup</h3>
+
+Replication and backup both protect data, but they are not the same thing. Replication creates multiple live copies of the same file so that services remain available if hardware fails. Backup creates separate copies that can be restored if files are accidentally deleted, corrupted, or lost.
+
+Replication focuses on continuous availability. Backup focuses on long-term data recovery.
+
+---
+
+## Encryption
+
+<h3 className={styles.subheading}>What is Encryption?</h3>
+
+Encryption is the process of converting readable data into an unreadable format called ciphertext. Only authorized users or systems with the correct decryption key can convert the information back into its readable form.
+
+Cloud providers use encryption to protect data while it is being transferred and while it is stored on cloud servers.
+
+<figure className="exhibit-figure">
+  <img src={img22.src} alt="Diagram showing readable data being converted into encrypted ciphertext and then decrypted back into readable data." />
+  <figcaption><strong>Figure 22.</strong> Encryption transforms readable data into unreadable ciphertext to protect information from unauthorized access.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Encryption in Transit</h3>
+
+Encryption in transit protects data while it is being transferred between a user's device and the cloud provider. Modern cloud storage services use secure communication protocols such as HTTPS and TLS to prevent attackers from intercepting or reading data during transmission.
+
+<figure className="exhibit-figure">
+  <img src={img23.src} alt="Diagram showing a laptop sending encrypted data through the Internet to cloud storage using HTTPS and TLS with lock icons." />
+  <figcaption><strong>Figure 23.</strong> Encryption in transit protects files while they travel from a user's device to the cloud provider.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Encryption at Rest</h3>
+
+Once a file reaches the cloud, it remains encrypted while stored on the provider's storage servers. This is known as encryption at rest. Even if someone gained unauthorized access to the physical storage devices, the encrypted data would remain unreadable without the correct encryption key.
+
+<figure className="exhibit-figure">
+  <img src={img24.src} alt="Storage server containing encrypted files with padlock icons indicating that files remain protected while stored." />
+  <figcaption><strong>Figure 24.</strong> Encryption at rest keeps stored files unreadable to unauthorized users even if the physical storage system is compromised.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Authentication and Access Control</h3>
+
+Encryption works together with authentication and access control. Authentication verifies a user's identity through login details, passwords, or multi-factor authentication. Access control determines which users can view, edit, or share specific files.
+
+<figure className="exhibit-figure">
+  <img src={img25.src} alt="Multi-factor authentication interface showing a user verifying identity before accessing cloud storage." />
+  <figcaption><strong>Figure 25.</strong> Authentication and access control help ensure that only authorized users can access cloud storage files.</figcaption>
+</figure>
+
+---
+
+## Advantages
+
+Cloud storage provides several advantages over traditional local storage:
+
+- **Anywhere Access** – Users can access files from any Internet-connected device.
+- **Scalability** – Storage capacity can grow as user or organization needs increase.
+- **Cost Efficiency** – Users do not need to buy and maintain large physical storage systems.
+- **Reliability** – Replication and distributed storage help reduce the risk of data loss.
+- **Collaboration** – Users can share files and work together on documents.
+- **Disaster Recovery** – Files can remain available even if a personal device is lost, damaged, or stolen.
+
+<figure className="exhibit-figure">
+  <img src={img26.src} alt="Cloud storage interface showing a file being uploaded and synchronized across user devices." />
+  <figcaption><strong>Figure 26.</strong> Cloud storage improves accessibility by allowing users to upload and access files from multiple devices.</figcaption>
+</figure>
+
+<figure className="exhibit-figure">
+  <img src={img27.src} alt="Team members collaborating on shared cloud documents using laptops and connected devices." />
+  <figcaption><strong>Figure 27.</strong> Cloud storage supports collaboration by allowing multiple users to access and work on shared files.</figcaption>
+</figure>
+
+---
+
+## Applications
+
+<h3 className={styles.subheading}>Personal Use</h3>
+
+Cloud storage is commonly used for photo storage, video storage, document backup, mobile device synchronization, and personal file sharing.
+
+<h3 className={styles.subheading}>Business Use</h3>
+
+Businesses use cloud storage for team collaboration, shared document management, disaster recovery, remote work, and enterprise data storage.
+
+<h3 className={styles.subheading}>Education</h3>
+
+Schools and universities use cloud storage for assignment submission, shared learning materials, research collaboration, and cloud-based productivity tools.
+
+<figure className="exhibit-figure">
+  <img src={img28.src} alt="Students using cloud storage tools for assignments, shared files, and educational collaboration." />
+  <figcaption><strong>Figure 28.</strong> In education, cloud storage supports assignment submission, file sharing, and collaborative learning.</figcaption>
+</figure>
+
+<h3 className={styles.subheading}>Large-Scale Computing</h3>
+
+Cloud storage is also essential for large-scale computing. It supports big data storage, artificial intelligence and machine learning datasets, media streaming, web application hosting, and content delivery services.
+
+<figure className="exhibit-figure">
+  <img src={img29.src} alt="Cloud connected to big data storage, artificial intelligence, media streaming, web application hosting, and content delivery services." />
+  <figcaption><strong>Figure 29.</strong> Large-scale computing uses cloud storage to support data-intensive services such as AI, streaming, web hosting, and content delivery.</figcaption>
+</figure>
+
+---
+
+## Conclusion
+
+Cloud storage has transformed the way individuals and organizations store, manage, and access digital information. By moving data from local devices to distributed data centers, cloud providers deliver scalable, reliable, and cost-effective storage services that can be accessed from virtually anywhere.
+
+Behind the simple user experience is a complex architecture involving upload processing, data centers, distributed storage, replication, and encryption. Together, these technologies ensure that files remain available, protected, and accessible across devices.
+
+As digital data continues to grow, cloud storage will remain a fundamental part of modern cloud computing. It supports everyday personal storage as well as enterprise systems, artificial intelligence, streaming platforms, and future technologies.
+
+<figure className="exhibit-figure">
+  <img src={img30.src} alt="Final architecture diagram showing the complete cloud storage journey from device to upload, data center, replication, encryption, and access from multiple devices." />
+  <figcaption><strong>Figure 30.</strong> Complete cloud storage journey: a file moves from a user's device to the cloud, is processed in a data center, replicated for reliability, encrypted for security, and made available across multiple devices.</figcaption>
+</figure>
+
+---
+
+## Interactive Recap
+
+Before you leave the exhibit, try the interactive simulator below. Follow the complete journey of a file—from your device to cloud storage—and see how upload, authentication, storage, replication, and synchronization work together behind the scenes.
+
+<CloudJourneySimulator client:load />
+
+---
+
+## Cloud Storage Quiz
+
+Test your understanding with a short cloud storage quiz. Submit each answer, then review the results at the end.
+
+<CloudQuiz client:load />
+
+---
+
+## References
+
+- Kulkarni, G., Waghmare, R., Palwe, R., Waykule, V., Bankar, H., & Koli, K. (2012). *Cloud Storage Architecture*.
+- Rajan, R. A. P., & Shanmugapriyaa, S. (2012). *Evolution of Cloud Storage as Cloud Computing Infrastructure Service*.
+- Wu, J., Ping, L., Ge, X., Wang, Y., & Fu, J. (2010). *Cloud Storage as the Infrastructure of Cloud Computing*.
+- Zeng, W., Zhao, Y., Ou, K., & Song, W. (2009). *Research on Cloud Storage Architecture and Key Technologies*.
