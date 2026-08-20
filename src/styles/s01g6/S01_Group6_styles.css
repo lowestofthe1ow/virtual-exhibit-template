@@ -1,0 +1,545 @@
+@import "../tailwind-scoped.css";
+@import "tw-animate-css";
+@import "@fontsource-variable/noto-sans";
+@import "@fontsource-variable/playfair-display";
+
+/* umbrella integration: the original entry imported "shadcn/tailwind.css",
+ * a subpath export of the "shadcn" npm CLI package that is not (and should
+ * not become) a dependency of the umbrella site — it is a scaffolding tool,
+ * not a runtime library, and 625 of its 630 lines (scroll-fade utilities,
+ * shimmer utilities, the accordion @theme keyframes) are never referenced
+ * anywhere in this exhibit's own source (verified: `grep -rn` across
+ * src/components/s01g6 and src/lib/s01g6 for scroll-fade, shimmer,
+ * no-scrollbar, accordion-down/up, and each of the six @custom-variant
+ * names). Only five @custom-variant declarations are actually consumed
+ * (by ui/dialog.tsx, ui/tabs.tsx, ui/scroll-area.tsx via their
+ * `data-open:`, `data-closed:`, `data-active:`, `data-horizontal:`,
+ * `data-vertical:` utility classes), so those five are reproduced here
+ * verbatim instead of pulling in the whole package. */
+@custom-variant data-open {
+    &:where([data-state="open"]),
+    &:where([data-open]:not([data-open="false"])) {
+        @slot;
+    }
+}
+
+@custom-variant data-closed {
+    &:where([data-state="closed"]),
+    &:where([data-closed]:not([data-closed="false"])) {
+        @slot;
+    }
+}
+
+@custom-variant data-active {
+    &:where([data-state="active"]),
+    &:where([data-active]:not([data-active="false"])) {
+        @slot;
+    }
+}
+
+@custom-variant data-horizontal {
+    &:where([data-orientation="horizontal"]) {
+        @slot;
+    }
+}
+
+@custom-variant data-vertical {
+    &:where([data-orientation="vertical"]) {
+        @slot;
+    }
+}
+
+@custom-variant dark (&:is(.dark *));
+
+html:has(#wifi-evolution-exhibit) {
+    background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%) !important;
+    min-height: 100vh;
+}
+
+body:has(#wifi-evolution-exhibit) {
+    --background: oklch(0.147 0.004 49.3);
+    --foreground: oklch(0.986 0.002 67.8);
+    --card: oklch(0.214 0.009 43.1);
+    --card-foreground: oklch(0.986 0.002 67.8);
+    --popover: oklch(0.214 0.009 43.1);
+    --popover-foreground: oklch(0.986 0.002 67.8);
+    --primary: oklch(0.78 0.16 205);
+    --primary-foreground: oklch(0.12 0.02 240);
+    --secondary: oklch(0.279 0.041 260);
+    --secondary-foreground: oklch(0.986 0.002 67.8);
+    --muted: oklch(0.279 0.041 260);
+    --muted-foreground: oklch(0.714 0.014 41.2);
+    --accent: oklch(0.279 0.041 260);
+    --accent-foreground: oklch(0.986 0.002 67.8);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 12%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.78 0.16 205);
+    --radius: 0.625rem;
+
+    --c-ink:        #ffffff;
+    --c-cream:      #0f172a;
+    --c-muted:      #94a3b8;
+    --c-rule:       #334155;
+    --c-amber:      #f59e0b;
+    --c-amber-pale: #78350f;
+    --c-blue:       #3b82f6;
+    --c-blue-pale:  #1e3a8a;
+    --c-violet:     #8b5cf6;
+    --c-violet-pale:#4c1d95;
+    --c-teal:       #14b8a6;
+    --c-teal-pale:  #115e59;
+
+    color: var(--foreground);
+}
+
+@theme inline {
+    --font-s01g6-sans: 'Noto Sans Variable', sans-serif;
+    --font-s01g6-heading: 'Playfair Display Variable', serif;
+    --color-s01g6-ring: var(--ring);
+    --color-s01g6-input: var(--input);
+    --color-s01g6-border: var(--border);
+    --color-s01g6-destructive: var(--destructive);
+    --color-s01g6-accent-foreground: var(--accent-foreground);
+    --color-s01g6-accent: var(--accent);
+    --color-s01g6-muted-foreground: var(--muted-foreground);
+    --color-s01g6-muted: var(--muted);
+    --color-s01g6-secondary-foreground: var(--secondary-foreground);
+    --color-s01g6-secondary: var(--secondary);
+    --color-s01g6-primary-foreground: var(--primary-foreground);
+    --color-s01g6-primary: var(--primary);
+    --color-s01g6-popover-foreground: var(--popover-foreground);
+    --color-s01g6-popover: var(--popover);
+    --color-s01g6-card-foreground: var(--card-foreground);
+    --color-s01g6-card: var(--card);
+    --color-s01g6-foreground: var(--foreground);
+    --color-s01g6-background: var(--background);
+    --radius-s01g6-sm: calc(var(--radius) * 0.6);
+    --radius-s01g6-md: calc(var(--radius) * 0.8);
+    --radius-s01g6-lg: var(--radius);
+    --radius-s01g6-xl: calc(var(--radius) * 1.4);
+    --radius-s01g6-2xl: calc(var(--radius) * 1.8);
+    --radius-s01g6-3xl: calc(var(--radius) * 2.2);
+    --radius-s01g6-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+    .wifi-explorer, .wifi-carousel {
+        @apply font-s01g6-sans;
+    }
+}
+
+body:has(#wifi-evolution-exhibit) .article,
+body:has(#wifi-evolution-exhibit) .toc,
+body:has(#wifi-evolution-exhibit) .content__titlemeta,
+body:has(#wifi-evolution-exhibit) .header__titleblock {
+    background: rgba(15, 23, 42, 0.65) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(56, 189, 248, 0.2) !important;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.6) !important;
+    color: var(--foreground) !important;
+    max-width: 100%;
+}
+
+body:has(#wifi-evolution-exhibit) .content__titlemeta h1,
+body:has(#wifi-evolution-exhibit) .header__titleblock strong {
+    color: #ffffff;
+}
+
+.article p:not(.wifi-explorer *, .wifi-carousel *) {
+    line-height: 1.78;
+    margin-bottom: 1rem;
+    word-break: break-word;
+}
+
+.article > p:first-of-type:not(.wifi-explorer *, .wifi-carousel *) {
+    font-size: 1.08em;
+    color: var(--c-muted);
+}
+
+.article strong:not(.wifi-explorer *, .wifi-carousel *) {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.article h2:not(.wifi-explorer *, .wifi-carousel *) {
+    font-family: 'Playfair Display Variable', serif;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    padding: 0.6rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.15em;
+    letter-spacing: 0.01em;
+    font-weight: 700;
+}
+
+.article h3:not(.wifi-explorer *, .wifi-carousel *) {
+    margin-top: 0;
+    margin-bottom: 0.375rem;
+    font-size: 1.1em;
+    color: #ffffff;
+}
+
+.article h4:not(.wifi-explorer *, .wifi-carousel *) {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1em;
+    font-weight: 700;
+    color: inherit;
+}
+
+.article hr:not(.wifi-explorer *, .wifi-carousel *) {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--c-rule) 15%, var(--c-rule) 85%, transparent);
+    margin: 2.5rem 0;
+}
+
+.article :not(pre) > code:not(.wifi-explorer *, .wifi-carousel *) {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--c-rule);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.875em;
+    word-break: break-all;
+}
+
+.article pre:not(.wifi-explorer *, .wifi-carousel *) {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--c-rule);
+    border-left: 3px solid var(--c-amber);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.callout:not(.wifi-explorer *, .wifi-carousel *) {
+    background: var(--c-amber-pale);
+    border-left: 3px solid var(--c-amber);
+    padding: 0.9rem 1.125rem;
+    border-radius: 0 4px 4px 0;
+    margin: 1.5rem 0;
+}
+
+.references:not(.wifi-explorer *, .wifi-carousel *) {
+    font-size: 0.875em;
+    border-top: 1px solid var(--c-rule);
+    padding-top: 1.5rem;
+}
+
+body:has(#wifi-evolution-exhibit) .toc__item a,
+body:has(#wifi-evolution-exhibit) .toc__item a:link,
+body:has(#wifi-evolution-exhibit) .references a,
+body:has(#wifi-evolution-exhibit) .references a:link {
+    color: #38bdf8 !important;
+    text-decoration: none;
+}
+
+body:has(#wifi-evolution-exhibit) .toc__item a:visited,
+body:has(#wifi-evolution-exhibit) .references a:visited {
+    color: #7dd3fc !important;
+}
+
+body:has(#wifi-evolution-exhibit) .toc__item a:hover,
+body:has(#wifi-evolution-exhibit) .references a:hover {
+    color: #f0f9ff !important;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+    text-decoration: underline;
+}
+
+.article table:not(.wifi-explorer *, .wifi-carousel *) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875em;
+    margin: 1.5rem 0;
+    border: 1px solid var(--c-rule);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.article thead th:not(.wifi-explorer *, .wifi-carousel *) {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    text-align: left;
+    padding: 0.6rem 0.9rem;
+    font-weight: 600;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.article tbody td:not(.wifi-explorer *, .wifi-carousel *) {
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--c-rule);
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.article tbody tr:last-child td:not(.wifi-explorer *, .wifi-carousel *) {
+    border-bottom: none;
+}
+
+.article tbody tr:nth-child(even) td:not(.wifi-explorer *, .wifi-carousel *) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+@media (max-width: 639px) {
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) {
+        min-width: 100% !important;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) thead {
+        display: none;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody tr {
+        display: block;
+        border: 1px solid var(--c-rule);
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        overflow: hidden;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        padding: 0.6rem 0.9rem;
+        border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+        font-size: 0.95em;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody td:first-child {
+        background: rgba(56, 189, 248, 0.15) !important;
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 1.05em;
+        margin-bottom: 0;
+        padding: 0.65rem 0.9rem;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 0;
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody td:first-child::before {
+        display: none;
+    }
+
+    .article table.responsive-table:not(.wifi-explorer *, .wifi-carousel *) tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75em;
+        letter-spacing: 0.05em;
+        color: #38bdf8;
+        margin-right: 1rem;
+        text-align: left;
+        flex-shrink: 0;
+    }
+}
+
+.freq-panels:not(.wifi-explorer *, .wifi-carousel *) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.freq-panel:not(.wifi-explorer *, .wifi-carousel *) {
+    border: 1px solid var(--c-rule);
+    border-top-width: 3px;
+    border-radius: 4px;
+    padding: 1.1rem 1rem 1.4rem;
+    background: rgba(255, 255, 255, 0.02);
+    position: relative;
+    overflow: hidden;
+}
+
+.freq-panel:not(.wifi-explorer *, .wifi-carousel *)::after {
+    content: attr(data-ghz);
+    position: absolute;
+    right: 0.5rem;
+    bottom: -0.40rem;
+    font-size: 4.75rem;
+    font-weight: 900;
+    font-family: 'Playfair Display Variable', serif;
+    color: #ffffff;
+    opacity: 0.04;
+    line-height: 0.85;
+    pointer-events: none;
+    user-select: none;
+}
+
+.freq-panel--24:not(.wifi-explorer *, .wifi-carousel *) { border-top-color: var(--c-blue); }
+.freq-panel--24 h4:not(.wifi-explorer *, .wifi-carousel *) { color: var(--c-blue); }
+.freq-panel--5:not(.wifi-explorer *, .wifi-carousel *)  { border-top-color: var(--c-violet); }
+.freq-panel--5  h4:not(.wifi-explorer *, .wifi-carousel *) { color: var(--c-violet); }
+.freq-panel--6:not(.wifi-explorer *, .wifi-carousel *)  { border-top-color: var(--c-teal); }
+.freq-panel--6  h4:not(.wifi-explorer *, .wifi-carousel *) { color: var(--c-teal); }
+
+.wifi-explorer .badge,
+.wifi-carousel .badge,
+.badge:not(.wifi-explorer *, .wifi-carousel *) {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: 700;
+    padding: 0.22em 0.6em;
+    border-radius: 3px;
+}
+
+.wifi-explorer .badge-year,
+.wifi-carousel .badge-year,
+.badge-year:not(.wifi-explorer *, .wifi-carousel *) { background: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
+
+.wifi-explorer .badge-24,
+.wifi-carousel .badge-24,
+.badge-24:not(.wifi-explorer *, .wifi-carousel *)   { background: #1e3a8a !important; color: #93c5fd !important; }
+
+.wifi-explorer .badge-5,
+.wifi-carousel .badge-5,
+.badge-5:not(.wifi-explorer *, .wifi-carousel *)    { background: #4c1d95 !important; color: #c084fc !important; }
+
+.wifi-explorer .badge-6,
+.wifi-carousel .badge-6,
+.badge-6:not(.wifi-explorer *, .wifi-carousel *)    { background: #115e59 !important; color: #2dd4bf !important; }
+
+.wifi-explorer .badge-dual,
+.wifi-carousel .badge-dual,
+.badge-dual:not(.wifi-explorer *, .wifi-carousel *) { background: #312e81 !important; color: #a5b4fc !important; }
+
+.wifi-explorer .badge-tri,
+.wifi-carousel .badge-tri,
+.badge-tri:not(.wifi-explorer *, .wifi-carousel *)  { background: #1a2e1a !important; color: #86efac !important; }
+
+.wifi-explorer, .wifi-carousel {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.wifi-explorer, .wifi-carousel,
+.wifi-explorer h1, .wifi-explorer h2, .wifi-explorer h3, .wifi-explorer h4,
+.wifi-explorer p, .wifi-explorer label,
+.wifi-explorer span:not([style*="color"]):not([class*="badge"]):not([class*="text-"]),
+.wifi-explorer text,
+.wifi-explorer div:not([class*="bg-"]):not([style*="color"]):not([class*="text-"]),
+.wifi-carousel h1, .wifi-carousel h2, .wifi-carousel h3, .wifi-carousel h4,
+.wifi-carousel p, .wifi-carousel label,
+.wifi-carousel span:not([style*="color"]):not([class*="badge"]):not([class*="text-"]),
+.wifi-carousel div:not([class*="bg-"]):not([style*="color"]):not([class*="text-"]) {
+    color: #f8fafc !important;
+}
+
+.wifi-explorer .text-s01g6-muted-foreground,
+.wifi-carousel .text-s01g6-muted-foreground,
+.wifi-explorer [class*="text-s01g6-muted"],
+.wifi-carousel [class*="text-s01g6-muted"] {
+    color: #94a3b8 !important;
+}
+
+.wifi-explorer button,
+.wifi-carousel button {
+    color: #f8fafc !important;
+}
+
+.wifi-explorer button[class*="bg-s01g6-primary"],
+.wifi-carousel button[class*="bg-s01g6-primary"],
+.wifi-explorer button[data-state="active"],
+.wifi-carousel button[data-state="active"] {
+    color: #020617 !important;
+}
+
+.wifi-explorer button:not([role="tab"]) *,
+.wifi-carousel button:not([role="tab"]) * {
+    color: inherit !important;
+}
+
+.wifi-explorer div[role="tablist"] {
+    background-color: rgba(15, 23, 42, 0.5) !important;
+    border: 1px solid rgba(56, 189, 248, 0.2) !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100% !important;
+}
+
+.wifi-explorer div[role="tablist"]::-webkit-scrollbar {
+    display: none;
+}
+
+.wifi-explorer button[role="tab"] {
+    color: #94a3b8 !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    transition: all 0.2s ease-in-out !important;
+    flex-shrink: 0 !important;
+}
+
+.wifi-explorer button[role="tab"]:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.wifi-explorer button[role="tab"][data-state="active"],
+.wifi-explorer button[role="tab"][aria-selected="true"] {
+    background-color: #38bdf8 !important;
+    color: #020617 !important;
+    font-weight: 600 !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important;
+}
+
+body:has(#wifi-evolution-exhibit) [role="dialog"] > button.absolute {
+    background-color: transparent !important;
+    color: #94a3b8 !important;
+    border-radius: 0.375rem !important;
+    transition: all 0.2s ease !important;
+}
+
+body:has(#wifi-evolution-exhibit) [role="dialog"] > button.absolute:hover {
+    background-color: rgba(56, 189, 248, 0.15) !important;
+    color: #ffffff !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.wifi-explorer .generation-tabs div[role="tablist"] {
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+}
