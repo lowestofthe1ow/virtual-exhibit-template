@@ -1,0 +1,423 @@
+.intro {
+  max-width: 68ch;
+  padding: clamp(var(--s2), 2vh, var(--s3)) clamp(var(--s3), 3vw, var(--s4));
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  border: var(--card-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  margin-bottom: clamp(var(--s2), 2.5vh, var(--s4));
+}
+
+.intro > :last-child {
+  margin-bottom: 0;
+}
+
+.inlineMono {
+  font-family: var(--font-mono);
+  color: var(--signal-green);
+}
+
+.viz {
+  position: relative;
+  isolation: isolate;
+  margin-top: clamp(var(--s2), 2.5vh, var(--s4));
+  padding: clamp(var(--s2), 3vh, var(--s4)) clamp(var(--s3), 3vw, var(--s4));
+  border-radius: var(--radius-lg);
+  border: var(--card-border);
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(var(--s1), 2vh, var(--s3));
+  transition: border-color var(--dur-standard) ease, box-shadow var(--dur-standard) ease;
+}
+
+.vizBad {
+  border-color: rgba(239, 68, 68, 0.55) !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.35), 0 30px 90px rgba(239, 68, 68, 0.14);
+}
+
+/* Readout: sign glyph + odometer */
+.readout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+}
+
+.sign {
+  font-family: var(--font-lcd);
+  font-size: clamp(2rem, 6vh, 3.4rem);
+  font-weight: 700;
+  line-height: 1;
+  transition: color var(--dur-standard) ease;
+}
+.signPos {
+  color: var(--signal-green);
+}
+.signNeg {
+  color: var(--catastrophe-red);
+}
+
+.counterWrap {
+  font-family: var(--font-mono);
+  filter: drop-shadow(0 0 18px rgba(34, 197, 94, 0.2));
+  transition: filter var(--dur-standard) ease;
+}
+/* Glow follows the value's meaning: green nominal, red once it overflows. */
+.vizBad .counterWrap {
+  filter: drop-shadow(0 0 22px rgba(239, 68, 68, 0.32));
+}
+
+.readoutMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  width: 100%;
+  justify-content: center;
+  min-height: 2rem;
+  flex-wrap: wrap;
+}
+
+.hex {
+  font-family: var(--font-lcd);
+  font-size: 1rem;
+  color: var(--muted-silver);
+  letter-spacing: 0.04em;
+}
+
+.maxBadge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--signal-green);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+.overflowStatic {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--catastrophe-red);
+  letter-spacing: 0.06em;
+}
+.overflowFuzz {
+  display: block;
+}
+
+/* Binary register strip */
+.register {
+  display: flex;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nibble {
+  display: flex;
+  gap: 6px;
+}
+
+.bit {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.4vh, 1rem);
+  font-weight: 500;
+  width: clamp(1.3rem, 3.2vw, 2.0rem);
+  height: clamp(1.6rem, 4vh, 2.2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  color: rgba(201, 209, 217, 0.4);
+  background: var(--bg-dark-scrim);
+  transition: color var(--dur-micro) ease, border-color var(--dur-micro) ease,
+    background var(--dur-micro) ease, box-shadow var(--dur-micro) ease;
+}
+
+.bit.on {
+  color: var(--telemetry-cyan);
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(34, 211, 238, 0.1);
+}
+
+.signBit {
+  border-color: rgba(245, 158, 11, 0.55);
+  color: rgba(245, 158, 11, 0.75);
+}
+
+.signBit.on {
+  color: var(--booster-amber);
+  border-color: var(--booster-amber);
+  background: rgba(245, 158, 11, 0.14);
+}
+
+.signBit.signOn {
+  color: var(--catastrophe-red);
+  border-color: var(--catastrophe-red);
+  background: rgba(239, 68, 68, 0.16);
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.5);
+}
+
+.pulse {
+  animation: bitpulse 220ms var(--ease-out);
+}
+
+@keyframes bitpulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
+  40% {
+    box-shadow: 0 0 18px 2px rgba(34, 211, 238, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
+}
+
+.bitLegend {
+  display: flex;
+  justify-content: space-between;
+  width: min(100%, 520px);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--muted-silver);
+  margin-top: -8px;
+}
+.legendSign {
+  color: rgba(245, 158, 11, 0.85);
+}
+
+/* 64 -> 16 cast */
+.cast {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: clamp(var(--s2), 2vh, var(--s3));
+  width: 100%;
+  max-width: 760px;
+}
+
+.castBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: clamp(var(--s1), 1.5vh, var(--s2));
+  border-radius: var(--radius);
+  border: 1px solid var(--hairline);
+  background: var(--bg-dark-scrim);
+  text-align: center;
+}
+.castBoxBad {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.castLabel {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-silver);
+}
+.castValue {
+  font-family: var(--font-lcd);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+.castValue.mono {
+  color: var(--telemetry-cyan);
+}
+.castBoxBad .castValue.mono {
+  color: var(--catastrophe-red);
+}
+.castType {
+  font-size: 0.66rem;
+  color: rgba(201, 209, 217, 0.66);
+}
+
+.castArrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--telemetry-cyan);
+  transition: color var(--dur-standard) ease;
+}
+.castArrowBad {
+  color: var(--catastrophe-red);
+}
+.castOp {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* Velocity control */
+.control {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--s1), 1.5vh, var(--s2));
+}
+
+/* Velocity control — a custom HUD gauge, not a stock range input. The track carries
+ * the nominal→danger zones and the +32,767 caution line; the reticle thumb and fill
+ * take the live accent (cyan nominal, red on overflow). Same native <input>, so
+ * keyboard, drag, and value semantics are unchanged. */
+.sliderWrap {
+  position: relative;
+  padding-top: 22px;
+}
+
+.threshold {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--booster-amber);
+  white-space: nowrap;
+}
+.threshold::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 6px;
+  background: rgba(245, 158, 11, 0.6);
+  transform: translateX(-50%);
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: clamp(26px, 4vh, 30px);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Shared track background: caution line at the int16 limit, fill to current value,
+ * then the nominal / danger zone tint underneath. */
+.slider::-webkit-slider-runnable-track {
+  height: 12px;
+  border-radius: 7px;
+  border: 1px solid var(--hairline);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), rgba(245, 158, 11, 0.85) calc(50% - 1px), rgba(245, 158, 11, 0.85) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(90deg, var(--sl-accent) 0 var(--pct, 0%), transparent var(--pct, 0%) 100%),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.16) 0 50%, rgba(239, 68, 68, 0.18) 50% 100%);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 26px;
+  margin-top: -7px;
+  border-radius: 4px;
+  border: 1px solid rgba(5, 6, 10, 0.85);
+  background: linear-gradient(180deg, #fff 0%, var(--sl-accent) 55%, color-mix(in srgb, var(--sl-accent) 55%, #05060a) 100%);
+  box-shadow: 0 0 0 1px var(--sl-accent), 0 0 14px 1px color-mix(in srgb, var(--sl-accent) 55%, transparent);
+  transition: box-shadow var(--dur-micro) ease;
+}
+.slider:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1px var(--sl-accent), 0 0 20px 3px color-mix(in srgb, var(--sl-accent) 70%, transparent);
+}
+.slider:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1px var(--sl-accent), 0 0 26px 5px color-mix(in srgb, var(--sl-accent) 82%, transparent);
+}
+.slider:focus-visible {
+  outline: none;
+}
+.slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--space-black), 0 0 0 4px var(--sl-accent),
+    0 0 20px 3px color-mix(in srgb, var(--sl-accent) 70%, transparent);
+}
+
+/* Firefox: native progress fill + matching track/thumb. */
+.slider::-moz-range-track {
+  height: 12px;
+  border-radius: 7px;
+  border: 1px solid var(--hairline);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), rgba(245, 158, 11, 0.85) calc(50% - 1px), rgba(245, 158, 11, 0.85) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.16) 0 50%, rgba(239, 68, 68, 0.18) 50% 100%);
+}
+.slider::-moz-range-progress {
+  height: 12px;
+  border-radius: 7px 0 0 7px;
+  background: var(--sl-accent);
+}
+.slider::-moz-range-thumb {
+  width: 12px;
+  height: 26px;
+  border-radius: 4px;
+  border: 1px solid rgba(5, 6, 10, 0.85);
+  background: linear-gradient(180deg, #fff 0%, var(--sl-accent) 55%, #0a1020 100%);
+  box-shadow: 0 0 0 1px var(--sl-accent), 0 0 14px 1px color-mix(in srgb, var(--sl-accent) 50%, transparent);
+  transition: box-shadow var(--dur-micro) ease;
+}
+.slider:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 2px var(--space-black), 0 0 0 4px var(--sl-accent);
+}
+
+.controlRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+  flex-wrap: wrap;
+}
+.controlHint {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted-silver);
+}
+
+.replay {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  color: var(--booster-amber);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background var(--dur-micro) ease, transform var(--dur-micro) ease;
+}
+.replay:hover {
+  background: rgba(245, 158, 11, 0.16);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .cast {
+    grid-template-columns: 1fr;
+  }
+  .castArrow {
+    transform: rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}

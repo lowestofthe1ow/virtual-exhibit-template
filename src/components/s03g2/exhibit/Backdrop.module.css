@@ -1,0 +1,44 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* Hull phase — opacity crossfades in on descent (specs/behaviors/hull-backdrop.md). */
+.hullWrap {
+  position: absolute;
+  inset: 0;
+}
+
+/* Launch phase — space void + StarField, fades out on descent. */
+.space {
+  background:
+    radial-gradient(120% 90% at 50% 15%, #0a0f1f 0%, var(--space-black) 60%, #030409 100%);
+}
+
+/* Amber "warning" heat bloom — peaks mid-descent. */
+.amber {
+  background:
+    radial-gradient(90% 60% at 50% 92%, rgba(245, 158, 11, 0.55), transparent 60%);
+}
+
+/* Red "failure" heat bloom — grows toward the overflow. */
+.red {
+  background:
+    radial-gradient(80% 70% at 50% 60%, rgba(239, 68, 68, 0.6), transparent 62%);
+}
+
+/* Red wash / vignette at the failure beats. */
+.wash {
+  background:
+    radial-gradient(140% 120% at 50% 40%, transparent 40%, rgba(239, 68, 68, 0.5) 100%),
+    linear-gradient(0deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.12));
+  mix-blend-mode: screen;
+}

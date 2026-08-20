@@ -1,0 +1,259 @@
+/* theme.css — exhibit design system (ours; the sanctioned place for exhibit CSS).
+ * Implements the spec style guide: palette, typography, motion + the neutralizing
+ * of the locked layout chrome so the exhibit renders full-bleed on Space Black.
+ * See specs/screens/exhibit.md. Does NOT modify layouts/ or global.css. */
+
+/* Typography — forensic / engineered / ominous. A mission-control console meets an
+ * accident-inquiry report. Chakra Petch (mechanical instrument-panel display) +
+ * Public Sans (the USWDS government-report grotesque, body) + Spline Sans Mono
+ * (telemetry / register readouts). Deliberately off the overused Space Grotesk /
+ * Inter / JetBrains Mono triad. Google Fonts only (per specs/architecture.md). */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;700&display=swap');
+
+/* 7-segment LCD display font for numeric readouts (Counter odometer, register
+ * hex/decimal, HUD telemetry values, SRI numeric readouts). Lives in public/
+ * so Vite never tries to verify the asset at build time. Labels, tags, hints,
+ * and body copy stay on --font-mono. */
+@font-face {
+  font-family: 'DS-Digital';
+  src: url('/virtual-exhibit-template/s03g2/fonts/DS-DIGI.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* Palette (spec style guide — law) */
+  --space-black: #05060a;
+  --deep-void: #0b1020;
+  --ariane-silver: #c9d1d9;
+  --telemetry-cyan: #22d3ee;
+  --booster-amber: #f59e0b;
+  --catastrophe-red: #ef4444;
+  --signal-green: #22c55e;
+
+  /* Weathered-hull base palette (specs/behaviors/hull-backdrop.md). Grays are the
+   * neutral backdrop base; the semantic accents above stay the failure colours.
+   * Hull-hazard is a painted-surface amber, distinct from interactive booster-amber. */
+  --hull-fill: #2f3234;
+  --hull-panel-light: #4b4d50;
+  --hull-panel-dark: #353739;
+  --hull-seam: #242628;
+  --hull-rust: #965b36;
+  --hull-scorch: #1f1b18;
+  --hull-smoke: #5f615d;
+  --hull-hazard: #d39c2d;
+
+  /* Derived surfaces */
+  --surface: #0b1020;
+  --surface-2: #10162e;
+  --hairline: rgba(201, 209, 217, 0.14);
+  --hairline-strong: rgba(201, 209, 217, 0.28);
+  --muted-silver: rgba(201, 209, 217, 0.62);
+
+  /* Uniform Minimalist Card Tokens */
+  --card-bg: rgba(15, 23, 42, 0.65);
+  --card-border: 1px solid rgba(255, 255, 255, 0.08);
+  --card-blur: blur(12px) saturate(110%);
+  --text-bright: #eef2f6;
+  --bg-dark-scrim: rgba(5, 6, 10, 0.5);
+
+  /* Typography */
+  --font-display: 'Chakra Petch', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, monospace;
+  --font-lcd: 'DS-Digital', 'Spline Sans Mono', ui-monospace, monospace;
+
+  /* Spacing scale (8px base) */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 48px;
+  --s6: 64px;
+  --s8: 96px;
+
+  /* Motion language (spec) */
+  --dur-micro: 120ms;
+  --dur-standard: 300ms;
+  --dur-scene: 600ms;
+  --dur-cinematic: 1200ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout */
+  --content-max: 1280px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --hud-h: 56px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  /* The exhibit is a full-viewport scene deck (specs/behaviors/scene-deck.md): no
+   * free page-scroll. theme.css loads only on the exhibit route, so this does not
+   * affect the homepage. */
+  overflow: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ariane-silver);
+  /* Hull base shows behind the fixed backdrop (specs/behaviors/hull-backdrop.md). */
+  background: var(--hull-fill);
+  /* Reserve space for the fixed bottom Telemetry HUD so the footer clears it. */
+  padding-bottom: var(--hud-h);
+}
+
+.section {
+  scroll-margin-top: calc(var(--hud-h) + 16px);
+}
+
+/* ---- Neutralize the locked layout chrome so the island is full-bleed ---- */
+
+.content {
+  display: block !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.toc {
+  display: none !important;
+}
+
+.content__block {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.article {
+  max-width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.content__titlemeta {
+  display: none !important;
+}
+
+/* global.css forces .article h* to Lora + a border-bottom (higher specificity than a
+ * CSS-module class). Match its selector here to hand headings back to the exhibit. */
+.article h1,
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+  font-family: var(--font-display) !important;
+  border-bottom: none !important;
+  /* No `color` here: setting even `color: inherit` outranks a CSS-module heading
+   * class, so inside a <button> card the title would inherit the button's default
+   * (black). Let each heading's own class own its colour. */
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* ExhibitLayout hides the first article h1 (it assumed a duplicate title). We keep
+ * an accessible h1 for the exhibit, so undo that hide. */
+.article h1 {
+  display: block !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Shared visible keyboard focus (quality floor). */
+:where(a, button, [tabindex], input, summary):focus-visible {
+  outline: 2px solid var(--telemetry-cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---- Restyle (not restructure) the leftover layout header + footer dark ---- */
+
+.header {
+  /* Fixed chrome overlaying the deck's top edge (mirrors the fixed bottom HUD) so the
+   * full-viewport scene stage starts at y=0 — specs/behaviors/scene-deck.md. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: rgba(5, 6, 10, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--hairline);
+  padding: 10px 20px;
+}
+
+.header__titleblock {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: var(--ariane-silver);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  font-size: 0.82rem;
+}
+
+.header__subtitle {
+  color: var(--muted-silver);
+}
+
+.header .button,
+.button {
+  background-color: rgba(34, 211, 238, 0.08);
+  border: 1px solid var(--hairline-strong);
+  color: var(--telemetry-cyan);
+}
+
+.header .button:hover,
+.button:hover {
+  border-color: var(--telemetry-cyan);
+  color: var(--telemetry-cyan);
+}
+
+footer {
+  background: var(--space-black);
+  color: var(--muted-silver);
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,120 @@
+.launch {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(var(--s3), 5vh, var(--s6)) var(--s3);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.4vh, 0.72rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted-silver);
+  margin: 0 0 clamp(var(--s2), 3vh, var(--s4));
+}
+
+.titleWrap {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fuzzTitle {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.titleStatic {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 10vh, 5.5rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  /* Solid colours, not a clipped gradient: cyan reads "nominal", and the overflowed
+   * "10" is amber — the sign-bit warning the whole exhibit turns on. */
+  color: var(--telemetry-cyan);
+}
+
+.bit {
+  font-variant-numeric: tabular-nums;
+  color: var(--booster-amber);
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(0.95rem, 2.2vh, 1.35rem);
+  color: var(--text-bright);
+  margin: clamp(var(--s2), 3vh, var(--s4)) 0 var(--s1);
+}
+
+.tagline {
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.8vh, 0.9rem);
+  color: var(--telemetry-cyan);
+  letter-spacing: 0.02em;
+  margin: 0 0 clamp(var(--s3), 4vh, var(--s5));
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.8vh, 0.9rem);
+  letter-spacing: 0.04em;
+  color: var(--space-black);
+  background: var(--telemetry-cyan);
+  text-decoration: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.4), 0 10px 30px rgba(34, 211, 238, 0.25);
+  transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-standard) ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.6), 0 14px 40px rgba(34, 211, 238, 0.4);
+}
+
+.intro {
+  max-width: 46rem;
+  margin: clamp(var(--s3), 4vh, var(--s6)) auto 0;
+  font-size: clamp(0.85rem, 2vh, 1rem);
+  line-height: 1.6;
+  color: var(--muted-silver);
+}
+
+.byline {
+  margin: clamp(var(--s2), 3vh, var(--s4)) 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.4vh, 0.72rem);
+  letter-spacing: 0.06em;
+  color: rgba(201, 209, 217, 0.66);
+}
+
+.cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: clamp(var(--s3), 4vh, var(--s6));
+  font-family: var(--font-mono);
+  font-size: clamp(0.55rem, 1.3vh, 0.64rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-silver);
+}

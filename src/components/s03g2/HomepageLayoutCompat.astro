@@ -1,0 +1,77 @@
+---
+/* HomepageLayoutCompat.astro: GROUP-OWNED Astro 6 compat copy of
+ * src/layouts/HomepageLayout.astro (the instructor's file, which stays untouched).
+ *
+ * Why: the template layout calls Astro.glob(), removed in Astro 6, so the `/`
+ * route cannot build, and a failing build blocks the whole Pages deploy. See
+ * documents/escalation-astro-glob.md and plans/homepage-astro-glob-blocker.md.
+ * Per the template banner, group work goes in components/. The only change vs
+ * the original: the exhibit list is read via a content collection
+ * (src/content.config.ts) instead of Astro.glob(). A straight import.meta.glob()
+ * swap (eager or lazy) is NOT equivalent: importing the page modules attaches
+ * each page's own CSS to this page's <head>, and the exhibit's theme.css
+ * contains `.toc { display:none !important }`, which hides the exhibit list
+ * below. The content layer parses frontmatter without importing the modules.
+ * The markup is verbatim; entries are mapped to the { url, frontmatter } shape
+ * the original template code expects.
+ *
+ * Revert: once the template is fixed upstream (leak-free), point
+ * src/pages/index.mdx back at ../layouts/HomepageLayout.astro and delete this
+ * file plus src/content.config.ts.
+ */
+
+import 'normalize.css';
+import '@fontsource-variable/lora';
+import '@fontsource-variable/noto-sans';
+
+import '../styles/global.css';
+
+import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
+
+const { title = "CSARCH2 Virtual Exhibit", author } = Astro.props.frontmatter ?? Astro.props;
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+const exhibits = (await getCollection('exhibits'))
+  .filter((entry) => entry.id !== 'index')
+  .map((entry) => ({ url: base + entry.id, frontmatter: entry.data }));
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+    </head>
+
+    <body>
+        <hgroup class="titleheading">
+            <h1 class="title">ArchCities Virtual Exhibit</h1>
+            <div class="subtitle">Computer Architecture is Forever</div>
+        </hgroup>
+        <main class="content">
+            <nav class="toc">
+                <h2>Exhibits</h2>
+                <ul class="toc__list">
+                    {exhibits.map((exhibit) => (
+                        <li class="toc__item" style="margin-bottom: 1rem;">
+                            <a href={exhibit.url} style="font-weight: 500;">
+                                {exhibit.frontmatter.title || "Untitled Exhibit"}
+                            </a>
+                            {exhibit.frontmatter.author && (
+                                <span style="display: block; font-size: 0.8rem; color: var(--muted);">
+                                    by {exhibit.frontmatter.author}
+                                </span>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        </main>
+
+        <footer>CSARCH2 Virtual Exhibit &mdash; "Computer Architecture is Forever"</footer>
+    </body>
+</html>

@@ -1,0 +1,84 @@
+/* Brushed-metal surface layers (specs/behaviors/metallic-surface.md).
+ * Host panels must be `position: relative; isolation: isolate` with a transparent
+ * background; this layer sits behind content at z-index:-1. */
+
+.filterHost {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.metal {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  /* Frosted back — blurs the weathered hull showing through the panel. */
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.metal > * {
+  position: absolute;
+  inset: 0;
+}
+
+/* Brushed metal base — diagonal light across hull-panel tones. Slight translucency
+   lets the frosted hull tint the metal. */
+.base {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(20, 30, 55, 0.72) 0%,
+      rgba(15, 23, 42, 0.65) 55%,
+      rgba(18, 26, 48, 0.72) 100%
+    );
+}
+
+/* SVG specular-lit sheen — the "metalness". Solid source so the specular light
+   covers the whole panel, then screen-blended low. */
+.specular {
+  background: #777;
+  filter: url(#metal-specular);
+  mix-blend-mode: screen;
+  opacity: var(--metal-sheen, 0.5);
+}
+
+/* Fractal-noise grain. */
+.grain {
+  opacity: var(--metal-grain, 0.4);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Diagonal highlight sweep — the classic reflective glass/metal streak. */
+.sheen {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.04) 38%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.05) 62%,
+    rgba(255, 255, 255, 0.13) 100%
+  );
+  mix-blend-mode: overlay;
+  opacity: var(--metal-metalness, 0.6);
+}
+
+/* Reduced motion / capability fallback: drop the (static but heavy) specular filter,
+   keep the brushed gradient + grain + sheen so the metal look survives cheaply. */
+@media (prefers-reduced-motion: reduce) {
+  .specular {
+    filter: none;
+    opacity: 0.28;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 55%);
+    mix-blend-mode: screen;
+  }
+}

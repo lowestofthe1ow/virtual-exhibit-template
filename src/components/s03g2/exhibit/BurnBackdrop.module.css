@@ -1,0 +1,564 @@
+/* BurnBackdrop — four-stage weathered-hull backdrop (ported from Burn Background.dc.html).
+ * Stage visibility is controlled by CSS classes toggled from JSX. */
+
+/* ---- Keyframes (from the design comp) ---- */
+
+@keyframes bgHeatShift {
+  0%, 100% { transform: translateY(0) scale(1.02); }
+  50% { transform: translateY(-1.2%) scale(1.05); }
+}
+
+@keyframes bgEmberGlow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.95; }
+}
+
+@keyframes bgFlicker {
+  0%, 100% { opacity: 0.85; }
+  45% { opacity: 1; }
+  70% { opacity: 0.7; }
+}
+
+@keyframes panelMeltA {
+  0%, 100% { transform: none; }
+  50% { transform: skewX(-2.2deg) scaleY(1.04) translateY(1px); }
+}
+
+@keyframes panelMeltB {
+  0%, 100% { transform: none; }
+  50% { transform: skewX(2.6deg) scaleY(0.96) translateY(1px); }
+}
+
+@keyframes hatchMelt {
+  0%, 100% { transform: none; border-radius: 50%; }
+  50% { transform: scale(1.05, 0.9); border-radius: 46% 54% 60% 40%; }
+}
+
+@keyframes warnBlink {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+
+@keyframes sparkFlash {
+  0%, 88%, 100% { opacity: 0; }
+  90% { opacity: 1; }
+  93% { opacity: 0.2; }
+  96% { opacity: 0.9; }
+}
+
+@keyframes heatPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes wireSwing {
+  0%, 100% { transform: rotate(3deg); }
+  50% { transform: rotate(-4deg); }
+}
+
+@keyframes arcJump {
+  0%, 100% { opacity: 0; transform: scaleY(0); }
+  6% { opacity: 1; transform: scaleY(1); }
+  10% { opacity: 0.1; transform: scaleY(0.8); }
+  14% { opacity: 0.95; transform: scaleY(1.1); }
+  20% { opacity: 0; transform: scaleY(0); }
+}
+
+/* ---- Container ---- */
+
+.wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0a0705;
+}
+
+/* ---- Base wash layers (one per stage) ---- */
+
+.baseS1 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #f7f4ee 0%, #f1ece0 30%, #e9e2d2 62%, #ddd2bc 85%, #d2c5aa 100%);
+}
+
+.baseS2 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #ede5d4 0%, #e2d4b8 20%, #d6c198 40%, #c9a878 58%,
+    #b8905a 74%, #a87c47 88%, #966838 100%);
+}
+
+.baseS3 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #d4c09a 0%, #b8945a 16%, #9a6e38 30%, #7c4e24 44%,
+    #5e3418 58%, #432110 72%, #2c1409 84%, #1a0c06 94%, #0e0704 100%);
+}
+
+.baseS4 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #b09068 0%, #8a6840 14%, #6e4828 26%, #553420 36%,
+    #3e2214 48%, #2a1610 60%, #1e0f0a 72%, #140a07 82%,
+    #0c0604 90%, #070303 96%, #040202 100%);
+}
+
+/* ---- Stage 1: pristine metallic sheen ---- */
+
+.s1Sheen {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: soft-light;
+  opacity: 0.35;
+  background: linear-gradient(165deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,0.5) 40%,
+    rgba(255,255,255,0.15) 55%,
+    rgba(255,255,255,0) 70%);
+}
+
+.s1Lines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background: repeating-linear-gradient(90deg,
+    rgba(255,255,255,0.3) 0 1px, transparent 1px 4px);
+}
+
+/* ---- Stage 2+: heat shimmer + scorch ---- */
+
+.heatShimmer {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  animation: bgFlicker 7s ease-in-out infinite;
+  background:
+    radial-gradient(80% 60% at 50% 50%, rgba(255,150,60,0.18) 0%, rgba(255,110,40,0.06) 50%, rgba(0,0,0,0) 80%),
+    radial-gradient(60% 40% at 20% 30%, rgba(255,130,50,0.12) 0%, rgba(0,0,0,0) 70%),
+    radial-gradient(60% 40% at 80% 70%, rgba(255,130,50,0.12) 0%, rgba(0,0,0,0) 70%);
+}
+
+.sootStreaks {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(24% 14% at 22% 28%, rgba(60,40,25,0.3) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(28% 12% at 72% 18%, rgba(55,35,22,0.28) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(22% 10% at 15% 65%, rgba(60,40,25,0.32) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(30% 12% at 58% 82%, rgba(55,35,22,0.35) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(24% 10% at 82% 55%, rgba(60,40,25,0.28) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(20% 9% at 40% 45%, rgba(55,38,24,0.25) 0%, rgba(0,0,0,0) 100%);
+}
+
+.heatDiscolor {
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(35% 20% at 30% 25%, rgba(120,70,30,0.3) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(40% 18% at 70% 35%, rgba(130,75,28,0.25) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(30% 16% at 50% 55%, rgba(100,60,25,0.3) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(35% 18% at 25% 78%, rgba(120,70,30,0.35) 0%, rgba(0,0,0,0) 100%),
+    radial-gradient(30% 14% at 75% 72%, rgba(110,65,28,0.3) 0%, rgba(0,0,0,0) 100%);
+}
+
+.heatGlow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  mix-blend-mode: screen;
+  animation: heatPulse 5s ease-in-out infinite;
+  background: radial-gradient(80% 80% at 50% 50%,
+    rgba(255,120,40,0.4) 0%, rgba(255,80,20,0.1) 60%, rgba(0,0,0,0) 100%);
+}
+
+/* ---- Stage 3+: intense fire overlay + char ---- */
+
+.fireOverlay {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  animation: bgFlicker 5.5s ease-in-out infinite;
+  background:
+    radial-gradient(90% 70% at 50% 50%, rgba(255,140,40,0.35) 0%, rgba(255,90,20,0.15) 40%, rgba(0,0,0,0) 70%),
+    radial-gradient(60% 50% at 25% 30%, rgba(255,180,70,0.25) 0%, rgba(0,0,0,0) 60%),
+    radial-gradient(60% 50% at 75% 65%, rgba(255,70,20,0.28) 0%, rgba(0,0,0,0) 60%),
+    radial-gradient(50% 40% at 50% 15%, rgba(255,120,40,0.2) 0%, rgba(0,0,0,0) 55%);
+}
+
+.charTexture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(0,0,0,0.45) 0 8px, rgba(0,0,0,0) 9px),
+    radial-gradient(circle at 75% 15%, rgba(0,0,0,0.4) 0 7px, rgba(0,0,0,0) 8px),
+    radial-gradient(circle at 40% 38%, rgba(0,0,0,0.5) 0 10px, rgba(0,0,0,0) 11px),
+    radial-gradient(circle at 82% 45%, rgba(0,0,0,0.45) 0 9px, rgba(0,0,0,0) 10px),
+    radial-gradient(circle at 18% 62%, rgba(0,0,0,0.55) 0 8px, rgba(0,0,0,0) 9px),
+    radial-gradient(circle at 62% 70%, rgba(0,0,0,0.5) 0 10px, rgba(0,0,0,0) 11px),
+    radial-gradient(circle at 40% 84%, rgba(0,0,0,0.6) 0 14px, rgba(0,0,0,0) 15px),
+    radial-gradient(circle at 82% 88%, rgba(0,0,0,0.55) 0 12px, rgba(0,0,0,0) 13px),
+    repeating-linear-gradient(58deg, rgba(0,0,0,0.12) 0 2px, rgba(0,0,0,0) 2px 26px),
+    repeating-linear-gradient(-42deg, rgba(0,0,0,0.1) 0 2px, rgba(0,0,0,0) 2px 30px);
+}
+
+/* ---- Stage 4: glowing crack seams ---- */
+
+.crackSeams {
+  position: absolute;
+  inset: 0;
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  animation: bgEmberGlow 4s ease-in-out infinite;
+  background:
+    repeating-linear-gradient(74deg,
+      rgba(255,120,30,0) 0 40px, rgba(255,120,30,0.16) 41px 42px, rgba(255,120,30,0) 43px 90px),
+    repeating-linear-gradient(-66deg,
+      rgba(255,90,20,0) 0 55px, rgba(255,90,20,0.14) 56px 57px, rgba(255,90,20,0) 58px 120px);
+}
+
+/* ---- Fine grain (all states) ---- */
+
+.grain {
+  position: absolute;
+  inset: -20%;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  animation: bgHeatShift 14s ease-in-out infinite;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.6) 0.5px, transparent 0.6px),
+    radial-gradient(rgba(0,0,0,0.6) 0.5px, transparent 0.6px);
+  background-size: 3px 3px, 4px 4px;
+  background-position: 0 0, 1px 2px;
+}
+
+/* ---- Rocket skin detail (all states) ---- */
+
+.skinDetail {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.segmentRings {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background:
+    linear-gradient(180deg, transparent 0, transparent calc(9% - 1px), rgba(70,55,40,0.55) 9%, transparent calc(9% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(20% - 1px), rgba(70,55,40,0.55) 20%, transparent calc(20% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(31% - 1px), rgba(70,55,40,0.55) 31%, transparent calc(31% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(42% - 1px), rgba(70,55,40,0.55) 42%, transparent calc(42% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(52% - 1px), rgba(60,45,32,0.6) 52%, transparent calc(52% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(61% - 1px), rgba(50,38,28,0.6) 61%, transparent calc(61% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(72% - 1px), rgba(45,34,25,0.55) 72%, transparent calc(72% + 2px)),
+    linear-gradient(180deg, transparent 0, transparent calc(84% - 1px), rgba(40,30,22,0.5) 84%, transparent calc(84% + 2px));
+}
+
+.segmentHighlights {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  background:
+    linear-gradient(180deg, transparent calc(9% + 2px), rgba(255,255,255,0.6) calc(9% + 3px), transparent calc(9% + 5px)),
+    linear-gradient(180deg, transparent calc(20% + 2px), rgba(255,255,255,0.6) calc(20% + 3px), transparent calc(20% + 5px)),
+    linear-gradient(180deg, transparent calc(31% + 2px), rgba(255,255,255,0.5) calc(31% + 3px), transparent calc(31% + 5px)),
+    linear-gradient(180deg, transparent calc(42% + 2px), rgba(255,255,255,0.4) calc(42% + 3px), transparent calc(42% + 5px)),
+    linear-gradient(180deg, transparent calc(52% + 2px), rgba(255,255,255,0.3) calc(52% + 3px), transparent calc(52% + 5px));
+}
+
+/* ---- Warning lights (stage 2+) ---- */
+
+.warnLight {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 7px 2px rgba(255,176,32,0.7);
+  animation: warnBlink 2.1s ease-in-out infinite;
+}
+
+.warnLightRed {
+  composes: warnLight;
+  background: #ff5030;
+  box-shadow: 0 0 8px 2px rgba(255,80,48,0.8);
+}
+
+/* ---- Scorch marks (stage 2+) ---- */
+
+.scorchMark {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* ---- Stress cracks (stage 2+) ---- */
+
+.stressCrack {
+  position: absolute;
+  height: 1px;
+}
+
+/* ---- Exposed electrical (stage 3+) ---- */
+
+.junctionBox {
+  position: absolute;
+}
+
+.junctionInner {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #16100b, #241710);
+  border: 1px solid rgba(20,12,7,0.9);
+  border-radius: 3px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.wire {
+  position: absolute;
+  width: 2px;
+  border-radius: 1px;
+  transform-origin: top;
+}
+
+.spark {
+  position: absolute;
+  border-radius: 50%;
+  animation: sparkFlash 2.3s linear infinite;
+}
+
+.arc {
+  position: absolute;
+  width: 1px;
+  transform-origin: top;
+  animation: arcJump 3.2s linear infinite;
+}
+
+/* ---- Torn holes (stage 3+) ---- */
+
+.tornGlow {
+  position: absolute;
+}
+
+.tornInner {
+  position: absolute;
+}
+
+/* ---- Dents (stage 3+) ---- */
+
+.dent {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* ---- Buckled panels (stage 4) ---- */
+
+.buckledHole {
+  position: absolute;
+  border-radius: 2px;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.9),
+    inset 0 -1px 2px rgba(255,120,40,0.25);
+}
+
+.buckledFlap {
+  position: absolute;
+  border-radius: 2px;
+  box-shadow: 5px 8px 14px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,220,170,0.35);
+}
+
+/* ---- Torn-away sections (stage 4) ---- */
+
+.tornSection {
+  position: absolute;
+}
+
+/* ---- Curled metal flaps (stage 4) ---- */
+
+.metalFlap {
+  position: absolute;
+  box-shadow: 3px 5px 10px rgba(0,0,0,0.6);
+}
+
+/* ---- Scuff marks (stage 4) ---- */
+
+.scuff {
+  position: absolute;
+  height: 2px;
+}
+
+/* ---- Internal framing (stage 4) ---- */
+
+.framing {
+  position: absolute;
+  background:
+    repeating-linear-gradient(90deg, rgba(50,35,22,0.5) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(0deg, rgba(50,35,22,0.3) 0 2px, transparent 2px 20px);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 70%);
+}
+
+/* ---- Debris (stage 4) ---- */
+
+.debris {
+  position: absolute;
+}
+
+/* ---- Ember canvas ---- */
+
+.emberCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ---- Vignettes ---- */
+
+.vignetteS1 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 90% at 50% 30%,
+    rgba(0,0,0,0) 65%, rgba(0,0,0,0.18) 100%);
+}
+
+.vignetteS2 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 90% at 50% 50%,
+    rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%);
+}
+
+.vignetteS3Plus {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 90% at 50% 50%,
+    rgba(0,0,0,0) 45%, rgba(0,0,0,0.5) 100%);
+}
+
+/* ---- Panels / hatches (stage 1-2: static; stage 3+: melting) ---- */
+
+.panelStatic {
+  position: absolute;
+  border-radius: 3px;
+}
+
+.panelMeltA {
+  composes: panelStatic;
+  transform-origin: center;
+  animation: panelMeltA 14s ease-in-out infinite;
+}
+
+.panelMeltB {
+  composes: panelStatic;
+  transform-origin: center;
+  animation: panelMeltB 14s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+.hatchStatic {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hatchMelt {
+  composes: hatchStatic;
+  transform-origin: center;
+  animation: hatchMelt 14s ease-in-out infinite;
+}
+
+/* ---- Markings (all states) ---- */
+
+.markingsWrap {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flagGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  width: 100%;
+}
+
+.flagCell {
+  aspect-ratio: 3 / 2;
+}
+
+/* ---- Warning display panel (stage 3+) ---- */
+
+.warnPanel {
+  position: absolute;
+}
+
+.warnPanelOuter {
+  position: absolute;
+  inset: 0;
+  background: #1a100a;
+  border: 1px solid rgba(40,25,15,0.7);
+  border-radius: 2px;
+}
+
+.warnPanelFlash {
+  position: absolute;
+  inset: 3px;
+  background: rgba(255,40,20,0.15);
+  animation: warnBlink 0.8s ease-in-out infinite;
+}
+
+/* ---- Reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .heatShimmer,
+  .heatGlow,
+  .fireOverlay,
+  .grain {
+    animation: none;
+  }
+  .crackSeams {
+    animation: none;
+    opacity: 0.5;
+  }
+  .panelMeltA,
+  .panelMeltB {
+    animation: none;
+  }
+  .hatchMelt {
+    animation: none;
+  }
+  .warnLight,
+  .warnLightRed {
+    animation: none;
+    opacity: 0.5;
+  }
+  .spark {
+    animation: none;
+    opacity: 0.4;
+  }
+  .arc {
+    animation: none;
+    opacity: 0.3;
+  }
+  .wire {
+    animation: none;
+  }
+  .warnPanelFlash {
+    animation: none;
+    opacity: 0.3;
+  }
+}

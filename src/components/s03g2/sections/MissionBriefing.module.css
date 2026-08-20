@@ -1,0 +1,285 @@
+/* Legibility card behind the intro title + lede (specs/screens/exhibit.md ②). A
+ * low-contrast scrim — dark translucent fill + faint hairline + slight blur — so the
+ * grey lede never blends into the hull + Noise when this section's instability peaks
+ * at the late timeline. Deliberately a quiet recessed panel, not a bright box, per
+ * "the backdrop serves the UI". */
+.intro {
+  max-width: 68ch;
+  padding: clamp(var(--s2), 2vh, var(--s3)) clamp(var(--s3), 3vw, var(--s4));
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  border: var(--card-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  margin-bottom: clamp(var(--s2), 2.5vh, var(--s4));
+}
+
+.intro > :last-child {
+  margin-bottom: 0;
+}
+
+.scrubber {
+  margin-top: 0;
+  padding: clamp(var(--s2), 2vh, var(--s3)) clamp(var(--s3), 3vw, var(--s4));
+  border-radius: var(--radius-lg);
+  border: var(--card-border);
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  margin-bottom: clamp(var(--s2), 2.5vh, var(--s4));
+}
+
+.track {
+  position: relative;
+  height: clamp(32px, 5vh, 44px);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.track:focus-visible {
+  outline: 2px solid var(--telemetry-cyan);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+.trackBase {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 2px;
+}
+
+.progress {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  margin-top: -2px;
+  transform-origin: left center;
+  border-radius: 2px;
+  /* Scale, not width — keeps the fill off the layout path. */
+  transition: transform var(--dur-standard) ease, background var(--dur-standard) ease;
+}
+.sev_ok {
+  background: var(--signal-green);
+}
+.sev_warn {
+  background: var(--booster-amber);
+}
+.sev_bad {
+  background: var(--catastrophe-red);
+}
+
+/* Event positions: thin, non-interactive notch marks (no click targets). */
+.notch {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 14px;
+  border-radius: 1px;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.notch_ok {
+  background: var(--signal-green);
+}
+.notch_warn {
+  background: var(--booster-amber);
+}
+.notch_bad {
+  background: var(--catastrophe-red);
+}
+
+/* Current position: a vertical line that lights up in the active severity colour. */
+.playhead {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: left var(--dur-standard) var(--ease-out), background var(--dur-standard) ease,
+    box-shadow var(--dur-standard) ease;
+  pointer-events: none;
+}
+.play_ok {
+  background: var(--signal-green);
+  box-shadow: 0 0 14px 1px var(--signal-green);
+}
+.play_warn {
+  background: var(--booster-amber);
+  box-shadow: 0 0 14px 1px var(--booster-amber);
+}
+.play_bad {
+  background: var(--catastrophe-red);
+  box-shadow: 0 0 16px 2px var(--catastrophe-red);
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--s1);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--muted-silver);
+  letter-spacing: 0.04em;
+}
+
+/* Prev / Next arrow controls — the obvious primary navigation. */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s3);
+  margin-top: var(--s3);
+}
+
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: var(--ariane-silver);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: border-color var(--dur-micro) ease, color var(--dur-micro) ease,
+    background var(--dur-micro) ease, transform var(--dur-micro) ease;
+}
+.arrow:hover:not(:disabled) {
+  border-color: var(--telemetry-cyan);
+  color: var(--telemetry-cyan);
+  background: rgba(34, 211, 238, 0.12);
+  transform: translateY(-1px);
+}
+.arrow:disabled {
+  opacity: 0.22;
+  cursor: default;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: #eef2f6;
+  min-width: 5ch;
+  text-align: center;
+}
+.countSep {
+  color: var(--muted-silver);
+}
+
+/* Event card */
+.card {
+  position: relative;
+  isolation: isolate;
+  margin-top: 0;
+  min-height: clamp(140px, 20vh, 200px);
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  padding: clamp(var(--s2), 2.5vh, var(--s4)) clamp(var(--s3), 3vw, var(--s4));
+  box-sizing: border-box;
+  transition: border-color var(--dur-standard) ease;
+}
+/* Severity tints the full border (not a left stripe); the sevBadge carries the
+ * text-backed signal so meaning never rests on colour alone. */
+.card_ok {
+  border-color: rgba(34, 197, 94, 0.4);
+}
+.card_warn {
+  border-color: rgba(245, 158, 11, 0.45);
+}
+.card_bad {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+}
+.cardTag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--telemetry-cyan);
+}
+.sevBadge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+.badge_ok {
+  color: var(--signal-green);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+.badge_warn {
+  color: var(--booster-amber);
+  border-color: rgba(245, 158, 11, 0.5);
+}
+.badge_bad {
+  color: var(--catastrophe-red);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.2vh, 1.3rem);
+  color: #eef2f6;
+  margin: clamp(var(--s1), 1.5vh, var(--s2)) 0 var(--s1);
+}
+.cardDetail {
+  color: var(--muted-silver);
+  line-height: 1.5;
+  max-width: none;
+  font-size: clamp(0.85rem, 1.6vh, 0.95rem);
+  margin: 0;
+}
+
+.telemetry {
+  display: flex;
+  gap: clamp(var(--s3), 4vw, var(--s5));
+  margin-top: clamp(var(--s2), 2vh, var(--s3));
+  padding-top: clamp(var(--s2), 2vh, var(--s3));
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.tItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.tK {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-silver);
+}
+.tV {
+  font-size: 0.95rem;
+  color: var(--ariane-silver);
+}
+.tMono {
+  font-family: var(--font-mono);
+  color: var(--telemetry-cyan);
+}

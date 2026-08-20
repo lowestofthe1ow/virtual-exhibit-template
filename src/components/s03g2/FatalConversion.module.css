@@ -1,0 +1,26 @@
+/* The scene deck (specs/behaviors/scene-deck.md): the stage owns the viewport; each
+ * pane is a full-viewport scene. Free page-scroll between scenes is gone — the deck
+ * transition is the only motion between them. */
+.stage {
+  position: relative;
+  z-index: 1;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.pane {
+  position: absolute;
+  inset: 0;
+  /* A scene taller than the viewport (small phones) keeps its own inner scroll; the
+   * deck only advances at this boundary (see FatalConversion.jsx wheel handler). */
+  overflow-y: auto;
+  overflow-x: clip;
+  /* Contain the scene to the pane so its own min-height fills, not overflows. */
+  display: flex;
+  flex-direction: column;
+}
+
+.pane > * {
+  flex: 1 0 auto;
+}
