@@ -1,0 +1,78 @@
+---
+layout: ../layouts/ExhibitLayout.astro
+title: "The Architectural Evolution: From Mainframes to Microprocessors"
+description: "CSARCH2 S02 Group 1 Case Study"
+author: "Ac-ac, Mikhael Darryl; Cordero, Ramuel Sean; Degullado, Joseph Edward Kelvin; Gomez, Luis Royce; Panaligan, Louis Raphael"
+readingTime: "2 minutes, 52 seconds"
+---
+
+import ArchQuiz from "../components/s02g1/ArchQuiz.jsx";
+import TextWithImage from "../components/s02g1/TextWithImage.astro";
+import "../styles/s02g1/global.css";
+
+<TextWithImage
+  body="The evolution of computer architecture is defined by radical advancements in physical scale, reliability, and standardization. This case study traces the technological journey of computing systems as they transitioned from massive, room-sized vacuum tube mainframes to highly integrated silicon microprocessors. By examining three foundational milestones, we explore how these historical hardware paradigm shifts permanently reshaped the modern digital landscape."
+  imageAlt="IBM System/360, from a 1964 sales brochure"
+  imageCaption="IBM System/360, from a 1964 sales brochure"
+  imageSrc="https://www.ibm.com/adobe/dynamicmedia/deliver/dm-aid--2ed30b2a-be08-4357-9ba6-6f6e47a6cd0b/1960s-ibm-system-360-circle-4-people.jpg?preferwebp=true"
+  reverse
+/>
+
+## Vacuum Tube Era - ENIAC (1945)
+
+<TextWithImage
+  body="One of the world's first general-purpose electronic computers. Built using approximately 18,000 vacuum tubes, ENIAC occupied an entire room, consumed enormous amounts of electricity, and required manual rewiring to perform different tasks. It demonstrated that electronic computation was possible and laid the foundation for future computer development."
+  imageAlt="Four ENIAC panels and one of its three function tables"
+  imageCaption="Four ENIAC panels and one of its three function tables"
+  imageSrc="https://upload.wikimedia.org/wikipedia/commons/6/6c/ENIAC_Penn1.jpg"
+/>
+
+<h3>Key Concepts</h3>
+
+- **Vacuum tube technology:** Employed thousands of glass tubes to act as electronic switches instead of slow mechanical relays.
+- **Room-sized computing:** Monumental scale requiring dedicated physical facility space (approx. 30x50 feet).
+- **High power consumption:** Drew massive electrical currents, generating immense heat that required industrial cooling.
+- **Manual programming:** Lacked internal program memory; equations had to be hard-wired via physical patch cords and switches.
+
+## The Transistor Revolution - IBM System/360 (1964)
+
+<img
+  alt="IBM System/360 mainframe setup"
+  src="https://retrocomputingforum.com/uploads/default/original/2X/b/b3ff24e3162a395651799322d1e8b305b76cb246.jpeg"
+  style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
+/>
+
+The invention of the transistor dramatically changed computer design. Instead of relying on fragile vacuum tubes, computers became smaller, faster, more energy-efficient, and significantly more reliable. IBM's System/360 family introduced the idea that multiple computer models could share the same instruction set architecture while offering different levels of performance. This compatibility allowed software to run across different machines without being rewritten, making computing more practical for businesses and organizations.
+
+<h3>Key Concepts</h3>
+
+- **Discrete transistors:** Shifted logic architecture to reliable micro-modules built with discrete solid-state components.
+- **Improved reliability:** Drastically lowered system downtime compared to generations plagued by daily tube burnouts.
+- **Reduced size and power consumption:** Allowed dense multi-layered logic gates to fit onto small pluggable cards.
+- **Standardized instruction set architecture:** Decoupled software from physical hardware, introducing scalable platform compatibility.
+
+## The Microprocessor Age - Intel 4004 (1971)
+
+<TextWithImage
+  body="The Intel 4004 represented a major breakthrough by integrating the central processing unit onto a single silicon chip. What once required cabinets of hardware could now fit into a device smaller than a fingernail. This innovation enabled the development of personal computers, embedded systems, smartphones, and countless modern electronic devices, proving that increasing computing power could coexist with decreasing physical size."
+  imageAlt="Intel C4004 processor with grey traces"
+  imageCaption="Intel C4004 processor with grey traces"
+  imageSrc="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Intel_C4004.jpg/3840px-Intel_C4004.jpg"
+/>
+
+<h3>Key Concepts</h3>
+
+- **Silicon integrated circuits:** Squeezed thousands of micro-transistors directly onto a single, solid semiconductor die.
+- **Single-chip CPU:** Combined the control unit, registers, and arithmetic logic unit onto one single package.
+- **Miniaturization:** Smashed the physical footprint constraints of processing hardware down to a microscopic scale.
+- **Beginning of modern computing:** Shifted the industry paradigm toward general-purpose microprocessors customized via software.
+
+## Quiz
+
+<ArchQuiz client:load />
+
+## References
+
+- Engineering and Technology History Wiki (ETHW). (n.d.). _ENIAC_. Retrieved July 6, 2026, from https://ethw.org/ENIAC
+- IBM Corporation. (2014). _The IBM System/360: The $5 billion gamble that changed the trajectory of IBM_. IBM Heritage Archives. Retrieved July 6, 2026, from https://www.ibm.com/history/system-360
+- Intel Corporation. (n.d.). _Announcing a new era of integrated electronics: The Intel 4004_. Intel Virtual Vault. Retrieved July 6, 2026, from https://www.intel.com/content/www/us/en/history/virtual-vault/articles/the-intel-4004.html
