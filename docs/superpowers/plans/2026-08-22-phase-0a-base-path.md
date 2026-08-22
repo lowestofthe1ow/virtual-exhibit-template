@@ -839,6 +839,33 @@ to:
 2. Visit your page at `localhost:4321/topic_name`.
 ```
 
+Then extend §13 ("The s02g7 Exception") with the rebuild recipe. Task 6 proved
+that rebuilding s02g7 takes **three** changes, not one, and all three live in the
+gitignored `.integration-src/` tree — so none of them survive a fresh clone. Add:
+
+```markdown
+### Rebuilding s02g7
+
+Its `basePath` is baked into hashed chunk filenames and JSON payloads, so it can
+only be rebuilt, never text-rewritten. Three changes are required, and missing
+either of the last two produces a build that looks fine and is quietly broken:
+
+1. `next.config.mjs` — `basePath` must match the route (`/s02g7` at the current
+   root base).
+2. `src/lib/basePath.ts` — an independently maintained `BASE_PATH` mirror, used
+   by hand-written `<img>`/`<a>` tags. Next only auto-prefixes `next/link` and
+   `next/image`, so this constant must be edited in lockstep. Skipping it left
+   34 files pointing at the old base.
+3. `next.config.mjs` — `trailingSlash: true`. Without it the App Router export
+   emits extensionless links that depend on host-side clean-URL rewriting, which
+   this static site does not do. Skipping it produced 88 dead links with an
+   otherwise perfectly correct `basePath`.
+
+Then `npm run build` in the source tree, replace `public/s02g7/` with its `out/`,
+and stage with `git add -A public/s02g7` — the hashed filenames change, so
+deletions must be staged too. Verify with `node tools/check-links.mjs`.
+```
+
 Then add this subsection at the end of the "Merged Site Guide", after §13:
 
 ```markdown
