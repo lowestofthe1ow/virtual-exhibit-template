@@ -695,12 +695,62 @@ Without this task the work decays: nothing stops the next exhibit import from re
 
 **Files:**
 - Create: `tools/test/no-hardcoded-base.test.mjs`
+- Modify: `tools/rewrite-base.mjs` (make `exclude` injectable — see Step 0)
 - Modify: `package.json`
 - Modify: `README.md`
 
 **Interfaces:**
 - Consumes: `rewriteTree` from Task 3.
 - Produces: a `npm run verify` script that Phase 0b's deploy will call.
+
+- [ ] **Step 0: Make the exclusion provable**
+
+Task 3's review found that `EXCLUDE` is redundant with Task 1's URL guard: every
+reference in `exhibits.json` is inside an `https://…` URL, so `rewriteBaseRefs`
+already returns `changed: 0`, and `if (changed === 0) continue` drops the file
+from the report whether or not `EXCLUDE` matched. The exclusion is correct today
+but nothing proves it, so a future regression to it would be silent.
+
+In `tools/rewrite-base.mjs`, make the set injectable so a test can exercise the
+path guard in isolation:
+
+```javascript
+export function rewriteTree(root, { from, to, dryRun, exclude = EXCLUDE }) {
+```
+
+and change the membership test to use the parameter:
+
+```javascript
+    if (exclude.has(file.split('\\').join('/'))) continue;
+```
+
+Then add this test to `tools/test/no-hardcoded-base.test.mjs`. The decoy's
+reference is **bare root-relative**, a form the URL guard does not suppress, so
+only the path guard can spare it — which is what makes the test load-bearing:
+
+```javascript
+test('a file in the exclude set is skipped even when its reference IS rewritable', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'exclude-'));
+  writeFileSync(join(dir, 'keep.json'), '{"x": "/virtual-exhibit-template/a.webp"}');
+  writeFileSync(join(dir, 'skip.json'), '{"x": "/virtual-exhibit-template/b.webp"}');
+
+  const report = rewriteTree(dir, {
+    from: 'virtual-exhibit-template',
+    to: '',
+    dryRun: true,
+    exclude: new Set([join(dir, 'skip.json').split('\\').join('/')]),
+  });
+
+  assert.deepEqual(
+    report.map((r) => r.file),
+    [join(dir, 'keep.json')],
+    'the excluded file was reported, so the path guard is not doing its job',
+  );
+});
+```
+
+This needs `mkdtempSync`, `writeFileSync`, `tmpdir` and `join` imported at the
+top of the test file alongside `readFileSync`.
 
 - [ ] **Step 1: Write the failing test**
 
