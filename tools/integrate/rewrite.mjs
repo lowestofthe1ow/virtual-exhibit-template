@@ -15,7 +15,17 @@ const TRAILING_BOUNDARY = '(?=[`\'"/#?]|$)';
 // every call site; rewriteFile still takes it as an overridable option below
 // rather than baking the literal into the regex, so a caller can pass a
 // different value instead of forking this file if that ever stops being true.
-const UMBRELLA_BASE = 'virtual-exhibit-template';
+// The site is served at root (astro.config.mjs `base: '/'`). Empty means
+// "no base segment"; joinUmbrella collapses it correctly.
+const UMBRELLA_BASE = '';
+
+// With the site served at root, umbrellaBase is '' and a naive
+// `/${base}/${rest}` emits `//rest` — a protocol-relative URL, which the
+// browser resolves against a HOST rather than the site root. Collapse the
+// empty case instead of interpolating it.
+function joinUmbrella(base, rest) {
+  return base ? `/${base}/${rest}` : `/${rest}`;
+}
 
 // A source repo's own astro.config `base:` shows up in the wild as
 // '/CSARCH2-Group-6/', 'virtual-exhibit-template', '/', or '' — leading and
@@ -117,7 +127,7 @@ export function rewriteFile(
     // needs the umbrella site's own base spliced in ahead of `value` too.
     out = out.replace(
       new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      (match, quote) => `${quote}/${umbrellaBase}/${value}`,
+      (match, quote) => `${quote}${joinUmbrella(umbrellaBase, value)}`,
     );
   }
 
@@ -155,7 +165,7 @@ export function rewriteFile(
     // double it, so only this root-absolute branch gets umbrellaBase.
     out = out.replace(
       new RegExp('(["\'`])/(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      (match, quote) => `${quote}/${umbrellaBase}/${slug}/${final}`,
+      (match, quote) => `${quote}${joinUmbrella(umbrellaBase, `${slug}/${final}`)}`,
     );
   }
 
@@ -184,7 +194,7 @@ export function rewriteFile(
     // requiring the slash silently missed the bare form and shipped a 404.
     out = out.replace(
       new RegExp('(["\'`])/' + escapedBase + '(/|(?=["\'`]))', 'g'),
-      (_m, q, tail) => `${q}/${umbrellaBase}/${slug}${tail === '/' ? '/' : ''}`,
+      (_m, q, tail) => `${q}${joinUmbrella(umbrellaBase, slug)}${tail === '/' ? '/' : ''}`,
     );
   }
 
