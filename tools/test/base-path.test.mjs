@@ -67,3 +67,32 @@ test('is a no-op on source with no references', () => {
   assert.equal(text, 'const x = 1;');
   assert.equal(changed, 0);
 });
+
+test('a bare reference at the end of the string resolves to root, not the empty string', () => {
+  const { text, changed } = rewriteBaseRefs('/virtual-exhibit-template', opts);
+  assert.equal(text, '/');
+  assert.equal(changed, 1);
+});
+
+test('a bare reference immediately followed by a quote resolves to root', () => {
+  const { text, changed } = rewriteBaseRefs('prevUrl="/virtual-exhibit-template" ', opts);
+  assert.equal(text, 'prevUrl="/" ');
+  assert.equal(changed, 1);
+});
+
+test('a bare reference followed by a query string resolves to root plus the query', () => {
+  const { text } = rewriteBaseRefs('/virtual-exhibit-template?x=1', opts);
+  assert.equal(text, '/?x=1');
+});
+
+test('a bare reference followed by a fragment resolves to root plus the fragment', () => {
+  const { text } = rewriteBaseRefs('/virtual-exhibit-template#top', opts);
+  assert.equal(text, '/#top');
+});
+
+test('a bare reference with a non-empty "to" is unaffected by the root-collapse fix', () => {
+  const { text } = rewriteBaseRefs('/virtual-exhibit-template', {
+    from: 'virtual-exhibit-template', to: 'csarch2',
+  });
+  assert.equal(text, '/csarch2');
+});

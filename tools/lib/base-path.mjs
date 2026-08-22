@@ -35,8 +35,19 @@ export function rewriteBaseRefs(source, { from, to }) {
     text += source.slice(i, at);
     if (insideUrl) {
       text += needle;
+    } else if (to) {
+      text += `/${to}`;
+      changed++;
     } else {
-      text += to ? `/${to}` : '';
+      // to === '' means "rewrite to root". A bare reference — the needle is
+      // the whole path, with nothing (or a non-'/' character, e.g. '?' or
+      // '#') immediately after it — must still resolve to "/", the root
+      // path, not "" (RFC 3986: an empty URI reference resolves to the
+      // CURRENT document, not the root). Only when the next character is
+      // '/' does dropping the needle outright leave a correct path, because
+      // that '/' is still there in the remainder of the source.
+      const nextChar = source[at + needle.length];
+      text += nextChar === '/' ? '' : '/';
       changed++;
     }
     i = at + needle.length;
