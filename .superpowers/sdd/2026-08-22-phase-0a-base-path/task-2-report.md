@@ -198,3 +198,87 @@ Full suite: **146/146 tests pass** (141 original + 5 new from this fix).
 
 - **Modified**: `tools/check-links.mjs` (added 16 lines, regex update, error handling, script/style stripping)
 - **Modified**: `tools/test/check-links.test.mjs` (added 5 new test cases)
+
+---
+
+## Fix Round 2: Unclosed Script/Style Tag Handling
+
+### Issue: Unclosed `<script>` and `<style>` tags fail open
+
+**Problem:** The regex patterns `/^<script[^>]*>[\s\S]*?<\/script>/gi` and `/^<style[^>]*>[\s\S]*?<\/style>/gi` require a closing tag to match. When a `<script>` or `<style>` tag is never closed, the regex matches nothing, leaving the tag body unscrapped. Any bare `href`/`src` inside the unclosed tag would then be checked as a real link, producing false positives.
+
+Example: `<script>let src = "/nope.webp";` (no closing tag) would have the assignment checked and report `/nope.webp` as a dead link, blocking Task 5's "0 dead links" gate.
+
+**Solution:** Update both regex patterns to match to end-of-file when no closing tag is present:
+```javascript
+html = html.replace(/<script[^>]*>[\s\S]*?(?:<\/script>|$)/gi, '');
+html = html.replace(/<style[^>]*>[\s\S]*?(?:<\/style>|$)/gi, '');
+```
+
+The `(?:<\/script>|$)` alternation matches either a closing `</script>` tag OR the end of the file (`$`), ensuring unclosed tags are fully stripped.
+
+### Deliberate Non-Fix: `</script>` inside JS string literals
+
+The re-review flagged a case where a string literal contains `</script>` but that is **not a defect**, per the HTML spec:
+
+```html
+<script>const s = "</script>"; let src = "/x.webp";</script>
+```
+
+In this case, the first `</script>` inside the string terminates the element per HTML parsing rules, leaving `let src = "/x.webp";</script>` outside and unstripped. This produces a false positive (`/x.webp` is checked as a real link).
+
+**Ruling:** This is correct behavior. The HTML spec says script elements terminate at the first `</script` regardless of JavaScript string context — that is exactly why authors must escape it as `<\/script>`. Making the checker parse differently from browsers would be worse than the false positive. A comment was added to the code recording this deliberate design:
+
+```javascript
+// A literal </script> ends the element even inside a JS string — that is real
+// HTML parsing, not a regex limitation, which is why authors must escape it as
+// <\/script>. Matching the browser here is deliberate.
+```
+
+### Test Added
+
+Added 1 test case to verify unclosed script tags are handled:
+
+**Test:** `"a page containing an unclosed <script> tag with a link-like string reports no dead link"`
+- Creates HTML: `<script>let src = "/nope.webp";` (no closing tag)
+- Verifies: `checkLinks(d).errors` is empty (no false positive)
+
+### Test Results
+
+```bash
+$ node --test tools/test/check-links.test.mjs
+✔ a page linking to an existing file passes
+✔ a page linking to a missing file fails
+✔ a missing image is reported
+✔ external, anchor, mailto and data URLs are ignored
+✔ a directory link resolves to its index.html
+✔ query strings and fragments are stripped before resolving
+✔ a file containing NUL bytes is still scanned
+✔ a missing distDir returns {ok: false} with an error and does not throw
+✔ an existing but empty distDir returns {ok: true, errors: []}
+✔ a page whose inline <script> contains `const heroSrc = "/does/not/exist.webp"` reports NO dead link
+✔ a page whose inline <script> contains `let src = "/also/missing.webp"` reports NO dead link
+✔ a page with <a href="/real/"> AND a script block still catches the real dead link
+✔ a page containing an unclosed <script> tag with a link-like string reports no dead link
+
+✓ tests 13
+✓ pass 13
+✓ fail 0
+```
+
+Full suite: **147/147 tests pass** (146 existing + 1 new from this fix).
+
+### Commit
+
+```
+1b12ed8 fix: handle unclosed script/style tags in link scanning
+
+- Update regex to match to end-of-file when closing tag is absent
+- Add explanatory comment about </script> in JS string literals
+- Add test case for unclosed <script> tag
+```
+
+### Files Changed
+
+- **Modified**: `tools/check-links.mjs` (regex updated with `|$` alternation, added explanatory comment)
+- **Modified**: `tools/test/check-links.test.mjs` (added 1 new test case for unclosed tags)
