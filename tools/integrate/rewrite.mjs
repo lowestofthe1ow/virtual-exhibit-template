@@ -117,16 +117,20 @@ export function rewriteFile(
   for (const [key, value] of sortedRoutes) {
     const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     // ${base}route/  ->  ${base}<value>/
-    // ${base}/route/ -> ${base}/<value>/
+    // ${base}/route/ -> ${base}<value>/
     // Student code writes both shapes (with and without a single separating
-    // slash between the base template literal and the route name); the
-    // optional slash is captured and echoed back unchanged. Replaced via a
-    // function (not a "$1$2..." template) for the same reason as
-    // publicAssets below: a `value` containing a literal "$" must never be
-    // misread as a backreference.
+    // slash between the base template literal and the route name). The
+    // captured slash is DROPPED, not echoed back: `${base}` renders as
+    // `import.meta.env.BASE_URL`, which at this site's `base: '/'` is "/",
+    // so echoing the slash emitted "//<route>" - a protocol-relative URL the
+    // browser resolves against a HOST. Collapsing makes both shapes converge
+    // on the separator-free form, the same one the no-slash branch has always
+    // produced. Replaced via a function (not a "$1$2..." template) for the
+    // same reason as publicAssets below: a `value` containing a literal "$"
+    // must never be misread as a backreference.
     out = out.replace(
       new RegExp('(\\$\\{base[A-Za-z]*\\})(/?)(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      (match, baseLit, slash) => `${baseLit}${slash}${value}`,
+      (match, baseLit) => `${baseLit}${value}`,
     );
     // The root-absolute form ("/08-shader-lab") resolves at the browser
     // root, so — like a root-absolute public-asset reference below — it
@@ -156,12 +160,14 @@ export function rewriteFile(
   for (const [original, final] of assetEntries) {
     const escaped = original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     // Same optional-slash blind spot as routes above: ${base}/logo.png and
-    // ${base}logo.png both occur in the wild. Replaced via a function (not
-    // a "$1$2..." template) so that a `final` name containing a literal
-    // "$" can never be misread as a backreference.
+    // ${base}logo.png both occur in the wild, and the captured slash is
+    // dropped for the same reason - `${base}` is "/" at this site's base, so
+    // keeping it emitted "//<slug>/<asset>". Replaced via a function (not a
+    // "$1$2..." template) so that a `final` name containing a literal "$"
+    // can never be misread as a backreference.
     out = out.replace(
       new RegExp('(\\$\\{base[A-Za-z]*\\})(/?)(' + escaped + ')' + TRAILING_BOUNDARY, 'g'),
-      (match, baseLit, slash) => `${baseLit}${slash}${slug}/${final}`,
+      (match, baseLit) => `${baseLit}${slug}/${final}`,
     );
     // The root-absolute form ("/Clock.png") resolves at the browser root, so
     // it needs both the umbrella site's own base AND the slug spliced in:

@@ -307,7 +307,9 @@ test('the entry page\'s own name maps to the bare slug in the built routes map',
   );
   assert.equal(result.status, 0);
   const page = readFileSync(join(cwd, 'src', 'pages', 's01g1.mdx'), 'utf8');
-  assert.match(page, /href=\{`\$\{base\}\/s01g1`\}/);
+  // Collapsed form: `${base}` is "/" at this site's base, so keeping the
+  // authored separator would emit "//s01g1" (see rewrite.mjs).
+  assert.match(page, /href=\{`\$\{base\}s01g1`\}/);
   assert.doesNotMatch(page, /s01g1\/entry/);
 });
 
