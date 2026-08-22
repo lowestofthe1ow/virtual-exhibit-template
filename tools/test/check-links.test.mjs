@@ -67,3 +67,42 @@ test('a file containing NUL bytes is still scanned', () => {
   });
   assert.equal(checkLinks(d).ok, false);
 });
+
+test('a missing distDir returns {ok: false} with an error and does not throw', () => {
+  const { ok, errors } = checkLinks('/tmp/definitely-does-not-exist-xyz-123');
+  assert.equal(ok, false);
+  assert.ok(errors[0].includes('no such directory'));
+});
+
+test('an existing but empty distDir returns {ok: true, errors: []}', () => {
+  const d = mkdtempSync(join(tmpdir(), 'empty-dist-'));
+  const { ok, errors } = checkLinks(d);
+  assert.equal(ok, true);
+  assert.deepEqual(errors, []);
+});
+
+test("a page whose inline <script> contains `const heroSrc = \"/does/not/exist.webp\"` reports NO dead link", () => {
+  const d = dist({
+    'index.html': '<script>const heroSrc = "/does/not/exist.webp";</script>',
+  });
+  assert.deepEqual(checkLinks(d).errors, []);
+});
+
+test("a page whose inline <script> contains `let src = \"/also/missing.webp\"` reports NO dead link", () => {
+  const d = dist({
+    'index.html': '<script>let src = "/also/missing.webp";</script>',
+  });
+  assert.deepEqual(checkLinks(d).errors, []);
+});
+
+test('a page with <a href="/real/"> AND a script block still catches the real dead link', () => {
+  const d = dist({
+    'index.html':
+      '<script>const src = "/does/not/exist.webp";</script>' +
+      '<a href="/real/">link</a>',
+  });
+  const { ok, errors } = checkLinks(d);
+  assert.equal(ok, false);
+  assert.ok(errors[0].includes('/real/'));
+  assert.equal(errors.length, 1);
+});
