@@ -22,9 +22,15 @@ const UMBRELLA_BASE = '';
 // With the site served at root, umbrellaBase is '' and a naive
 // `/${base}/${rest}` emits `//rest` — a protocol-relative URL, which the
 // browser resolves against a HOST rather than the site root. Collapse the
-// empty case instead of interpolating it.
+// empty case instead of interpolating it. A caller may also pass a base
+// copied straight out of an astro.config `base:` value, conventionally
+// written with a leading (and sometimes trailing) slash - e.g. '/csarch2' -
+// so run it through normalizeBase first, the same normalization already
+// applied to sourceBase below, or a decorated base reintroduces the exact
+// '//' defect this helper exists to prevent.
 function joinUmbrella(base, rest) {
-  return base ? `/${base}/${rest}` : `/${rest}`;
+  const normalized = normalizeBase(base);
+  return normalized ? `/${normalized}/${rest}` : `/${rest}`;
 }
 
 // A source repo's own astro.config `base:` shows up in the wild as
@@ -159,7 +165,8 @@ export function rewriteFile(
     );
     // The root-absolute form ("/Clock.png") resolves at the browser root, so
     // it needs both the umbrella site's own base AND the slug spliced in:
-    // "/Clock.png" -> "/virtual-exhibit-template/s40g1/Clock.webp". This is
+    // "/Clock.png" -> "/s40g1/Clock.webp" (or "/<umbrellaBase>/s40g1/Clock.webp"
+    // when umbrellaBase is set, e.g. for a non-root future deploy). This is
     // unlike the ${base}-prefixed form just above, whose ${base} already
     // supplies the umbrella base at runtime - adding it there too would
     // double it, so only this root-absolute branch gets umbrellaBase.

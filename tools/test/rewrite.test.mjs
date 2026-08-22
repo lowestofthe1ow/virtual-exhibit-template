@@ -413,3 +413,32 @@ test('a non-empty umbrella base is still spliced in', () => {
   });
   assert.equal(out, '<img src="/csarch2/s40g1/Clock.png">');
 });
+
+test('an umbrella base with a leading slash is normalized, not doubled', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    slug: 's40g1',
+    publicAssets: ['Clock.png'],
+    umbrellaBase: '/csarch2',
+  });
+  assert.equal(out, '<img src="/csarch2/s40g1/Clock.png">');
+  assert.doesNotMatch(out, /\/\//, 'emitted a protocol-relative URL');
+});
+
+test('an umbrella base with a trailing slash is normalized, not doubled', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    slug: 's40g1',
+    publicAssets: ['Clock.png'],
+    umbrellaBase: 'csarch2/',
+  });
+  assert.equal(out, '<img src="/csarch2/s40g1/Clock.png">');
+});
+
+test('an umbrella base with both leading and trailing slashes is normalized', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    slug: 's40g1',
+    publicAssets: ['Clock.png'],
+    umbrellaBase: '/csarch2/',
+  });
+  assert.equal(out, '<img src="/csarch2/s40g1/Clock.png">');
+  assert.doesNotMatch(out, /\/\//, 'emitted a protocol-relative URL');
+});
