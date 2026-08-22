@@ -50,6 +50,16 @@ npm install
 npm run dev
 ```
 
+### Commands
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server on `localhost:4321`. |
+| `npm run build` | Static build into `dist/`. |
+| `npm run preview` | Serve the built `dist/` locally. |
+| `npm test` | Unit tests for the tooling in `tools/`. |
+| `npm run verify` | The full gate: `npm test`, then `npm run build`, then `node tools/verify-site.mjs` (every exhibit in `exhibits.json` has a built route) and `node tools/check-links.mjs` (every internal `href`/`src` in `dist/` resolves). Run this before committing anything that touches `src/` or `tools/`. |
+
 ---
 
 ## 3. Project Structure
@@ -319,17 +329,63 @@ Then `npm run build` in the source tree, replace `public/s02g7/` with its `out/`
 and stage with `git add -A public/s02g7` — the hashed filenames change, so
 deletions must be staged too. Verify with `node tools/check-links.mjs`.
 
+The source tree this was built from lives in the gitignored
+`.integration-src/` and carries local modifications that do **not** exist
+upstream — `src/lib/basePath.ts` plus nine call-site edits — so a fresh clone
+of `JoseBryanPerez/CSARCH2_Group_7` is *not* on its own sufficient to
+reproduce `public/s02g7/`; capturing those changes as a patch is deferred to
+Phase 0b.
+
 ## 14. The Base Path
 
 The site is served at the root of its domain (`base: '/'` in
 `astro.config.mjs`). Never hardcode a base path segment in an exhibit —
 write root-relative paths like `/s01g8/diagram.webp` and they will work.
 
+Do not build a path out of `import.meta.env.BASE_URL` either. `BASE_URL`
+is the base exactly as Astro normalized it, which at `base: '/'` is
+`"/"` — so ``href={`${baseUrl}/s01g8`}`` renders as `//s01g8`. That is a
+**protocol-relative** URL: the browser resolves `s01g8` as a *host name*
+and goes looking for `https://s01g8/`. Write the plain literal
+`href="/s01g8"` instead. `tools/check-links.mjs` now fails on any `//`
+reference whose first segment is not a real hostname.
+
 `tools/test/no-hardcoded-base.test.mjs` fails the build if a hardcoded
-base reappears. If the site ever needs to move under a path again, do not
-hand-edit: run
+base segment reappears.
 
-    node tools/rewrite-base.mjs --from '' --to csarch2
+### Moving the site under a path
 
-and update `base` in `astro.config.mjs` to match. `tools/check-links.mjs`
-verifies the result against the real build.
+`tools/rewrite-base.mjs` swaps one base segment for another across
+`src/`, skipping the external URLs in `src/data/exhibits.json` and
+anywhere else the segment appears after a scheme-and-host:
+
+    node tools/rewrite-base.mjs --from csarch2 --to csarch3 --dry-run
+    node tools/rewrite-base.mjs --from csarch2 --to ''        # back to root
+
+**It cannot add a base where there is none.** Moving *from* the current
+root base *to* a named one is not a one-command operation, and there is
+no flag that makes it one. The tool keys on the literal segment being
+replaced; at a root base there is no such segment, only a leading `/`
+that is indistinguishable from every other slash in the tree. `--from ''`
+used to be documented here and silently corrupted every path it touched
+(`/s01g8/diagram.webp` → `/csarch2s01g8/csarch2diagram.webp`); it is now
+rejected with an error.
+
+If the site does need to move off root, the sequence is:
+
+1. Set `base: '/csarch2'` in `astro.config.mjs`. This fixes everything
+   Astro itself generates (bundled assets, `<link>`/`<script>` tags,
+   `Astro.url`) but **not** the root-relative literals in exhibit
+   markup, which Astro emits verbatim.
+2. Prefix those literals. There is no safe blanket rewrite — a
+   root-relative path in exhibit markup is not distinguishable from
+   other `/`-leading strings without knowing the slug set. The workable
+   form is per-slug and mechanical: for each of the 53 slugs, rewrite
+   `"/<slug>` to `"/csarch2/<slug>` in `src/` (again excluding
+   `src/data/exhibits.json`).
+3. Rebuild and run `node tools/check-links.mjs`. It resolves every
+   internal `href`/`src` against the real `dist/`, so anything missed in
+   step 2 is reported rather than shipped.
+
+Phase 0b moves this site to Render at a root domain, so this is not
+expected to be needed.
