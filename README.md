@@ -20,6 +20,7 @@
   - [11. Protected Shared Files](#11-protected-shared-files)
   - [12. Adding or Re-Importing an Exhibit](#12-adding-or-re-importing-an-exhibit)
   - [13. The s02g7 Exception](#13-the-s02g7-exception)
+  - [14. The Base Path](#14-the-base-path)
 
 ---
 
@@ -201,7 +202,7 @@ Astro handles routing automatically once your `.mdx` file is in `src/pages/`.
 npm run dev
 ```
 
-2. Visit your page at `localhost:4321/virtual-exhibit-template/topic_name`.
+2. Visit your page at `localhost:4321/topic_name`.
 
 ---
 
@@ -296,3 +297,39 @@ lists its `status` as `"external"` rather than `"live"`. This was the only
 exhibit in the entire 53-exhibit corpus that needed this fallback — every
 other exhibit, however unusual its own stack (Tailwind, `import.meta.glob`,
 dynamic routes, content collections), was merged as real Astro source.
+
+### Rebuilding s02g7
+
+Its `basePath` is baked into hashed chunk filenames and JSON payloads, so it can
+only be rebuilt, never text-rewritten. Three changes are required, and missing
+either of the last two produces a build that looks fine and is quietly broken:
+
+1. `next.config.mjs` — `basePath` must match the route (`/s02g7` at the current
+   root base).
+2. `src/lib/basePath.ts` — an independently maintained `BASE_PATH` mirror, used
+   by hand-written `<img>`/`<a>` tags. Next only auto-prefixes `next/link` and
+   `next/image`, so this constant must be edited in lockstep. Skipping it left
+   34 files pointing at the old base.
+3. `next.config.mjs` — `trailingSlash: true`. Without it the App Router export
+   emits extensionless links that depend on host-side clean-URL rewriting, which
+   this static site does not do. Skipping it produced 88 dead links with an
+   otherwise perfectly correct `basePath`.
+
+Then `npm run build` in the source tree, replace `public/s02g7/` with its `out/`,
+and stage with `git add -A public/s02g7` — the hashed filenames change, so
+deletions must be staged too. Verify with `node tools/check-links.mjs`.
+
+## 14. The Base Path
+
+The site is served at the root of its domain (`base: '/'` in
+`astro.config.mjs`). Never hardcode a base path segment in an exhibit —
+write root-relative paths like `/s01g8/diagram.webp` and they will work.
+
+`tools/test/no-hardcoded-base.test.mjs` fails the build if a hardcoded
+base reappears. If the site ever needs to move under a path again, do not
+hand-edit: run
+
+    node tools/rewrite-base.mjs --from '' --to csarch2
+
+and update `base` in `astro.config.mjs` to match. `tools/check-links.mjs`
+verifies the result against the real build.

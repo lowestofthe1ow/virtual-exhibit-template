@@ -15,11 +15,11 @@ function walk(dir) {
   });
 }
 
-export function rewriteTree(root, { from, to, dryRun }) {
+export function rewriteTree(root, { from, to, dryRun, exclude = EXCLUDE }) {
   const report = [];
 
   for (const file of walk(root)) {
-    if (EXCLUDE.has(file.split('\\').join('/'))) continue;
+    if (exclude.has(file.split('\\').join('/'))) continue;
     if (!EXTENSIONS.has(extname(file))) continue;
 
     const before = readFileSync(file, 'utf8');
