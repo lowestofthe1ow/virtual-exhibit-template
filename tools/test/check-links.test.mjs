@@ -113,3 +113,78 @@ test('a page containing an unclosed <script> tag with a link-like string reports
   });
   assert.deepEqual(checkLinks(d).errors, []);
 });
+
+// --- protocol-relative URLs (C1b) ---
+//
+// `${import.meta.env.BASE_URL}/s03g3` renders as "//s03g3" once the base is
+// "/". The checker used to skip every "//" reference outright, so the site's
+// own gate could not see the 552 broken links this produced.
+
+test('a protocol-relative site path ("//s03g3") is reported, not skipped', () => {
+  const d = dist({
+    'index.html': '<a href="//s03g3">go</a>',
+    's03g3/index.html': '<html></html>',
+  });
+  const { ok, errors } = checkLinks(d);
+  assert.equal(ok, false);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /protocol-relative/);
+  assert.match(errors[0], /\/\/s03g3/);
+});
+
+test('a protocol-relative site path is reported even when the target exists on disk', () => {
+  const d = dist({
+    'index.html': '<img src="//s40g6/usb.glb">',
+    's40g6/usb.glb': 'x',
+  });
+  assert.equal(checkLinks(d).ok, false);
+});
+
+test('a genuinely external protocol-relative URL ("//cdn.example.com/x") is still skipped', () => {
+  const d = dist({
+    'index.html': '<script src="//cdn.example.com/lib.js"></script><img src="//img.cdn.net/a.png">',
+  });
+  assert.deepEqual(checkLinks(d).errors, []);
+});
+
+test('a protocol-relative localhost URL is treated as an external host', () => {
+  const d = dist({ 'index.html': '<a href="//localhost:4321/s01g8">x</a>' });
+  assert.deepEqual(checkLinks(d).errors, []);
+});
+
+// --- <script src> (I1) ---
+//
+// The element body was stripped INCLUDING its opening tag, so every
+// <script src> in the build - 119 of them, 113 from s02g7's chunk graph -
+// was consumed before the attribute scan ever ran.
+
+test('a missing <script src> is reported', () => {
+  const d = dist({ 'index.html': '<script src="/_astro/missing.js"></script>' });
+  const { ok, errors } = checkLinks(d);
+  assert.equal(ok, false);
+  assert.match(errors[0], /_astro\/missing\.js/);
+});
+
+test('an existing <script src> passes', () => {
+  const d = dist({
+    'index.html': '<script type="module" src="/_astro/app.js"></script>',
+    '_astro/app.js': 'console.log(1);',
+  });
+  assert.deepEqual(checkLinks(d).errors, []);
+});
+
+test('a <script src> is checked while that same element\'s body is still ignored', () => {
+  const d = dist({
+    'index.html':
+      '<script src="/_astro/present.js">const x = "/does/not/exist.webp";</script>',
+    '_astro/present.js': 'x',
+  });
+  assert.deepEqual(checkLinks(d).errors, []);
+});
+
+test('a protocol-relative <script src> to a bare slug is reported', () => {
+  const d = dist({ 'index.html': '<script src="//s02g7/chunk.js"></script>' });
+  const { ok, errors } = checkLinks(d);
+  assert.equal(ok, false);
+  assert.match(errors[0], /protocol-relative/);
+});
