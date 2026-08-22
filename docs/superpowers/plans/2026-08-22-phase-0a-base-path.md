@@ -34,6 +34,8 @@
 | `README.md` (modify:§8) | The dev-server URL example loses the base segment. |
 | `public/s02g7/**` (replace) | Rebuilt Next.js export with the new `basePath`. |
 | 33 files under `src/` (modify) | Mechanically rewritten by the codemod. Not hand-edited. |
+| `tools/integrate/rewrite.mjs` (modify:18,120,158,187) | Stop splicing a hardcoded base into newly imported exhibits. |
+| `tools/test/rewrite.test.mjs`, `tools/test/import-exhibit.test.mjs` (modify) | 15 assertions that encode the old base. |
 
 ---
 
@@ -800,6 +802,153 @@ in README section 14."
 
 ---
 
+### Task 8: Teach the import rewriter about a root base
+
+Found by the pre-flight scan, not present in the spec. `tools/integrate/rewrite.mjs` is the tool that imports new exhibits, and it splices the umbrella base into their references. It hardcodes the old value, so the next exhibit import would reinject exactly what Tasks 3–5 removed — and `npm test` would stay green, because the existing tests assert the old literal.
+
+**Files:**
+- Modify: `tools/integrate/rewrite.mjs:18`, and its three splice sites at lines 120, 158, 187
+- Modify: `tools/test/rewrite.test.mjs` (14 occurrences)
+- Modify: `tools/test/import-exhibit.test.mjs:158` (1 occurrence)
+
+**Interfaces:**
+- Consumes: nothing from earlier tasks.
+- Produces: `rewriteFile` output that carries no base segment when `umbrellaBase` is `''`, and still carries one when it is not.
+
+- [ ] **Step 1: Write the failing test**
+
+Append to `tools/test/rewrite.test.mjs`:
+
+```javascript
+test('a root umbrella base produces a single leading slash, not //', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    slug: 's40g1',
+    publicAssets: ['Clock.png'],
+    umbrellaBase: '',
+  });
+  assert.equal(out, '<img src="/s40g1/Clock.png">');
+  assert.doesNotMatch(out, /\/\//, 'emitted a protocol-relative URL');
+});
+
+test('a non-empty umbrella base is still spliced in', () => {
+  const out = rewriteFile('<img src="/Clock.png">', {
+    slug: 's40g1',
+    publicAssets: ['Clock.png'],
+    umbrellaBase: 'csarch2',
+  });
+  assert.equal(out, '<img src="/csarch2/s40g1/Clock.png">');
+});
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `node --test tools/test/rewrite.test.mjs`
+Expected: FAIL — the first new test emits `<img src="//s40g1/Clock.png">`.
+
+- [ ] **Step 3: Add the join helper**
+
+In `tools/integrate/rewrite.mjs`, immediately after the `UMBRELLA_BASE` declaration, add:
+
+```javascript
+// With the site served at root, umbrellaBase is '' and a naive
+// `/${base}/${rest}` emits `//rest` — a protocol-relative URL, which the
+// browser resolves against a HOST rather than the site root. Collapse the
+// empty case instead of interpolating it.
+function joinUmbrella(base, rest) {
+  return base ? `/${base}/${rest}` : `/${rest}`;
+}
+```
+
+- [ ] **Step 4: Change the constant and the three splice sites**
+
+Change line 18:
+
+```javascript
+const UMBRELLA_BASE = 'virtual-exhibit-template';
+```
+
+to:
+
+```javascript
+// The site is served at root (astro.config.mjs `base: '/'`). Empty means
+// "no base segment"; joinUmbrella collapses it correctly.
+const UMBRELLA_BASE = '';
+```
+
+Then replace each of the three splice expressions:
+
+```javascript
+      (match, quote) => `${quote}/${umbrellaBase}/${value}`,
+```
+becomes
+```javascript
+      (match, quote) => `${quote}${joinUmbrella(umbrellaBase, value)}`,
+```
+
+```javascript
+      (match, quote) => `${quote}/${umbrellaBase}/${slug}/${final}`,
+```
+becomes
+```javascript
+      (match, quote) => `${quote}${joinUmbrella(umbrellaBase, `${slug}/${final}`)}`,
+```
+
+```javascript
+      (_m, q, tail) => `${q}/${umbrellaBase}/${slug}${tail === '/' ? '/' : ''}`,
+```
+becomes
+```javascript
+      (_m, q, tail) => `${q}${joinUmbrella(umbrellaBase, slug)}${tail === '/' ? '/' : ''}`,
+```
+
+- [ ] **Step 5: Update the existing assertions**
+
+In `tools/test/rewrite.test.mjs`, every expected output of the form
+`/virtual-exhibit-template/<rest>` becomes `/<rest>`. For example:
+
+```javascript
+  assert.match(out, /src="\/virtual-exhibit-template\/s03g9\/moon\.svg"/);
+```
+becomes
+```javascript
+  assert.match(out, /src="\/s03g9\/moon\.svg"/);
+```
+
+Leave the one negative assertion (`assert.doesNotMatch(out, /virtual-exhibit-template/)`) exactly as it is — it remains true and still guards the right thing.
+
+In `tools/test/import-exhibit.test.mjs:158`:
+
+```javascript
+  assert.match(page, /src="\/virtual-exhibit-template\/s03g9\/astronauts\.png"/);
+```
+becomes
+```javascript
+  assert.match(page, /src="\/s03g9\/astronauts\.png"/);
+```
+
+- [ ] **Step 6: Run the full suite**
+
+Run: `npm test`
+Expected: all tests pass, including the two new ones.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add tools/integrate/rewrite.mjs tools/test/rewrite.test.mjs tools/test/import-exhibit.test.mjs
+git commit -m "fix: teach the import rewriter that the site is served at root
+
+rewrite.mjs spliced a hardcoded base into every imported exhibit's
+references, so the next import would have reinjected the segment Tasks
+3-5 removed — and the suite would have stayed green, because the tests
+asserted the old literal.
+
+Setting the constant to '' alone emits '//path', a protocol-relative
+URL the browser resolves against a host. joinUmbrella collapses the
+empty case, and a test now covers both it and the non-empty base."
+```
+
+---
+
 ## Self-Review
 
 **Spec coverage** — every requirement in the spec's [Base path migration](../specs/2026-08-22-virtual-exhibit-social-design.md#base-path-migration) section maps to a task:
@@ -814,6 +963,7 @@ in README section 14."
 | `base: '/'` | 5 |
 | Link-checker added, Node not shell | 2 |
 | Tooling must not use grep on built HTML | 2 (implementation comment + NUL-byte test) |
+| Import tooling must not reinject the base | 8 (found by pre-flight scan; not in the spec) |
 
 **Two spec deviations, both simplifications**, recorded here so the spec can be amended: the spec anticipated a separate mechanism for CSS `url()` and a rehype plugin for markdown links. At `base: '/'` both resolve correctly as plain root-relative paths, so the uniform codemod covers them. If the base ever becomes non-root, both need revisiting — which is why README §14 documents the codemod as the supported path.
 
