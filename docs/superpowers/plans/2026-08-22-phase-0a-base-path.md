@@ -583,9 +583,23 @@ Expected: `base refs left in s01g8: 0`, and the CSS href starts `/_astro/`, not 
 - [ ] **Step 4: Run the link checker over the real build**
 
 Run: `node tools/check-links.mjs`
-Expected: `0 dead links`, exit 0.
 
-If dead links appear, they are real — fix them before continuing rather than relaxing the checker.
+Expected: **282 dead links, every one under `dist/s02g7/`.** This is not a failure
+of this task. `public/s02g7/` is a committed Next.js static export with the old
+`basePath` baked into hashed chunk filenames and JSON payloads — it cannot be
+rewritten, only rebuilt, which is Task 6. The site-wide `0 dead links` gate lives
+at the end of Task 6, not here.
+
+Confirm the breakdown is entirely `s02g7` before continuing:
+
+```bash
+node tools/check-links.mjs 2>&1 | grep '^FAIL' \
+  | sed -E 's#^FAIL (dist/[^/]+)/.*#\1#' | sort | uniq -c
+```
+
+Expected: a single line, `282 dist/s02g7`. **A dead link under any other
+directory is a real regression from the rewrite** — fix it before continuing
+rather than relaxing the checker.
 
 - [ ] **Step 5: Run the existing suite**
 
@@ -669,13 +683,18 @@ process.exit(n===0?0:1);'
 
 Expected: `0`
 
-- [ ] **Step 6: Rebuild and re-check links**
+- [ ] **Step 6: Rebuild and re-check links — this is the site-wide gate**
 
 ```bash
 npm run build && node tools/check-links.mjs
 ```
 
-Expected: `0 dead links`
+Expected: `0 dead links`, exit 0.
+
+This is where the whole-site zero is finally reachable. Task 5 legitimately left
+282 dead links under `dist/s02g7/`, all pointing at the old baked-in `basePath`;
+this rebuild is what clears them. If any dead link remains here, it is real —
+fix it rather than relaxing the checker.
 
 - [ ] **Step 7: Commit**
 
