@@ -3,17 +3,17 @@ import React from 'react';
 import { useCacheStore } from '../../store/s40g1/cacheStore.js';
 
 const memoryImages = {
-  'Teacup': '/virtual-exhibit-template/s40g1/Teacup.webp',
-  'Knife': '/virtual-exhibit-template/s40g1/Knife.webp',
-  'Broken Knife': '/virtual-exhibit-template/s40g1/Broken-Knife.webp',
-  'Top Hat': '/virtual-exhibit-template/s40g1/Top-Hat.webp',
-  'Broken Top-Hat': '/virtual-exhibit-template/s40g1/Broken-Top-Hat.webp',
-  'Clock': '/virtual-exhibit-template/s40g1/Clock.webp',
-  'Broken Clock': '/virtual-exhibit-template/s40g1/Broken-Clock.webp',
-  'Key': '/virtual-exhibit-template/s40g1/Key.webp',
-  'Broken Key': '/virtual-exhibit-template/s40g1/Broken-Key.webp',
-  'Broken Mirror': '/virtual-exhibit-template/s40g1/Broken-Mirror.webp',
-  'Broken Teacup': '/virtual-exhibit-template/s40g1/Broken-Teacup.webp',
+  'Teacup': '/s40g1/Teacup.webp',
+  'Knife': '/s40g1/Knife.webp',
+  'Broken Knife': '/s40g1/Broken-Knife.webp',
+  'Top Hat': '/s40g1/Top-Hat.webp',
+  'Broken Top-Hat': '/s40g1/Broken-Top-Hat.webp',
+  'Clock': '/s40g1/Clock.webp',
+  'Broken Clock': '/s40g1/Broken-Clock.webp',
+  'Key': '/s40g1/Key.webp',
+  'Broken Key': '/s40g1/Broken-Key.webp',
+  'Broken Mirror': '/s40g1/Broken-Mirror.webp',
+  'Broken Teacup': '/s40g1/Broken-Teacup.webp',
 };
 
 const getImageForData = (data) => {

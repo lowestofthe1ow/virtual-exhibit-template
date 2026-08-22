@@ -11,7 +11,7 @@ const eras = [
 ];
 
 export default function ArcadeMenu() {
-  // Astro dynamically supplies the base URL ('/virtual-exhibit-template/s02g5/' or '/')
+  // Astro dynamically supplies the base URL ('/s02g5/' or '/')
   const rawBase = import.meta.env.BASE_URL || '/';
   const baseUrl = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 

@@ -264,7 +264,7 @@ function Innovations() {
       
       <footer className="innovation-footer">
 
-        <a href="/virtual-exhibit-template/s03g4/agc-homepage/"> Return to Homepage </a>
+        <a href="/s03g4/agc-homepage/"> Return to Homepage </a>
 
       </footer>
 
