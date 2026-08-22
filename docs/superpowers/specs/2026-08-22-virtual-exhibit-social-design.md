@@ -8,10 +8,19 @@
 ## Goal
 
 Add likes, comments, page-visit counts, and Google SSO accounts to the merged
-53-exhibit site, and move it from GitHub Pages to server-side hosting on Render —
-without modifying any exhibit's source, without modifying anything in
-`src/layouts/`, and while staying portable to a university-hosted Postgres and
-server that the course is committed to moving to this term or next.
+53-exhibit site, and move it from GitHub Pages to server-side hosting on Render,
+staying portable to the university-hosted Postgres and server the course is
+committed to moving to this term or next.
+
+Two constraints hold throughout:
+
+- **Nothing in `src/layouts/` is modified**, honoring the notice in
+  `ExhibitLayout.astro`. This holds without exception.
+- **No feature in this design modifies exhibit source.** The social features reach
+  the exhibits entirely through post-build injection. The one exception is
+  [Phase 0a](#base-path-migration), which mechanically replaces hardcoded base-path
+  literals in 33 files — it changes no exhibit's content, markup, or behavior, and
+  is isolated into its own phase precisely so that claim stays auditable.
 
 ## Non-goals
 
@@ -22,7 +31,6 @@ server that the course is committed to moving to this term or next.
 - Threaded/nested comments. Flat only.
 - A full analytics product. A public view counter, nothing more.
 - Redesigning any exhibit's content or visuals.
-- Changing Astro's `base` path. Orthogonal to this work and tracked separately.
 
 ## Decisions locked in
 
@@ -38,6 +46,8 @@ server that the course is committed to moving to this term or next.
    prerendering exactly as they do today.
 6. **Schema lives in the repo** as plain `.sql` migrations, not in the dashboard.
 7. **Empty tables are dropped and rebuilt**; populated tables altered in place.
+8. **The base path is de-hardcoded and the site moves to root (`base: '/'`)**, as
+   the first step of Phase 0. See [Base path migration](#base-path-migration).
 
 ## Verified context
 
@@ -399,8 +409,11 @@ and in practice only one environment variable.
 
 ```html
 <exhibit-social slug="s01g8"></exhibit-social>
-<script type="module" src="/virtual-exhibit-template/exhibit-social.<hash>.js"></script>
+<script type="module" src="/exhibit-social.<hash>.js"></script>
 ```
+
+(Shown at `base: '/'` per Phase 0a. The injector reads the base from the Astro
+config rather than hardcoding it, so the emitted `src` follows any future base.)
 
 | Path in `dist/` | Slug | Note |
 |---|---|---|
@@ -519,9 +532,83 @@ Committed to `.env.example` by name with empty values. Real values live in `.env
 locally (already gitignored) and Render's environment settings.
 
 **Redirect URIs** must be registered in Google Cloud Console per environment, with
-exact matching — no wildcards. The callback path inherits Astro's `base`, so today
-it is `/virtual-exhibit-template/api/auth/google/callback`. If the base path is
-later changed, the registered URIs must be updated in lockstep.
+exact matching — no wildcards. Because Phase 0a moves the site to `base: '/'`, the
+callback path is `/api/auth/google/callback`, giving:
+
+```
+http://localhost:4321/api/auth/google/callback
+https://<render-service>.onrender.com/api/auth/google/callback
+```
+
+The university host is added when known. Registering these only after Phase 0a
+lands is the reason that phase runs first.
+
+## Base path migration
+
+Runs first, inside Phase 0, because the OAuth callback path inherits Astro's
+`base` and must be settled before production redirect URIs are registered.
+
+**Target: `base: '/'`.** On GitHub Pages the base was forced by project-page
+routing. Nothing on Render forces it, and with a base set, `https://<host>/` has
+no page and 404s — every visitor arriving at the bare domain gets nothing without
+a redirect shim.
+
+The durable goal is not the value but the **removability of the hardcoding**. The
+university move will raise this a third time; once every reference goes through
+`import.meta.env.BASE_URL`, any future base is a one-line config change.
+
+### Scope, measured
+
+**109 real base-path occurrences across 33 files.**
+
+| Form | Count | Fix |
+|---|---|---|
+| Bare string literals in JS/JSX (asset maps) | 91 | Prefix with `import.meta.env.BASE_URL` |
+| `href=` / `src=` attributes | 25 | Same |
+| Markdown links in MDX | 15 | Same |
+| `url()` in CSS | 3 | Separate mechanism — see below |
+
+Counts overlap where one line carries both an attribute and a literal; the
+authoritative total is 109 occurrences over 33 files.
+
+### The trap: 25 occurrences must NOT be rewritten
+
+A further 25 matches of the string `virtual-exhibit-template` are inside
+`https://…` URLs pointing at **other students' repositories and GitHub Pages
+deployments** — for example `https://dmdlsu.github.io/virtual-exhibit-template/`.
+Every match in `src/data/exhibits.json` is of this kind, so that file must not be
+touched at all.
+
+A blind `sed -i 's|/virtual-exhibit-template||g'` therefore corrupts 25 working
+external links into broken relative paths, and **nothing in the build would
+report it**. The rewrite must skip any match preceded by a scheme and host.
+
+### CSS is the one awkward case
+
+`src/styles/s03g2/theme.css` and `src/styles/s04g3/exhibit-theme.css` reference the
+base inside `url()`. Plain CSS has no build-time env access, so these cannot use
+`import.meta.env.BASE_URL`. Fix by having the owning Astro component set a CSS
+custom property (e.g. `--base-url`) that the rule consumes, or by moving those
+specific declarations inline.
+
+### s02g7 must be rebuilt, not rewritten
+
+`public/s02g7/` is a Next.js static export with
+`basePath: '/virtual-exhibit-template/s02g7'` baked into chunk filenames and JSON
+payloads — 99 of its 141 files contain the literal. It must be rebuilt with the new
+`basePath` and re-committed. Source is re-clonable from
+`https://github.com/JoseBryanPerez/CSARCH2_Group_7`, so the gitignored working copy
+in `.integration-src/` is not a single point of failure.
+
+### Verification
+
+- Extend `tools/verify-site.mjs` with a Node link-checker over `dist/` asserting
+  every internal `href`/`src` resolves to a file that exists. Worth keeping
+  permanently — it would have caught the dead links repaired in `ce77b5e`.
+- Assert zero remaining bare `/virtual-exhibit-template` occurrences in `src/`,
+  while confirming the 25 external URLs are still intact.
+- Per [Built-output anomalies](#built-output-anomalies), this checker must be Node,
+  not shell.
 
 ## Phasing
 
@@ -529,7 +616,8 @@ Each phase is independently deployable and independently useful.
 
 | Phase | Ships | Rationale |
 |---|---|---|
-| **0 — Foundation** | Node adapter, `/api/health`, `db.ts`, migration runner, migration `0001`. No user-visible change. | Retires the largest risk first: proving the static→SSR hosting swap renders all 53 exhibits identically, with no other variable in flight. |
+| **0a — Base path** | De-hardcode 109 occurrences, fix the 2 CSS files, rebuild `s02g7`, set `base: '/'`, add the link-checker. | Must precede OAuth redirect URI registration, and is the only step that touches exhibit source — kept isolated so a regression is unambiguous. |
+| **0b — Foundation** | Node adapter, `/api/health`, `db.ts`, migration runner, migration `0001`. No user-visible change. | Retires the largest risk: proving the static→SSR hosting swap renders all 53 exhibits identically, with no other variable in flight. |
 | **1 — View counts** | `view_events`, view beacon, `/api/stats`, the injector, widget showing views only, homepage card counts. | Proves the novel machinery — injection across all four path shapes including `s02g7` — using the one feature needing no auth. |
 | **2 — Auth** | Google OAuth, sessions, `/api/auth/*`, sign-in/out in the widget. | Lands against a widget that already works. |
 | **3 — Likes** | `likes`, `PUT`/`DELETE`, heart in the widget. | Small once 1 and 2 exist. |
@@ -568,11 +656,11 @@ tend to merely confirm whatever the code already does.
 
 ## Open items
 
-- Rename `GOOGLE_CLOUD_ID` to `GOOGLE_CLIENT_ID` in `.env` to match this spec and
-  pair correctly with `GOOGLE_CLIENT_SECRET`.
-- Confirm the Workspace domain on student accounts is `dlsu.edu.ph` and not a
-  subdomain such as `students.dlsu.edu.ph`; the `hd` check must match whatever the
-  ID token actually carries, or accept a set of domains.
-- The Astro `base` path change is orthogonal to this work but interacts with OAuth
-  redirect URI registration. Settle it before registering production URIs, or
-  register both forms.
+All items from the initial draft are resolved: the `.env` key is renamed, the
+Workspace domain is confirmed, and the base path is settled as Phase 0a above.
+
+Remaining, to confirm during implementation:
+
+- The Render service name, which fixes the second OAuth redirect URI.
+- Whether a paid Render instance is provisioned before judging, per the cold-start
+  risk in [Operational risks](#operational-risks).
