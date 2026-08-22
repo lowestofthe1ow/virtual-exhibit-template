@@ -5,14 +5,13 @@ const { exhibit } = Astro.props;
 const { slug, section, group, title, authors, description, keywords, repo, url } =
   exhibit;
 
-const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <article class="card" id={slug}>
   <p class="card__tag">{section} &middot; Group {group}</p>
 
   <h3 class="card__title">
-    <a href=`${baseUrl}/${slug}` target="_blank">
+    <a href=`/${slug}` target="_blank">
       {title}<Icon name="ic:baseline-open-in-new" class="card__ico" />
     </a>
   </h3>

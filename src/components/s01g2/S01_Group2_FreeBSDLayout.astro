@@ -47,7 +47,7 @@ const basePath = baseUrl.replace(/\/$/, '');
                     const fullPath = `${basePath}${page.path}`.replace(/\/\//g, '/');
                     return (
                         <div class="progress-step" data-page-path={fullPath}>
-                            <a href={`${baseUrl}${page.path}`} class="progress-dot" data-label={page.label}></a>
+                            <a href={page.path} class="progress-dot" data-label={page.label}></a>
                         </div>
                     );
                 })}
@@ -59,14 +59,14 @@ const basePath = baseUrl.replace(/\/$/, '');
         <nav>
             <span class='nav-title'>FreeBSD</span>
             <span class='nav-items'>
-                <a href={`${baseUrl}/s01g2`}>Home</a>
-                <a href={`${baseUrl}/s01g2/info-page`}>What is FreeBSD?</a>
-                <a href={`${baseUrl}/s01g2/history-page`}>History</a>
-                <a href={`${baseUrl}/s01g2/freebsd-vs-linux`}>FreeBSD vs Linux</a>
-                <a href={`${baseUrl}/s01g2/where-is-freebsd`}>Where is FreeBSD Used?</a>
-                <a href={`${baseUrl}/s01g2/portsvspkg`}>Ports vs Pkg</a>
-                <a href={`${baseUrl}/s01g2/cli`}>CLI</a>
-                <a href={`${baseUrl}/s01g2/references`}>References</a>
+                <a href="/s01g2">Home</a>
+                <a href="/s01g2/info-page">What is FreeBSD?</a>
+                <a href="/s01g2/history-page">History</a>
+                <a href="/s01g2/freebsd-vs-linux">FreeBSD vs Linux</a>
+                <a href="/s01g2/where-is-freebsd">Where is FreeBSD Used?</a>
+                <a href="/s01g2/portsvspkg">Ports vs Pkg</a>
+                <a href="/s01g2/cli">CLI</a>
+                <a href="/s01g2/references">References</a>
             </span>
             <span class='nav-toggle'>
                 ☰
