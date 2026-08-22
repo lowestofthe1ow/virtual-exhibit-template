@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, writeFileSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { rewriteBaseRefs } from '../lib/base-path.mjs';
+import { rewriteTree } from '../rewrite-base.mjs';
 
 const opts = { from: 'virtual-exhibit-template', to: '' };
 
@@ -95,4 +99,80 @@ test('a bare reference with a non-empty "to" is unaffected by the root-collapse 
     from: 'virtual-exhibit-template', to: 'csarch2',
   });
   assert.equal(text, '/csarch2');
+});
+
+// --- 'from' must name a segment (I3) ---
+//
+// README 14 used to instruct `--from '' --to csarch2` as the one-command way
+// to move the site under a base. With from === '' the needle is a bare '/',
+// which matches EVERY slash: "/s01g8/diagram.webp" became
+// "/csarch2s01g8/csarch2diagram.webp". The tool now refuses.
+
+test("an empty 'from' throws instead of matching every slash", () => {
+  assert.throws(
+    () => rewriteBaseRefs('"/s01g8/diagram.webp"', { from: '', to: 'csarch2' }),
+    /must name a base path segment/,
+  );
+});
+
+test("a 'from' of '/' throws for the same reason", () => {
+  assert.throws(
+    () => rewriteBaseRefs('"/s01g8/diagram.webp"', { from: '/', to: 'csarch2' }),
+    /must name a base path segment/,
+  );
+});
+
+test("rewriteTree refuses an empty 'from' and writes nothing", () => {
+  const dir = mkdtempSync(join(tmpdir(), 'empty-from-'));
+  const file = join(dir, 'page.json');
+  const before = '{"x": "/s01g8/diagram.webp"}';
+  writeFileSync(file, before);
+
+  assert.throws(
+    () => rewriteTree(dir, { from: '', to: 'csarch2', dryRun: false, exclude: new Set() }),
+    /must name a base path segment/,
+  );
+  assert.equal(readFileSync(file, 'utf8'), before);
+});
+
+// --- 'from'/'to' are segments, however they are decorated ---
+
+test("a 'to' written with a leading slash does not produce //", () => {
+  const { text } = rewriteBaseRefs("'/virtual-exhibit-template/a.webp'", {
+    from: 'virtual-exhibit-template', to: '/csarch2',
+  });
+  assert.equal(text, "'/csarch2/a.webp'");
+});
+
+test("a 'to' written with leading and trailing slashes is normalized", () => {
+  const { text } = rewriteBaseRefs("'/virtual-exhibit-template/a.webp'", {
+    from: 'virtual-exhibit-template', to: '/csarch2/',
+  });
+  assert.equal(text, "'/csarch2/a.webp'");
+});
+
+test("a 'to' of '/' means root, the same as ''", () => {
+  const { text } = rewriteBaseRefs("'/virtual-exhibit-template/a.webp'", {
+    from: 'virtual-exhibit-template', to: '/',
+  });
+  assert.equal(text, "'/a.webp'");
+});
+
+test("a 'from' written with leading and trailing slashes still matches", () => {
+  const { text, changed } = rewriteBaseRefs("'/virtual-exhibit-template/a.webp'", {
+    from: '/virtual-exhibit-template/', to: 'csarch2',
+  });
+  assert.equal(text, "'/csarch2/a.webp'");
+  assert.equal(changed, 1);
+});
+
+test("rewriteTree's prefilter uses the normalized 'from' too", () => {
+  const dir = mkdtempSync(join(tmpdir(), 'decorated-from-'));
+  writeFileSync(join(dir, 'page.json'), '{"x": "/virtual-exhibit-template/a.webp"}');
+
+  const report = rewriteTree(dir, {
+    from: '/virtual-exhibit-template/', to: 'csarch2', dryRun: true, exclude: new Set(),
+  });
+  assert.equal(report.length, 1);
+  assert.equal(report[0].changed, 1);
 });

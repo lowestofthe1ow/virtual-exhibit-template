@@ -1,3 +1,5 @@
+import { normalizeBase } from '../integrate/rewrite.mjs';
+
 // The rewrite rule for the site's base path segment. Pure string in, pure
 // string out — every caller (CLI, tests, future base changes) goes through here.
 //
@@ -14,7 +16,29 @@
 // path: preceded by a delimiter, never by a scheme-and-host.
 
 export function rewriteBaseRefs(source, { from, to }) {
-  const needle = `/${from}`;
+  // 'from' and 'to' name a path SEGMENT. They are written both ways in the
+  // wild — 'csarch2', '/csarch2', '/csarch2/' — all meaning the same segment,
+  // so run both through the same normalization the import rewriter uses. An
+  // un-normalized `to: '/csarch2'` produced '//csarch2/a.webp': a
+  // protocol-relative URL the browser resolves against a HOST.
+  const fromSegment = normalizeBase(from);
+  const toSegment = normalizeBase(to);
+
+  // An empty 'from' would make the needle a bare '/', matching EVERY slash in
+  // the file: "/s01g8/diagram.webp" came out as
+  // "/csarch2s01g8/csarch2diagram.webp". There is no segment to key on when
+  // the site is already at root, so this is not a rewrite this tool can do —
+  // refuse it rather than corrupting the tree. See README 14.
+  if (!fromSegment) {
+    throw new Error(
+      "rewriteBaseRefs: 'from' must name a base path segment. " +
+        'An empty (or "/") from would match every slash in the file and ' +
+        'corrupt every path. To move a site that is already at root UNDER a ' +
+        'base, see README 14 - this tool cannot express that direction.',
+    );
+  }
+
+  const needle = `/${fromSegment}`;
   let text = '';
   let changed = 0;
   let i = 0;
@@ -35,11 +59,11 @@ export function rewriteBaseRefs(source, { from, to }) {
     text += source.slice(i, at);
     if (insideUrl) {
       text += needle;
-    } else if (to) {
-      text += `/${to}`;
+    } else if (toSegment) {
+      text += `/${toSegment}`;
       changed++;
     } else {
-      // to === '' means "rewrite to root". A bare reference — the needle is
+      // an empty 'to' means "rewrite to root". A bare reference — the needle is
       // the whole path, with nothing (or a non-'/' character, e.g. '?' or
       // '#') immediately after it — must still resolve to "/", the root
       // path, not "" (RFC 3986: an empty URI reference resolves to the
