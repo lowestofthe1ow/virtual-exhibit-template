@@ -106,3 +106,10 @@ test('a page with <a href="/real/"> AND a script block still catches the real de
   assert.ok(errors[0].includes('/real/'));
   assert.equal(errors.length, 1);
 });
+
+test('a page containing an unclosed <script> tag with a link-like string reports no dead link', () => {
+  const d = dist({
+    'index.html': '<script>let src = "/nope.webp";',
+  });
+  assert.deepEqual(checkLinks(d).errors, []);
+});

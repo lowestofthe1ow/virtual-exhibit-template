@@ -35,9 +35,12 @@ export function checkLinks(distDir) {
 
   for (const file of walk(distDir)) {
     let html = readFileSync(file, 'utf8');
-    // Strip script and style blocks before scanning for links
-    html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-    html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+    // Strip script and style blocks before scanning for links.
+    // A literal </script> ends the element even inside a JS string — that is real
+    // HTML parsing, not a regex limitation, which is why authors must escape it as
+    // <\/script>. Matching the browser here is deliberate.
+    html = html.replace(/<script[^>]*>[\s\S]*?(?:<\/script>|$)/gi, '');
+    html = html.replace(/<style[^>]*>[\s\S]*?(?:<\/style>|$)/gi, '');
 
     for (const [, raw] of html.matchAll(ATTR)) {
       if (!isInternal(raw)) continue;
